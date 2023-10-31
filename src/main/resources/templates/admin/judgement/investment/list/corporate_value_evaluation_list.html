@@ -20,11 +20,15 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <div th:include="~{admin/judgement/investment/search/corporate_value_evaluation_search :: searchFragment}"></div><br>
+    <div th:include="~{admin/judgement/investment/search/corporate_value_evaluation_search :: searchFragment}"></div>
+    <br>
     <div class="admin-content-wrapper">
         <table>
             <thead>
             <tr>
+                <th>
+                    <input type="checkbox" name="allSelect" id="allSelectBtn">
+                </th>
                 <th>투자 심사요청 코드</th>
                 <th>심사요청 제목</th>
                 <th>심사요청한 아이디</th>
@@ -35,13 +39,18 @@
                 <th>평가 결과</th>
                 <th>기업가치 평가일</th>
                 <th>수정</th>
+                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
+
             <tr th:if="${corporateValueEvaluationList == null}">
-                <td colspan="10">기업가치 평가 목록이 없습니다.</td>
+                <td colspan="11">기업가치 평가 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${corporateValueEvaluationList == null}" th:each="l : ${corporateValueEvaluationList}">
+                <td style="text-align: center;">
+                    <input type="checkbox" name="selsectList">
+                </td>
                 <td>
                     <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
                 </td>
@@ -58,6 +67,9 @@
                 <td th:text="${l.corpValueEvaluateDay}"></td>
                 <td>
                     <a th:href="@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}">삭제</a>
                 </td>
             </tr>
             </tbody>

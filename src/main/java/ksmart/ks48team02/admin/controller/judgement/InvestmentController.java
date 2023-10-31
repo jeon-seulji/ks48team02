@@ -25,7 +25,7 @@ public class InvestmentController {
     //생성자메소드를 통한 DI
     public InvestmentController(InvestmentService investmentService){
 
-    this.investmentService = investmentService;
+        this.investmentService = investmentService;
     }
 
     @GetMapping("/judge-main")
@@ -40,8 +40,8 @@ public class InvestmentController {
 
     @GetMapping("/search/judge")
     public String getInvestmentJudgeList(Model model
-                                        ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                        ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue) {
+            ,@RequestParam(name = "searchKey", required = false) String searchKey
+            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue) {
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
         if(searchKey != null) {
@@ -59,8 +59,8 @@ public class InvestmentController {
 
     @GetMapping("/search/law-satistify")
     public String getLawSatistifyList(Model model
-                                     ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                     ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
+            ,@RequestParam(name = "searchKey", required = false) String searchKey
+            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
 
         List<AdminLawSatistifyReason> lawSatistifyReasonList = null;
         if(searchKey != null) {
@@ -78,12 +78,12 @@ public class InvestmentController {
 
     @GetMapping("/search/incongruity-sectors")
     public String getIncongruitySectorsList(Model model
-                                           ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                           ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
+            ,@RequestParam(name = "searchKey", required = false) String searchKey
+            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
 
         List<AdminIncongruitySectors> incongruitySectorsList = null;
         if(searchKey != null) {
-           incongruitySectorsList = investmentService.getIncogruitySectorsList(searchKey, searchValue);
+            incongruitySectorsList = investmentService.getIncogruitySectorsList(searchKey, searchValue);
         }else {
             incongruitySectorsList = investmentService.getIncogruitySectorsList();
         }
@@ -97,8 +97,8 @@ public class InvestmentController {
 
     @GetMapping("/search/corporate-value")
     public String getCorporateValueEvaluationList(Model model
-                                                 ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                                 ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
+            ,@RequestParam(name = "searchKey", required = false) String searchKey
+            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
 
         List<AdminCorporateValueEvaluation> corporateValueEvaluationList = null;
         if(searchKey != null) {
@@ -243,11 +243,48 @@ public class InvestmentController {
     }
 
     @GetMapping("/update/corporate-value")
-    public String modifyCorporateValueEvaluation(Model model){
+    public String modifyCorporateValueEvaluation(Model model) {
 
         model.addAttribute("title", "기업가치 평가 결과 수정");
         model.addAttribute("contentsTitle","기업가치 평가 결과 수정");
 
         return "admin/judgement/investment/update/corporate_value_evaluation_update";
     }
+
+    @GetMapping("delete/judge")
+    public String reomveInvestmentJudge(Model model) {
+
+        model.addAttribute("title", "투자펀딩 심사요청 삭제");
+        model.addAttribute("contentsTitle","투자펀딩 심사요청 삭제");
+
+        return "admin/judgement/investment/delete/invest_jduge_delete";
+    }
+
+    @GetMapping("delete/law-satistify")
+    public String removeLawSatistify(Model model) {
+
+        model.addAttribute("title", "자본시장법 범위충족기준 삭제");
+        model.addAttribute("contentsTitle", "자본시장법 범위충족기준 삭제");
+
+        return "admin/judgement/investment/delete/law_satistify_delete";
+    }
+
+    @GetMapping("delete/incongruity-sectors")
+    public String removeIncongruitySectors(Model model) {
+
+        model.addAttribute("title", "부적합 업종 삭제");
+        model.addAttribute("contentsTitle","부적합 업종 삭제");
+
+        return "admin/judgement/investment/delete/incongruity_sectors_delete";
+    }
+
+    @GetMapping("delete/corporate-value")
+    public String removeCorporateValueEvaluation(Model model) {
+
+        model.addAttribute("title", "기업가치 평가 결과 삭제");
+        model.addAttribute("contentsTitle","기업가치 평가 결과 삭제");
+
+        return "admin/judgement/investment/delete/corporate_value_evaluation_delete";
+    }
+
 }
