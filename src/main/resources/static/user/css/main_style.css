@@ -30,11 +30,14 @@
 }
 .content-wrap {
     padding: 50px 0 20px;
+
+}
+.scroll-action-area {
     transform: translateY(150px);
     opacity: 0;
     transition: all .4s;
 }
-.content-wrap.scrolled {
+.scroll-action-area.scrolled {
     transform: translateY(0);
     opacity: 1;
 }
