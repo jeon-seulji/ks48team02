@@ -40,8 +40,8 @@ public class InvestmentController {
 
     @GetMapping("/search/judge")
     public String getInvestmentJudgeList(Model model
-            ,@RequestParam(name = "searchKey", required = false) String searchKey
-            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue) {
+                                        ,@RequestParam(name = "searchKey", required = false) String searchKey
+                                        ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue) {
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
         if(searchKey != null) {
@@ -59,8 +59,8 @@ public class InvestmentController {
 
     @GetMapping("/search/law-satistify")
     public String getLawSatistifyList(Model model
-            ,@RequestParam(name = "searchKey", required = false) String searchKey
-            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
+                                     ,@RequestParam(name = "searchKey", required = false) String searchKey
+                                     ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
 
         List<AdminLawSatistifyReason> lawSatistifyReasonList = null;
         if(searchKey != null) {
@@ -78,8 +78,8 @@ public class InvestmentController {
 
     @GetMapping("/search/incongruity-sectors")
     public String getIncongruitySectorsList(Model model
-            ,@RequestParam(name = "searchKey", required = false) String searchKey
-            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
+                                           ,@RequestParam(name = "searchKey", required = false) String searchKey
+                                           ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
 
         List<AdminIncongruitySectors> incongruitySectorsList = null;
         if(searchKey != null) {
@@ -97,8 +97,8 @@ public class InvestmentController {
 
     @GetMapping("/search/corporate-value")
     public String getCorporateValueEvaluationList(Model model
-            ,@RequestParam(name = "searchKey", required = false) String searchKey
-            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
+                                                 ,@RequestParam(name = "searchKey", required = false) String searchKey
+                                                 ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue){
 
         List<AdminCorporateValueEvaluation> corporateValueEvaluationList = null;
         if(searchKey != null) {
