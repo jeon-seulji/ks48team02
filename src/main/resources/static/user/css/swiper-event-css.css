@@ -136,3 +136,33 @@
 .swiper-pagination-current {
 	color: #fff !important;
 }
+.swiper-slide:hover .product-main-title {
+	text-decoration: underline;
+}
+.product-main-title {
+	width: 100%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	word-break: break-word;
+
+	display: -webkit-box;
+	-webkit-line-clamp: 2; /* 원하는 라인수 */
+	-webkit-box-orient: vertical
+}
+.slide-thumb,
+.slide-img {
+	overflow: hidden;
+}
+.slide-thumb:hover div,
+.slide-img:hover div{
+	transform: scale(1.1);
+}
+
+.slide-thumb div,
+.slide-img div{
+	width: 100%;
+	height: 100%;
+	background-position: center center;
+	background-size: cover;
+	transition: all .4s;
+}

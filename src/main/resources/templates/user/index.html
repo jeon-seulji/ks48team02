@@ -5,23 +5,23 @@
   	  
   	  <head>
 		  <title>flocky</title>
-  	  <!--  사용자별 css file 추가 부분 -->
-  	   <!-- Link Swiper's CSS -->
-  		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-  		<link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
-  		<link rel="stylesheet" th:href="@{/user/css/main_style.css}" />
-
-  	 
+		  <!--  사용자별 css file 추가 부분 -->
+		  <!-- Link Swiper's CSS -->
+		  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+		  <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
+		  <link rel="stylesheet" th:href="@{/user/css/main_style.css}" />
   	  </head>
   	  
   	  
 	 <!-- 사용자 페이지별 javascript file -->
 	 <th:block layout:fragment="customJsFile">
-		<!-- Swiper JS -->
-	  	<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+		 <!-- Swiper JS -->
+	  	 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
 
-	
+		 <!-- scroll to give class js code file -->
+		 <script th:src="@{/user/js/scroll-active.js}"></script>
+
 	</th:block>
 	
 	
@@ -47,8 +47,8 @@
 				$('.tab-menu-btn li').removeClass('active');
 				$(this).addClass('active');
 				let tabData = $(this).attr('data-tab');
-				$('.main-rank-area').hide();
-				$('#'+tabData).show();
+				$('.main-rank-area').hide().removeClass('active');
+				$('#'+tabData).show().addClass('active');
 			});
 
 			// contents swiper slide
@@ -85,6 +85,10 @@
 					prevEl: "#donationProject .swiper-button-prev",
 				},
 			});
+
+
+			$('#mdJoinProject, #project-rank').addClass('active');
+
 
 		</script>
 
@@ -174,7 +178,22 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
+											</div>
+											<div class="description">
+												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션! 지금 구매하면 한정 에디션 구매 선착 500명</div>
+												<div class="product-detail-info">
+													<span class="funding-percent">350%</span>
+													<span class="category">테크·가전</span>
+												</div>
 
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a th:href="@{#}">
+											<div class="slide-img">
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -189,7 +208,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -204,7 +223,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -219,7 +238,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -234,7 +253,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -249,7 +268,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -264,7 +283,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -279,7 +298,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -294,7 +313,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -309,22 +328,7 @@
 									<div class="swiper-slide">
 										<a th:href="@{#}">
 											<div class="slide-img">
-
-											</div>
-											<div class="description">
-												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-												<div class="product-detail-info">
-													<span class="funding-percent">350%</span>
-													<span class="category">테크·가전</span>
-												</div>
-
-											</div>
-										</a>
-									</div>
-									<div class="swiper-slide">
-										<a th:href="@{#}">
-											<div class="slide-img">
-
+												<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 											</div>
 											<div class="description">
 												<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
@@ -348,7 +352,7 @@
 									<li data-tab="funding-rank" class="active">펀딩 순위</li>
 									<li data-tab="store-rank">스토어 순위</li>
 								</ul>
-								<div id="funding-rank" class="main-rank-area" style="display: block;">
+								<div id="funding-rank" class="main-rank-area active" style="display: block;">
 									<ul>
 										<li>
 											<a th:href="@{#}">
@@ -500,152 +504,187 @@
 						<div class="swiper mySwiper contents-area">
 							<div class="swiper-wrapper">
 								<div class="swiper-slide">
-									<a th></a>
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
-
-
+								<div class="swiper-slide">
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
+										</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
+								</div>
 							</div>
 
 						</div>
@@ -669,158 +708,193 @@
 						<div class="swiper mySwiper contents-area">
 							<div class="swiper-wrapper">
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
-
-
+								<div class="swiper-slide">
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
+										</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
+								</div>
 							</div>
 
 						</div>
 						<div class="swiper-button-next"></div>
 						<div class="swiper-button-prev"></div>
 					</div>
-
 				</section>
 
 				<section id="donationProject" class="content-wrap">
@@ -830,153 +904,188 @@
 						<div class="swiper mySwiper contents-area">
 							<div class="swiper-wrapper">
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
-
-
+								<div class="swiper-slide">
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
+										</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
+								</div>
 							</div>
-
 						</div>
 						<div class="swiper-button-next"></div>
 						<div class="swiper-button-prev"></div>
@@ -991,153 +1100,188 @@
 						<div class="swiper mySwiper contents-area">
 							<div class="swiper-wrapper">
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
 								<div class="swiper-slide">
-									<div class="slide-thumb">
-
-									</div>
-									<div class="description">
-										<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-										<div class="product-detail-info">
-											<span class="funding-percent">350%</span>
-											<span class="category">테크·가전</span>
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
 										</div>
-									</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
 								</div>
-
-
+								<div class="swiper-slide">
+									<a th:href="@{#}">
+										<div class="slide-thumb">
+											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
+										</div>
+										<div class="description">
+											<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+											<div class="product-detail-info">
+												<span class="funding-percent">350%</span>
+												<span class="category">테크·가전</span>
+											</div>
+										</div>
+									</a>
+								</div>
 							</div>
-
 						</div>
 						<div class="swiper-button-next"></div>
 						<div class="swiper-button-prev"></div>
