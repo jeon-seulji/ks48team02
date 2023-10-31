@@ -22,41 +22,63 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
     <form id="modifyIncongruitySectorsForm" th:action="@{/admin/investment/update/incongruity-sectors}" method="post">
-        <table th:object="${incongruitySectorsInfo}">
-            <tbody>
-            <tr>
-                <td><label for="incongruitySectorsCode">부적합 업종 코드</label></td>
-                <td>
-                    <input type="text" id="incongruitySectorsCode" name="incongruitySectorsCode" placeholder="부적합 업종 코드를 입력해주세요" th:value="*{incongruitySectorsCode}" readonly="readonly"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="incongruitySectorsBusiness">부적합 업종</label></td>
-                <td colspan="2">
-                    <input type="text" id="incongruitySectorsBusiness" name="incongruitySectorsBusiness" placeholder="부적합 업종을 입력해주세요" th:value="*{incongruitySectorsBusiness}"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="memberId">등록자</label></td>
-                <td colspan="2">
-                    <input type="text" id="memberId" name="memberId" placeholder="등록자를 입력해주세요" th:value="*{memberId}" readonly="readonly"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="incongruitySectorsWhether">부적합 업종 여부</label></td>
-                <td colspan="2">
-                    <input type="text" id="incongruitySectorsWhether" name="incongruitySectorsWhether" placeholder="부적합 업종 여부를 입력해주세요" readonly="readonly" th:value="*{incongruitySectorsWhether}"/>
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="3">
-                    <button type="submit" id="modifyIncongruitySectorsBtn">수정하기</button>
-                </td>
-            </tr>
-            </tfoot>
-        </table>
+
+        <div class="container admin-content-wrapper" th:object="${incongruitySectorsInfo}">
+
+
+            <div class="row g-5" style="justify-content: center;">
+                <div class="col-md-7 col-lg-8">
+                    <div class="row g-3">
+
+                        <br>
+                        <div class="my-2 col-12">
+                            <label for="memberPw" class="form-label fw-bord text-dark">관리자 비밀번호</label>
+                            <input type="text" class="form-control" id="memberPw" placeholder="관리자 비밀번호를 재입력해주세요.">
+                        </div>
+                        <br>
+                        <button type="button" class="submitBtn">
+                            확인
+                        </button>
+
+                        <hr class="my-4">
+
+                        <div class="my-2 col-12">
+                            <label for="incongruitySectorsCode" class="form-label fw-bord text-dark">부적합 업종 코드</label>
+                            <input type="text" class="form-control" id="incongruitySectorsCode" name="incongruitySectorsCode" placeholder="부적합 업종 코드를 입력해주세요." th:value="*{incongruitySectorsCode}" readonly="readonly" disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="incongruitySectorsBusiness" class="form-label fw-bord text-dark">부적합 업종</label>
+                            <input type="text" class="form-control" id="incongruitySectorsBusiness" name="incongruitySectorsBusiness" th:value="*{incongruitySectorsBusiness}" placeholder="부적합 업종을 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="memberId" class="form-label fw-bord text-dark">등록한 아이디</label>
+                            <input type="text" class="form-control" id="memberId" name="memberId" th:value="*{memberId}" placeholder="등록한 아이디를 입력해주세요." readonly="readonly" disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="incongruitySectorsWhether" class="form-label fw-bord text-dark">부적합 여부</label>
+                            <select class="form-control" id="incongruitySectorsWhether" name="incongruitySectorsWhether" disabled="disabled">
+                                <option value="">===부적합여부를 선택해주세요===</option>
+                                <option value="1">적합</option>
+                                <option value="0">부적합</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <button class="my-5 w-100 btn btn-primary btn-lg" type="submit" id="modifyIncongruitySectorsBtn">수정하기</button>
+                </div>
+            </div>
+
+        </div>
+
     </form>
 </th:block>
 </html>

@@ -5,6 +5,27 @@
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
+    <style>
+        table{
+            display:flex;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        tbody{
+            display:flex
+        }
+
+        th{
+            display:block
+        }
+
+        td{display:block;
+            width: 1000px;
+        }
+    </style>
 </head>
 
 
@@ -50,6 +71,7 @@
                 <th>심사자 아이디</th>
                 <th>심사결과</th>
                 <th>수정</th>
+                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
@@ -89,6 +111,9 @@
 
                 <td>
                     <a th:href="@{/admin/investment/update/judge(investmentRequestJudgeCode=*{investmentRequestJudgeCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/investment/delete/judge(investmentRequestJudgeCode=*{investmentRequestJudgeCode})}">삭제</a>
                 </td>
             </tr>
             </tbody>
