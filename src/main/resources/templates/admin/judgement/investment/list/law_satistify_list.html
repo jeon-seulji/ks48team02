@@ -4,7 +4,7 @@
       layout:decorate="~{admin/layout/default}">
 
 <head>
-  <!--  사용자별 css file 추가 부분 -->
+    <!--  사용자별 css file 추가 부분 -->
 </head>
 
 
@@ -25,34 +25,38 @@
     <div class="admin-content-wrapper">
         <table>
             <thead>
-                <tr>
-                    <th>자본시장법 범위충족 코드</th>
-                    <th>자본시장법 범위충족 사유</th>
-                    <th>등록자 아이디</th>
-                    <th>등록일시</th>
-                    <th>수정</th>
-                </tr>
+            <tr>
+                <th>자본시장법 범위충족 코드</th>
+                <th>자본시장법 범위충족 사유</th>
+                <th>등록자 아이디</th>
+                <th>등록일시</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:if="${lawSatistifyReasonList == null}">
-                    <td colspan="5">자본시장법 범위충족 목록이 없습니다.</td>
-                </tr>
-                <tr th:unless="${lawSatistifyReasonList == null}" th:each="l : ${lawSatistifyReasonList}">
-                    <td>
-                        <a th:href="@{/admin/investment/view/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}" th:text="${l.lawSatistifyCode}"></a>
-                    </td>
-                    <td th:text="${l.lawSatistifyReason}"></td>
-                    <td th:text="${l.memberId}"></td>
-                    <td th:text="${l.codeRegDay}"></td>
-                    <td>
-                        <a th:href="@{/admin/investment/update/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}">수정</a>
-                    </td>
-                </tr>
+            <tr th:if="${lawSatistifyReasonList == null}">
+                <td colspan="6">자본시장법 범위충족 목록이 없습니다.</td>
+            </tr>
+            <tr th:unless="${lawSatistifyReasonList == null}" th:each="l : ${lawSatistifyReasonList}">
+                <td>
+                    <a th:href="@{/admin/investment/view/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}" th:text="${l.lawSatistifyCode}"></a>
+                </td>
+                <td th:text="${l.lawSatistifyReason}"></td>
+                <td th:text="${l.memberId}"></td>
+                <td th:text="${l.codeRegDay}"></td>
+                <td>
+                    <a th:href="@{/admin/investment/update/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/investment/delete/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}">삭제</a>
+                </td>
+            </tr>
             </tbody>
         </table>
         <br>
         <button type="button" class="submitBtn" th:onclick="|location.href='@{/admin/investment/insert/law-satistify}'|">
-          등록하기
+            등록하기
         </button>
 
         <div class="board-page-area">

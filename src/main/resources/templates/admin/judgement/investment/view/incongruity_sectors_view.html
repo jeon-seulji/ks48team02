@@ -5,6 +5,27 @@
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
+    <style>
+        table{
+            display:flex;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        tbody{
+            display:flex
+        }
+
+        th{
+            display:block
+        }
+
+        td{display:block;
+            width: 1000px;
+        }
+    </style>
 </head>
 
 
@@ -30,6 +51,7 @@
                 <th>등록한 아이디</th>
                 <th>등록일시</th>
                 <th>수정</th>
+                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
@@ -43,6 +65,9 @@
                 <td th:text="*{codeRegDay}"></td>
                 <td>
                     <a th:href="@{/admin/investment/update/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/investment/delete/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}">삭제</a>
                 </td>
             </tr>
             </tbody>
