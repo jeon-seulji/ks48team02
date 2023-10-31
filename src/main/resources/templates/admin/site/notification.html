@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" th:href="@{/admin/css/adminBoard.css}">
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+    <!--    <script>-->
+    <!--        function popupOpen(){-->
+    <!--            console.log("a");-->
+    <!--            var url= "/admin/board/main";    //팝업창에 출력될 페이지 URL-->
+    <!--            var winWidth = 700;-->
+    <!--            var winHeight = 600;-->
+
+    <!--            var popupX = (document.body.offsetWidth / 2) - (winWidth / 2);-->
+    <!--            // 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음-->
+
+    <!--            var popupY= (window.screen.height / 2) - (winHeight / 2);-->
+    <!--            // 만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음-->
+    <!--            var popupOption= 'status=no, height='+winWidth+', width='+winHeight+', left='+ popupX + ', top='+ popupY;    //팝업창 옵션(optoin)-->
+
+    <!--            window.open(url,' target="_blank"',popupOption);-->
+    <!--    </script>-->
+
+</th:block>
+
+<th:block layout:fragment="customContents">
+    <form>
+        <div class="boardMain" style="margin-bottom: 20px;">
+            <h3>알림 관리</h3>
+        </div>
+
+        <div class="section">
+            <div class="title"><h2>알림 목록</h2></div>
+            <div class="addBtnArea">
+                <a class="addBtn">알림 등록</a>
+            </div>
+        </div>
+
+        <div class="boardTable">
+            <table border="1">
+                <thead class="top">
+                <tr>
+                    <th><input type="checkbox" id="allCheck"></th>
+                    <th>알림 유형</th>
+                    <th>유저 아이디</th>
+                    <th>알림 내용</th>
+                    <th>알림 발생 일시</th>
+                </tr>
+                </thead>
+                <tbody class="center">
+
+                </tbody>
+            </table>
+        </div>
+    </form>
+</th:block>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <form id="modifyLawSatistifyForm" th:action="@{/admin/investment/update/law-satistify}" method="post">
+        <table th:object="${lawSatistifyInfo}">
+            <tbody>
+                <tr>
+                    <td><label for="lawSatistifyCode">자본시장법 범위충족 코드</label></td>
+                    <td>
+                        <input type="text" id="lawSatistifyCode" name="lawSatistifyCode" placeholder="자본시장법 범위충족 코드를 입력해주세요" th:value="*{lawSatistifyCode}" readonly="readonly"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="lawSatistifyReason">자본시장법 범위충족 사유</label></td>
+                    <td colspan="2">
+                        <input type="text" id="lawSatistifyReason" name="lawSatistifyReason" placeholder="자본시장법 범위충족 사유를 입력해주세요" th:value="*{lawSatistifyReason}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="memberId">등록자</label></td>
+                    <td colspan="2">
+                        <input type="text" id="memberId" name="memberId" placeholder="등록자를 입력해주세요" th:value="*{memberId}" readonly="readonly"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="lawSatistifyWhether">자본시장법 범위충족 여부</label></td>
+                    <td colspan="2">
+                        <input type="text" id="lawSatistifyWhether" name="lawSatistifyWhether" placeholder="자본시장법 범위충족 여부를 입력해주세요" readonly="readonly" th:value="*{lawSatistifyWhether}"/>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        <button type="submit" id="modifyLawSatistifyBtn">수정하기</button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</th:block>
+</html>

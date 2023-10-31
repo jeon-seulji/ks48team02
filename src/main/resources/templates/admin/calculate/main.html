@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <title th:text="${title}"></title>
+</head>
+
+<!-- 통계 대시보드 -->
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+    <script>
+        // window.onresize = function(){
+        //     let widthValue = $('.demo-container').width();
+        //     $('.demo-container').attr('width',widthValue*0.72);
+        //     document.location.reload();
+        // };
+
+
+
+
+        // chart 분류 선택시 chart 생성
+       // import pattern from "../../../static/admin/vendors/mocha/mocha";
+
+        $('#reportrange').on('change',function(){
+            let thisValue = $(this).val();
+            $('.demo-container').removeClass('active');
+            switch(thisValue){
+                case 'total' :
+                    console.log('total');
+                    $('#myTotalChart').addClass('active');
+                    break;
+                case 'reward' :
+                    console.log('reward');
+                    $('#myRewardChart').addClass('active');
+                    break;
+                case 'donation' :
+                    console.log('donation');
+                    $('#myDonationChart').addClass('active');
+                    break;
+                case 'investment' :
+                    console.log('investment');
+                    $('#myInvestmentChart').addClass('active');
+                    break;
+            }
+        });
+
+
+        // reward Chart
+        new Chart(document.querySelector("#myRewardChart canvas"), {
+            type: 'bar',
+            data: {
+                labels: ['10/13','10/14','10/15','10/16','10/17','10/18','10/19'],
+                datasets: [{
+                    // barThickness: 10,
+                    data: [86,114,1006,107,221,783,2478],
+                    label: "리워드",
+                    backgroundColor: projectPointColor[0],
+                    // backgroundColor: (context) => {
+                    //     const bgColor = [
+                    //         'rgba(234,84,85,0.25)',
+                    //         'rgba(254,182,146,0.59)'
+                    //     ];
+                    //     if (!context.chart.chartArea){
+                    //         return;
+                    //     }
+                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
+                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+                    //     gradientBg.addColorStop(0, bgColor[0]);
+                    //     gradientBg.addColorStop(1, bgColor[1]);
+                    //     return gradientBg;
+                    // },
+                    fill: true
+
+                }]
+            },
+            options: {
+                title: {
+                    display: false,
+                    text: 'World population per region (in millions)'
+                }
+            }
+        });
+
+
+        //donation chart
+        new Chart(document.querySelector("#myDonationChart canvas"), {
+            type: 'bar',
+            data: {
+                labels: ['10/13','10/14','10/15','10/16','10/17','10/18','10/19'],
+                datasets: [{
+                    // barThickness: 10,
+                    data: [282,1350,1411,502,635,809,947],
+                    label: "기부",
+                    backgroundColor: projectPointColor[1],
+                    // backgroundColor: (context) => {
+                    //     const bgColor = [
+                    //         'rgba(50,204,236,0.2)',
+                    //         'rgba(144,247,236,0.6)'
+                    //     ];
+                    //     if (!context.chart.chartArea){
+                    //         return;
+                    //     }
+                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
+                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+                    //     gradientBg.addColorStop(0, bgColor[0]);
+                    //     gradientBg.addColorStop(1, bgColor[1]);
+                    //     return gradientBg;
+                    // },
+                    fill: true
+                }]
+            },
+            options: {
+                title: {
+                    display: false,
+                    text: 'World population per region (in millions)'
+                }
+            }
+        });
+
+
+        // investment chart
+        new Chart(document.querySelector("#myInvestmentChart canvas"), {
+            type: 'bar',
+            data: {
+                labels: ['10/13','10/14','10/15','10/16','10/17','10/18','10/19'],
+                datasets: [{
+                    // barThickness: 10,
+                    data: [1680,1270,178,930,1203,1276,708],
+                    label: "투자",
+                    backgroundColor: projectPointColor[2],
+                    // backgroundColor: (context) => {
+                    //     const bgColor = [
+                    //         'rgba(206,159,252,0.2)',
+                    //         'rgba(115,103,240,0.72)'
+                    //     ];
+                    //     if (!context.chart.chartArea){
+                    //         return;
+                    //     }
+                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
+                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+                    //     gradientBg.addColorStop(0, bgColor[0]);
+                    //     gradientBg.addColorStop(1, bgColor[1]);
+                    //     return gradientBg;
+                    // },
+                    fill: true
+                }]
+            },
+            options: {
+                title: {
+                    display: false,
+                    text: 'World population per region (in millions)'
+                }
+            }
+        });
+
+
+        // total Chart
+        new Chart(document.querySelector("#myTotalChart canvas"), {
+            type: 'bar',
+            data: {
+                labels: ['10/13','10/14','10/15','10/16','10/17','10/18','10/19'],
+                datasets: [{
+                    // barThickness: 10,
+                    data: [86,114,1006,107,221,783,2458,1520],
+                    label: "리워드",
+                    backgroundColor: projectPointColor[0],
+                    // backgroundColor: (context) => {
+                    //     const bgColor = [
+                    //         'rgba(234,84,85,0.2)',
+                    //         'rgba(254,182,146,0.59)'
+                    //     ];
+                    //     if (!context.chart.chartArea){
+                    //         return;
+                    //     }
+                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
+                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+                    //     gradientBg.addColorStop(0, bgColor[0]);
+                    //     gradientBg.addColorStop(1, bgColor[1]);
+                    //     return gradientBg;
+                    // },
+                    fill: true
+                }, {
+                    // barThickness: 10,
+                    data: [282,1350,1411,502,635,809,947],
+                    label: "기부",
+                    backgroundColor: projectPointColor[1],
+                    // backgroundColor: (context) => {
+                    //     const bgColor = [
+                    //         'rgba(50,204,236,0.2)',
+                    //         'rgba(144,247,236,0.6)'
+                    //     ];
+                    //     if (!context.chart.chartArea){
+                    //         return;
+                    //     }
+                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
+                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+                    //     gradientBg.addColorStop(0, bgColor[0]);
+                    //     gradientBg.addColorStop(1, bgColor[1]);
+                    //     return gradientBg;
+                    // },
+                    fill: true
+                }, {
+                    // barThickness: 10,
+                    data: [1680,1270,178,930,1203,1276,708],
+                    label: "투자",
+                    backgroundColor: projectPointColor[2],
+                    // backgroundColor: (context) => {
+                    //     const bgColor = [
+                    //         'rgba(206,159,252,0.2)',
+                    //         'rgba(115,103,240,0.72)'
+                    //     ];
+                    //     if (!context.chart.chartArea){
+                    //         return;
+                    //     }
+                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
+                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+                    //     gradientBg.addColorStop(0, bgColor[0]);
+                    //     gradientBg.addColorStop(1, bgColor[1]);
+                    //     return gradientBg;
+                    // },
+                    fill: true
+                }]
+            },
+            options: {
+                title: {
+                    display: false,
+                    text: 'World population per region (in millions)'
+                }
+            }
+        });
+
+    </script>
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+
+
+        <div class="filter">
+            <label for="reportrange"></label>
+            <select id="reportrange" class="pull-right" name="total-chart-project-select" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                <option value="total">전체 프로젝트</option>
+                <option value="reward">리워드 프로젝트</option>
+                <option value="donation">기부 프로젝트</option>
+                <option value="investment">투자 프로젝트</option>
+            </select>
+        </div>
+        <section id="todat-dash" class="admin-today-dash" >
+            <div class="admin-content-wrapper">
+                <!-- 그래프 -->
+                <div>
+                    <h5 class="chart-title">펀딩 성공 프로젝트 매출 집계</h5>
+                    <div class="x_content">
+                        <div class="chart-description">
+
+                            <!-- total chart area -->
+                            <div>
+
+                                <div class="demo-container active" id="myTotalChart">
+                                    <!--  chartjs canvas area -->
+                                    <canvas width="740" height="280"></canvas>
+                                </div>
+
+                                <!-- reward chart area -->
+                                <div class="demo-container" id="myRewardChart" style="height:280px">
+                                    <!--  chartjs canvas area -->
+                                    <canvas width="740" height="280"></canvas>
+                                </div>
+
+                                <!-- donation chart area -->
+                                <div class="demo-container" id="myDonationChart" style="height:280px">
+                                    <!--  chartjs canvas area -->
+                                    <canvas width="740" height="280"></canvas>
+                                </div>
+
+                                <!-- investment chart area -->
+                                <div class="demo-container" id="myInvestmentChart" style="height:280px">
+                                    <!--  chartjs canvas area -->
+                                    <canvas width="740" height="280"></canvas>
+                                </div>
+
+                            </div>
+                            <div class="tiles-area">
+                                <div class="tiles">
+                                    <div class="chart-description-data">
+                                        <p>오늘 들어온 주문</p>
+                                        <h2><span class="order-count">231,809</span> 건</h2>
+                                    </div>
+                                    <div class="chart-description-data">
+                                        <p>오늘 총 결제된 금액</p>
+                                        <h2><span class="payment-total">231,809,000</span>원</h2>
+                                    </div>
+                                    <div class="chart-description-data">
+                                        <p>오늘 승인 프로젝트 수</p>
+                                        <h2><span class="project-count">521</span></h2>
+                                    </div>
+                                </div>
+                                <div class="cal-total-info">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="area-row">
+            <section id="tdsslRnkng" class="admin-today-dash" >
+                <div class="title-wrap">
+                    <h4 class="admin-content-title">오늘 장바구니 담긴 순위</h4>
+                    <form class="project_selected" method="get">
+                        <select name="projectSelected">
+                            <option value="">=== 프로젝트 분류 ===</option>
+                            <option value="reward">리워드 프로젝트 통계</option>
+                            <option value="donation">기부 프로젝트 통계</option>
+                            <option value="investment">투자 프로젝트 통계</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="admin-content-wrapper">
+                    <table class="total-table action">
+                        <thead>
+                        <tr>
+                            <th class="table-no">No.</th>
+                            <th >상품명</th>
+                            <th class="table-option">옵션</th>
+                            <th class="table-count">개수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4" style="text-align: center;">토탈 데이터가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </section>
+            <section id="tdyrShcrt" class="admin-today-dash" >
+                <div class="title-wrap">
+                    <h4 class="admin-content-title">오늘 상품 판매량 순위</h4>
+                    <form class="project_selected" method="get">
+                        <select name="projectSelected">
+                            <option value="">=== 프로젝트 분류 ===</option>
+                            <option value="reward">리워드 프로젝트 통계</option>
+                            <option value="donation">기부 프로젝트 통계</option>
+                            <option value="investment">투자 프로젝트 통계</option>
+                        </select>
+                    </form>
+                </div>
+
+                <div class="admin-content-wrapper">
+                    <table class="total-table action">
+                        <thead>
+                        <tr>
+                            <th class="table-no">No.</th>
+                            <th >상품명</th>
+                            <th class="table-option">옵션</th>
+                            <th class="table-count">개수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4" style="text-align: center;">토탈 데이터가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </section>
+        </div>
+
+</th:block>
+
+</html>

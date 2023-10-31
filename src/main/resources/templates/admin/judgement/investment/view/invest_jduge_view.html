@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <div class="admin-content-wrapper">
+        <table th:object="${investmentRequestJudgeInfo}">
+            <thead>
+            <tr>
+                <th>투자 심사요청 코드</th>
+                <th>자본시장법 범위충족 코드</th>
+                <th>부적합 업종 코드</th>
+                <th>업종 코드</th>
+                <th>기업가치 평가 코드</th>
+                <th>스토어 코드</th>
+                <th>투자 심사요청 제목</th>
+                <th>요청한 판매자 아이디</th>
+                <th>스토어명</th>
+                <th>회사명</th>
+                <th>요청자명</th>
+                <th>업종</th>
+                <th>심사요청 내용</th>
+                <th>목표펀딩금액</th>
+                <th>자본시장법 범위충족 사유</th>
+                <th>영업이익</th>
+                <th>감가상각비</th>
+                <th>순차입금</th>
+                <th>현재주식수</th>
+                <th>발행예정주식수</th>
+                <th>신청일자</th>
+                <th>심사완료일자</th>
+                <th>심사자 아이디</th>
+                <th>심사결과</th>
+                <th>수정</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${investmentRequestJudgeInfo == null}">
+                <td colspan="25">투자 심사요청 내용이 없습니다.</td>
+            </tr>
+            <tr th:unless="${investmentRequestJudgeInfo == null}">
+                <td th:text="*{investmentRequestJudgeCode}"></td>
+                <td th:if="*{lawSatistifyCode == null}">해당없음</td>
+                <td th:unless="*{lawSatistifyCode == null}" th:text="*{lawSatistifyCode}"></td>
+                <td th:if="*{incongruitySectorsCode == null}">해당없음</td>
+                <td th:unless="*{incongruitySectorsCode == null}" th:text="*{incongruitySectorsCode}"></td>
+                <td th:text="*{companyBusinessTypeCode}"></td>
+                <td th:if="*{corporateValueEvaluationCode == null}">해당없음</td>
+                <td th:unless="*{corporateValueEvaluationCode == null}" th:text="*{corporateValueEvaluationCode}"></td>
+                <td th:text="*{storeCode}"></td>
+                <td th:text="*{investmentRequestSubject}"></td>
+                <td th:text="*{memberIdSeller}"></td>
+                <td th:text="*{storeName}"></td>
+                <td th:text="*{investmentCompany}"></td>
+                <td th:text="*{representativeName}"></td>
+                <td th:text="*{cbtBusinessType}"></td>
+                <td th:text="*{investmentRequestContent}"></td>
+                <td th:text="*{investmentAchievementMoney}"></td>
+                <td th:text="*{lawSatistifyReason}"></td>
+                <td th:text="*{businessProfits}"></td>
+                <td th:text="*{depreciation}"></td>
+                <td th:text="*{netDebt}"></td>
+                <td th:text="*{stockNumber}"></td>
+                <td th:text="*{issueStockNumber}"></td>
+                <td th:text="*{investmentRequestDate}"></td>
+                <td th:text="*{investJudgeDate}"></td>
+                <td th:text="*{memberId}"></td>
+                <td th:if="*{investJudgeResult == 0}">심사 대기</td>
+                <td th:if="*{investJudgeResult == 1}">심사 승인</td>
+                <td th:if="*{investJudgeResult == 2}">심사 반려</td>
+
+                <td>
+                    <a th:href="@{/admin/investment/update/judge(investmentRequestJudgeCode=*{investmentRequestJudgeCode})}">수정</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</th:block>
+</html>

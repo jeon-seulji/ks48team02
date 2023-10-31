@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" th:href="@{/admin/css/adminBoard.css}">
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+    <script>
+
+    </script>
+
+</th:block>
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+    <script>
+        // 체크박스 전체 선택
+        $('#allCheck').on('click', function (){
+            let isChecked = $(this).prop('checked');
+            $('input[name="admin_board"]').prop('checked', isChecked);
+        });
+    </script>
+</th:block>
+
+<th:block layout:fragment="customContents">
+    <form>
+        <div class="boardMain" style="margin-bottom: 20px;">
+            <h3>공지사항 관리</h3>
+        </div>
+
+        <div class="section">
+            <div class="title"><h2>공지사항 목록</h2></div>
+            <div class="addBtnArea">
+                <a class="addBtn">게시판 등록</a>
+            </div>
+        </div>
+
+        <div class="boardTable">
+            <table border="1">
+                <thead class="top">
+                <tr>
+                    <th>
+                        <input type="checkbox" id="allCheck">
+                    </th>
+                    <th>카테고리<br>유형</th>
+                    <th>게시판 이름</th>
+                    <th>게시 날짜</th>
+                    <th>관리자 ID</th>
+                    <th>게시물 관리</th>
+                </tr>
+                </thead>
+                <tbody class="center">
+                <tr>
+                    <td>
+                        <input type="checkbox" class="rowCheck" name="admin_board" value="1">
+                    </td>
+                    <td>공지사항</td>
+                    <td>
+                        <a th:href="@{/user/board/3}">[서비스 안내] 플로키 서비스 투자 오픈</a>
+                    </td>
+                    <td>2023-10-18</td>
+                    <td>id001</td>
+                    <td>
+                        <a class="modify" onclick="popupOpen('/admin/board/modify1')">수정</a>
+                        <a class="delete" th:href="@{#}">삭제</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" class="rowCheck" name="admin_board" value="2">
+                    </td>
+                    <td>공지사항</td>
+                    <td>
+                        <a th:href="@{/user/board/2}">[서비스 안내] 플로키 서비스 리워드 오픈</a>
+                    </td>
+                    <td>2023-10-18</td>
+                    <td>id001</td>
+                    <td>
+                        <a class="modify" onclick="popupOpen('/admin/board/modify2')">수정</a>
+                        <a class="delete" th:href="@{#}">삭제</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" class="rowCheck" name="admin_board" value="3">
+                    </td>
+                    <td>공지사항</td>
+                    <td>
+                        <a th:href="@{/user/board/1}">[서비스 안내] 플로키 서비스 오픈</a>
+                    </td>
+                    <td>2023-10-18</td>
+                    <td>id001</td>
+                    <td>
+                        <a class="modify" onclick="popupOpen('/admin/board/modify3')">수정</a>
+                        <a class="delete" th:href="@{#}">삭제</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</th:block>
+</html>

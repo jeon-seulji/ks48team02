@@ -1,0 +1,120 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org/" lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/user/layout/semi_default}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>회원 탈퇴 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+
+
+    <style>
+
+        #PageWrapper {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+
+            margin-bottom: 50px;
+            height:100vh ;
+
+            align-items: center;
+        }
+
+        #AccountContainer {
+            background-color: yellow;
+            display: flex;
+            justify-content: center;
+            width: 500px;
+            height: 770px;
+            align-items: center;
+            flex-direction: column;
+        }
+        #ftco-navbar {
+            background-color: white; !important;
+        }
+
+        .container {
+            flex-direction: row;
+            align-items: baseline; !important;
+            justify-content: space-between;
+            margin-top: 0;
+            margin-bottom: 0 ;
+
+        }
+
+        .left-empty-space {
+
+            color:white;
+            width: 132px;
+            height: 40px;
+
+        }
+
+        #logo-container {
+            padding-left: 0; !important;
+        }
+
+        .top-right-conts {
+            padding-right: 0; !important;
+        }
+        .login-logo {
+            position: relative;
+        }
+        .login-logo .top-left-conts {
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-width: 800px){
+            .navbar.navbar-expand-lg.ftco_navbar.ftco-navbar-light, .py-1.bg-primary {
+                display: none;
+
+            }
+        }
+
+        .login-logo .container {
+            justify-content: center;
+
+        }
+
+        .login-logo .user-connection-menu {
+            display: none;
+        }
+
+        /* 탈퇴 동의 체크박스 */
+        .form-check-label {
+            color: grey;
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+<body>
+<th:block layout:fragment="customContents">
+    <div id="PageWrapper">
+        <div id="AccountContainer">
+            
+        </div>
+
+    </div>
+</th:block>
+
+
+
+
+
+
+<script>
+    $(document).ready(function (){
+        $('.for-blank-space').hide();
+    })
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>

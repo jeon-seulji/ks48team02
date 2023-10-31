@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/user/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <!-- Link Swiper's CSS -->
+    <style>
+        .category-button {
+            border: none;
+            border-radius: 25px; /* 라운드 처리 반경을 조정합니다. */
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .category-li{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-left: 20px;
+        }
+        .selected {
+            font-weight: bold;
+            color: black;
+        }
+        ul.d-flex li:hover {
+            cursor: pointer;
+        }
+        .investment-item-box{
+            width: 350px;
+            height: 300px;
+        }
+        .investment-item-first-child{
+            background: grey;
+            width: 350px;
+            height: 200px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .investment-item-first-child img{
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+        }
+        .investment-item-second-child{
+            width: 350px;
+            height: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .investment-item-third-child{
+            width: 350px;
+            height: auto;
+            font-weight: bolder;
+            color: black;
+            font-size: 15px;
+        }
+        .investment-item-fourth-child{
+            width: 350px;
+            height: auto;
+        }
+        .investment-item-span-first{
+            font-weight: bold;
+            font-size: 20px;
+            color: #235FD9;
+        }
+        .investment-item-span-second{
+            margin-left: 5px;
+        }
+        .investment-item-span-third{
+            margin-left: auto;
+            color: #235FD9;
+            background: #cce5ff;
+            font-size: 12px;
+            padding: 2px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
+
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
+
+</th:block>
+
+
+<!-- 사용자별 스크립트 작성 -->
+
+<th:block layout:fragment="customJsCode">
+
+
+    <script>
+        function sortItemClickedStyle(element) {
+            const listItems = document.querySelectorAll("#sort-item-wrap li");
+
+            for (const listItem of listItems) {
+                listItem.classList.remove("selected");
+            }
+
+            element.classList.add("selected");
+        }
+        function cateItemClickedStyle(element) {
+            const listItems = document.querySelectorAll("#category-wrap li");
+
+            for (const listItem of listItems) {
+                listItem.classList.remove("selected");
+            }
+
+            element.classList.add("selected");
+        }
+
+        // 초기 스타일이 적용되도록 직접 호출
+        document.addEventListener("DOMContentLoaded", function() {
+            const sortItemWrap = document.querySelector("#sort-item-wrap li:first-child");
+            sortItemWrap.classList.add("selected");
+
+            const categoryItemWrap = document.querySelector("#category-wrap li:first-child");
+            categoryItemWrap.classList.add("selected");
+        });
+    </script>
+
+</th:block>
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <section id="main-swiper-slide" class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide slide-1">
+                <div class="container">
+                    <div>
+                        <div class="sub-title">NEW</div>
+                        <h2>
+                            플로키 투자회원 전용
+                            <br>
+                            카톡방 오픈
+                        </h2>
+                        <div class="slide-description">
+                            플로키 회원이라면 누구나 입장 가능
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide slide-2">
+                <div class="container">
+                    <div>
+                        <div class="sub-title">EVENT</div>
+                        <h2>
+                            특별히 검증된 상품만 모았어요
+                            <br>
+                            신상품 10% 할인
+                        </h2>
+                        <div class="slide-description">
+                            이벤트 페이지 참조
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide slide-3">
+                <div class="container">
+                    <div>
+                        <div class="sub-title">REWARD</div>
+                        <h2>
+                            시선집중 스페셜 기획전
+                            <br>
+                            추천 프로젝트를 만나보세요
+                        </h2>
+                        <div class="slide-description">
+                            펀딩 마감기간 임박
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="controller-area">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </section>
+
+    <div style="margin-bottom: 50px"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex col">
+                    <p style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
+                    <div id="sort-item-wrap" class="d-flex" style="margin-left: auto">
+                        <select style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
+                            <option>전체</option>
+                            <option>진행중</option>
+                            <option>종료됨</option>
+                        </select>
+                        <ul class="d-flex" style="margin-top: 5px">
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">추천순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">마감임박순</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="container" style="width: 100%; height: 100%">
+                    <div class="row">
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
+                                <img class="donation-item-third-child-image" src="https://ohmycompany.imgix.net/uploads/invest/main/MAIN_202308250201186818d6.jpg?lossless=1&h=450">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼, 커핑커피</a>
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+                        <div class="col investment-item-box">
+                            <div class="investment-item-first-child">
+                            </div>
+                            <div class="investment-item-second-child">
+                                <span class="investment-item-span-first">103% 달성</span>
+                                <span class="investment-item-span-second">1,033,580,000원</span>
+                                <span class="investment-item-span-third">5일 남음</span>
+                            </div>
+                            <div class="investment-item-third-child">
+                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            </div>
+                            <div class="investment-item-fourth-child">
+                                플라이강원(주)
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</th:block>
+</html>

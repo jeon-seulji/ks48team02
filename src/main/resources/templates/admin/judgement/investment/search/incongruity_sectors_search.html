@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="searchFragment">
+    <form th:action="@{/admin/investment/search/incongruity-sectors}" method="get">
+        <select name="searchKey">
+            <option value="incongruitySectorsCode">코드명</option>
+            <option value="incongruitySectorsBusiness">부적합사유</option>
+            <option value="memberId">아이디</option>
+        </select>
+        <input type="text" name="searchValue" placeholder="검색어를 입력해주세요." />
+        <button type="submit" class="submitBtn">검색</button>
+    </form>
+</div>
+</html>

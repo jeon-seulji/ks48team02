@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="searchFragment">
+    <form th:action="@{/admin/investment/search/law-satistify}" method="get">
+        <select name="searchKey">
+            <option value="lawSatistifyCode">코드명</option>
+            <option value="lawSatistifyReason">충족사유</option>
+            <option value="memberId">아이디</option>
+        </select>
+        <input type="text" name="searchValue" placeholder="검색어를 입력해주세요." />
+        <button type="submit" class="submitBtn">검색</button>
+    </form>
+</div>
+</html>

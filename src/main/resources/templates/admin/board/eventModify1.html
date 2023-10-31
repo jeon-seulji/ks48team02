@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <title th:text="${title}"></title>
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+    <script>
+
+    </script>
+
+</th:block>
+
+<th:block layout:fragment="customContents">
+    이벤트 수정 페이지입니다
+    수정 누르면 이벤트 전체 나와서 세부 내용 수정 할수있게 페이지 만들기111
+</th:block>
+</html>

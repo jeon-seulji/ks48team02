@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+</head>
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <div th:include="~{admin/judgement/investment/search/corporate_value_evaluation_search :: searchFragment}"></div><br>
+    <div class="admin-content-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>투자 심사요청 코드</th>
+                <th>심사요청 제목</th>
+                <th>심사요청한 아이디</th>
+                <th>기업가치 평가 코드</th>
+                <th>심사한 아이디</th>
+                <th>평가된 기업가치</th>
+                <th>주당가격</th>
+                <th>평가 결과</th>
+                <th>기업가치 평가일</th>
+                <th>수정</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${corporateValueEvaluationList == null}">
+                <td colspan="10">기업가치 평가 목록이 없습니다.</td>
+            </tr>
+            <tr th:unless="${corporateValueEvaluationList == null}" th:each="l : ${corporateValueEvaluationList}">
+                <td>
+                    <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
+                </td>
+                <td th:text="${l.investmentRequestSubject}"></td>
+                <td th:text="${l.memberIdSeller}"></td>
+                <td>
+                    <a th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}" th:text="${l.corporateValueEvaluationCode}"></a>
+                </td>
+                <td th:text="${l.memberId}"></td>
+                <td th:text="${l.evaluatedCorpValue}"></td>
+                <td th:text="${l.stockPrice}"></td>
+                <td th:if="${l.corpValueFulfill == 1}">심사 통과</td>
+                <td th:if="${l.corpValueFulfill == 0}">심사 탈락</td>
+                <td th:text="${l.corpValueEvaluateDay}"></td>
+                <td>
+                    <a th:href="@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}">수정</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+
+        <button type="button" class="submitBtn" th:onclick="|location.href='@{/admin/investment/insert/corporate-value}'|">
+            등록하기
+        </button>
+
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li class="link-active"><a th:href="@{#}">1</a></li>
+                    <li><a th:href="@{#}">2</a></li>
+                    <li><a th:href="@{#}">3</a></li>
+                    <li><a th:href="@{#}">4</a></li>
+                    <li><a th:href="@{#}">5</a></li>
+                    <li><a th:href="@{#}">6</a></li>
+                </ul>
+                <div class="list-btn-area">
+                    <button class="prev-transfer">
+                        <span>prev</span>
+                    </button>
+                    <button class="next-transfer">
+                        <span>next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+</html>

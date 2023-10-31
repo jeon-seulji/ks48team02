@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <div th:include="~{admin/judgement/investment/search/incongruity_sectors_search :: searchFragment}"></div><br>
+    <div class="admin-content-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>부적합 업종 코드</th>
+                <th>부적합 업종</th>
+                <th>등록한 아이디</th>
+                <th>등록일시</th>
+                <th>수정</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${incongruitySectorsList == null}">
+                <td colspan="5">부적합 업종 목록이 없습니다.</td>
+            </tr>
+            <tr th:unless="${incongruitySectorsList == null}" th:each="l : ${incongruitySectorsList}">
+                <td>
+                    <a th:href="@{/admin/investment/view/incongruity-sectors(incongruitySectorsCode=${l.incongruitySectorsCode})}" th:text="${l.incongruitySectorsCode}"></a>
+                </td>
+                <td th:text="${l.incongruitySectorsBusiness}"></td>
+                <td th:text="${l.memberId}"></td>
+                <td th:text="${l.codeRegDay}"></td>
+                <td>
+                    <a th:href="@{/admin/investment/update/incongruity-sectors(incongruitySectorsCode=${l.incongruitySectorsCode})}">수정</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <button type="button" class="submitBtn" th:onclick="|location.href='@{/admin/investment/insert/incongruity-sectors}'|">
+            등록하기
+        </button>
+
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li class="link-active"><a th:href="@{#}">1</a></li>
+                    <li><a th:href="@{#}">2</a></li>
+                    <li><a th:href="@{#}">3</a></li>
+                    <li><a th:href="@{#}">4</a></li>
+                    <li><a th:href="@{#}">5</a></li>
+                    <li><a th:href="@{#}">6</a></li>
+                </ul>
+                <div class="list-btn-area">
+                    <button class="prev-transfer">
+                        <span>prev</span>
+                    </button>
+                    <button class="next-transfer">
+                        <span>next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+</html>

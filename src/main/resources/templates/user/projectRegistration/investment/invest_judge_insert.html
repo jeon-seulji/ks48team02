@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout/default}">
+
+<head>
+  <!--  사용자별 css file 추가 부분 -->
+  <!-- Link Swiper's CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
+
+
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
+
+</th:block>
+
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+  <script>
+    // main swiper slide
+    let mainSwiper = new Swiper("#main-swiper-slide", {
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false
+      },
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        type: "fraction",
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
+
+    // md join swiper slide
+    let mdJoinSwiper = new Swiper("#mdJoinProject .mySwiper", {
+      slidesPerView: 3,
+      grid: {
+        rows: 2,
+      },
+      // spaceBetween: 20,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+    });
+
+    // rank tab function
+    $('.tab-menu-btn li').on('click',function(){
+      $('.tab-menu-btn li').removeClass('active');
+      $(this).addClass('active');
+      let tabData = $(this).attr('data-tab');
+      $('.main-rank-area').hide();
+      $('#'+tabData).show();
+    });
+
+    // contents swiper slide
+    let contentsSwiperSlide = new Swiper(".contents-area", {
+      slidesPerView: 5,
+      spaceBetween: 20,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
+  </script>
+
+
+
+</th:block>
+
+<th:block layout:fragment="customContents">
+  <div class="container">
+    <main>
+      <div class="py-5 text-center">
+        <!--<img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">-->
+        <h2>투자 프로젝트 심사 요청</h2>
+        <!--<p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>-->
+      </div>
+
+      <div class="row g-5" style="justify-content: center;">
+        <div class="col-md-7 col-lg-8">
+          <form class="needs-validation" novalidate="">
+            <div class="row g-3">
+
+              <div class="my-2 col-12">
+                <label for="projectSubject" class="form-label fw-bord text-dark">프로젝트 제목</label>
+                <input type="text" class="form-control" id="projectSubject" placeholder="프로젝트 제목을 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="representativeName" class="form-label fw-bord text-dark">대표자 성함</label>
+                <input type="text" class="form-control" id="representativeName" placeholder="대표자 성함을 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="corporateName" class="form-label fw-bord text-dark">회사명</label>
+                <input type="text" class="form-control" id="corporateName" placeholder="회사명을 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="projectContent" class="form-label fw-bord text-dark">프로젝트 내용</label>
+                <input type="text" class="form-control" id="projectContent" placeholder="프로젝트 내용을 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="investmentTargetAmount" class="form-label fw-bord text-dark">펀딩 목표 금액</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="investmentTargetAmount" placeholder="펀딩 목표 금액을 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="operatingProfit" class="form-label fw-bord text-dark">영업 이익</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="operatingProfit" placeholder="영업 이익 금액을 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="depreciationExpense" class="form-label fw-bord text-dark">감가상각비</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="depreciationExpense" placeholder="감가상각비를 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="netBorrowings" class="form-label fw-bord text-dark">순차입금</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="netBorrowings" placeholder="순차입금을 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="currentStockNum" class="form-label fw-bord text-dark">현재 주식 수</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="currentStockNum" placeholder="현재 주식 수를 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="issueStockNum" class="form-label fw-bord text-dark">발행 예정 주식 수</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="issueStockNum" placeholder="발행 예정 주식 수를 입력해주세요." value required>
+              </div>
+
+            </div>
+
+
+            <hr class="my-4">
+
+            <div class="my-2 col-12">
+              <label for="businessType" class="form-label fw-bord text-dark">업종 선택</label>
+              <div class="input-group mb-3">
+                <select class="custom-select" id="businessType">
+                  <option selected>업종 선택</option>
+                  <option value="1">복권 발행 및 판매업</option>
+                  <option value="2">기원 운영업</option>
+                  <option value="3">공연 기획업</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="my-2 col-12">
+              <label for="capitalMarketsLawSatisfactionCriteria" class="form-label fw-bord text-dark">자본시장법 충족 기준</label>
+              <div class="input-group mb-3">
+                <select class="custom-select" id="capitalMarketsLawSatisfactionCriteria">
+                  <option selected>자본시장법 충족 기준 선택</option>
+                  <option value="1">창업 후 7년 이내 비상장</option>
+                  <option value="2">비상장 벤처기업</option>
+                  <option value="3">이노비즈 기업</option>
+                </select>
+              </div>
+            </div>
+
+            <form>
+              <div class="form-group">
+                <label for="investmentFile">첨부파일 업로드</label>
+                <input type="file" class="form-control-file" id="investmentFile">
+              </div>
+            </form>
+
+            <hr class="my-4">
+
+
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="same-address">
+              <label class="form-check-label" for="same-address">동의?</label>
+            </div>
+
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="save-info">
+              <label class="form-check-label" for="save-info">ㅇㅇ</label>
+            </div>
+            <button class="my-5 w-100 btn btn-primary btn-lg" type="submit">제출하기</button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</th:block>
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+
+</html>

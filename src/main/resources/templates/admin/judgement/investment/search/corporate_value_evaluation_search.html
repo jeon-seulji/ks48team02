@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="searchFragment">
+    <form th:action="@{/admin/investment/search/corporate-value}" method="get">
+        <select name="searchKey">
+            <option value="investmentRequestJudgeCode">요청코드명</option>
+            <option value="investmentRequestSubject">제목</option>
+            <option value="memberIdSeller">요청아이디</option>
+            <option value="corporateValueEvaluationCode">평가코드명</option>
+            <option value="memberId">심사아이디</option>
+            <option value="corpValueFulfill">평가결과</option>
+        </select>
+        <input type="text" name="searchValue" placeholder="검색어를 입력해주세요." />
+        <button type="submit" class="submitBtn">검색</button>
+    </form>
+</div>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <div class="admin-content-wrapper">
+        <table th:object="${incongruitySectorsInfo}">
+            <thead>
+            <tr>
+                <th>부적합 업종 코드</th>
+                <th>부적합 업종</th>
+                <th>등록한 아이디</th>
+                <th>등록일시</th>
+                <th>수정</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${incongruitySectorsInfo == null}">
+                <td colspan="5">부적합 업종 목록이 없습니다.</td>
+            </tr>
+            <tr th:unless="${incongruitySectorsInfo == null}">
+                <td th:text="*{incongruitySectorsCode}"></td>
+                <td th:text="*{incongruitySectorsBusiness}"></td>
+                <td th:text="*{memberId}"></td>
+                <td th:text="*{codeRegDay}"></td>
+                <td>
+                    <a th:href="@{/admin/investment/update/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}">수정</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</th:block>
+</html>

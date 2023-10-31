@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{seller/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <title th:text="${title}"></title>
+    <style>
+        #slSettlementBankInfo input,
+        #slSettlementBankInfo select{
+            border: 1px solid var(--borderColor);
+            height: 25px;
+            padding: 3px;
+        }
+        #slSettlementBankInfo label {
+            margin: 0 6px 0 15px;
+        }
+        #slSettlementBankInfo input:focus,
+        #slSettlementBankInfo select:focus{
+            border: 1px solid var(--maincolor);
+        }
+        #orderBackBtn:hover {
+            border: 1px solid var(--maincolor);
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/admin/css/order_detail_style.css}">
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+    <script th:src="@{/common/js/submenuJs.js}"></script>
+    <script th:src="@{/admin/js/settlement/settlementJs.js}"></script>
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+    <script>
+
+        console.log(CURRENT_URL,'<-- CURRENT_URL');
+        console.log(document.referrer,'<-- document.referrer');
+
+        $('.project-info-title').css('margin','0 0 20px');
+        $('.admin-content-wrapper').css('margin-top','0');
+
+
+        //  배송 예정일 setting
+        $('input[name="delivedDateInput"]').on('change', function(){
+            let value = $(this).val();
+            $('input[name="delivedDate"]').val(value);
+            $(this).val('');
+        });
+
+        // 배송 메세지 직접 입력
+        $('select[name="deliveryMessage"]').on('change', function(){
+            let selectedValue = $(this).val();
+
+            console.log(selectedValue, '<--');
+            if(selectedValue == '5') {
+                $('input[name="deliveryMessageDirect"]').attr('disabled', false);
+                $('input[name="deliveryMessageDirect"]').focus();
+            }
+        });
+    </script>
+</th:block>
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <!-- 교환 정보 -->
+    <div class="admin-wrapper"> <!-- 수정 -->
+        <!-- contents -->
+
+        <form id="swappingInfoDetailBt" method="get">
+            <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
+
+            <!-- 정보 영역 -->
+                <div class="project-info-title"  style="margin: 50px 0 20px;">
+                    <h5>교환 신청 코드</h5>
+                    <p style="color: var(--maincolor);">DIC_20230922_00001</p>
+                </div>
+                <form >
+                    <table id="deliveryInfo" class="settlement-log" style="border:none;">
+                        <!-- contents -->
+
+                        <tr>
+                            <td >
+                                배송 유형
+                            </td>
+                            <td  colspan="3" style="text-align: left !important;">
+                                <select name="delivery_category">
+                                    <option value="1" selected>일반 주문 배송</option>
+                                    <option value="1">교환 배송</option>
+                                    <option value="1">환불 배송</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                배송 상태
+                            </td>
+                            <td style="text-align: left !important;">
+                                <select name="delivery_category">
+                                    <option value="1" selected>배송 대기중</option>
+                                    <option value="1">배송중</option>
+                                    <option value="1">배송완료</option>
+
+                                </select>
+                            </td>
+                            <td class="title-td">
+                                배송 완료 예정일
+                            </td>
+                            <td>
+                                <input type="text" name="delivedDate">
+                                <input type="date" name="delivedDateInput" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                교환 코드
+                            </td>
+                            <td style="text-align: left !important;">
+                                <a class="detail-link" th:href="@{#}">DRG32094-00001 예시링크</a>
+                            </td>
+                            <td class="title-td">
+                                환불 코드
+                            </td>
+                            <td style="text-align: left !important;">
+                                <a>-</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                택배사
+                            </td>
+                            <td style="text-align: left !important;">
+                                <select name="delivery_category">
+                                    <option value="">=== 택배사를 선택해주세요 ===</option>
+                                    <option value="1">CJ 대한통운</option>
+                                    <option value="1">롯데택배</option>
+                                    <option value="1">우체국택배</option>
+                                    <option value="1">로젠택배</option>
+                                    <option value="1">한진택배</option>
+                                    <option value="1">편의점택배</option>
+                                </select>
+                            </td>
+                            <td class="title-td">
+                                운송장번호
+                            </td>
+                            <td>
+                                <input type="text" name="deliverNumber" value="304928-327372">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >
+                                배송 메세지
+                            </td>
+                            <td  colspan="3" style="text-align: left !important;">
+                                <select name="deliveryMessage" style="width:210px;">
+                                    <option value="1" selected>문 앞에 두고 가주세요</option>
+                                    <option value="2">배송 전에 연락 바랍니다</option>
+                                    <option value="3">직접 받고 부재시 문 앞</option>
+                                    <option value="4">부재시 경비실에 두고 가주세요</option>
+                                    <option value="5" >직접 입력</option>
+                                </select>
+                                <input type="text" width="700px" maxlength="20" placeholder="직접입력" name="deliveryMessageDirect" disabled>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                배송 시작일
+                            </td>
+                            <td style="text-align: left !important;">
+                                2023-10-20
+                            </td>
+                            <td class="title-td">
+                                배송 완료일
+                            </td>
+                            <td>
+                                2023-10-20
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            <div class="btn-area">
+                <ul>
+                    <li>
+                        <button id="orderBackBtn" class="submitBtn" type="button" onclick="backLocationFn()" style="border:1px solid #191919;">뒤로</button>
+                    </li>
+                    <li>
+                        <button id="deliveryRemoveBtn" onclick="confirmBtnFn(event.target)" class="submitBtn" type="button" >수정</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        </form>
+        <div class="btn-area" style="justify-content: flex-end;">
+            <ul>
+                <li>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 배송 정보 -->
+    <div class="admin-wrapper"> <!-- 수정 -->
+        <!-- contents -->
+        <form id="deliveryInfoDetailBt" method="get">
+            <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
+
+                <!-- 배송정보 영역 -->
+                <th:block th:replace="~{/seller/fragments/deliverInfo :: delriverInfo}">
+
+                </th:block>
+                <div class="btn-area">
+                    <ul>
+                        <li>
+                            <button id="orderBackBtn" class="submitBtn" type="button" onclick="backLocationFn()" style="border:1px solid #191919;">뒤로</button>
+                        </li>
+                        <li>
+                            <button id="deliveryRemoveBtn" onclick="confirmBtnFn(event.target)" class="submitBtn" type="button" >수정</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </form>
+        <div class="btn-area" style="justify-content: flex-end;">
+            <ul>
+                <li>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>

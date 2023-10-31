@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <div class="admin-content-wrapper">
+        <table th:object="${corporateValueEvaluationInfo}">
+            <thead>
+            <tr>
+                <th>투자 심사요청 코드</th>
+                <th>심사요청 제목</th>
+                <th>심사요청한 아이디</th>
+                <th>기업가치 평가 코드</th>
+                <th>심사한 아이디</th>
+                <th>영업이익</th>
+                <th>감가상각비</th>
+                <th>EBITDA</th>
+                <th>업종 평균 EV/EBITDA</th>
+                <th>환산 EV</th>
+                <th>순차입금</th>
+                <th>평가된 기업가치</th>
+                <th>현재 발행주식 수</th>
+                <th>주당가격</th>
+                <th>평가 결과</th>
+                <th>기업가치 평가일</th>
+                <th>수정</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${corporateValueEvaluationInfo == null}">
+                <td colspan="17">기업가치 평가 내용이 없습니다.</td>
+            </tr>
+            <tr th:unless="${corporateValueEvaluationInfo == null}">
+                <td th:text="*{investmentRequestJudgeCode}"></td>
+                <td th:text="*{investmentRequestSubject}"></td>
+                <td th:text="*{memberIdSeller}"></td>
+                <td th:text="*{corporateValueEvaluationCode}"></td>
+                <td th:text="*{memberId}"></td>
+                <td th:text="*{operatingProfit}"></td>
+                <td th:text="*{depreciation}"></td>
+                <td th:text="*{ebitda}"></td>
+                <td th:text="*{evEbitda}"></td>
+                <td th:text="*{convertEv}"></td>
+                <td th:text="*{netDebt}"></td>
+                <td th:text="*{evaluatedCorpValue}"></td>
+                <td th:text="*{stockNumber}"></td>
+                <td th:text="*{stockPrice}"></td>
+                <td th:if="*{corpValueFulfill == 1}">심사 통과</td>
+                <td th:if="*{corpValueFulfill == 0}">심사 탈락</td>
+                <td th:text="*{corpValueEvaluateDay}"></td>
+                <td>
+                    <a th:href="@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}">수정</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</th:block>
+</html>

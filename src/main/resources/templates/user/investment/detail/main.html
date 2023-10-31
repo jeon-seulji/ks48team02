@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/user/investment/detail/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <title th:text="${title}"></title>
+
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+</th:block>
+
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            spaceBetween: 30,    // 슬라이드 사이 여백
+            slidesPerView : 'auto', // 한 슬라이드에 보여줄 갯수
+            centeredSlides: true,    //센터모드
+            autoplay: {     //자동슬라이드 (false-비활성화)
+                delay: 2500, // 시간 설정
+                disableOnInteraction: false, // false-스와이프 후 자동 재생
+            },
+            loop : false,   // 슬라이드 반복 여부
+            loopAdditionalSlides : 1,
+            // 슬라이드 반복 시 마지막 슬라이드에서 다음 슬라이드가 보여지지 않는 현상 수정
+            pagination: { // 호출(pager) 여부
+                el: ".swiper-pagination", //버튼을 담을 태그 설정
+                clickable: true, // 버튼 클릭 여부
+            },
+            navigation: {   // 버튼
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+        let investContentsSwiperSlide = new Swiper("#investProject .contents-area", {
+            slidesPerView: 3,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: "#investProject .swiper-button-next",
+                prevEl: "#investProject .swiper-button-prev",
+            },
+        });
+    </script>
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <div class="col-lg-12" style="height: 40px"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="swiper mySwiper" style="height: 400px; border-radius: 10px;">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="https://ohmycompany.imgix.net/uploads/invest/main/MAIN_202308250201186818d6.jpg?lossless=1&h=450"></div>
+                        <div class="swiper-slide"><img src="https://www.ohmycompany.com/uploads/editorImages/2023/editorImg_20230829090951698e6b.png"></div>
+                        <div class="swiper-slide"><img src="https://www.ohmycompany.com/uploads/editorImages/2023/editorImg_2023082804325777632f.png"></div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12" style="height: 20px"></div>
+            <div class="col-lg-12 story-banner-box" style="background: #f9fafb; border-radius: 5px; padding: 10px">
+                <div>
+                    <p style="color: black">증권형 크라우드펀딩에 대한 투자는 투자원금의 손실이 발생할 수 있습니다. 투자에 대한 책임은 전적으로 투자자 본인에게 있으므로, 투자위험에 대한 내용을 꼭 확인해주세요.</p>
+                </div>
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-header" style="padding: 0px">
+                <p style="color: black; font-weight: bold; font-size: 20px">증권 발행 조건</p>
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-body">
+                <p>ㅎㅎ</p>
+                <img src="">
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-header" style="padding: 0px">
+                <p style="color: black; font-weight: bold; font-size: 20px">기본정보</p>
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-body">
+                <p>ㅎㅎ</p>
+                <img src="">
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-header" style="padding: 0px">
+                <p style="color: black; font-weight: bold; font-size: 20px">투자개요</p>
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-body">
+                <p>ㅎㅎ</p>
+                <img src="">
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-header" style="padding: 0px">
+                <p style="color: black; font-weight: bold; font-size: 20px">사업소개</p>
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-body">
+                <p>ㅎㅎ</p>
+                <img src="">
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-header" style="padding: 0px">
+                <p style="color: black; font-weight: bold; font-size: 20px">첨부자료</p>
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-body">
+                <p>ㅎㅎ</p>
+                <img src="">
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-header" style="padding: 0px">
+                <p style="color: black; font-weight: bold; font-size: 20px">투자위험고지</p>
+            </div>
+            <div class="col-lg-12" style="height: 40px"></div>
+            <div class="col-lg-12 story-body">
+                <p>ㅎㅎ</p>
+                <img src="">
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+
+</html>
