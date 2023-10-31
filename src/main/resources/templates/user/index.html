@@ -697,8 +697,16 @@
 
 				<section id="bannerArea" class="content-wrap">
 					<div class="container">
-						<div class="banner-content"></div>
-						<div class="banner-content"></div>
+						<div class="banner-content">
+							<a th:href="@{#}">
+								<div th:style="'background-image: url('+ @{/user/images/EVENT_BANNER_1.png} +');'"></div>
+							</a>
+						</div>
+						<div class="banner-content">
+							<a th:href="@{#}">
+								<div th:style="'background-image: url('+ @{/user/images/EVENT_BANNER_2.png} +');'"></div>
+							</a>
+						</div>
 					</div>
 				</section>
 				<section id="rewardProject" class="content-wrap">
