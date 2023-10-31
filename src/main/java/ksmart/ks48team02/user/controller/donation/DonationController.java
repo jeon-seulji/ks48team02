@@ -43,6 +43,16 @@ public class DonationController {
         return "user/donation/payment/confirm";
     }
 
+    @GetMapping("/detail/news")
+    public String newsPage(){
+        return "user/donation/detail/news/main";
+    }
+
+    @GetMapping("/detail/news/newsDetail")
+    public String newsDetailPage(){
+        return "user/donation/detail/news/news_detail";
+    }
+
     // test용 경로 매핑
     @GetMapping("/test")
     public String paymentConfirmtestPage(){

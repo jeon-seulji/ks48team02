@@ -21,47 +21,49 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-
-    <div class="container">
-        <main>
+    <form id="addIncongruitySectorsForm" th:action="@{/admin/investment/insert/incongruity-sectors}" method="post">
+        <div class="container admin-content-wrapper">
 
             <div class="row g-5" style="justify-content: center;">
                 <div class="col-md-7 col-lg-8">
-                    <form class="needs-validation" novalidate="">
-                        <div class="row g-3">
 
+                    <div class="row g-3">
 
-                            <div class="my-2 col-12">
-                                <label for="memberId" class="form-label fw-bord text-dark">관리자 아이디</label>
-                                <input type="text" class="form-control" id="memberId" placeholder="관리자 아이디를 재입력해주세요.">
-                            </div>
-                            <br>
-                            <div class="my-2 col-12">
-                                <label for="memberPw" class="form-label fw-bord text-dark">관리자 비밀번호</label>
-                                <input type="text" class="form-control" id="memberPw" placeholder="관리자 비밀번호를 재입력해주세요.">
-                            </div>
-                            <br>
-                            <button type="button" class="submitBtn">
-                                확인
-                            </button>
-
-                            <hr class="my-4">
-
-                            <div class="my-2 col-12">
-                                <label for="incongruitySectorsBusiness" class="form-label fw-bord text-dark">부적합 업종</label>
-                                <input type="text" class="form-control" id="incongruitySectorsBusiness" placeholder="부적합 업종을 입력해주세요." disabled="disabled">
-                            </div>
-
+                        <div class="my-2 col-12">
+                            <label for="memberPw" class="form-label fw-bord text-dark">관리자 비밀번호</label>
+                            <input type="text" class="form-control" id="memberPw" placeholder="관리자 비밀번호를 재입력해주세요.">
                         </div>
+                        <br>
+
+                        <button type="button" class="submitBtn">
+                            확인
+                        </button>
 
                         <hr class="my-4">
 
-                        <button class="my-5 w-100 btn btn-primary btn-lg" type="submit">등록하기</button>
-                    </form>
+                        <div class="my-2 col-12">
+                            <label for="incongruitySectorsBusiness" class="form-label fw-bord text-dark">부적합 업종</label>
+                            <input type="text" class="form-control" id="incongruitySectorsBusiness" placeholder="부적합 업종을 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="incongruitySectorsWhether" class="form-label fw-bord text-dark">부적합 여부</label>
+                            <select class="form-control" id="incongruitySectorsWhether" name="incongruitySectorsWhether" disabled="disabled">
+                                <option value="">===부적합여부를 선택해주세요===</option>
+                                <option value="1">적합</option>
+                                <option value="0">부적합</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <button class="my-5 w-100 btn btn-primary btn-lg" type="submit" id="addIncongruitySectorsBtn">등록하기</button>
                 </div>
             </div>
-        </main>
-    </div>
-
+        </div>
+    </form>
 </th:block>
 </html>

@@ -31,11 +31,12 @@
                 <th>등록한 아이디</th>
                 <th>등록일시</th>
                 <th>수정</th>
+                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
             <tr th:if="${incongruitySectorsList == null}">
-                <td colspan="5">부적합 업종 목록이 없습니다.</td>
+                <td colspan="6">부적합 업종 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${incongruitySectorsList == null}" th:each="l : ${incongruitySectorsList}">
                 <td>
@@ -46,6 +47,9 @@
                 <td th:text="${l.codeRegDay}"></td>
                 <td>
                     <a th:href="@{/admin/investment/update/incongruity-sectors(incongruitySectorsCode=${l.incongruitySectorsCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/investment/delete/incongruity-sectors(incongruitySectorsCode=${l.incongruitySectorsCode})}">삭제</a>
                 </td>
             </tr>
             </tbody>
