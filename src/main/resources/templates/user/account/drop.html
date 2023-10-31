@@ -1,4 +1,6 @@
 <!doctype html>
+<!-- 회원 탈퇴 화면-->
+
 <html xmlns:th="http://www.thymeleaf.org/" lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/user/layout/semi_default}">
@@ -8,9 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>회원 탈퇴 페이지</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
-
-
     <style>
 
         #PageWrapper {
@@ -18,53 +17,17 @@
             display: flex;
             justify-content: center;
             overflow: hidden;
-
-            margin-bottom: 50px;
-            height:100vh ;
-
+            /*// height:100vh ;*/
             align-items: center;
         }
 
-        #AccountContainer {
-            background-color: yellow;
-            display: flex;
-            justify-content: center;
-            width: 500px;
-            height: 770px;
-            align-items: center;
-            flex-direction: column;
-        }
-        #ftco-navbar {
-            background-color: white; !important;
+        #dropContainer {
+            background-color: white;
+            width: 600px;
+            margin:30px;
+            margin-top:80px;
         }
 
-        .container {
-            flex-direction: row;
-            align-items: baseline; !important;
-            justify-content: space-between;
-            margin-top: 0;
-            margin-bottom: 0 ;
-
-        }
-
-        .left-empty-space {
-
-            color:white;
-            width: 132px;
-            height: 40px;
-
-        }
-
-        #logo-container {
-            padding-left: 0; !important;
-        }
-
-        .top-right-conts {
-            padding-right: 0; !important;
-        }
-        .login-logo {
-            position: relative;
-        }
         .login-logo .top-left-conts {
             position: absolute;
             left: 50%; top: 50%;
@@ -74,13 +37,7 @@
         @media (max-width: 800px){
             .navbar.navbar-expand-lg.ftco_navbar.ftco-navbar-light, .py-1.bg-primary {
                 display: none;
-
             }
-        }
-
-        .login-logo .container {
-            justify-content: center;
-
         }
 
         .login-logo .user-connection-menu {
@@ -92,17 +49,140 @@
             color: grey;
             font-weight: normal;
         }
+
+        #drop-title, .drop-check, #solve-problem, .mb-3{
+            padding: 10px;
+
+        }
+
+        /* 확인사항 */
+        #dropTerm dt, #solve-problem{
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #dropTerm dd{
+            font-size: 13px;
+            color: darkgery;
+            margin: 10px;;
+
+        }
+
+        .solid-bolder{
+            border: 1px solid grey;
+        }
+
+        .agree-check{
+            margin-left: 20px;
+            margin-bottom:50px;
+        }
+
+        .modal-body detail{
+
+        }
     </style>
 </head>
 
 <body>
+
+<!--사용자별 html 코드-->
 <th:block layout:fragment="customContents">
     <div id="PageWrapper">
-        <div id="AccountContainer">
-            
-        </div>
+        <div id="dropContainer">
+            <h1 style="font-weight:550; margin-bottom: 30px;">회원 탈퇴</h1>
+            <div id="drop-title">
+                <h2 >서비스 이용에 불편함이 있으셨나요?</h2>
 
-    </div>
+                <div id="solve-problem">
+                    <a th:href="@{#}" style="color:#235FD9;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-arrow-down-right-square-fill" viewBox="0 0 16 16">
+                            <path d="M14 16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12zM5.904 5.197 10 9.293V6.525a.5.5 0 0 1 1 0V10.5a.5.5 0 0 1-.5.5H6.525a.5.5 0 0 1 0-1h2.768L5.197 5.904a.5.5 0 0 1 .707-.707z"/>
+                        </svg> 불편사항 문의하러 가기 </a>
+                </div>
+            </div>
+
+            <div class="drop-check">
+                <h2>탈퇴 전 확인 사항</h2>
+                <p style="color:red; font-size:15px;">진행 중인 프로젝트가 있는 경우, 탈퇴가 불가합니다.</p>
+
+                <div id="dropTerm">
+                    <dl>
+                        <dt>탈퇴 후 1개월 내 재가입 제한</dt>
+                        <dd>탈퇴 후 3개월 내 동일 아이디(이메일)로 재가입 불가</dd>
+                        <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey"></div>
+                        <dt>탈퇴 후 개인 정보 일괄 삭제</dt>
+                        <dd>참여한/찜한/개설 중인 프로젝트 일괄 삭제</dd>
+                        <dd>쿠폰, 포인트 등 개인 정보 일괄 삭제</dd>
+                        <dd>※ 펀딩이 종료된 프로젝트는 삭제되지 않습니다</dd>
+                        <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey"></div>
+                        <dt>미상환 투자금 환급 불이익 감수</dt>
+                        <dd>아직 상환되지 않은 투자금이 있을때, 투자금을 돌려받지 못할 불이익과 위험 감수</dd>
+                    </dl>
+                </div>
+                <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey"></div>
+                <div class="agree-check">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault" >탈퇴 유의사항을 확인했습니다. </label>
+                        <div class="form-text" style="color:red; font-size:13px;">체크 안 하고 다음 누를 시 : 탈퇴 유의사항을 확인해 주세요</div>
+                    </div>
+                </div>
+
+
+                <div>
+                    <h2>본인 확인</h2>
+                    <div class="mb-3">
+                        <label for="checkPassword" class="form-label">비밀번호 확인</label>
+                        <input type="password" class="form-control" id="checkPassword" >
+                        <div class="form-text" style="color:red; font-size:13px;">비밀번호를 입력해 주세요. </div>
+
+                        <!-- 모달 트리거 버튼   -->
+                        <button
+                                type="button"
+                                class="btn btn-dark"
+                                data-toggle="modal"
+                                data-target="#exampleModal"
+                                data-what="hello"
+                                style="margin-left:470px">탈퇴하기</button>
+                    </div>
+
+                    <!-- 모달팝업 -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+
+                                <!-- 팝업창 내용 -->
+                                <div class="modal-body detail">
+                                    <p>정말로 탈퇴하시겠습니까?</p>
+
+                                </div>
+
+                                <div class="modal-footer" >
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-dark">확인</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+    <script>
+
+    </script>
+
+</th:block>
+
+<!-- 사용자별 스크립트 파일 -->
+<th:block layout:fragment="customJsFile">
+
 </th:block>
 
 
@@ -110,11 +190,5 @@
 
 
 
-<script>
-    $(document).ready(function (){
-        $('.for-blank-space').hide();
-    })
-
-</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 </body>
