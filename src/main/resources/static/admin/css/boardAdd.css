@@ -1,0 +1,24 @@
+@charset "UTF-8";
+.titleArea{
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid black;
+}
+.boardForm{
+    width: 900px;
+    margin: 0 auto;
+}
+.formText{
+    margin-top: 20px;
+    width: 500px;
+}
+caption{
+    display: none;
+}
+.RW{
+    padding-left: 20px;
+}
+.boardBtn{
+
+}
