@@ -5,6 +5,12 @@
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
+    <style>
+        td.label-div{
+            width : 300px;
+            background-color: #f0f3fc;
+        }
+    </style>
 </head>
 
 
@@ -22,41 +28,66 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
     <form id="modifyLawSatistifyForm" th:action="@{/admin/investment/update/law-satistify}" method="post">
-        <table th:object="${lawSatistifyInfo}">
-            <tbody>
-                <tr>
-                    <td><label for="lawSatistifyCode">자본시장법 범위충족 코드</label></td>
-                    <td>
-                        <input type="text" id="lawSatistifyCode" name="lawSatistifyCode" placeholder="자본시장법 범위충족 코드를 입력해주세요" th:value="*{lawSatistifyCode}" readonly="readonly"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label for="lawSatistifyReason">자본시장법 범위충족 사유</label></td>
-                    <td colspan="2">
-                        <input type="text" id="lawSatistifyReason" name="lawSatistifyReason" placeholder="자본시장법 범위충족 사유를 입력해주세요" th:value="*{lawSatistifyReason}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label for="memberId">등록자</label></td>
-                    <td colspan="2">
-                        <input type="text" id="memberId" name="memberId" placeholder="등록자를 입력해주세요" th:value="*{memberId}" readonly="readonly"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label for="lawSatistifyWhether">자본시장법 범위충족 여부</label></td>
-                    <td colspan="2">
-                        <input type="text" id="lawSatistifyWhether" name="lawSatistifyWhether" placeholder="자본시장법 범위충족 여부를 입력해주세요" readonly="readonly" th:value="*{lawSatistifyWhether}"/>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3">
-                        <button type="submit" id="modifyLawSatistifyBtn">수정하기</button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="admin-wrapper">
+            <div class=" container admin-content-wrapper" th:object="${lawSatistifyInfo}">
+
+                <main>
+
+                    <div class="row g-5" style="justify-content: center;">
+                        <div class="col-md-7 col-lg-8">
+                            <form class="needs-validation" novalidate="">
+                                <div class="row g-3">
+
+                                    <div class="my-2 col-12">
+                                        <label for="memberPw" class="form-label fw-bord text-dark">관리자 비밀번호</label>
+                                        <input type="password" class="form-control" id="memberPw" name="memberPw" placeholder="관리자 비밀번호를 재입력해주세요.">
+                                    </div>
+                                    <br>
+
+                                    <button type="button" class="submitBtn">
+                                        확인
+                                    </button>
+
+                                    <hr class="my-4">
+
+                                    <div class="my-2 col-12">
+                                        <label for="lawSatistifyCode" class="form-label fw-bord text-dark">자본시장법 범위충족 코드</label>
+                                        <input type="text" class="form-control" id="lawSatistifyCode" name="lawSatistifyCode" placeholder="자본시장법 범위충족 코드를 입력해주세요." th:value="*{lawSatistifyCode}" readonly="readonly" disabled="disabled">
+                                    </div>
+                                    <br>
+
+                                    <div class="my-2 col-12">
+                                        <label for="lawSatistifyReason" class="form-label fw-bord text-dark">자본시장법 범위충족 사유</label>
+                                        <input type="text" class="form-control" id="lawSatistifyReason" name="lawSatistifyReason" placeholder="자본시장법 범위충족 사유를 입력해주세요." th:value="*{lawSatistifyReason}" disabled="disabled">
+                                    </div>
+                                    <br>
+
+                                    <div class="my-2 col-12">
+                                        <label for="memberId" class="form-label fw-bord text-dark">등록자 아이디</label>
+                                        <input type="text" class="form-control" id="memberId" name="memberId" placeholder="등록자 아이디를 입력해주세요." th:value="*{memberId}" disabled="disabled">
+                                    </div>
+                                    <br>
+
+                                    <div>
+                                        <label for="lawSatistifyWhether" class="form-label fw-bord text-dark">자본시장법 범위충족 여부</label>
+                                        <select class="form-control" id="lawSatistifyWhether" name="lawSatistifyWhether" disabled="disabled">
+                                            <option value="">===충족여부를 선택해주세요===</option>
+                                            <option value="1">충족</option>
+                                            <option value="0">미충족</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <hr class="my-4">
+
+                                <button class="my-5 w-100 btn btn-primary btn-lg" type="submit" id="modifyLawSatistifyBtn">수정하기</button>
+                            </form>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
     </form>
 </th:block>
 </html>

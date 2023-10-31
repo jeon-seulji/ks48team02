@@ -5,6 +5,27 @@
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
+    <style>
+        table{
+            display:flex;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        tbody{
+            display:flex
+        }
+
+        th{
+            display:block
+        }
+
+        td{display:block;
+            width: 1000px;
+        }
+    </style>
 </head>
 
 
@@ -42,6 +63,7 @@
                 <th>평가 결과</th>
                 <th>기업가치 평가일</th>
                 <th>수정</th>
+                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
@@ -68,6 +90,9 @@
                 <td th:text="*{corpValueEvaluateDay}"></td>
                 <td>
                     <a th:href="@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}">삭제</a>
                 </td>
             </tr>
             </tbody>
