@@ -25,6 +25,22 @@ public class InvestmentController {
         return "user/investment/detail/main";
     }
 
+    @GetMapping("/detail/comment")
+    public String detailCommentPage(Model model) {
+
+        model.addAttribute("title", "투자 상세 댓글");
+
+        return "user/investment/detail/comment";
+    }
+
+    @GetMapping("/detail/investor")
+    public String detailInvestorPage(Model model) {
+
+        model.addAttribute("title", "투자 상세 투자자 목록");
+
+        return "user/investment/detail/investor";
+    }
+
     @GetMapping("/list/after-process")
     public String getAfterProcessList(Model model) {
 
