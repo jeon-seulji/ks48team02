@@ -36,8 +36,12 @@
     height: 232.99px;
     height: calc((100% - 30px) / 2) !important;
 
+
+}
+#mdJoinProject .swiper-slide a {
     /* Center slide text vertically */
     display: flex;
+    width: 100%; height: 100%;
     flex-direction: column;
     gap: 10px;
     padding-right: 14px;
