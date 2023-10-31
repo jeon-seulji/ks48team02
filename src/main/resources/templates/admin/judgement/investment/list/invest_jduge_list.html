@@ -38,11 +38,12 @@
                 <th>심사자</th>
                 <th>심사결과</th>
                 <th>수정</th>
+                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
             <tr th:if="${investmentRequestJudgeList == null}">
-                <td colspan="12">투자 심사요청 목록이 없습니다.</td>
+                <td colspan="13">투자 심사요청 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${investmentRequestJudgeList == null}" th:each="l : ${investmentRequestJudgeList}">
                 <td>
@@ -62,6 +63,9 @@
                 <td th:if="${l.investJudgeResult == 2}">심사 반려</td>
                 <td>
                     <a th:href="@{/admin/investment/update/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/investment/delete/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}">삭제</a>
                 </td>
             </tr>
             </tbody>
