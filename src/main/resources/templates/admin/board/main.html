@@ -29,15 +29,15 @@
 </th:block>
 
 <th:block layout:fragment="customContents">
-    <form>
-        <div class="boardMain" style="margin-bottom: 20px;">
-            <h3>공지사항 관리</h3>
-        </div>
+    <div class="boardMain" style="margin-bottom: 20px;">
+        <h3>공지사항 관리</h3>
+    </div>
 
+    <form>
         <div class="section">
             <div class="title"><h2>공지사항 목록</h2></div>
             <div class="addBtnArea">
-                <a class="addBtn">게시판 등록</a>
+                <a th:href="@{/admin/board/boardAdd}" class="addBtn">게시판 등록</a>
             </div>
         </div>
 
@@ -103,6 +103,27 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li class="link-active"><a th:href="@{#}">1</a></li>
+                    <li><a th:href="@{#}">2</a></li>
+                    <li><a th:href="@{#}">3</a></li>
+                    <li><a th:href="@{#}">4</a></li>
+                    <li><a th:href="@{#}">5</a></li>
+                    <li><a th:href="@{#}">6</a></li>
+                </ul>
+                <div class="list-btn-area">
+                    <button class="prev-transfer">
+                        <span>prev</span>
+                    </button>
+                    <button class="next-transfer">
+                        <span>next</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
     </form>
 </th:block>

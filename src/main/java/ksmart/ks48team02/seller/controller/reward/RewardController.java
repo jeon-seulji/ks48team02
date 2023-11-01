@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller("sellerRewardController")
 @RequestMapping("/seller/reward")
-public class rewardController {
+public class RewardController {
 
 
     // 판매자 상품 관리 페이지
@@ -51,6 +51,13 @@ public class rewardController {
     public String newsAddPage(Model model) {
 
         return"seller/reward/news/add";
+    }
+
+    //판매자 댓글 관리
+    @GetMapping("/products/comment")
+    public String rewardComment(Model model) {
+
+        return"seller/reward/products/comment";
     }
 
 }
