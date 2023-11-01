@@ -1,83 +1,63 @@
 package ksmart.ks48team02.seller.controller.reward;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@RequestMapping("/user/reward")
+
+@Controller("sellerRewardController")
+@RequestMapping("/seller/reward")
 public class RewardController {
 
-    //리워드 메인 페이지
-    @GetMapping(value = {"" , "/"})
-    public String mainPage(Model model) {
 
-        return "user/reward/main";
+    // 판매자 상품 관리 페이지
+    @GetMapping("/products")
+    public String productsPage(Model model) {
+
+        return "seller/reward/products/main";
     }
 
-    //리워드 상세 페이지
-    @GetMapping("/detail")
-    public String detailPage(Model model) {
+    // 판매자 상품 검색태그 수정 패이지
+    @GetMapping("/products/preExperienceRecruit")
+    public String preExperienceRecruitPage(Model model) {
 
-        return "user/reward/detail/main";
+        return "seller/reward/products/pre_experience_recruit";
     }
 
-    //리워드 상세 페이지 댓글
-    @GetMapping("/detail/comment")
-    public String commentPage(Model model) {
+    // 판매자 사전체험단 관리 페이지
+    @GetMapping("/products/searchTagModify")
+    public String serchTagModifyPage(Model model) {
 
-        return "user/reward/detail/comment";
+        return "seller/reward/products/search_tag_modify";
     }
 
-    //리워드 상세 페이지 새소식
-    @GetMapping("/detail/news")
+    //판매자 리워드 새소식 관리 페이지 (새소식 목록 조회+ 삭제)
+    @GetMapping("/news")
     public String newsPage(Model model) {
 
-        return "user/reward/detail/news";
+        return "seller/reward/news/main";
     }
 
-    //리워드 상세 페이지 환불 정책
-    @GetMapping("/detail/refundPolicy")
-    public String refundPolicy(Model mode){
+    //판매자 리워드 새소식 수정 페이지
+    @GetMapping("/news/modify")
+    public String newsModiftyPage(Model model) {
 
-        return "user/reward/detail/refundPolicy";
+        return "seller/reward/news/modify";
     }
 
-    //리워드 주문 페이지
-    @GetMapping("/order")
-    public String orderPage(Model model) {
+    //판매자 리워드 새소식 추가 페이지
+    @GetMapping("/news/add")
+    public String newsAddPage(Model model) {
 
-        return "user/reward/order/main";
+        return"seller/reward/news/add";
     }
 
-    //리워드 결제 페이지
-    @GetMapping("/payment")
-    public String paymentPage(Model model) {
+    //판매자 댓글 관리
+    @GetMapping("/products/comment")
+    public String rewardComment(Model model) {
 
-        return "user/reward/payment/main";
+        return"seller/reward/products/comment";
     }
-
-    //리워드 결제 확인 페이지
-    @GetMapping("/payment/confirm")
-    public String paymentConfirmPage(Model model) {
-
-        return "user/reward/payment/confirm";
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
