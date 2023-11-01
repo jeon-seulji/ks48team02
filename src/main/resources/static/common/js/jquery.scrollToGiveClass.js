@@ -31,9 +31,9 @@ removeFunction : function(){}
   $.fn.scrollToGiveClass = function(options){
 
     var defaultOptions = {
-      baseline:'middle',
+      baseline:'bottom',
       class:'scrolled',
-      add:150,
+      add:-200,
       limit:'',
       limitValue:0,
       addFunction:function(){},
