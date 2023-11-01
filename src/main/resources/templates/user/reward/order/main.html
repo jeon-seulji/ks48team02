@@ -250,6 +250,12 @@
 
 
         })
+        //사용 포인트 음수로 입력하지 못하게
+        $(document).on('change', '#usePoint', function(){
+            if($(this).val() < 0) {
+                $(this).val(0);
+            }
+        })
 
 
 
@@ -312,6 +318,9 @@
                                         <span class="optionName ml-2">옵션 1</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
+                                        <span class="optionContents ml-2">옵션1 상세 내용~~~</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
                                         <span class="ml-2">주문 수량</span>
                                         <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
@@ -341,6 +350,9 @@
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="optionName ml-2">옵션 2</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                                        <span class="optionContents ml-2">옵션2 상세 내용~~~</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">주문 수량</span>
@@ -375,6 +387,9 @@
                                         <span class="optionName ml-2">옵션 3</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
+                                        <span class="optionContents ml-2">옵션3 상세 내용~~~</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
                                         <span class="ml-2">주문 수량</span>
                                         <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
@@ -405,6 +420,9 @@
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="optionName ml-2">옵션 4</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                                        <span class="optionContents ml-2">옵션4 상세 내용~~~</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">주문 수량</span>
@@ -439,6 +457,9 @@
                                         <span class="optionName ml-2">옵션 5</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
+                                        <span class="optionContents ml-2">옵션5 상세 내용~~~</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
                                         <span class="ml-2">주문 수량</span>
                                         <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
@@ -469,6 +490,9 @@
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="optionName ml-2">옵션 6</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                                        <span class="optionContents ml-2">옵션6 상세 내용~~~</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">주문 수량</span>

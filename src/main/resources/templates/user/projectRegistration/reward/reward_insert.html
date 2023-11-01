@@ -56,7 +56,7 @@
 
                     $.each(data, function () {
                         let checkValue = $(this).val();
-                        if (checkValue === null || checkValue === '' || checkValue === 'undefined') {
+                        if (checkValue === null || checkValue === '' || checkValue === 'undefined' ) {
                             isValid = false;
                             let eleId = $(this).attr('id');
                             let cate = $(`label[for="${eleId}"]`).text();
@@ -150,10 +150,15 @@
             //리워드 추가 버튼 클릭 시 슬라이더 폼 추가
             $('#rewardAddBtn').click(function () {
 
+
+                $(this).parents('#rewardAddDiv').find('#rewardPrice, #rewardSubject, #rewardContents, #deliverStartDate').each((idx,item) =>{
+                    console.log($(item).val());
+                })
+
                 let rewardSubject = $('#rewardSubject').val();
                 let rewardPrice = $('#rewardPrice').val();
-                let rewardComent = $('#rewardComent').val();
-                let rewardDelever = $('#date-picker-delever').val();
+                let rewardContents = $('#rewardContents').val();
+                let rewardDelever = $('#deliverStartDate').val();
 
                 let card = $(' <div class="swiper-slide">\n' +
                     '                    <div class="card border-primary mb-4 shadow-sm">\n' +
@@ -161,10 +166,12 @@
                     '                        <h5 class="rewardSebjectH my-0 fw-normal"></h5>\n' +
                     '                      </div>\n' +
                     '                      <div class="card-body">\n' +
+                    '                        <p class="text-dark">리워드 내용</p>\n' +
+                    '                        <textarea class="rewardContents" rows="3" readonly="readonly" style="width: 205px"></textarea>\n' +
                     '                        <p class="text-dark">리워드 금액</p>\n' +
-                    '                        <input class="rewardPriceInput form-control-sm" type="text" readonly value="">\n' +
+                    '                        <input class="rewardPriceInput" type="text" readonly value="">\n' +
                     '                        <p class="text-dark">예상 배송일</p>\n' +
-                    '                        <input class="rewardDeleverInput form-control-sm" type="text" readonly value="">\n' +
+                    '                        <input class="rewardDeleverInput" type="text" readonly value="">\n' +
                     '                        <br><br>\n' +
                     '                        <button type="button" class="modifyBtn w-70 btn btn-sm btn-primary">수정</button>\n' +
                     '                        <button type="button" class="delBtn w-70 btn btn-sm btn-danger">삭제</button>\n' +
@@ -174,6 +181,7 @@
 
 
                 $(card).find('.rewardSebjectH').text(rewardSubject);
+                $(card).find('.rewardContents').text(rewardContents);
                 $(card).find('.rewardPriceInput').val(`${Number(rewardPrice.replaceAll(',', '')).toLocaleString('ko-KR')}원`);
                 $(card).find('.rewardDeleverInput').val(rewardDelever);
                 $('.swiper-wrapper').append($(card));
@@ -183,8 +191,8 @@
 
                 $('#rewardPrice').val('');
                 $('#rewardSubject').val('');
-                $('#rewardComent').val('');
-                $('#date-picker-delever').val('');
+                $('#rewardContents').val('');
+                $('#deliverStartDate').val('');
 
             });
 
@@ -236,7 +244,7 @@
 
             $('#rewardSubject').val(rewardSubject);
             $('#rewardPrice').val(rewardPrice.replace('원', ''));
-            $('#date-picker-delever').val(rewardDelever);
+            $('#deliverStartDate').val(rewardDelever);
 
             $(this).parents('.swiper-slide').remove();
 
@@ -447,7 +455,7 @@
                             <br>
                             <label for="rewardPrice" class="form-label fw-bord text-dark">리워드 금액</label>
                             <input type="number" class="form-control" id="rewardPrice" placeholder="리워드 금액을 입력해주세요."
-                                   value="" required="">
+                                   value="0" required="">
                             <br>
                         </div>
 
@@ -460,8 +468,8 @@
 
                         <div class="col-10">
                             <div class="mb-3">
-                                <label for="rewardComent" class="form-label">리워드 내용</label>
-                                <textarea class="form-control" id="rewardComent" rows="10"></textarea>
+                                <label for="rewardContents" class="form-label">리워드 내용</label>
+                                <textarea class="form-control" id="rewardContents" rows="10"></textarea>
                             </div>
                         </div>
 
