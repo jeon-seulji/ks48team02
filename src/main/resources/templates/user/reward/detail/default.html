@@ -46,7 +46,9 @@
             object-fit: cover;
         }
         .story-body{
-            overflow: hidden;
+            overflow: auto;
+            overflow-x: hidden;
+            height: 800px;
         }
         #donationBtn {
             width: 300px;
@@ -108,7 +110,7 @@
 
 <section id="donationProject" class="content-wrap">
     <div class="main-section container">
-        <h3 class="main-title">기부 추천 프로젝트</h3>
+        <h3 class="main-title">리워드 추천 프로젝트</h3>
         <!-- Swiper -->
         <div class="swiper contents-area">
             <div class="swiper-wrapper">
@@ -310,12 +312,14 @@
         // 현재 페이지 URL 또는 다른 방법으로 현재 화면을 식별하고 해당 메뉴 항목을 활성화합니다.
         var currentPath = window.location.pathname;
 
-        if (currentPath === '/user/donation/detail') {
+        if (currentPath === '/user/reward/detail') {
             $('#story').addClass('active');
-        } else if (currentPath === '/user/donation/detail/condition') {
-            $('#condition').addClass('active');
-        } else if (currentPath === '/user/donation/detail/comment') {
+        } else if (currentPath === '/user/reward/detail/news') {
+            $('#news').addClass('active');
+        } else if (currentPath === '/user/reward/detail/comment') {
             $('#comments').addClass('active');
+        } else if (currentPath === '/user/reward/detail/policy') {
+            $('#policy').addClass('active');
         }/* else if (/!* 다른 페이지의 경로 *!/) {
             // 다른 페이지에 해당하는 메뉴 항목을 활성화
         }*/

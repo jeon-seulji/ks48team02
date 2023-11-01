@@ -30,6 +30,12 @@ public class BoardController {
 
         return "admin/board/modifyNotice3";
     }
+    // 공지사항 등록
+    @GetMapping("/boardAdd")
+    public String boardAdd(){
+
+        return "admin/board/boardAdd";
+    }
 
 
     // 이벤트 관리
