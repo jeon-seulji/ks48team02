@@ -27,6 +27,7 @@
         <table>
             <thead>
             <tr>
+                <th>투자 후 분배 코드</th>
                 <th>판매자 아이디</th>
                 <th>투자펀딩 공고코드</th>
                 <th>투자금액</th>
@@ -38,15 +39,12 @@
             </thead>
             <tbody>
             <tr th:if="${afterInvestDivisionList == null}">
-                <td colspan="7">투자 후 분배 목록이 없습니다.</td>
+                <td colspan="9">투자 후 분배 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${afterInvestDivisionList == null}" th:each="l : ${afterInvestDivisionList}">
                 <td>
                     <a th:href="@{/admin/investment/view/after-invest-division(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
                 </td>
-                <td th:text="${l}"></td>
-                <td th:text="${l}"></td>
-                <td th:text="${l}"></td>
                 <td th:text="${l}"></td>
                 <td th:text="${l}"></td>
                 <td th:text="${l}"></td>
