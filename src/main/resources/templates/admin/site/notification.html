@@ -32,10 +32,10 @@
 </th:block>
 
 <th:block layout:fragment="customContents">
+    <div class="boardMain" style="margin-bottom: 20px;">
+        <h3>알림 관리</h3>
+    </div>
     <form>
-        <div class="boardMain" style="margin-bottom: 20px;">
-            <h3>알림 관리</h3>
-        </div>
 
         <div class="section">
             <div class="title"><h2>알림 목록</h2></div>
@@ -56,10 +56,37 @@
                 </tr>
                 </thead>
                 <tbody class="center">
-
+                <tr>
+                    <td>
+                        <input type="checkbox" class="rowCheck" name="admin_board" value="1">
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
+
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li class="link-active"><a th:href="@{#}">1</a></li>
+                    <li><a th:href="@{#}">2</a></li>
+                    <li><a th:href="@{#}">3</a></li>
+                    <li><a th:href="@{#}">4</a></li>
+                    <li><a th:href="@{#}">5</a></li>
+                    <li><a th:href="@{#}">6</a></li>
+                </ul>
+                <div class="list-btn-area">
+                    <button class="prev-transfer">
+                        <span>prev</span>
+                    </button>
+                    <button class="next-transfer">
+                        <span>next</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
     </form>
 </th:block>
 </html>

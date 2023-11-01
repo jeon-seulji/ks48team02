@@ -1,7 +1,7 @@
 
 
 // main scroll active controls
-$('.content-wrap').scrollToGiveClass(function(){});
+$('.scroll-action-area').scrollToGiveClass(function(){});
 
 
 $('#btEventBanner').scrollToGiveClass(function(){});

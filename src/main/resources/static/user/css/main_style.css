@@ -2,7 +2,7 @@
 
 /* animator */
 @keyframes rankAni{
-    0%{opacity: 0; transform: translateY(70px)}
+    0%{opacity: 0; transform: translateY(150px)}
     100%{opacity: 1; transform: translateY(0)}
 }
 .main-rank-area.active li:nth-child(1){
@@ -30,11 +30,14 @@
 }
 .content-wrap {
     padding: 50px 0 20px;
+
+}
+.scroll-action-area {
     transform: translateY(150px);
     opacity: 0;
     transition: all .4s;
 }
-.content-wrap.scrolled {
+.scroll-action-area.scrolled {
     transform: translateY(0);
     opacity: 1;
 }
@@ -219,15 +222,28 @@
 .main-section .swiper-button-next::after {
     color: #4c4c4c !important;
 }
-
+.main-rank-area li:hover h5 {
+    text-decoration: underline;
+}
 #bannerArea .container {
     display: flex;
     gap: 20px;
 }
 .banner-content {
     height: 240px;
-    background: #eee;
     width: calc(50% - 10px);
+    overflow: hidden;
+}
+.banner-content > a{
+    display: block;
+    width: 100%; height: 100%;
+}
+.banner-content:hover a div {
+    transform: scale(1.05);
+}
+.banner-content > a DIV {
+    width: 100%; height: 100%;
+    transition: all .4s;
 }
 #btEventBanner {
     margin: 90px auto 150px;

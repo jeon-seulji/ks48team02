@@ -109,8 +109,10 @@
             // 다음 버튼 클릭시 페이지 이동, 선택한 옵션 정보 입력
             $('.nextBtn').click(function(){
 
-
-
+                if($('#orderInfo').find('input[type="checkbox"]:checked').length < 1) {
+                    alert('리워드를 선택해 주세요');
+                    return;
+                }
                 $(this).parents('.info-contents-area').hide();
                 $(this).parents('.info-contents-area').next().show();
 
@@ -188,22 +190,67 @@
                 $(this).parents('.info-contents-area').prev().show();
             });
 
+            //배송 메세지 선택 시, 기타 옵션 선택하면 기타 요청사항 입력받게
+            $('#deliverRequest').change(function(){
+                let isElseSelected = $(this).val() === 'DELM_005';
+                if(!isElseSelected){
+                    $('#elseDeliverRequest').val('');
+                }
+                $('#elseDeliverRequest').prop('disabled',!isElseSelected);
+
+
+            })
+
+            //약관 체크 모두 될 시 모두 동의에 체크.
+            $('.essential').not('#agreeNews').click(function(){
+                let checkLength = $('.essential').not('#agreeNews').length;
+                let checkedLength = $('.essential:checked').not('#agreeNews').length;
+                let isAllCheck = checkLength === checkedLength;
+                $('#allCheck').prop('checked',isAllCheck);
+            });
+
+            //약관 모두 동의 체크시 모두 동의
+            $('#allCheck').click(function(){
+                $('.essential').not('#agreeNews').prop('checked',$(this).prop('checked'));
+            });
+
+            //옵션 수량 음수로는 선택할 수 없게
+            $('.optionAmount').change(function(){
+                if($(this).val() < 1) {
+                    $(this).val(1);
+                }
+            })
+
+            //옵션 선택될 시 기본값 1주고 수량 바꿀 수 있게, 선택 안될 시 값0으로 주고 수량 못바꾸게
+            $('.selectOption input:checkbox').change(function(){
+                let optionAmount = $(this).parent().find('.optionAmount');
+
+                if($(this).prop('checked')) {
+                    $(optionAmount).attr('readonly',false)
+                    if($(optionAmount).val() < 1) {
+                        $(optionAmount).val(1);
+                    }
+                } else{
+                    $(optionAmount).val(0);
+                    $(optionAmount).attr('readonly',true)
+                }
+            });
+
+            //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
+            $('.paymentBtn').click(function(){
+                $('.essential').each(function(idx,item){
+                    if(!$(item).prop('checked')) {
+                        alert('필수 약관에 모두 동의해주세요');
+                        $(item).focus();
+                        return false;
+                    }
+                });
+            });
+
+
 
         })
 
-        $(document).on('change','.selectOption input:checkbox',function(){
-            let optionAmount = $(this).parent().find('.optionAmount');
-            if($(this).prop('checked')) {
-                $(optionAmount).attr('readonly',false)
-                if($(optionAmount).val() < 1) {
-                    $(optionAmount).val(1);
-                }
-            } else{
-                $(optionAmount).val(0);
-                $(optionAmount).attr('readonly',true)
-            }
-
-        });
 
 
 
@@ -499,7 +546,7 @@
                                             <p id="memberMobile" class="mb-lg-5">010-1111-1111</p>
 
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="agreeNews">
+                                                <input class="essential form-check-input" type="checkbox" value="" id="agreeNews">
                                                 <label class="form-check-label" for="agreeNews">
                                                     (필수) 프로젝트 진행에 대한 새소식 및 결제 관련 안내를 받습니다
                                                 </label>
@@ -535,9 +582,18 @@
                                         <br>
                                         <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddr" value="" style="height: 35px" placeholder="상세 주소">
                                         <br>
-                                        <label for="delverRequest" class="font-weight-bold text-dark mt-lg-2">배송 요청사항</label>
+                                        <label for="deliverRequest" class="font-weight-bold text-dark mt-lg-2">배송 요청사항</label>
                                         <br>
-                                        <input type="text" class="w-100" id="delverRequest" value="" style="height: 35px">
+                                        <select id="deliverRequest">
+                                            <option value="DELM_001">문 앞에 두고 가주세요</option>
+                                            <option value="DELM_002">배송 전에 연락 해주세요</option>
+                                            <option value="DELM_003">부재시 문 앞에 놓아주세요</option>
+                                            <option value="DELM_004">부재시 경비실에 맡겨주세요</option>
+                                            <option value="DELM_005">기타</option>
+                                        </select>
+                                        <!--                                        <input type="text" class="w-100" id="deliverRequest" value="" style="height: 35px">-->
+                                        <br>
+                                        <input type="text" class="w-100 mt-lg-2" id="elseDeliverRequest" value="" style="height: 35px" placeholder="기타" disabled>
                                         <br>
 
                                     </div>
@@ -557,14 +613,14 @@
                                     </div>
                                     <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="kakaoPay" checked>
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="kakaoPay">
                                         <label class="form-check-label" for="kakaoPay">
                                             카카오페이
                                         </label>
                                     </div>
                                     <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="creditCard" checked>
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="creditCard">
                                         <label class="form-check-label" for="creditCard">
                                             신용카드
                                         </label>
@@ -584,19 +640,19 @@
                                     </div>
                                     <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="agree1" checked>
+                                        <input class="essential form-check-input" type="checkbox" value="" id="agree1">
                                         <label class="form-check-label" for="agree1">
                                             구매조건, 결제 진행 및 결제 대행 서비스 동의(필수)
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="agree2" checked>
+                                        <input class="essential form-check-input" type="checkbox" value="" id="agree2">
                                         <label class="form-check-label" for="agree2">
                                             개인정보 제3자 제공 동의 (필수)
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="agree3" checked>
+                                        <input class="essential form-check-input" type="checkbox" value="" id="agree3">
                                         <label class="form-check-label" for="agree3">
                                             책임 규정에 대한 동의 (필수)
                                         </label>

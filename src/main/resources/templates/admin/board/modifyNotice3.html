@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<!-- 사용자별 스크립트 작성 -->
+
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <title th:text="${title}"></title>
@@ -9,42 +9,42 @@
     <link rel="stylesheet" th:href="@{/admin/css/contents_style.css}">
     <link rel="stylesheet" th:href="@{/common/css/common-css.css}">
 </head>
+
 <!--if(confirm('정말 취소하시겠습니까?')){-->
 <!--// 확인 누르면 실행될 내용 작성-->
 <!--} else {-->
 <!--// 취소 누르면 실행될 내용 작성-->
 <!--}-->
+
 <!-- 사용자 페이지별 javascript file -->
 <body>
 <div class="pop_modify">
     <div class="ui-header">
         <table border="1">
             <tbody>
-            <h1>신고</h1>
+            <h1>공지 사항</h1>
             <tr>
-                <td class="sidebar">신고 유형</td>
-                <td>리원드</td>
+                <td class="sidebar">카테고리 유형</td>
+                <td>공지사항</td>
             </tr>
             <tr>
-                <td class="sidebar">신고 제목</td>
-                <td>신고합니다.</td>
+                <td class="sidebar">게시판 이름</td>
+                <td>[서비스 안내] 플로키 서비스 오픈</td>
             </tr>
             <tr>
-                <td class="sidebar">신고자 아이디</td>
-                <td>id005</td>
-            </tr>
-            <tr>
-                <td class="sidebar">신고 내용</td>
+                <td class="sidebar">세부 내용</td>
                 <td>
                             <textarea class="detailComment" rows="3" style="width: 100%;">
-타인의 지적재산권을 허락없이 사용함
+안녕하세요 김플로입니다.
+이번에 플로키 크라우드펀딩 사이트를 오픈했습니다.
+많은 참여와 성원 부탁드립니다.
                         </textarea>
                 </td>
 
             </tr>
             <tr>
-                <td class="sidebar">신고 일시</td>
-                <td>2023-10-26</td>
+                <td class="sidebar">게시 날짜</td>
+                <td>2023-10-18</td>
             </tr>
             <tr>
                 <td class="sidebar">관리자 ID</td>
@@ -59,23 +59,14 @@
         </div>
     </div>
 </div>
-
-
 <script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
 <script>
-    // 취소 버튼 누르면 알림창
     $('.cancel').click(function (){
-        if(confirm('정말 취소하시겠습니까?')){
-            // 확인 누르면 실행될 내용 작성
-            // 창이 사라진다.
-            console.log(11);
+        if(confirm("정말로 취소 하시겠습니까???")){
             window.close();
         }
-    })
+    });
 </script>
 
-
 </body>
-
-
 </html>
