@@ -8,9 +8,10 @@
 -->
 <configuration>
 	<!-- 변수 지정 : 로그 파일 경로 변수 -->
+
     <property name="LOG_DIR" value="src/main/resources/logs" />
     <property name="LOG_PATH_NAME" value="${LOG_DIR}/application.log" />
-	
+
 	<!-- ConsoleAppender : 콘솔 패턴 커스텀 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
@@ -23,7 +24,7 @@
 			<pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %n    %msg%n</pattern>
 		</encoder>
 	</appender>
-	
+
 	<!-- Rolling File Appender
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         	파일 경로
@@ -43,11 +44,11 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
     </appender> -->
-	
+
 	<!-- 
 		name => 패키지 경로 
 		additivity => 중복 확인 (false는 중복 안되게 한 번만 로그를 출력하겠다 의미)
-		
+
 	-->
 	<!-- 프로젝트 패키지 안 클래스에 설정된 로그 출력 -->
 	<logger name="ksmart.ks48team02" level="INFO" additivity="false">
@@ -85,6 +86,7 @@
 	</logger> 
 	
 	<!-- SQL 결과 조회된 데이터의 table로 표현하여 로그 출력 --> 
+
 	<logger name="jdbc.resultsettable" level="OFF" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
