@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AccountController {
 
     @GetMapping(value={"","/"})
-    public String mainPage(){
+    public String mainPage(){ // 회원가입 페이지
 
         return "user/account/main";
     }

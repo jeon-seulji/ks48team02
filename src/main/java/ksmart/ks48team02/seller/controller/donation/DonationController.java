@@ -62,6 +62,22 @@ public class DonationController {
         return "seller/donation/comments/main";
     }
 
+    @GetMapping("/news")
+    public String newsManagementPage(Model model){
+        model.addAttribute("title","판매자 : 새소식 관리");
+        model.addAttribute("contentsTitle","새소식 관리");
+        return "seller/donation/news/main";
+    }
+
+    @GetMapping("/news/add")
+    public String newsAddPage(){
+        return "seller/donation/news/add";
+    }
+
+    @GetMapping("/news/modify")
+    public String newsModifyPage(){
+        return "seller/donation/news/modify";
+    }
 
 
 }

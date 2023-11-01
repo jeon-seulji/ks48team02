@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>플로키 신고하기</title>
@@ -31,15 +31,11 @@
         <div class="report_area">
             <dl>
                 <span class="inner">작성자</span>
-                <dd class="report_nick">
-                    userName
-                </dd>
+                <input type="text" class="report_cont" placeholder="작성자 아이디 입력해주세요.">
             </dl>
             <dl class="report_connt">
                 <span class="inner">내 용</span>
-                <dd class="report_cont">
-                    신고내용
-                </dd>
+                <input type="text" class="report_cont" placeholder="상세 신고 내용을 적어주세요">
             </dl>
         </div>
 
