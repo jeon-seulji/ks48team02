@@ -21,12 +21,108 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <a th:href="@{/seller/investment/view/after-fund-revenue}">상세</a>
-    <button>
-        <a th:href="@{/seller/investment/insert/after-fund-revenue}">등록</a>
-    </button>
-    <button>
-        <a th:href="@{/seller/investment/update/after-fund-revenue}">수정</a>
-    </button>
+
+    <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div><br>
+    <div class="admin-content-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>투자펀딩후 진행정보 코드</th>
+                <th>대표자 아이디</th>
+                <th>투자펀딩 공고코드</th>
+                <th>진행 후 펀딩 달성금액 가치</th>
+                <th>펀딩 달성금액</th>
+                <th>매출액</th>
+                <th>매출원가</th>
+                <th>매출총이익</th>
+                <th>영업이익</th>
+                <th>영업비용</th>
+                <th>당기순이익</th>
+                <th>매출기준일 기업가치</th>
+                <th>청약당시 기업가치</th>
+                <th>매출기준일 주가</th>
+                <th>발행주가</th>
+                <th>배당액</th>
+                <th>배당률</th>
+                <th>주당배당금</th>
+                <th>주당수익</th>
+                <th>매출기준기간(시작)</th>
+                <th>매출기준기간(종료)</th>
+                <th>등록일시</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${afterFundrevenueList == null}">
+                <td colspan="24">투자후 기업정보 공개 목록이 없습니다.</td>
+            </tr>
+            <tr th:unless="${afterFundrevenueList == null}" th:each="l : ${afterFundrevenueList}">
+                <td>
+                    <a th:href="@{/seller/investment/view/judge(afterFundrevenueCode=${l.afterFundrevenueCode})}" th:text="${l.afterFundrevenueCode}"></a>
+                </td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td>
+                    <a th:href="@{/seller/investment/update/after-fund-revenue(afterFundrevenueCode=${l.afterFundrevenueCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/seller/investment/delete/after-fund-revenue(afterFundrevenueCode=${l.afterFundrevenueCode})}">삭제</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+
+        <button type="button" class="submitBtn" th:onclick="|location.href='@{/seller/investment/insert/after-fund-revenue}'|">
+            등록하기
+        </button>
+        <button type="button" class="submitBtn" th:onclick="|location.href='@{/seller/investment/update/after-fund-revenue}'|">
+            수정하기
+        </button>
+
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li class="link-active"><a th:href="@{#}">1</a></li>
+                    <li><a th:href="@{#}">2</a></li>
+                    <li><a th:href="@{#}">3</a></li>
+                    <li><a th:href="@{#}">4</a></li>
+                    <li><a th:href="@{#}">5</a></li>
+                    <li><a th:href="@{#}">6</a></li>
+                </ul>
+                <div class="list-btn-area">
+                    <button class="prev-transfer">
+                        <span>prev</span>
+                    </button>
+                    <button class="next-transfer">
+                        <span>next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </th:block>
 </html>
