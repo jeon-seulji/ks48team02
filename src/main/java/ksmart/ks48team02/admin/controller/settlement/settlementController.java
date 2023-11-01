@@ -12,7 +12,6 @@ public class settlementController {
     // 정산 신청 현황 페이지
     @GetMapping(value = {"","/"})
     public String adminSettlementPage(Model model){
-
         model.addAttribute("title","관리자 : 정산 관리");
         model.addAttribute("contentsTitle","정산 신청 현황");
         model.addAttribute("contentsSubTitle","스토어 전체 정산 신청 현황이 노출됩니다");
