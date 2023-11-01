@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
+@Controller("userRewardController")
 @RequestMapping("/user/reward")
 public class RewardController {
 
@@ -35,8 +35,16 @@ public class RewardController {
     @GetMapping("/detail/news")
     public String newsPage(Model model) {
 
-        return "user/reward/detail/news";
+        return "user/reward/detail/news/main";
     }
+
+    //리워드 새소식 상세 페이지
+    @GetMapping("/detail/news/detail")
+    public String newsDetailPage(){
+
+        return "user/reward/detail/news/detail";
+    }
+
 
     //리워드 주문 페이지
     @GetMapping("/order")
@@ -57,6 +65,13 @@ public class RewardController {
     public String paymentConfirmPage(Model model) {
 
         return "user/reward/payment/confirm";
+    }
+
+    //리워드 환불 정책 페이지
+    @GetMapping("/detail/refundPolicy")
+    public String refundPolicyPage(){
+
+        return"user/reward/detail/refundPolicy";
     }
 
 

@@ -21,12 +21,90 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <a th:href="@{/seller/investment/view/customer-invest}">상세</a>
-    <button>
-        <a th:href="@{/seller/investment/insert/customer-invest}">등록</a>
-    </button>
-    <button>
-        <a th:href="@{/seller/investment/update/customer-invest}">수정</a>
-    </button>
+
+    <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div><br>
+    <div class="admin-content-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>운영 후 투자자 손익 코드</th>
+                <th>투자펀딩 공고코드</th>
+                <th>투자펀딩후 진행정보 코드</th>
+                <th>총 수익</th>
+                <th>주가 수익</th>
+                <th>주가수익률</th>
+                <th>배당수익</th>
+                <th>배당수익률</th>
+                <th>주당수익</th>
+                <th>주식구입수</th>
+                <th>주당금액</th>
+                <th>결제금액</th>
+                <th>수익기준일</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${customerInvestList == null}">
+                <td colspan="15">운영 후 투자자 손익 목록이 없습니다.</td>
+            </tr>
+            <tr th:unless="${customerInvestList == null}" th:each="l : ${customerInvestList}">
+                <td>
+                    <a th:href="@{/seller/investment/view/customer-invest(customerInvestCode=${l.customerInvestCode})}" th:text="${l.afterFundrevenueCode}"></a>
+                </td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td th:text="${l}"></td>
+                <td>
+                    <a th:href="@{/seller/investment/update/customer-invest(customerInvestCode=${l.customerInvestCode})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/seller/investment/delete/customer-invest(customerInvestCode=${l.customerInvestCode})}">삭제</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+
+        <button type="button" class="submitBtn" th:onclick="|location.href='@{/seller/investment/insert/customer-invest}'|">
+            등록하기
+        </button>
+        <button type="button" class="submitBtn" th:onclick="|location.href='@{/seller/investment/update/customer-invest}'|">
+            수정하기
+        </button>
+
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li class="link-active"><a th:href="@{#}">1</a></li>
+                    <li><a th:href="@{#}">2</a></li>
+                    <li><a th:href="@{#}">3</a></li>
+                    <li><a th:href="@{#}">4</a></li>
+                    <li><a th:href="@{#}">5</a></li>
+                    <li><a th:href="@{#}">6</a></li>
+                </ul>
+                <div class="list-btn-area">
+                    <button class="prev-transfer">
+                        <span>prev</span>
+                    </button>
+                    <button class="next-transfer">
+                        <span>next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </th:block>
 </html>

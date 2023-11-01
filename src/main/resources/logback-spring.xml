@@ -89,6 +89,5 @@
 	<!-- 필수 : 전역(root)에 관련된 로그를 담는 곳 ( ksmart.mybatis ) -->
 	<root level="INFO"> <!-- ERROR : error가 났을 때만 로그 출력 -->
 		<appender-ref ref="STDOUT" />
-		<appender-ref ref="ROLLING_FILE" />
 	</root>
 </configuration>
