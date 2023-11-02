@@ -52,37 +52,53 @@
     <form id="slRefundForm" method="get">
       <table class="partition-select">
         <tbody>
-        <tr>
-          <td>
-            기간
-          </td>
-          <td>
-            <input type="date" name="amDateSettStartDate" value="">
-            <span> - </span>
-            <input type="date" name="amDateSettEndDate" value="">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            처리 현황
-          </td>
-          <td class="order-category-select">
-            <ul>
-              <li>
-                <input id="progressing_r" type="checkbox" name="progressing_r">
-                <label for="progressing_r">처리중</label>
-              </li>
-              <li>
-                <input id="progressed_r" type="checkbox" name="progressed_r">
-                <label for="progressed_r">처리완료</label>
-              </li>
+          <tr>
+            <td>
+              기간
+            </td>
+            <td>
+              <input type="date" name="amDateSettStartDate" value="">
+              <span> - </span>
+              <input type="date" name="amDateSettEndDate" value="">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              처리 현황
+            </td>
+            <td class="order-category-select">
+              <ul>
+                <li>
+                  <input id="progressing_r" type="checkbox" name="progressing_r">
+                  <label for="progressing_r">처리중</label>
+                </li>
+                <li>
+                  <input id="progressed_r" type="checkbox" name="progressed_r">
+                  <label for="progressed_r">처리완료</label>
+                </li>
 
-              </li>
+                </li>
 
-            </ul>
+              </ul>
 
-          </td>
-        </tr>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              검색 키워드
+            </td>
+            <td class="order-category-select">
+              <select name="searchKey">
+                <option value="total">전체</option>
+                <option value="total">전체</option>
+                <option value="orderCode">주문코드</option>
+                <option value="orderName">주문자명</option>
+                <option value="orderId">주문아이디</option>
+                <option value="projectName">공고명</option>
+              </select>
+              <input type="search" name="searchValue">
+            </td>
+          </tr>
         </tbody>
       </table>
       <div class="btn-area">
@@ -157,7 +173,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -183,7 +199,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -209,7 +225,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -235,7 +251,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -261,7 +277,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -287,7 +303,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -313,7 +329,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -339,7 +355,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -365,7 +381,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/investment/order/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -383,162 +399,7 @@
                 처리중
               </td>
             </tr>
-            <tr>
-              <td class="table-data-center">
-                <input type="checkbox" name="selectList">
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                id100
-              </td>
-              <td class="table-data-center">
-                [국내 최초 상륙] 프로젝트 명 멋있는 프로젝트 명 작성할 공간
-              </td>
-              <td class="table-data-center">
-                <span>35,000</span>원
-              </td>
-              <td class="table-data-center">
-                2023-10-15 00:00:00
-              </td>
-              <td class="table-data-center">
-                처리중
-              </td>
-            </tr>
-            <tr>
-              <td class="table-data-center">
-                <input type="checkbox" name="selectList">
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                id100
-              </td>
-              <td class="table-data-center">
-                [국내 최초 상륙] 프로젝트 명 멋있는 프로젝트 명 작성할 공간
-              </td>
-              <td class="table-data-center">
-                <span>35,000</span>원
-              </td>
-              <td class="table-data-center">
-                2023-10-15 00:00:00
-              </td>
-              <td class="table-data-center">
-                처리중
-              </td>
-            </tr>
-            <tr>
-              <td class="table-data-center">
-                <input type="checkbox" name="selectList">
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                id100
-              </td>
-              <td class="table-data-center">
-                [국내 최초 상륙] 프로젝트 명 멋있는 프로젝트 명 작성할 공간
-              </td>
-              <td class="table-data-center">
-                <span>35,000</span>원
-              </td>
-              <td class="table-data-center">
-                2023-10-15 00:00:00
-              </td>
-              <td class="table-data-center">
-                처리중
-              </td>
-            </tr>
-            <tr>
-              <td class="table-data-center">
-                <input type="checkbox" name="selectList">
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                id100
-              </td>
-              <td class="table-data-center">
-                [국내 최초 상륙] 프로젝트 명 멋있는 프로젝트 명 작성할 공간
-              </td>
-              <td class="table-data-center">
-                <span>35,000</span>원
-              </td>
-              <td class="table-data-center">
-                2023-10-15 00:00:00
-              </td>
-              <td class="table-data-center">
-                처리중
-              </td>
-            </tr>
-            <tr>
-              <td class="table-data-center">
-                <input type="checkbox" name="selectList">
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                id100
-              </td>
-              <td class="table-data-center">
-                [국내 최초 상륙] 프로젝트 명 멋있는 프로젝트 명 작성할 공간
-              </td>
-              <td class="table-data-center">
-                <span>35,000</span>원
-              </td>
-              <td class="table-data-center">
-                2023-10-15 00:00:00
-              </td>
-              <td class="table-data-center">
-                처리중
-              </td>
-            </tr>
-            <tr>
-              <td class="table-data-center">
-                <input type="checkbox" name="selectList">
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
-              </td>
-              <td class="table-data-center">
-                id100
-              </td>
-              <td class="table-data-center">
-                [국내 최초 상륙] 프로젝트 명 멋있는 프로젝트 명 작성할 공간
-              </td>
-              <td class="table-data-center">
-                <span>35,000</span>원
-              </td>
-              <td class="table-data-center">
-                2023-10-15 00:00:00
-              </td>
-              <td class="table-data-center">
-                처리중
-              </td>
-            </tr>
+
           </tbody>
         </table>
       </form>

@@ -54,47 +54,61 @@
         <form id="amYearChartForm" method="get">
             <table class="partition-select">
                 <tbody>
-                <tr>
-                    <td>
-                        기간
-                    </td>
-                    <td>
-                        <input type="date" name="amDateSettStartDate" value="">
-                        <span> - </span>
-                        <input type="date" name="amDateSettEndDate" value="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        주문 상태
-                    </td>
-                    <td class="order-category-select">
-                        <ul>
-                            <li>
-                                <input id="delivery_d" type="checkbox" name="">
-                                <label for="delivery_d">배송 대기중</label>
-                            </li>
-                            <li>
-                                <input id="delivering_d" type="checkbox" name="">
-                                <label for="delivering_d">배송중</label>
-                            </li>
-                            <li>
-                                <input id="delivered_d" type="checkbox" name="">
-                                <label for="delivered_d">배송완료</label>
-                            </li>
-                            <li>
-                                <input id="refunding_d" type="checkbox" name="">
-                                <label for="refunding_d">환불 신청 배송</label>
-                            </li>
-                            <li>
-                                <input id="swipping_d" type="checkbox" name="">
-                                <label for="swipping_d">교환 신청 배송</label>
-                            </li>
+                    <tr>
+                        <td>
+                            기간
+                        </td>
+                        <td>
+                            <input type="date" name="amDateSettStartDate" value="">
+                            <span> - </span>
+                            <input type="date" name="amDateSettEndDate" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            주문 상태
+                        </td>
+                        <td class="order-category-select">
+                            <ul>
+                                <li>
+                                    <input id="delivery_d" type="checkbox" name="">
+                                    <label for="delivery_d">배송 대기중</label>
+                                </li>
+                                <li>
+                                    <input id="delivering_d" type="checkbox" name="">
+                                    <label for="delivering_d">배송중</label>
+                                </li>
+                                <li>
+                                    <input id="delivered_d" type="checkbox" name="">
+                                    <label for="delivered_d">배송완료</label>
+                                </li>
+                                <li>
+                                    <input id="refunding_d" type="checkbox" name="">
+                                    <label for="refunding_d">환불 신청 배송</label>
+                                </li>
+                                <li>
+                                    <input id="swipping_d" type="checkbox" name="">
+                                    <label for="swipping_d">교환 신청 배송</label>
+                                </li>
 
-                        </ul>
+                            </ul>
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            검색 키워드
+                        </td>
+                        <td class="order-category-select">
+                            <select name="searchKey">
+                                <option value="total">전체</option>
+                                <option value="settlementCode">공고코드</option>
+                                <option value="settlementId">신청아이디</option>
+                                <option value="projectName">공고명</option>
+                            </select>
+                            <input type="search" name="searchValue">
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="btn-area">
