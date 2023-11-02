@@ -52,12 +52,12 @@
                     <input type="checkbox" name="selsectList">
                 </td>
                 <td>
-                    <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
+                    <a class="detail-link" th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
                 </td>
                 <td th:text="${l.investmentRequestSubject}"></td>
                 <td th:text="${l.memberIdSeller}"></td>
                 <td>
-                    <a th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}" th:text="${l.corporateValueEvaluationCode}"></a>
+                    <a class="detail-link" th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}" th:text="${l.corporateValueEvaluationCode}"></a>
                 </td>
                 <td th:text="${l.memberId}"></td>
                 <td th:text="${l.evaluatedCorpValue}"></td>

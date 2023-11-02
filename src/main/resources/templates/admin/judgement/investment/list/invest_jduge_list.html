@@ -47,7 +47,7 @@
             </tr>
             <tr th:unless="${investmentRequestJudgeList == null}" th:each="l : ${investmentRequestJudgeList}">
                 <td>
-                    <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
+                    <a class="detail-link" th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
                 </td>
                 <td th:text="${l.investmentRequestSubject}"></td>
                 <td th:text="${l.memberIdSeller}"></td>
