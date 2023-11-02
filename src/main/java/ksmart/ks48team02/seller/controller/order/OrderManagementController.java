@@ -105,6 +105,14 @@ public class OrderManagementController {
         model.addAttribute("contentsSubTitle","기부 주문 목록");
         return "/seller/donation/orderManagement/list";
     }
+    // 기부 주문 상세
+    @GetMapping("/donation/order/detail")
+    public String sellerDonationOrderDetail(Model model){
+        model.addAttribute("title","판매자 : 주문 상세");
+        model.addAttribute("contentsTitle","주문 상세");
+        model.addAttribute("contentsSubTitle","주문 상세");
+        return "/seller/donation/orderManagement/orderDetailInfo";
+    }
     // 기부 대시보드
     @GetMapping("/donation/order")
     public String sellerDonationOrderDashboard(Model model){
@@ -129,6 +137,14 @@ public class OrderManagementController {
         model.addAttribute("contentsTitle","투자 주문 대시보드");
         model.addAttribute("contentsSubTitle","투자 주문 대시보드");
         return "/seller/investment/order/main";
+    }
+    // 투자 주문 상세
+    @GetMapping("/investment/order/detail")
+    public String sellerInvestmentOrderDetail(Model model){
+        model.addAttribute("title","판매자 : 주문 상세");
+        model.addAttribute("contentsTitle","주문 상세");
+        model.addAttribute("contentsSubTitle","투자 주문 상세");
+        return "/seller/investment/order/orderDetailInfo";
     }
     // 리워드 자동 환불 신청 관리
     @GetMapping("/investment/order/autoReFund")

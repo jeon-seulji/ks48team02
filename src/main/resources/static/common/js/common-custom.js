@@ -183,3 +183,9 @@ $('#allSelectBtn').on('click', function(){
     let isChecked = $(this).prop('checked');
     $('input[name="selectList"]').prop('checked', isChecked);
 });
+
+// 공고 상세보기 btn controls
+$('.more-btn').on('click', function(){
+    $('#projectInfoDetail').toggleClass('active');
+    $(this).toggleClass('active');
+});

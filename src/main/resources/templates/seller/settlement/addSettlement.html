@@ -11,18 +11,437 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-
+    <script th:src="@{/admin/js/settlement/settlementJs.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
+    <script>
 
+
+        function submitValidation (){
+            let $checkedEles = $('.settlement-log input:not(#allSelectBtn):checked');
+            console.log($checkedEles, '<--');
+            if($checkedEles.length == 0) alert('공고를 한 개 이상 선택해주세요');
+            else location.href = '/seller/settlement/addSettlement/info';
+        }
+    </script>
 </th:block>
 
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    여기에 콘텐츠 작성 하자
+    <div class="admin-wrapper"> <!-- 수정 -->
+        <div class="admin-content-wrapper form-table">
+            <form id="amYearChartForm" method="get">
+                <table class="partition-select">
+                    <tbody>
+                    <tr>
+                        <td>
+                            기간
+                        </td>
+                        <td>
+                            <input type="date" name="amDateSettStartDate" value="2023-08-20">
+                            <span> - </span>
+                            <input type="date" name="amDateSettEndDate" value="2023-10-20">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            프로젝트 분류
+                        </td>
+                        <td>
+                            <select id="amProjectSelect" name="amProjectSelect">
+                                <option value="">프로젝트 분류를 선택해주세요</option>
+                                <option value="total">전체 프로젝트</option>
+                                <option value="reward">리워드 프로젝트</option>
+                                <option value="donation">기부 프로젝트</option>
+                                <option value="investment">투자 프로젝트</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            검색 키워드
+                        </td>
+                        <td class="order-category-select">
+                            <select name="searchKey">
+                                <option value="total">전체</option>
+                                <option value="settlementCode">공고코드</option>
+                                <option value="settlementId">신청아이디</option>
+                                <option value="projectName">공고명</option>
+                            </select>
+                            <input type="search" name="searchValue">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="btn-area">
+                    <button type="button" class="submitBtn">검색</button>
+                </div>
+            </form>
+        </div>
+        <div class="title-wrap">
+            <h4 class="admin-content-title">정산 신청 가능 프로젝트 목록</h4>
+        </div>
+        <div class="admin-content-wrapper">
+            <!-- select are -->
+            <div class="data-info">
+                <div class="list-count-area">
+                    <ul>
+                        <li>프로젝트 총 <span class="count-data total-list">0</span>건</li>
+                        <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                    </ul>
+                </div>
+                <div class="list-count-selector">
+                    <select name="orderby">
+                        <option value="regist_d">등록일 역순</option>
+                        <option value="regist_a">등록일 순</option>
+                        <option>-----------------</option>
+                        <option value="project_name_d">프로젝트명 역순</option>
+                        <option value="project_name_a">프로젝트명 역순</option>
+                    </select>
+                    <select name="count-select">
+                        <option value="15">15개씩 보기</option>
+                        <option value="20">20개씩 보기</option>
+                        <option value="30">30개씩 보기</option>
+                    </select>
+                </div>
+            </div>
+            <!-- contents area -->
+            <form>
+                <table class="settlement-log">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="allSelect" id="allSelectBtn">
+                        </th>
+                        <th>공고 코드</th>
+                        <th style="width:8%;">스토어명</th>
+                        <th style="width:8%;">프로젝트<br>분류</th>
+                        <th >프로젝트 명</th>
+                        <th style="width:9%;">
+                            펀딩 목표 금액
+                        </th>
+                        <th style="width:15%;">
+                            펀딩 달성 금액
+                        </th>
+                        <th>달성률</th>
+                        <th style="width:8%;">공고마감일자</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                        <!-- 조회 결과 없음 -->
+                        <tr style="display:none;">
+                            <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                        </tr>
+                        <!-- 조회 결과 contents -->
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectList">
+                            </td>
+                            <td>
+                                <a class="detail-link" th:href="@{#}">ODR2023092200001</a>
+                            </td>
+                            <td class="table-data-center">
+                                (주)CJ
+                            </td>
+                            <td class="table-data-center">
+                                리워드
+                            </td>
+                            <td>
+                                [프로젝트]프로젝트명 입니다요
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">500,000</span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+
+                            </td>
+                            <td class="table-data-center">
+                                <span class="settlement-pay">3500</span> %
+                            </td>
+                            <td class="table-data-center">
+                                2023-11-30
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <!-- list pager -->
+            <div class="board-page-area">
+                <div class="list-controller-inner">
+                    <ul>
+                        <li class="link-active"><a th:href="@{#}">1</a></li>
+                        <li><a th:href="@{#}">2</a></li>
+                        <li><a th:href="@{#}">3</a></li>
+                        <li><a th:href="@{#}">4</a></li>
+                        <li><a th:href="@{#}">5</a></li>
+                        <li><a th:href="@{#}">6</a></li>
+                    </ul>
+                    <div class="list-btn-area">
+                        <button class="prev-transfer">
+                            <span>prev</span>
+                        </button>
+                        <button class="next-transfer">
+                            <span>next</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="btn-area">
+            <ul>
+                <li>
+                    <button id="orderBackBtn" class="submitBtn" type="button" onclick="submitValidation()">정산 신청</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
 </th:block>
 </body>
 </html>

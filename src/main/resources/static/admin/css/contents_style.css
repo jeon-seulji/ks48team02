@@ -759,6 +759,7 @@ form .settlement-log tbody .sub-table-tr ~ tr td {
     padding: 0;
     line-height: 1;
     font-weight: 500;
+    font-size: 12px;
 }
 
 #orderListForm .settlement-log,
