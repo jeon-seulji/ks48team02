@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>공지사항 등록</title>
+    <title>이벤트 등록</title>
     <link rel="stylesheet" th:href="@{/admin/css/boardAdd.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
@@ -21,12 +21,12 @@
 
     <form>
         <div class="titleArea">
-            <h2>공지사항 등록</h2>
+            <h2>이벤트 등록</h2>
         </div>
 
         <div class="boardForm">
             <table border="1">
-                <caption>공지사항 등록 폼</caption>
+                <caption>이벤트 등록 폼</caption>
                 <colgroup>
                     <col style="width: 190px">
                     <col style="width: auto;">
@@ -47,7 +47,7 @@
                                 <div id="summernote"></div>
                                 <script>
                                     $('#summernote').summernote({
-                                        placeholder: '공지사항을 입력 해주세요.',
+                                        placeholder: '이벤트 내용을 입력 해주세요.',
                                         tabsize: 2,
                                         height: 100
                                     });
@@ -63,7 +63,7 @@
     </form>
 
 </th:block>
-    <div class="boardBtn">
-        <a class="cancel">취소</a> <a class="registration">글 등록</a>
-    </div>
+<div class="boardBtn">
+    <a class="cancel">취소</a> <a class="registration">글 등록</a>
+</div>
 </html>
