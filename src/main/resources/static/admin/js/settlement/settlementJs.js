@@ -1,10 +1,5 @@
 
-        // 전체 선택 버튼 제어
-        $('#allSelectBtn').on('click', function(){
-            let isChecked = $(this).prop('checked');
-            $('input[name="selectList"]').prop('checked', isChecked);
 
-        });
 
         // 선택된 체크박스 count add text
         function checkedCount($checkedInput){
@@ -25,7 +20,7 @@
             let checkedValidation = false;
 
             if($checkedInput.length == $formInInput.length - 1) checkedValidation = true;
-
+2
             $('#allSelectBtn').prop('checked', checkedValidation);
 
         });

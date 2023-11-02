@@ -71,7 +71,7 @@ public class OrderManagementController {
     }
 
     // 환불 신청 상세
-    @GetMapping("/reword/order/refund/deteil")
+    @GetMapping("/reword/order/refund/detail")
     public String sellerRefundDetailInfo(Model model){
         model.addAttribute("title","판매자 : 환불 상세 정보");
         model.addAttribute("contentsTitle","환불 상세 정보");
@@ -81,7 +81,7 @@ public class OrderManagementController {
 
 
     // 교환 신청 상세
-    @GetMapping("/reword/order/Swapping/deteil")
+    @GetMapping("/reword/order/Swapping/detail")
     public String sellerSwappingDetailInfo(Model model){
         model.addAttribute("title","판매자 : 교환 상세 정보");
         model.addAttribute("contentsTitle","교환 상세 정보");
