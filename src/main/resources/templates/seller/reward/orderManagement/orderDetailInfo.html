@@ -61,16 +61,7 @@
             $(this).val('');
         });
 
-        // 배송 메세지 직접 입력
-        $('select[name="deliveryMessage"]').on('change', function(){
-            let selectedValue = $(this).val();
 
-            console.log(selectedValue, '<--');
-            if(selectedValue == '5') {
-                $('input[name="deliveryMessageDirect"]').attr('disabled', false);
-                $('input[name="deliveryMessageDirect"]').focus();
-            }
-        });
     </script>
 </th:block>
 

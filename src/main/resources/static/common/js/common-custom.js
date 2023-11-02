@@ -165,3 +165,21 @@ function confirmBtnFn(e){
 
 // input [type='date'] min setting
 $('input[type="date"]').prop('min',nowDateFomat);
+
+// 배송 메세지 직접 입력
+$('select[name="deliveryMessage"]').on('change', function(){
+    let selectedValue = $(this).val();
+
+    console.log(selectedValue, '<--');
+    if(selectedValue == '5') {
+        $('input[name="deliveryMessageDirect"]').attr('disabled', false).focus();
+    } else {
+        $('input[name="deliveryMessageDirect"]').attr('disabled', true);
+    }
+});
+
+// 전체 선택 버튼 제어
+$('#allSelectBtn').on('click', function(){
+    let isChecked = $(this).prop('checked');
+    $('input[name="selectList"]').prop('checked', isChecked);
+});
