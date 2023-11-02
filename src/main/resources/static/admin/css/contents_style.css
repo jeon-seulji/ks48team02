@@ -13,6 +13,20 @@ select {
     border: 1px solid #ccc;
     font-size: 12px;
 }
+#orderInfoArea input:not([type='checkbox']):focus ,
+#orderInfoArea select:focus,
+#paymentInfoDetailBt input:focus,
+#paymentInfoDetailBt select:focus,
+#deliveryInfo input:focus,
+#deliveryInfo select:focus,
+input:focus,
+select:focus
+{
+    border: 1px solid var(--maincolor) !important;
+}
+.nav_menu {
+    background: #fff !important;
+}
 .page-title{
     margin-bottom: 20px;
 }
@@ -745,6 +759,7 @@ form .settlement-log tbody .sub-table-tr ~ tr td {
     padding: 0;
     line-height: 1;
     font-weight: 500;
+    font-size: 12px;
 }
 
 #orderListForm .settlement-log,
@@ -766,4 +781,14 @@ form .settlement-log tbody .sub-table-tr ~ tr td {
 .detail-link:hover {
     text-decoration: underline;
     color: var(--maincolor);
+}
+select[name="searchKey"]{
+    font-size: 11px;
+}
+select[name="searchKey"] ~ input {
+    font-size: 11px;
+    margin-left: 5px;
+    width: 350px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
 }

@@ -63,30 +63,44 @@
             <form id="amYearChartForm" method="get">
                 <table class="partition-select">
                     <tbody>
-                    <tr>
-                        <td>
-                            기간
-                        </td>
-                        <td>
-                            <input type="date" name="amDateSettStartDate" value="2023-08-20">
-                            <span> - </span>
-                            <input type="date" name="amDateSettEndDate" value="2023-10-20">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            프로젝트 분류
-                        </td>
-                        <td>
-                            <select id="amProjectSelect" name="amProjectSelect">
-                                <option value="">프로젝트 분류를 선택해주세요</option>
-                                <option value="total">전체 프로젝트</option>
-                                <option value="reward">리워드 프로젝트</option>
-                                <option value="donation">기부 프로젝트</option>
-                                <option value="investment">투자 프로젝트</option>
-                            </select>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                기간
+                            </td>
+                            <td>
+                                <input type="date" name="amDateSettStartDate" value="2023-08-20">
+                                <span> - </span>
+                                <input type="date" name="amDateSettEndDate" value="2023-10-20">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                프로젝트 분류
+                            </td>
+                            <td>
+                                <select id="amProjectSelect" name="amProjectSelect">
+                                    <option value="">프로젝트 분류를 선택해주세요</option>
+                                    <option value="total">전체 프로젝트</option>
+                                    <option value="reward">리워드 프로젝트</option>
+                                    <option value="donation">기부 프로젝트</option>
+                                    <option value="investment">투자 프로젝트</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                검색 키워드
+                            </td>
+                            <td class="order-category-select">
+                                <select name="searchKey">
+                                    <option value="total">전체</option>
+                                    <option value="settlementCode">공고코드</option>
+                                    <option value="settlementId">신청아이디</option>
+                                    <option value="projectName">공고명</option>
+                                </select>
+                                <input type="search" name="searchValue">
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="btn-area">

@@ -41,6 +41,14 @@ public class InvestmentController {
         return "user/investment/detail/investor";
     }
 
+    @GetMapping("/detail/news")
+    public String detailNewsPage(Model model) {
+
+        model.addAttribute("title", "투자 새소식");
+
+        return "user/investment/detail/news/main";
+    }
+
     @GetMapping("/list/after-process")
     public String getAfterProcessList(Model model) {
 
