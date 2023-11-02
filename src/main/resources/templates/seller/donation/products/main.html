@@ -6,110 +6,19 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <title th:text="${title}"></title>
-    <!-- Link Swiper's CSS -->
     <style>
-        .category-button {
-            border: none;
-            border-radius: 25px; /* 라운드 처리 반경을 조정합니다. */
+        .table-data-center-modify{
             text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .category-li{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-left: 20px;
-        }
-        .selected {
-            font-weight: bold;
-            color: black;
-        }
-        ul.d-flex li:hover {
-            cursor: pointer;
-        }
-        .donation-item-box{
-            width: 350px;
-            height: 300px;
-            margin: 10px;
-        }
-        .donation-item-first-child{
-            background: grey;
-            width: 350px;
-            height: 200px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .donation-item-first-child img{
-            width: 100%;
-            height: 100%;
-            border-radius: 5px;
-        }
-        .donation-item-second-child{
-            width: 350px;
-            height: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .donation-item-third-child{
-            width: 350px;
-            height: auto;
-            font-weight: bolder;
-            color: black;
-            font-size: 15px;
-        }
-        .donation-item-fourth-child{
-            width: 350px;
-            height: auto;
-        }
-        .donation-item-span-first{
-            font-weight: bold;
-            font-size: 20px;
-            color: #235FD9;
-        }
-        .donation-item-span-second{
-            margin-left: 5px;
-        }
-        .donation-item-span-third{
-            margin-left: auto;
-            color: #235FD9;
-            background: #cce5ff;
-            font-size: 12px;
-            padding: 2px;
-            border-radius: 5px;
-        }
-        .donation-item-third-child a:link{
-            text-decoration: none;
-        }
-        .donation-item-third-child a:visited{
-            color: black;
-            text-decoration: none;
-        }
-        .donation-item-third-child a:hover{
-            color: blue; text-decoration: underline;
+            color: blue;
+            text-decoration: underline;
         }
     </style>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
 </head>
 
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
+
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
@@ -135,63 +44,603 @@
             element.classList.add("selected");
         }
 
+        // 심사 여부에 따른 수정 버튼 숨기기 기능
+        $('tr').each(function() {
+            const judgeText = $(this).find('.table-data-center-judge').text().trim();
+
+            // "심사완료"인 경우
+            if (judgeText === '심사완료') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 숨깁니다.
+                $(this).find('.table-data-center-modify a').text('수정불가');
+                $(this).find('.table-data-center-modify a').on('click', function (event){
+                    event.preventDefault();
+                });
+            }
+        });
+
+        // 심사 완료 프로젝트, 심사중 프로젝트 셀렉트 박스 기능 구현
+        $('.project-select').on('change', function() {
+            const selectedValue = $(this).val();
+
+            // 모든 <tr> 요소를 숨깁니다.
+            $('table.settlement-log tbody tr').hide();
+
+            if (selectedValue === '0') {
+                // "전체 프로젝트"를 선택한 경우, 모든 행을 표시합니다.
+                $('table.settlement-log tbody tr').show();
+            } else if (selectedValue === '1') {
+                // "심사완료된 프로젝트"를 선택한 경우, "심사완료"인 행을 표시합니다.
+                $('table.settlement-log tbody tr .table-data-center-judge:contains("심사완료")').closest('tr').show();
+            } else if (selectedValue === '2') {
+                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
+                $('table.settlement-log tbody tr .table-data-center-judge:contains("심사중")').closest('tr').show();
+            }
+
+        });
+        // 행이 없을 경우 검색 결과가 없습니다. 행을 표시합니다.  -- 전체 프로젝트 누르면 이게 뜨는 오류가 있음
+        if($('table.settlement-log tbody tr').length == 1){
+            $('table.settlement-log tbody tr.not-contents').show();
+        }else{
+            $('table.settlement-log tbody tr.not-contents').hide();
+        }
+
+
     </script>
 </th:block>
 
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child" th:onclick="|location.href='@{/user/donation/detail}'|">
-                    <img class="donation-item-third-child-image" src="https://50plus.or.kr/upload/im/2018/09/17473716-08b5-4c55-8709-380ededad91c.png">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">34% 달성</span>
-                    <span class="donation-item-span-second">480,200원</span>
-                    <span class="donation-item-span-third">11일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    <a th:href="@{/user/donation/detail}">시설 퇴소를 앞둔, 음악으로 세상에 서고 싶은 사랑이</a>
-                </div>
-                <div class="donation-item-fourth-child">
-                    파주시문산종합사회복지관
-                </div>
+    <div class="title-wrap">
+        <h4 class="admin-content-title">현재 프로젝트 목록</h4>
+        <div class="btnArea">
+            <button type="button" class="printBtn"><span>액셀 다운로드</span></button>
+        </div>
+    </div>
+    <div class="admin-content-wrapper">
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>프로젝트 목록 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
             </div>
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">2% 달성</span>
-                    <span class="donation-item-span-second">130,800원</span>
-                    <span class="donation-item-span-third">11일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    어르신께 행복을 전하는 주민나눔 단체 해피CELL
-                </div>
-                <div class="donation-item-fourth-child">
-                    월곡종합사회복지관
-                </div>
+            <div class="list-count-selector">
+                <select class="project-select">
+                    <option value="0">전체 프로젝트</option>
+                    <option value="1">심사완료된 프로젝트</option>
+                    <option value="2">심사중인 프로젝트</option>
+                </select>
+                <select name="orderby">
+                    <option value="regist_d">등록일 역순</option>
+                    <option value="regist_a">등록일 순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">프로젝트명 역순</option>
+                    <option value="project_name_a">프로젝트명 역순</option>
+                </select>
+                <select name="count-select">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
             </div>
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">18% 달성</span>
-                    <span class="donation-item-span-second">1,798,700원</span>
-                    <span class="donation-item-span-third">14일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    연이은 강진, 고통 속에 놓인 아프가니스탄을 도와주세요..
-                </div>
-                <div class="donation-item-fourth-child">
-                    유엔난민기구
+        </div>
+        <form>
+
+            <table class="settlement-log">
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="allSelect" id="allSelectBtn">
+                    </th>
+                    <th style="width:8%;">프로젝트코드</th>
+                    <th style="width:8%;">프로젝트</br>심사여부</th>
+                    <th style="width:20%;">프로젝트 명</th>
+                    <th style="width:15%;">
+                        프로젝트 목표 금액
+                    </th>
+                    <th style="width:10%;">공고 등록일자</th>
+                    <th style="width:10%;">공고 마감일자</th>
+                    <th>수정</th>
+                    <th>담당자</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <!-- not contents -->
+                <tr class="not-contents">
+                    <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                </tr>
+                <!-- contents -->
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사중
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사중
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="table-data-center">
+                        <input type="checkbox" name="selectList">
+                    </td>
+                    <td class="table-data-center">
+                        ORD20231022-000001
+                    </td>
+                    <td class="table-data-center-judge">
+                        심사완료
+                    </td>
+                    <td>
+                        [프로젝트]프로젝트명 입니다요
+                    </td>
+
+                    <td>
+                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                    </td>
+                    <td class="table-data-center">
+                        2023-10-20
+                    </td>
+                    <td class="table-data-center">
+                        2023-11-20
+                    </td>
+                    <td class="table-data-center-modify">
+                        <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center">
+                        id001
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <!-- list pager -->
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li class="link-active"><a th:href="@{#}">1</a></li>
+                    <li><a th:href="@{#}">2</a></li>
+                    <li><a th:href="@{#}">3</a></li>
+                    <li><a th:href="@{#}">4</a></li>
+                    <li><a th:href="@{#}">5</a></li>
+                    <li><a th:href="@{#}">6</a></li>
+                </ul>
+                <div class="list-btn-area">
+                    <button class="prev-transfer">
+                        <span>prev</span>
+                    </button>
+                    <button class="next-transfer">
+                        <span>next</span>
+                    </button>
                 </div>
             </div>
 
         </div>
-    </div>
 </th:block>
 </body>
 </html>
