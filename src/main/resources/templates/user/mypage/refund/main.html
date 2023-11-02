@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout/login_default}">
+<!--로그인 후 볼 수 있는 유저 마이 페이지-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+    <style>
+        .login-logo .user-connection-menu {
+            display: none;
+        }
+
+        .nav-link{
+            font-size: medium;
+        }
+
+        #profileContainer{
+            display: flex;
+            justify-content: center;
+            padding: 35px;
+            flex-direction: column;
+        }
+
+        #img-box{
+            margin: 0 auto;
+        }
+
+        #name-box{
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+        }
+    </style>
+
+</head>
+<body>
+<!--사용자별 html-->
+<th:block layout:fragment="customContents">
+    <!-- 유저 프로필 영역   -->
+    <div id="profileContainer">
+        <!-- 프로필 이미지 -->
+        <div id="img-box">
+            <img style="width: 90px; height: 90px; border-radius: 50%;" src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.namu.wiki%2Fi%2FDgDM89CJAmUv4KwG-JNwQOWklX6MPKPXip-KQL66igwbwegZ3y6pRdFZ3Ne28Qn7JaxXZzewB3_iHM_uqJ7s8A.webp&type=sc960_832"
+                 id="profile_img" alt="">
+        </div>
+
+        <!-- 사용자 이름 + 설정 아이콘 -->
+        <div id="name-box">
+            <!-- 사용자 이름 -->
+            <h2>최미미</h2>
+            <!-- 설정 아이콘 클릭시 프로필 설정 페이지로 이동  -->
+            <a th:href="@{/user/mypage/profile}"><i class="bi bi-gear" id="showProfileIcon" ></i></a>
+
+        </div>
+    </div>
+    <!-- tab 메뉴 영역  -->
+    <!-- data-toggle="tab" 속성을 Bootstrap의 <a> 태그에 추가하면 해당 링크가 tab 컴포넌트를 제어하도록 설정 -->
+
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6 main_container">
+            <div class="bg-light border border-primary rounded mb-lg-3 row">
+                <h2 class="text-primary text-center my-lg-2">반품 사유를 입력해주세요</h2>
+            </div>
+
+            <div class="bg-light border border-primary rounded py-lg-3 px-lg-2 row">
+                <div class="col-lg-12">
+                    <input type="checkbox" id="allCheck">
+                    <label for="allCheck" class="text-dark">전체 체크</label>
+                    <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
+
+                    <ul id="orderList">
+                        <li>
+                            <div class="options my-lg-2 ml-lg-3 row">
+                            <span>
+                                <input type="checkbox" id="option1">
+                            </span>
+                                <span class="text-white">
+                                <label for="option1">
+                                    <div class="bg-primary rounded-circle text-center ml-lg-2" style="height: 80px; width: 80px" ><br>상품사진</div>
+                                </label>
+                            </span>
+                                <span class="text-dark ml-lg-3">
+                                <p class="rewardProjectName">프로젝트 제목</p>
+                                <p class="rewardOptionName">프로젝트 옵션1 이름</p>
+                                <p><span class="rewardOrderPrice font-weight-bold">30,000</span>원</p>
+                                <p>주문수량 : <span class="rewardOptionAmount font-weight-bold">1</span>개</p>
+                                <p>배송비 : <span class="rewardOptionDeliverPrice font-weight-bold">무료배송</span></p>
+                            </span>
+                            </div>
+                            <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
+                        </li>
+
+                        <li>
+                            <div class="options my-lg-2 ml-lg-3 row">
+                            <span>
+                                <input type="checkbox" id="option2">
+                            </span>
+                                <span class="text-white">
+                                <label for="option2">
+                                    <div class="bg-primary rounded-circle text-center ml-lg-2" style="height: 80px; width: 80px" ><br>상품사진</div>
+                                </label>
+                            </span>
+                                <span class="text-dark ml-lg-3">
+                                <p class="rewardProjectName">프로젝트 제목</p>
+                                <p class="rewardOptionName">프로젝트 옵션1 이름</p>
+                                <p><span class="rewardOrderPrice font-weight-bold">30,000</span>원</p>
+                                <p>주문수량 : <span class="rewardOptionAmount font-weight-bold">1</span>개</p>
+                                <p>배송비 : <span class="rewardOptionDeliverPrice font-weight-bold">무료배송</span></p>
+
+                            </span>
+                            </div>
+                            <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <br>
+                <div class="col-lg-6">
+                    <p class="text-center text-dark"> 배송비 구매자 부담</p>
+                    <div class="form-check text-center">
+
+
+                        <label class="btn btn-secondary" for="result1">
+                            <input type="radio" class="btn-check" name="options" id="result1" autocomplete="off" checked>
+                            단순 변심
+                        </label>
+                        <br>
+
+                        <label class="btn btn-secondary" for="result2">
+                            <input type="radio" class="btn-check" name="options" id="result2" autocomplete="off" checked>
+                            주문 실수
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <p class="text-center text-dark"> 배송비 판매자 부담</p>
+                    <div class="form-check text-center">
+
+                        <label class="btn btn-secondary" for="result3">
+                            <input type="radio" class="btn-check" name="options" id="result3" autocomplete="off" checked>
+                            파손 및 불량
+                        </label>
+                        <br>
+
+                        <label class="btn btn-secondary" for="result4">
+                            <input type="radio" class="btn-check" name="options" id="result4" autocomplete="off" checked>
+                            오배송 및 지연
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
+                    <p>상세 사유 입력</p>
+                    <textarea rows="5" style="width: 600px">
+
+                    </textarea>
+
+                    <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
+                    <p>사진 등록</p>
+                    <input class="form-control" id="thumbnailImage" type="file">
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</th:block>
+
+<!-- 사용자별 스크립트 파일 -->
+<th:block layout:fragment="customJsFile">
+
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+    <script>
+        <!-- 아이콘 클릭시 프로필 설정 페이지로 이동 -->
+
+        // $showProfileIcon.addEventListener('click', () => {
+        //     window.location.href = "mypage/profile";
+        // })
+
+    </script>
+</th:block>
+
+
+</body>
+</html>
