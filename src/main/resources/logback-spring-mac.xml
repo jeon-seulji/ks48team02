@@ -8,7 +8,7 @@
 -->
 <configuration>
 	<!-- 변수 지정 : 로그 파일 경로 변수 -->
-    <property name="LOG_DIR" value="/home/springboot/logs" />
+    <property name="LOG_DIR" value="/Users/Shared/logs" />
     <property name="LOG_PATH_NAME" value="${LOG_DIR}/application.log" />
 	
 	<!-- ConsoleAppender : 콘솔 패턴 커스텀 -->
