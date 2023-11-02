@@ -44,19 +44,118 @@
             element.classList.add("selected");
         }
 
-        // 심사 여부에 따른 수정 버튼 숨기기 기능
+        // 심사 여부에 따른 추가 기능들
         $('tr').each(function() {
             const judgeText = $(this).find('.table-data-center-judge').text().trim();
+            const $judgeCon = $(this).find('.table-data-center-judge');
+            const $curGoalMoney = $(this).find('.current-goal-money');
+
+            // "진행중"인 경우
+            if (judgeText === '진행중') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
+                const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
+                const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
+                $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $modifyImpossible.remove();
+
+                // TODO 현재 목표 금액 (DB 에서 가져와서 구현하기!
+                $curGoalMoney.text('30,000,000');
+
+                // TODO DB구현되면 공고 시작일자 적용
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('2023-10-25');
+            }
 
             // "심사완료"인 경우
-            if (judgeText === '심사완료') {
-                // "table-data-center-modify" 클래스의 <a> 태그를 숨깁니다.
-                $(this).find('.table-data-center-modify a').text('수정불가');
-                $(this).find('.table-data-center-modify a').on('click', function (event){
-                    event.preventDefault();
+            if (judgeText === '심사승인') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
+                const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
+                const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
+                $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $modifyImpossible.remove();
+
+                // 공고 시작 버튼 + 시작 누를 시 진행중으로 변경 +  TODO 공고 시작일자 (DB에 값 넣기) 설정하기
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('');
+                $startProjectDate.children();
+                const $startButton = $('<button style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>');
+
+                // 시작 버튼을 요소에 추가합니다.
+                $startProjectDate.append($startButton);
+
+                // 시작 버튼에 클릭 이벤트 리스너를 추가.
+                $startButton.click(function() {
+                    let currentDate = new Date();
+                    let day = currentDate.getDate();
+                    let month = (currentDate.getMonth() + 1);
+                    day = day < 10 ? '0' + day : day;
+                    month = month < 10 ? '0' + month : month;
+                    let formattedDate = currentDate.getFullYear() + '-' + month + '-' + day;
+                    $startProjectDate.text(formattedDate);
+                    // TODO 현재 목표 금액 (DB 에서 가져와서 구현하기!
+                    $curGoalMoney.text('127,000');
+
+                    $judgeCon.text('진행중');
+                    $startButton.remove();
                 });
+
             }
+
+            // "심사반려"인 경우
+            if (judgeText === '심사반려') {
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('-');
+            }
+
+            // "심사반려"인 경우
+            if (judgeText === '심사중') {
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('-');
+            }
+
+            // "프로젝트 성공"인 경우
+            if (judgeText === '성공') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
+                const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
+                const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
+                $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $modifyImpossible.remove();
+
+                // TODO 현재 목표 금액 (DB 에서 가져와서 구현하기!
+                $curGoalMoney.text('30,000,000');
+
+                // TODO 공고 시작일자 적용 임시 - 프로젝트 시작 시 값이 들어 있음 DB 구현되면 DB에서 가져오기
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('2023-10-26');
+            }
+
+            // "프로젝트 실패"인 경우
+            if (judgeText === '실패') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
+                const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
+                const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
+                $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $modifyImpossible.remove();
+
+                // TODO 현재 목표 금액 (DB 에서 가져와서 구현하기!
+                $curGoalMoney.text('30,000,000');
+
+                // TODO 공고 시작일자 적용 임시 - 프로젝트 시작 시 값이 들어 있음 DB 구현되면 DB에서 가져오기
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('2023-10-28');
+            }
+
         });
+
+
+        // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+        function isProject(){
+            if($('table.settlement-log tbody tr').length == 1){
+                $('table.settlement-log tbody tr.not-contents').show();
+            }else{
+                $('table.settlement-log tbody tr.not-contents').hide();
+            }
+        }
 
         // 심사 완료 프로젝트, 심사중 프로젝트 셀렉트 박스 기능 구현
         $('.project-select').on('change', function() {
@@ -68,21 +167,54 @@
             if (selectedValue === '0') {
                 // "전체 프로젝트"를 선택한 경우, 모든 행을 표시합니다.
                 $('table.settlement-log tbody tr').show();
+                isProject();
+
             } else if (selectedValue === '1') {
                 // "심사완료된 프로젝트"를 선택한 경우, "심사완료"인 행을 표시합니다.
-                $('table.settlement-log tbody tr .table-data-center-judge:contains("심사완료")').closest('tr').show();
+                $('table.settlement-log tbody tr .table-data-center-judge:contains("심사승인")').closest('tr').show();
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject();
+
             } else if (selectedValue === '2') {
                 // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
+                $('table.settlement-log tbody tr .table-data-center-judge:contains("심사반려")').closest('tr').show();
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject();
+            } else if (selectedValue === '3') {
+                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
                 $('table.settlement-log tbody tr .table-data-center-judge:contains("심사중")').closest('tr').show();
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject();
+            }
+            else if (selectedValue === '4') {
+                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
+                $('table.settlement-log tbody tr .table-data-center-judge:contains("진행중")').closest('tr').show();
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject();
+            }
+            else if (selectedValue === '5') {
+                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
+                $('table.settlement-log tbody tr .table-data-center-judge:contains("성공")').closest('tr').show();
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject();
+            }
+            else if (selectedValue === '6') {
+                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
+                $('table.settlement-log tbody tr .table-data-center-judge:contains("실패")').closest('tr').show();
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject();
             }
 
         });
-        // 행이 없을 경우 검색 결과가 없습니다. 행을 표시합니다.  -- 전체 프로젝트 누르면 이게 뜨는 오류가 있음
-        if($('table.settlement-log tbody tr').length == 1){
-            $('table.settlement-log tbody tr.not-contents').show();
-        }else{
-            $('table.settlement-log tbody tr.not-contents').hide();
-        }
+
+        // 목록 진입 시 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주기 위해 설정
+        isProject();
+
+        // 총 프로젝트 개수 띄우기
+        $('.total-list').text($('table.settlement-log tbody tr').length -1);
+
+
+
 
 
     </script>
@@ -102,26 +234,17 @@
             <div class="list-count-area">
                 <ul>
                     <li>프로젝트 목록 총 <span class="count-data total-list">0</span>건</li>
-                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
                 </ul>
             </div>
             <div class="list-count-selector">
                 <select class="project-select">
                     <option value="0">전체 프로젝트</option>
-                    <option value="1">심사완료된 프로젝트</option>
-                    <option value="2">심사중인 프로젝트</option>
-                </select>
-                <select name="orderby">
-                    <option value="regist_d">등록일 역순</option>
-                    <option value="regist_a">등록일 순</option>
-                    <option>-----------------</option>
-                    <option value="project_name_d">프로젝트명 역순</option>
-                    <option value="project_name_a">프로젝트명 역순</option>
-                </select>
-                <select name="count-select">
-                    <option value="15">15개씩 보기</option>
-                    <option value="20">20개씩 보기</option>
-                    <option value="30">30개씩 보기</option>
+                    <option value="1">심사승인된 프로젝트</option>
+                    <option value="2">심사반려된 프로젝트</option>
+                    <option value="3">심사중인 프로젝트</option>
+                    <option value="4">진행중인 프로젝트</option>
+                    <option value="5">성공한 프로젝트</option>
+                    <option value="6">실패한 프로젝트</option>
                 </select>
             </div>
         </div>
@@ -130,18 +253,20 @@
             <table class="settlement-log">
                 <thead>
                 <tr>
-                    <th>
-                        <input type="checkbox" name="allSelect" id="allSelectBtn">
-                    </th>
                     <th style="width:8%;">프로젝트코드</th>
-                    <th style="width:8%;">프로젝트</br>심사여부</th>
+                    <th style="width:8%;">프로젝트</br>현황</th>
                     <th style="width:20%;">프로젝트 명</th>
+                    <th style="width:15%;">
+                        프로젝트 현재 달성 금액
+                    </th>
                     <th style="width:15%;">
                         프로젝트 목표 금액
                     </th>
                     <th style="width:10%;">공고 등록일자</th>
                     <th style="width:10%;">공고 마감일자</th>
+                    <th style="width:10%;">공고 시작일자</th>
                     <th>수정</th>
+                    <th style="width:10%;">심사사유</th>
                     <th>담당자</th>
 
                 </tr>
@@ -154,20 +279,19 @@
                 <!-- contents -->
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사승인
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -175,8 +299,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -185,20 +315,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        성공
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -206,8 +335,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -215,9 +350,6 @@
 
                 </tr>
                 <tr>
-                    <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
                     <td class="table-data-center">
                         ORD20231022-000001
                     </td>
@@ -227,9 +359,11 @@
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -237,8 +371,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -246,21 +386,20 @@
 
                 </tr>
                 <tr>
-                    <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
                     <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        실패
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -268,8 +407,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -277,9 +422,6 @@
 
                 </tr>
                 <tr>
-                    <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
                     <td class="table-data-center">
                         ORD20231022-000001
                     </td>
@@ -289,9 +431,11 @@
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -299,8 +443,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -309,20 +459,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사승인
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -330,8 +479,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -340,20 +495,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사중
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -361,8 +515,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -371,20 +531,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사승인
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -392,8 +551,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -402,20 +567,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        성공
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -423,8 +587,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -433,20 +603,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사승인
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -454,8 +623,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -464,20 +639,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사중
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -485,8 +659,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -495,20 +675,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사승인
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -516,8 +695,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -526,19 +711,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사반려
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -546,8 +731,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -556,20 +747,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        심사반려
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -577,8 +767,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -587,20 +783,19 @@
                 </tr>
                 <tr>
                     <td class="table-data-center">
-                        <input type="checkbox" name="selectList">
-                    </td>
-                    <td class="table-data-center">
                         ORD20231022-000001
                     </td>
                     <td class="table-data-center-judge">
-                        심사완료
+                        진행중
                     </td>
                     <td>
                         [프로젝트]프로젝트명 입니다요
                     </td>
-
                     <td>
-                        <div style="float:left;"><span class="settlement-pay">150,000,000</span> 원</div>
+                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
+                    </td>
+                    <td>
+                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
                     </td>
                     <td class="table-data-center">
                         2023-10-20
@@ -608,8 +803,14 @@
                     <td class="table-data-center">
                         2023-11-20
                     </td>
+                    <td class="table-data-center start-project-date">
+                        2023-10-25
+                    </td>
                     <td class="table-data-center-modify">
                         <a th:href="@{/seller/donation/products/modify}">수정</a>
+                    </td>
+                    <td class="table-data-center judgement-reason">
+                        -
                     </td>
                     <td class="table-data-center">
                         id001
@@ -619,6 +820,8 @@
                 </tbody>
             </table>
         </form>
+
+
         <!-- list pager -->
         <div class="board-page-area">
             <div class="list-controller-inner">
