@@ -18,4 +18,7 @@ public class MypageController {
     public String profilePage(){
         return "user/mypage/profile";
     }
+
+
+
 }

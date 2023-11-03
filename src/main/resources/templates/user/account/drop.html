@@ -78,7 +78,45 @@
         }
 
         .modal-body detail{
+        }
 
+        /*  검은 버튼  */
+        .submitBtn_black {
+            background: #191919;
+            padding: 7px 23px;
+            transition: all .4s;
+            color: #fff;
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid #191919;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-left: 7px;
+        }
+
+        .submitBtn_black:hover {
+            background: var(--maincolor);
+            border: 1px solid var(--maincolor);
+        }
+
+        /* 흰 버튼 */
+        .submitBtn_white {
+            background: #fff;
+            padding: 7px 23px;
+            transition: all .4s;
+            color: #191919;
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid #191919;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+        .submitBtn_white:hover {
+            background: var(--maincolor);
+            border: 1px solid var(--maincolor);
+            color: #fff;
         }
     </style>
 </head>
@@ -139,7 +177,7 @@
                         <!-- 모달 트리거 버튼   -->
                         <button
                                 type="button"
-                                class="btn btn-dark"
+                                class="submitBtn_black"
                                 data-toggle="modal"
                                 data-target="#exampleModal"
                                 data-what="hello"
@@ -159,8 +197,8 @@
 
                                 <div class="modal-footer" >
 
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                    <button type="button" class="btn btn-dark">확인</button>
+                                    <button type="button" class="submitBtn_white" data-dismiss="modal">취소</button>
+                                    <form action="" method=""><button type="button" class="submitBtn_black">확인</button></form>
                                 </div>
                             </div>
                         </div>
