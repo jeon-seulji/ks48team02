@@ -199,7 +199,21 @@ let regEmpty = /\s/;
 
 // 공백 유효성 검사
 function validationEmptyFn($els){
+    let isFalse = true;
+    $($els).each((idx, item) => {
+        let value = $(item).val();
+        let labelId = $(item).attr('id');
+        console.log(labelId, '<--?')
 
+        if(value == null || value == '' || typeof value == 'undefined') {
+            let labelText = $(`label[for=${labelId}]`).text();
+            alert(labelText+'는 필수 입력 항목입니다');
+            $(item).focus();
+            isFalse = false;
+            return false;
+        }
+    });
+    return isFalse;
 }
 // 한글 유효성 검사
 function validationOnlyKoreanFn($els){
@@ -240,7 +254,9 @@ function onlyNumberValidationFn($els,addValue){
         $(item).siblings('.error-message').remove();
 
         let value = $(item).val();
-        let emptyMatches = value.match(regExpNum) ;
+
+        let emptyMatches = value.match(regEmpty) ;
+
         if(emptyMatches) {
             $(item).focus().val('').after('<span class="error-message">공백 없이 입력해주세요</span>');
             isFalse = false;

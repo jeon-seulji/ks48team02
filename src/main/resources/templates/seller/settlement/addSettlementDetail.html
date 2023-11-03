@@ -30,11 +30,17 @@
         // 예금주 유효성 validation
         $('#settAddBtn').on('click', function(){
             let $nameEl = $('input[name="settlementBankName"]');
-            if(validationOnlyKoreanFn($nameEl)){
-                alert('정상 처리되었습니다');
-                location.href = '/seller/settlement';
+            let $numberEl = $('input[name="settlementBankNumber"]');
+            let $totalEl = $('#slSettlementBankInfo input');
+
+            if (validationEmptyFn($totalEl)){
+                let validationKorean = validationOnlyKoreanFn($nameEl);
+                let validationNumber = onlyNumberValidationFn($numberEl, '-');
+                if( validationKorean && validationNumber){
+                    alert('정상 처리되었습니다');
+                    location.href = '/seller/settlement';
+                }
             }
-            // onlyNumberValidationFn($els,addr,addValue)
         });
 
 
@@ -221,7 +227,7 @@
                             <label for="settlementBankNumber">계좌번호</label>
                             <input id="settlementBankNumber" type="text" name="settlementBankNumber"
                                     placeholder="계좌번호 입력"
-                                    onfocus="this.placeholder=''"
+                                    onfocus="this.placeholder='000-00-000000'"
                                     onblur="this.placeholder='계좌번호 입력'">
 
                             <label for="settlementBankName">예금주</label>
