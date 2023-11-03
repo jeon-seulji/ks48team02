@@ -35,11 +35,11 @@
             <a th:href="@{/admin}"><i class="fa fa-home"></i> 홈 <span class="fa fa-chevron-down"></span></a>
           </li>
           <li>
-            <a><i class="fa fa-user"></i># 회원관리 <span class="fa fa-chevron-down"></span></a>
+            <a><i class="fa fa-user"></i># 회원관리(설아) <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a th:href="@{/templates/admin/user/memberList}"># 회원 조회</a></li>
-              <li><a th:href="@{/templates/admin/user/memberList}"># 로그인 이력</a></li>
-              <li><a href="index2.html"># 등급 관리</a></li>
+              <li><a th:href="@{/templates/admin/user/memberList}"># 회원 조회(설아)</a></li>
+              <li><a th:href="@{/templates/admin/user/memberList}"># 로그인 이력(설아)</a></li>
+              <li><a href="index2.html"># 등급 관리(설아)</a></li>
             </ul>
           </li>
           <li>
@@ -52,31 +52,31 @@
             <a><i class="fa fa-shopping-bag"></i> #주문 관리 (슬지) <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li>
-                <a th:href="@{#}">#주문 목록(슬지)</a>
+                <a th:href="@{/admin/order/list}">#주문 목록(슬지)</a>
               </li>
               <li>
-                <a th:href="@{#}">#배송 관리(슬지)</a>
+                <a th:href="@{/admin/order/delivery}">#배송 관리(슬지)</a>
               </li>
               <li>
-                <a th:href="@{#}">#교환/환불 신청 관리(슬지)</a>
+                <a th:href="@{/admin/order/refundSwapping}">#교환/환불 신청 관리(슬지)</a>
               </li>
               <li>
-                <a th:href="@{#}">#주문 로그 조회(슬지)</a>
+                <a th:href="@{/admin/order/completedList}">#주문 확정 목록(슬지)</a>
               </li>
             </ul>
           </li>
           <li>
-            <a><i class="fa fa-desktop"></i> 스토어 관리# <span class="fa fa-chevron-down"></span></a>
+            <a><i class="fa fa-desktop"></i> #스토어 관리(설아) <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="general_elements.html">스토어 조회#</a></li>
-              <li><a href="media_gallery.html">스토어 신청 현황#</a></li>
+              <li><a href="general_elements.html">#스토어 조회(설아)</a></li>
+              <li><a href="media_gallery.html">#스토어 신청 현황(설아)</a></li>
 
             </ul>
           </li>
           <li>
             <a><i class="fa fa-table"></i>!심사 관리(상,정,오)<span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="tables.html">리워드 심사 관리#</a></li>
+              <li><a href="tables.html">리워드 심사 관리(상민)</a></li>
               <li><a th:href="@{/admin/donation/judgement}">!기부 심사 관리(정민)</a></li>
               <li><a th:href="@{/admin/investment/judge-main}">!투자 심사 관리(오진)</a></li>
             </ul>
@@ -131,20 +131,20 @@
     <!-- /sidebar menu -->
 
     <!-- /menu footer buttons -->
-    <div class="sidebar-footer hidden-small">
-      <a data-toggle="tooltip" data-placement="top" title="Settings">
-        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-      </a>
-      <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-      </a>
-      <a data-toggle="tooltip" data-placement="top" title="Lock">
-        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-      </a>
-      <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-      </a>
-    </div>
+<!--    <div class="sidebar-footer hidden-small">-->
+<!--      <a data-toggle="tooltip" data-placement="top" title="Settings">-->
+<!--        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>-->
+<!--      </a>-->
+<!--      <a data-toggle="tooltip" data-placement="top" title="FullScreen">-->
+<!--        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>-->
+<!--      </a>-->
+<!--      <a data-toggle="tooltip" data-placement="top" title="Lock">-->
+<!--        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>-->
+<!--      </a>-->
+<!--      <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">-->
+<!--        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>-->
+<!--      </a>-->
+<!--    </div>-->
     <!-- /menu footer buttons -->
   </div>
 </div>
