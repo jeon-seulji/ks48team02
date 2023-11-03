@@ -31,7 +31,7 @@
         $('#settAddBtn').on('click', function(){
             let $nameEl = $('input[name="settlementBankName"]');
             let $numberEl = $('input[name="settlementBankNumber"]');
-            let $totalEl = $('#slSettlementBankInfo input');
+            let $totalEl = $('#slSettlementBankInfo input, #slSettlementBankInfo select');
 
             if (validationEmptyFn($totalEl)){
                 let validationKorean = validationOnlyKoreanFn($nameEl);
