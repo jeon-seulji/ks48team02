@@ -148,14 +148,14 @@
         });
 
 
-        // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-        function isProject(){
-            if($('table.settlement-log tbody tr').length == 1){
+        function isProject(judgeReason){
+            if($(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').length == 0){
                 $('table.settlement-log tbody tr.not-contents').show();
             }else{
-                $('table.settlement-log tbody tr.not-contents').hide();
+                $(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').show();
             }
         }
+
 
         // 심사 완료 프로젝트, 심사중 프로젝트 셀렉트 박스 기능 구현
         $('.project-select').on('change', function() {
@@ -167,48 +167,47 @@
             if (selectedValue === '0') {
                 // "전체 프로젝트"를 선택한 경우, 모든 행을 표시합니다.
                 $('table.settlement-log tbody tr').show();
-                isProject();
+
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                if($('table.settlement-log tbody tr').length == 1){
+                    $('table.settlement-log tbody tr.not-contents').show();
+                }else{
+                    $('table.settlement-log tbody tr.not-contents').hide();
+                }
 
             } else if (selectedValue === '1') {
                 // "심사완료된 프로젝트"를 선택한 경우, "심사완료"인 행을 표시합니다.
-                $('table.settlement-log tbody tr .table-data-center-judge:contains("심사승인")').closest('tr').show();
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-                isProject();
+                isProject("심사승인");
 
             } else if (selectedValue === '2') {
-                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
-                $('table.settlement-log tbody tr .table-data-center-judge:contains("심사반려")').closest('tr').show();
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-                isProject();
+                isProject("심사반려");
             } else if (selectedValue === '3') {
-                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
-                $('table.settlement-log tbody tr .table-data-center-judge:contains("심사중")').closest('tr').show();
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-                isProject();
+                isProject("심사중");
             }
             else if (selectedValue === '4') {
-                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
-                $('table.settlement-log tbody tr .table-data-center-judge:contains("진행중")').closest('tr').show();
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-                isProject();
+                isProject("진행중");
             }
             else if (selectedValue === '5') {
-                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
-                $('table.settlement-log tbody tr .table-data-center-judge:contains("성공")').closest('tr').show();
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-                isProject();
+                isProject("성공");
             }
             else if (selectedValue === '6') {
-                // "심사중인 프로젝트"를 선택한 경우, "심사중"인 행을 표시합니다.
-                $('table.settlement-log tbody tr .table-data-center-judge:contains("실패")').closest('tr').show();
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-                isProject();
+                isProject("실패");
             }
 
         });
 
-        // 목록 진입 시 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주기 위해 설정
-        isProject();
+        // 목록 진입 시 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주기 위해 설정 (초기화)
+        if($('table.settlement-log tbody tr').length == 1){
+            $('table.settlement-log tbody tr.not-contents').show();
+        }else{
+            $('table.settlement-log tbody tr.not-contents').hide();
+        }
 
         // 총 프로젝트 개수 띄우기
         $('.total-list').text($('table.settlement-log tbody tr').length -1);
@@ -265,7 +264,7 @@
                     <th style="width:10%;">공고 등록일자</th>
                     <th style="width:10%;">공고 마감일자</th>
                     <th style="width:10%;">공고 시작일자</th>
-                    <th>수정</th>
+                    <th>프로젝트</br>수정</th>
                     <th style="width:10%;">심사사유</th>
                     <th>담당자</th>
 
@@ -274,7 +273,7 @@
                 <tbody>
                 <!-- not contents -->
                 <tr class="not-contents">
-                    <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                    <td colspan="11" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                 </tr>
                 <!-- contents -->
                 <tr>
