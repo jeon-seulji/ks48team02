@@ -57,29 +57,30 @@
     </div>
     <!-- tab 메뉴 영역  -->
     <!-- data-toggle="tab" 속성을 Bootstrap의 <a> 태그에 추가하면 해당 링크가 tab 컴포넌트를 제어하도록 설정 -->
+    <div class="row mb-lg-5" >
+        <div class="col-lg-4"></div>
 
-    <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6 main_container">
-            <div class="bg-light border border-primary rounded mb-lg-3 row">
-                <h2 class="text-primary text-center my-lg-2">반품 사유를 입력해주세요</h2>
+        <div  id="refundResult" class="col-lg-4 main_container" style="display: block;">
+            <div class="border border-secondary rounded bg-light mb-lg-3 d-flex justify-content-center row">
+                <h3 class="text-dark my-lg-2">반품 사유를 입력해주세요</h3>
             </div>
 
-            <div class="bg-light border border-primary rounded py-lg-3 px-lg-2 row">
+            <div class="border border-secondary rounded py-lg-3 px-lg-2 row">
                 <div class="col-lg-12">
                     <input type="checkbox" id="allCheck">
-                    <label for="allCheck" class="text-dark">전체 체크</label>
-                    <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
+                    <label for="allCheck" class="text-dark font-weight-bold" style="margin-bottom: 0rem;">전체 체크</label>
+
+                    <hr style="color: #5a6268; size:1px">
 
                     <ul id="orderList">
                         <li>
                             <div class="options my-lg-2 ml-lg-3 row">
                             <span>
-                                <input type="checkbox" id="option1">
+                                <input type="checkbox" id="option1" class="optionCheck">
                             </span>
                                 <span class="text-white">
                                 <label for="option1">
-                                    <div class="bg-primary rounded-circle text-center ml-lg-2" style="height: 80px; width: 80px" ><br>상품사진</div>
+                                    <div class="rewardProjectImage bg-primary rounded-circle text-center ml-lg-2" style="height: 80px; width: 80px" ><br>상품사진</div>
                                 </label>
                             </span>
                                 <span class="text-dark ml-lg-3">
@@ -90,105 +91,339 @@
                                 <p>배송비 : <span class="rewardOptionDeliverPrice font-weight-bold">무료배송</span></p>
                             </span>
                             </div>
-                            <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
+                            <hr style="color: #5a6268; size:1px">
                         </li>
 
                         <li>
                             <div class="options my-lg-2 ml-lg-3 row">
                             <span>
-                                <input type="checkbox" id="option2">
+                                <input type="checkbox" id="option2" class="optionCheck">
                             </span>
                                 <span class="text-white">
                                 <label for="option2">
-                                    <div class="bg-primary rounded-circle text-center ml-lg-2" style="height: 80px; width: 80px" ><br>상품사진</div>
+                                    <div class="rewardProjectImage bg-primary rounded-circle text-center ml-lg-2" style="height: 80px; width: 80px" ><br>상품사진</div>
                                 </label>
                             </span>
                                 <span class="text-dark ml-lg-3">
                                 <p class="rewardProjectName">프로젝트 제목</p>
-                                <p class="rewardOptionName">프로젝트 옵션1 이름</p>
+                                <p class="rewardOptionName">프로젝트 옵션2 이름</p>
                                 <p><span class="rewardOrderPrice font-weight-bold">30,000</span>원</p>
                                 <p>주문수량 : <span class="rewardOptionAmount font-weight-bold">1</span>개</p>
                                 <p>배송비 : <span class="rewardOptionDeliverPrice font-weight-bold">무료배송</span></p>
 
                             </span>
                             </div>
-                            <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
+                            <hr style="color: #5a6268; size:1px">
                         </li>
                     </ul>
                 </div>
 
                 <br>
-                <div class="col-lg-6">
-                    <p class="text-center text-dark"> 배송비 구매자 부담</p>
-                    <div class="form-check text-center">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-4">
+                    <p class="text-center text-dark font-weight-bold"> 배송비 구매자 부담</p>
 
+                    <div class="form-check text-center mt-lg-2">
 
-                        <label class="btn btn-secondary" for="result1">
-                            <input type="radio" class="btn-check" name="options" id="result1" autocomplete="off" checked>
+                        <label class="btn btn-light btn-outline-dark w-100" for="result1" style="border-radius: 5px;">
+                            <input type="radio" class="btn-check" name="options" id="result1" checked>
                             단순 변심
                         </label>
                         <br>
 
-                        <label class="btn btn-secondary" for="result2">
-                            <input type="radio" class="btn-check" name="options" id="result2" autocomplete="off" checked>
+                        <label class="btn btn-light btn-outline-dark w-100" for="result2" style="border-radius: 5px;">
+                            <input type="radio" class="btn-check" name="options" id="result2">
                             주문 실수
                         </label>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <p class="text-center text-dark"> 배송비 판매자 부담</p>
-                    <div class="form-check text-center">
+                <div class="col-lg-4">
 
-                        <label class="btn btn-secondary" for="result3">
-                            <input type="radio" class="btn-check" name="options" id="result3" autocomplete="off" checked>
+                    <p class="text-center text-dark font-weight-bold"> 배송비 판매자 부담</p>
+
+                    <div class="form-check text-center mt-lg-2">
+
+                        <label class="btn btn-light btn-outline-dark w-100" for="result3" style="border-radius: 5px;">
+                            <input type="radio" class="btn-check" name="options" id="result3">
                             파손 및 불량
                         </label>
                         <br>
 
-                        <label class="btn btn-secondary" for="result4">
-                            <input type="radio" class="btn-check" name="options" id="result4" autocomplete="off" checked>
+                        <label class="btn btn-light btn-outline-dark w-100" for="result4" style="border-radius: 5px;">
+                            <input type="radio" class="btn-check" name="options" id="result4">
                             오배송 및 지연
                         </label>
                     </div>
                 </div>
 
-                <div class="col-lg-12">
-                    <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
-                    <p>상세 사유 입력</p>
-                    <textarea rows="5" style="width: 600px">
+                <div class="col-lg-12 text-dark">
+                    <hr style="color: #5a6268;">
+                    <p class="font-weight-bold ml-lg-2">상세 사유 입력</p>
+                    <textarea rows="5" class="w-100 rounded">
 
                     </textarea>
 
-                    <div style="border: 0.3px solid #8B8986; margin: 5px; width: 98%"></div>
-                    <p>사진 등록</p>
-                    <input class="form-control" id="thumbnailImage" type="file">
+                    <hr style="color: #5a6268; size:1px">
+
+                    <p class="font-weight-bold ml-lg-2">사진 등록</p>
+                    <input class="border border-secondary rounded w-100" id="refundImage" type="file">
+
+                    <div class="d-flex justify-content-center my-lg-3">
+
+                        <button class="nextBtn btn btn-primary w-50 mt-lg-3">다음 단계로</button>
+                    </div>
+
                 </div>
 
 
             </div>
+
+            <div class="mt-lg-3">
+
+                <strong class="text-danger">◈확인해주세요.</strong>
+
+                <p>반품 요청을 하시기 전 반드시 판매자에게 반품 가능 여부를 확인해 주세요.</p>
+                <p>반품 사유를 확인할 수 있는 사진을 등록하시면 보다 신속하게 반품 처리 진행됩니다.</p>
+                <p>주 결제수단(카드,계좌,휴대폰 등)과 보조 결제수단(네이버페이 포인트)를 복합결제 후 환불요청 시, 환불 우선순위에 따라 주 결제수단에서 선 환불 처리됩니다.</p>
+                <p>카드사 결제할인 적용 주문에 사용된 포인트는 환불 즉시 자동 회수되므로, <b>환불 후 계정으로 반환되지 않습니다.</b></p>
+            </div>
+
+        </div>
+
+        <div id="refundInfo" class="col-lg-4 main_container" style="display: none;">
+            <div class="border border-secondary rounded bg-light mb-lg-3 d-flex justify-content-center row">
+                <h3 class="text-dark my-lg-2">반품 정보를 입력해주세요</h3>
+            </div>
+
+            <div class="border border-secondary rounded py-lg-3 px-lg-2 row">
+                <div class="col-lg-12">
+
+                    <ul id="refundList">
+
+                    </ul>
+                </div>
+
+                <br>
+
+                <div class="refundDeliverType col-lg-12 text-dark">
+                    <p class="font-weight-bold ml-lg-2 mb-lg-2">상품을 수거해 드릴까요?</p>
+
+                    <input type="radio" class="btn-check" name="refundDeliverOption" id="refundDeliverOption1" checked>
+                    <label class="btn btn-light btn-outline-dark" for="refundDeliverOption1" style="border-radius: 5px;" >네 수거해 주세요.</label>
+                    <br>
+                    <input type="radio" class="btn-check" name="refundDeliverOption" id="refundDeliverOption2">
+                    <label class="btn btn-light btn-outline-dark" for="refundDeliverOption2" style="border-radius: 5px;">아니오 이미 판매자에게 발송했습니다.</label>
+                    <br>
+                    <input type="radio" class="btn-check" name="refundDeliverOption" id="refundDeliverOption3">
+                    <label class="btn btn-light btn-outline-dark" for="refundDeliverOption3" style="border-radius: 5px;">아니오 나중에 직접 발송하겠습니다.</label>
+
+                    <hr style="color: #5a6268; size:1px">
+
+                    <div class="refundDeliverOption1 displayDiv" style="display: block">
+                        <p class="font-weight-bold ml-lg-2 mb-lg-2">수거지 정보</p>
+
+                        <div class="ml-lg-3">
+
+                            <div class="form-check mt-lg-3">
+                                <input class="form-check-input" type="checkbox" value="" id="memberAddr">
+                                <label class="form-check-label text-primary font-weight-bold" for="memberAddr">
+                                    기존 배송지 추가
+                                </label>
+                            </div>
+                            <div class="ml-lg-2">
+                                <label for="refundUserName" class="font-weight-bold text-dark mt-lg-2" style="margin-bottom: 0rem;">이름</label>
+                                <br>
+                                <input type="text" class="w-50 h-75" id="refundUserName" value="" style="height: 35px">
+                                <br>
+                                <label for="refundUserMobile" class="font-weight-bold text-dark mt-lg-2" style="margin-bottom: 0rem;">휴대폰번호</label>
+                                <br>
+                                <input type="text" class="w-50 h-75" id="refundUserMobile" value="" style="height: 35px">
+                                <br>
+                                <label for="refundUserAddr" class="font-weight-bold text-dark mt-lg-2" style="margin-bottom: 0rem;">주소</label>
+                                <br>
+                                <button type="button" class="findAddrBtn btn btn-light btn-outline-dark" id="findAddrBtn" style="border-radius: 5px;">주소 찾기</button>
+                                <br>
+                                <input type="text" class="w-75 h-75 mt-lg-1" id="refundUserAddr" value="" style="height: 35px" placeholder="주소를 입력해 주세요" readonly="readonly">
+                                <input type="text" class="w-75 h-75 mt-lg-1" id="refundUserAddrDetail" value="" style="height: 35px" placeholder="상세 주소를 입력해 주세요">
+                                <br><br>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="refundDeliverOption2 displayDiv" style="display: none">
+                        <p class="font-weight-bold ml-lg-2 mb-lg-2">송장번호 입력</p>
+                        <select>
+                            <option>택배사를 선택해주세요</option>
+                            <option>우체국택배</option>
+                            <option>cj대한통운</option>
+                            <option>한진택배</option>
+                            <option>롯데택배</option>
+                            <option>로젠택배</option>
+                        </select>
+                        <input typeof="text" class="w-75">
+                    </div>
+
+                    <div class="refundDeliverOption3 displayDiv" style="display: none">
+                        <p class="font-weight-bold ml-lg-2 mb-lg-2">판매자 정보</p>
+
+                        <div class="mx-lg-5" style="border: 2px solid #3c3c3c; border-radius: 5px; padding: 20px; text-align: center;">
+                            <div>
+                                <div class="row justify-content-center">
+                                    <div class="ProfileImage" style="width: 40px; height: 40px; background: #EEE; margin-right: 3%;"></div>
+                                    <div class="" style="color: black; font-weight: bold; font-size: 20px;">주식회사 김플루</div>
+                                </div>
+                                <p><b>배송정보</b></p>
+                                <p>전라북도 전주시 덕진구 들사평1길 18</p>
+                                <p>1434-27번지</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <hr style="color: #5a6268; size:1px">
+
+                    <h4>환불 예정 금액 : <span id="refundTotalPrice" class="text-primary"></span>원</h4>
+
+
+                    <div class="d-flex justify-content-center my-lg-3">
+                        <button class="prevBtn btn btn-secondary w-50 mt-lg-3 mr-lg-2">이전 단계로</button>
+                        <button class="nextBtn btn btn-primary w-50 mt-lg-3">환불신청</button>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="mt-lg-3">
+
+                <strong class="text-danger">◈확인해주세요.</strong>
+
+                <p>반품 수거 완료 후 판매자가 상품 확인을 통해 상품 파손 등의 특별한 사유가 있는 경우</p>
+                <p><b>배송비 외에 추가 비용이 청구될 수 있습니다.</b></p>
+                <p>수거접수 요청 이후 수거주소 변경 및 수거취소 요청은 수거 요청하신 택배사를 통해 진행해 주세요</p>
+                <p><b>도서산간 지역의 경우, 추가운임이 청구될 수 있습니다</b></p>
+            </div>
+
 
         </div>
 
     </div>
 
 
+
+
+
 </th:block>
 
 <!-- 사용자별 스크립트 파일 -->
 <th:block layout:fragment="customJsFile">
-
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!--  다음 주소찾기 api   -->
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
+
     <script>
-        <!-- 아이콘 클릭시 프로필 설정 페이지로 이동 -->
+        $(function(){
 
-        // $showProfileIcon.addEventListener('click', () => {
-        //     window.location.href = "mypage/profile";
-        // })
+            //전체체크 클릭 시 주문한 상품 모두 선택
+            $('#allCheck').click(function(){
+                $('#orderList').find('input[type="checkbox"]').prop('checked',$(this).prop('checked'));
+            });
 
+
+            //주문한 상품 클릭 시 모두 클릭되면 전체체크 체크, 아니면 체크 해지
+            $('.optionCheck').click(function(){
+                let optionLength = $('.optionCheck').length;
+                let checkedLength = $('.optionCheck:checked').length;
+                let isAllcheck = optionLength === checkedLength;
+
+                $('#allCheck').prop('checked',isAllcheck);
+
+            });
+            //이전 단계로 버튼 클릭 시 환불 사유 입력 창 표시
+            $('.prevBtn').click(function(){
+                $('#refundInfo').hide();
+                $('#refundResult').show();
+            });
+
+            //다음 단계로 버튼 클릭 시 환불 정보 입력 창 표시, 선택한 상품 환불 리스트에 추가
+            $('.nextBtn').click(function(){
+
+                let checkedLength = $('.optionCheck:checked').length;
+                let isChecked = checkedLength < 1
+
+                if(isChecked) {
+                    alert('환불할 상품을 선택해주세요');
+
+                } else{
+                    $('#refundResult').hide();
+                    $('#refundInfo').show();
+                    $('#refundList').html('');
+
+                    let selectedRefundOption = $('#orderList').find('input[type="checkbox"]:checked').parents('.options');
+                    let refundTotalPrice = 0;
+
+                    $(selectedRefundOption).each((idx, item) => {
+
+                        // let refundImage = $(item).find('.rewardProjectImage'); 이미지는 추후에 보안!!!
+                        let refundProjectName = $(item).find('.rewardProjectName').text();
+                        let refundOptionName = $(item).find('.rewardOptionName').text();
+
+                        refundTotalPrice += Number($(item).find('.rewardOrderPrice').text().replaceAll(',',''));
+
+
+                        let refundOption = $(' <li>\n' +
+                            '                            <div class="options my-lg-2 ml-lg-3 row">\n' +
+                            '                                <span class="text-white">\n' +
+                            '                                    <div class="refundImage bg-primary rounded-circle text-center ml-lg-2" style="height: 80px; width: 80px" ><br>상품사진</div>\n' +
+                            '                                </span>\n' +
+                            '                                <span class="text-dark ml-lg-3 mt-lg-4">\n' +
+                            '                                    <p class="refundProjectName"></p>\n' +
+                            '                                    <p class="refundOptionName"></p>\n' +
+                            '                                </span>\n' +
+                            '                            </div>\n' +
+                            '                            <hr style="color: #5a6268; size:1px">\n' +
+                            '                        </li>')
+
+                        $(refundOption).find('.refundProjectName').text(refundProjectName);
+                        $(refundOption).find('.refundOptionName').text(refundOptionName);
+
+                        $('#refundList').append($(refundOption));
+                    });
+
+                    $('#refundTotalPrice').text(refundTotalPrice.toLocaleString('ko-KR'));
+                }
+            });
+
+            //주소찾기 클릭 시 다음 api 호출
+            $('.findAddrBtn, #refundUserAddr').click(function(){
+
+                new daum.Postcode({
+                    oncomplete: function(data) { //선택시 입력값 세팅
+                        $('#deliverMemberAddr').val(data.address); // 주소 넣기
+                    }
+                }).open();
+            });
+
+            //상품 수거 라디오버튼 클릭 시 입력 폼 출력
+            $('.refundDeliverType').find('input[type="radio"]').click(function(){
+
+                let refundDeliverOption = $(this).attr('id');
+
+                $('.refundDeliverType').find('.displayDiv').hide();
+                $(`.${refundDeliverOption}`).show();
+            });
+
+        })
     </script>
+
+
+
 </th:block>
 
 
