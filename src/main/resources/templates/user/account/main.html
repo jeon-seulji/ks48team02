@@ -195,13 +195,13 @@
                     <!-- 약관 동의 체크박스 -->
                     <div class="form-check-box">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="join-term">
+                            <input class="form-check-input individual" type="checkbox" value="" id="join-term">
                             <label class="form-check-label" for="join-term">
                                 회원가입 기본 약관(필수)
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="personal-data-term">
+                            <input class="form-check-input individual" type="checkbox" value="" id="personal-data-term">
                             <label class="form-check-label" for="personal-data-term">
                                 개인정보 수집 및 이용 동의(필수)
                             </label>
@@ -625,6 +625,19 @@ Fax: 02)0000-0000
             let myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
             myModal.show();
         }
+
+        /* 체크박스 : 전체동의 체크시 모든 항목 체크  */
+        const $allAgree = document.getElementById('allAgree');
+        const $individualAgree = document.querySelectorAll('.form-check-input.individual');
+
+        $allAgree.addEventListener('click', () => {
+            $individualAgree.forEach(element => {
+                 element.checked = $allAgree.checked;
+            })
+        })
+
+        /* 체크박스 : 개별 항목 전부 체크시 전체동의 체크 */
+
     </script>
 
 </th:block>

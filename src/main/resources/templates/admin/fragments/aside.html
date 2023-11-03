@@ -35,16 +35,34 @@
             <a th:href="@{/admin}"><i class="fa fa-home"></i> 홈 <span class="fa fa-chevron-down"></span></a>
           </li>
           <li>
-            <a><i class="fa fa-user"></i> 회원관리# <span class="fa fa-chevron-down"></span></a>
+            <a><i class="fa fa-user"></i># 회원관리 <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a th:href="@{/templates/admin/user/memberList}">회원 조회#</a></li>
-              <li><a href="index2.html">등급 관리#</a></li>
+              <li><a th:href="@{/templates/admin/user/memberList}"># 회원 조회</a></li>
+              <li><a th:href="@{/templates/admin/user/memberList}"># 로그인 이력</a></li>
+              <li><a href="index2.html"># 등급 관리</a></li>
             </ul>
           </li>
           <li>
             <a><i class="fa fa-edit"></i> #프로젝트 관리 (정민) <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a th:href="@{/admin/projectManagement}">#프로젝트 조회(정민)</a></li>
+            </ul>
+          </li>
+          <li>
+            <a><i class="fa fa-shopping-bag"></i> #주문 관리 (슬지) <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li>
+                <a th:href="@{#}">#주문 목록(슬지)</a>
+              </li>
+              <li>
+                <a th:href="@{#}">#배송 관리(슬지)</a>
+              </li>
+              <li>
+                <a th:href="@{#}">#교환/환불 신청 관리(슬지)</a>
+              </li>
+              <li>
+                <a th:href="@{#}">#주문 로그 조회(슬지)</a>
+              </li>
             </ul>
           </li>
           <li>

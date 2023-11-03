@@ -4,20 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@RequestMapping("/user/mypage")
-public class MypageController {
+@Controller("mypageRefundController")
+@RequestMapping("/user/mypage/refund")
+public class MypageRefundController {
 
     @GetMapping(value={"","/"})
-    public String dropPage(){
+    public String refundMain(){
 
-        return "user/mypage/mypage";
+        return"user/mypage/refund/main";
     }
-
-    @GetMapping("profile")
-    public String profilePage(){
-        return "user/mypage/profile";
-    }
-
-
 }

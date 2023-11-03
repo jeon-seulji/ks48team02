@@ -6,7 +6,7 @@
 .title-td {
     background: #f0f3fc;
     color: #191919;
-
+    text-align: center;
 }
 .orderDeliverBtn {
     display: inline-block;
@@ -33,18 +33,6 @@ select{
     padding: 7px 16px;
 }
 
-#orderInfoArea input:not([type='checkbox']):focus ,
-#orderInfoArea select:focus,
-#paymentInfoDetailBt input:focus,
-#paymentInfoDetailBt select:focus,
-#deliveryInfo input:focus,
-#deliveryInfo select:focus,
-input:focus,
-select:focus
-{
-
-    border: 1px solid var(--maincolor);
-}
 .order-total-info {
     padding: 28px 63px;
     margin-bottom: 30px;
