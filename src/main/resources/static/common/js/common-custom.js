@@ -186,6 +186,74 @@ $('#allSelectBtn').on('click', function(){
 
 // 공고 상세보기 btn controls
 $('.more-btn').on('click', function(){
-    $('#projectInfoDetail').toggleClass('active');
+    $('.projectInfoDetail').toggleClass('active');
     $(this).toggleClass('active');
 });
+
+
+/* 유효성 검사 Fn */
+let regExpKr = /[^ㄱ-ㅎ가-힣]/g;
+let regExpEn = /[^a-zA-Z]/g;
+let regExpNum = /[^0-9]/g;
+let regEmpty = /\s/;
+
+// 공백 유효성 검사
+function validationEmptyFn($els){
+
+}
+// 한글 유효성 검사
+function validationOnlyKoreanFn($els){
+    let isFalse = true;
+    $($els).each((idx, item) => {
+        // 초기화
+        $(item).siblings('.error-message').remove();
+        // 대상 value 반환
+        let value = $(item).val();
+
+        // 공백 검증
+        let emptyMatches = value.match(regEmpty) ; // 공백 반환
+        if(emptyMatches) {
+            $(item).focus().val('').after('<span class="error-message">공백 없이 입력해주세요</span>');
+            isFalse = false;
+            return false;
+        }
+
+        // 한글 유효성 검증
+        let valueMatches = value.match(regExpKr) ; // value 중 한글이 아닌 값 반환
+
+        if(valueMatches) {
+            $(item).focus().val('').after('<span class="error-message">한글만 입력해주세요</span>');
+            isFalse = false;
+            return false;
+        }
+    });
+    return isFalse;
+}
+/*
+*
+* */
+// 숫자 유효성 검사
+function onlyNumberValidationFn($els,addValue){
+    let regExpNum = new RegExp('[^0-9' + addValue + ']', 'g');
+    let isFalse = true;
+    $($els).each((idx, item) => {
+        $(item).siblings('.error-message').remove();
+
+        let value = $(item).val();
+        let emptyMatches = value.match(regExpNum) ;
+        if(emptyMatches) {
+            $(item).focus().val('').after('<span class="error-message">공백 없이 입력해주세요</span>');
+            isFalse = false;
+            return false;
+        }
+
+        // 숫자 유효성 검사
+        let valueMatches = value.match(regExpNum) ;
+        if(valueMatches) {
+            $(item).focus().val('').after('<span class="error-message">숫자만 입력해주세요</span>');
+            isFalse = false;
+            return false;
+        }
+    });
+    return isFalse;
+}
