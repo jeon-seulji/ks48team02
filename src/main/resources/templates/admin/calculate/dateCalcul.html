@@ -99,6 +99,16 @@
            let startDate = $(this).val();
            $('input[name="amDateCulEndDate"]').prop('min',startDate);
         });
+
+        let startDateValue = startDate(nowDateSet);
+        let endDateValue = `${nowDateSet.getFullYear()}-${String(nowDateSet.getMonth() + 1).padStart(2, '0')}-${String(nowDateSet.getDate()).padStart(2, '0')}`;
+
+        console.log(startDateValue, '<-- start value');
+        console.log(endDateValue, '<-- end value');
+
+        $('input[name="amDateCulStartDate"]').val(startDateValue);
+        $('input[name="amDateCulEndDate"]').val(endDateValue);
+
     </script>
 </th:block>
 
