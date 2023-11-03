@@ -20,10 +20,59 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <div th:include="~{admin/judgement/investment/search/corporate_value_evaluation_search :: searchFragment}"></div>
-    <br>
+
+    <div class="sett-total-data admin-content-wrapper form-table" th:fragment="settlementInfoHeader">
+        <div class="sett-total-item">
+            <h5>오늘 들어온 심사 요청</h5>
+            <div class="sett-total-item-data"><a class="today-add-count" th:href="@{#}" data-value="0">0</a>건</div>
+        </div>
+        <div class="sett-total-item">
+            <h5>처리중</h5>
+            <div class="sett-total-item-data"><a class="progress-add-count" th:href="@{#}" data-value="3">0</a>건</div>
+        </div>
+        <div class="sett-total-item">
+            <h5>오늘 처리 완료</h5>
+            <div class="sett-total-item-data"><a class="progress-completed-count" th:href="@{#}" data-value="0">0</a>건</div>
+        </div>
+        <div class="sett-total-item">
+            <h5>심사 반려</h5>
+            <div class="sett-total-item-data"><a class="progress-error-count" th:href="@{#}" data-value="1">0</a>건</div>
+        </div>
+    </div>
+
+    <div th:include="~{admin/judgement/investment/search/corporate_value_evaluation_search :: searchFragment}"></div><br>
+
+    <h4 class="admin-content-title">기업가치 평가 목록</h4>
+
     <div class="admin-content-wrapper">
-        <table>
+
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>심사 요청 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
+            </div>
+            <div class="list-count-selector">
+                <select name="orderby">
+                    <option value="regist_d">신청일 순</option>
+                    <option value="regist_a">신청일 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">심사요청 제목순</option>
+                    <option value="project_name_a">심사요청 제목역순</option>
+                    <option>-----------------</option>
+                    <option value="appli_progress_p">심사 통과</option>
+                    <option value="appli_progress_i">심사 반려</option>
+                </select>
+                <select name="count-select">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="settlement-log">
             <thead>
             <tr>
                 <th>
@@ -48,8 +97,8 @@
                 <td colspan="11">기업가치 평가 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${corporateValueEvaluationList == null}" th:each="l : ${corporateValueEvaluationList}">
-                <td style="text-align: center;">
-                    <input type="checkbox" name="selsectList">
+                <td>
+                    <input type="checkbox" name="selectList">
                 </td>
                 <td>
                     <a class="detail-link" th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
@@ -63,7 +112,7 @@
                 <td th:text="${l.evaluatedCorpValue}"></td>
                 <td th:text="${l.stockPrice}"></td>
                 <td th:if="${l.corpValueFulfill == 1}">심사 통과</td>
-                <td th:if="${l.corpValueFulfill == 0}">심사 탈락</td>
+                <td th:if="${l.corpValueFulfill == 0}">심사 반려</td>
                 <td th:text="${l.corpValueEvaluateDay}"></td>
                 <td>
                     <a th:href="@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}">수정</a>
@@ -76,9 +125,6 @@
         </table>
         <br>
 
-        <button type="button" class="submitBtn" th:onclick="|location.href='@{/admin/investment/insert/corporate-value}'|">
-            등록하기
-        </button>
 
         <div class="board-page-area">
             <div class="list-controller-inner">
@@ -100,7 +146,15 @@
                 </div>
             </div>
         </div>
-
     </div>
+
+    <div class="btn-area">
+        <ul>
+            <li>
+                <button id="orderBackBtn" class="submitBtn" type="button" th:onclick="|location.href='@{/admin/investment/insert/corporate-value}'|">등록하기</button>
+            </li>
+        </ul>
+    </div>
+
 </th:block>
 </html>
