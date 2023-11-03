@@ -18,7 +18,8 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    <script type="text/javascript" th:src="@{/user/js/tableToExcel.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
@@ -160,6 +161,13 @@
         // 총 프로젝트 개수 띄우기
         $('.total-list').text($('table.settlement-log tbody tr').length -1);
 
+        $('.printBtn').click(function(){
+            const settlementLog = tableToJson('.settlement-log');
+            const fileName = $('.settlement-log').data('listName');
+            console.log(settlementLog)
+            exportExcel(settlementLog, fileName);
+        })
+
     </script>
 </th:block>
 
@@ -199,7 +207,7 @@
         </div>
         <form>
 
-            <table class="settlement-log">
+            <table cellspacing="0" class="settlement-log" data-list-name="프로젝트전체현황">
                 <thead>
                 <tr>
                     <th style="width:8%;">프로젝트코드</th>
