@@ -33,11 +33,6 @@ public class DonationController {
         return "seller/donation/projectRegistration/donation_insert";
     }
 
-/*    @GetMapping("/orderManagement")
-    public String orderManagementMainPage(){
-        return "seller/donation/orderManagement/main";
-    }*/
-
     @GetMapping("/condition")
     public String conditionMainPage(Model model){
         model.addAttribute("title","판매자 : 기부 진행현황 관리");
