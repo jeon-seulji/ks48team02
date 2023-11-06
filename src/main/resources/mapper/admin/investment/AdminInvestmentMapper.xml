@@ -65,48 +65,77 @@
     <select id="getInvestmentRequestJudgeList" resultMap="adminInvestmentRequestJudgeListMap">
         /* 투자펀딩 심사요청 목록 조회 */
         SELECT
-        i.investment_request_judge_code,
-        i.investment_request_subject,
-        i.member_id_seller,
-        s.store_name AS storeName,
-        s.corporate_name AS corporateName,
-        i.investment_company,
-        s.representative_name AS representativeName,
-        i.investment_achievement_money,
-        i.investment_request_date,
-        i.invest_judge_date,
-        i.member_id,
-        i.invest_judge_result
+            i.investment_request_judge_code,
+            i.investment_request_subject,
+            i.member_id_seller,
+            s.store_name AS storeName,
+            s.corporate_name AS corporateName,
+            i.investment_company,
+            s.representative_name AS representativeName,
+            i.investment_achievement_money,
+            i.investment_request_date,
+            i.invest_judge_date,
+            i.member_id,
+            i.invest_judge_result,
+            (SELECT
+            COUNT(i.invest_judge_result)
+            FROM
+            investment_request_judge AS i
+            WHERE
+            DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
+            ) AS todayRequestCnt,
+            (SELECT
+            COUNT(i.invest_judge_result)
+            FROM
+            investment_request_judge AS i
+            WHERE
+            i.invest_judge_result = 2) standbyCnt,
+            (SELECT
+            COUNT(i.invest_judge_result)
+            FROM
+            investment_request_judge AS i
+            WHERE
+            i.invest_judge_result = 1
+            AND
+            DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
+            ) AS todayApproveCnt,
+            (SELECT
+            COUNT(i.invest_judge_result)
+            FROM
+            investment_request_judge AS i
+            WHERE
+            i.invest_judge_result = 0) rejectCnt
         FROM
-        investment_request_judge AS i
-        INNER JOIN
-        store AS s
-        ON
-        i.store_code = s.store_code;
+            investment_request_judge AS i
+            INNER JOIN
+            store AS s
+            ON
+            i.store_code = s.store_code
+        ORDER BY i.investment_request_judge_code;
     </select>
 
     <!-- 검색조건에 따른 투자펀딩 심사요청 목록 조회 -->
     <select id="getInvestmentRequestJudgeListBySearch" parameterType="String" resultMap="adminInvestmentRequestJudgeListMap">
         /* 검색조건에 따른 투자펀딩 심사요청 목록 조회 */
         SELECT
-        i.investment_request_judge_code,
-        i.investment_request_subject,
-        i.member_id_seller,
-        s.store_name AS storeName,
-        s.corporate_name AS corporateName,
-        i.investment_company,
-        s.representative_name AS representativeName,
-        i.investment_achievement_money,
-        i.investment_request_date,
-        i.invest_judge_date,
-        i.member_id,
-        i.invest_judge_result
+            i.investment_request_judge_code,
+            i.investment_request_subject,
+            i.member_id_seller,
+            s.store_name AS storeName,
+            s.corporate_name AS corporateName,
+            i.investment_company,
+            s.representative_name AS representativeName,
+            i.investment_achievement_money,
+            i.investment_request_date,
+            i.invest_judge_date,
+            i.member_id,
+            i.invest_judge_result
         FROM
-        investment_request_judge AS i
-        INNER JOIN
-        store AS s
-        ON
-        i.store_code = s.store_code
+            investment_request_judge AS i
+            INNER JOIN
+            store AS s
+            ON
+            i.store_code = s.store_code
         <where>
             <if test="amDateSettStartDate != null and amDateSettStartDate != ''">
                 DATE_FORMAT(i.investment_request_date, '%Y-%m-%d') >= #{amDateSettStartDate}
@@ -122,75 +151,127 @@
         </where>
     </select>
 
-    <!-- 특정 투자펀딩 심사요청 조회 -->
+    <!-- 코드에 따른 특정 투자펀딩 심사요청 조회 -->
     <select id="getInvestmentRequestJudgeByCode" parameterType="String" resultMap="adminInvestmentRequestJudgeListMap">
-        /* 특정 투자펀딩 심사요청 조회 */
+        /* 코드에 따른 특정 투자펀딩 심사요청 조회 */
         SELECT
-        i.investment_request_judge_code,
-        i.law_satistify_code,
-        i.incongruity_sectors_code,
-        i.company_business_type_code,
-        i.corporate_value_evaluation_code,
-        i.store_code,
-        i.investment_request_subject,
-        i.member_id_seller,
-        s.store_name AS storeName,
-        s.corporate_name AS corporateName,
-        i.investment_company,
-        s.representative_name AS representativeName,
-        c.business_type AS cbtBusinessType,
-        i.business_type,
-        i.investment_request_content,
-        i.investment_achievement_money,
-        i.law_satistify_reason,
-        i.business_profits,
-        i.depreciation,
-        i.net_debt,
-        i.stock_number,
-        i.issue_stock_number,
-        i.investment_request_date,
-        i.invest_judge_date,
-        i.member_id,
-        i.invest_judge_result
+            i.investment_request_judge_code,
+            i.law_satistify_code,
+            i.incongruity_sectors_code,
+            i.company_business_type_code,
+            i.corporate_value_evaluation_code,
+            i.store_code,
+            i.investment_request_subject,
+            i.member_id_seller,
+            s.store_name AS storeName,
+            s.corporate_name AS corporateName,
+            i.investment_company,
+            s.representative_name AS representativeName,
+            c.business_type AS cbtBusinessType,
+            i.business_type,
+            i.investment_request_content,
+            i.investment_achievement_money,
+            i.law_satistify_reason,
+            i.business_profits,
+            i.depreciation,
+            i.net_debt,
+            i.stock_number,
+            i.issue_stock_number,
+            i.investment_request_date,
+            i.invest_judge_date,
+            i.member_id,
+            i.invest_judge_result
         FROM
-        investment_request_judge AS i
-        INNER JOIN
-        store AS s
-        ON
-        i.store_code = s.store_code
-        INNER JOIN
-        company_business_type AS c
-        ON
-        i.company_business_type_code = c.company_business_type_code
+            investment_request_judge AS i
+            INNER JOIN
+            store AS s
+            ON
+            i.store_code = s.store_code
+            INNER JOIN
+            company_business_type AS c
+            ON
+            i.company_business_type_code = c.company_business_type_code
         WHERE
-        i.investment_request_judge_code = #{investmentRequestJudgeCode};
+            i.investment_request_judge_code = #{investmentRequestJudgeCode};
+    </select>
+
+    <!-- 심사결과에 따른 특정 투자펀딩 심사요청 조회 -->
+    <select id="getInvestmentRequestJudgeByResult" parameterType="String" resultMap="adminInvestmentRequestJudgeListMap">
+        /* 심사결과에 따른 특정 투자펀딩 심사요청 조회 */
+        SELECT
+            i.investment_request_judge_code,
+            i.law_satistify_code,
+            i.incongruity_sectors_code,
+            i.company_business_type_code,
+            i.corporate_value_evaluation_code,
+            i.store_code,
+            i.investment_request_subject,
+            i.member_id_seller,
+            s.store_name AS storeName,
+            s.corporate_name AS corporateName,
+            i.investment_company,
+            s.representative_name AS representativeName,
+            c.business_type AS cbtBusinessType,
+            i.business_type,
+            i.investment_request_content,
+            i.investment_achievement_money,
+            i.law_satistify_reason,
+            i.business_profits,
+            i.depreciation,
+            i.net_debt,
+            i.stock_number,
+            i.issue_stock_number,
+            i.investment_request_date,
+            i.invest_judge_date,
+            i.member_id,
+            i.invest_judge_result
+        FROM
+            investment_request_judge AS i
+            INNER JOIN
+            store AS s
+            ON
+            i.store_code = s.store_code
+            INNER JOIN
+            company_business_type AS c
+            ON
+            i.company_business_type_code = c.company_business_type_code
+        WHERE
+            i.invest_judge_result = ;
     </select>
 
     <!-- 자본시장법 범위충족기준 목록 조회 -->
     <select id="getLawSatistifyList" resultMap="adminLawSatistifyReasonListMap">
         /* 자본시장법 범위충족기준 목록 조회 */
         SELECT
-        l.law_satistify_code,
-        l.law_satistify_reason,
-        l.member_id,
-        l.law_satistify_whether,
-        l.code_reg_day
+            l.law_satistify_code,
+            l.law_satistify_reason,
+            l.member_id,
+            l.law_satistify_whether,
+            l.code_reg_day
         FROM
-        law_satistify_reason AS l
+            law_satistify_reason AS l
     </select>
 
     <!-- 검색조건에 따른 자본시장법 범위충족기준 목록 조회 -->
     <select id="getLawSatistifyListBySearch" parameterType="String" resultMap="adminLawSatistifyReasonListMap">
         /* 검색조건에 따른 자본시장법 범위충족기준 목록 조회 */
         SELECT
-        l.law_satistify_code,
-        l.law_satistify_reason,
-        l.member_id,
-        l.law_satistify_whether,
-        l.code_reg_day
+            l.law_satistify_code,
+            l.law_satistify_reason,
+            l.member_id,
+            l.law_satistify_whether,
+            l.code_reg_day
         FROM
-        law_satistify_reason AS l
+            law_satistify_reason AS l
         <where>
+            <if test="amDateSettStartDate != null and amDateSettStartDate != ''">
+                DATE_FORMAT(l.code_reg_day, '%Y-%m-%d') >= #{amDateSettStartDate}
+                AND
+            </if>
+            <if test="amDateSettEndDate != null and amDateSettEndDate != ''">
+                #{amDateSettEndDate} >= DATE_FORMAT(l.code_reg_day, '%Y-%m-%d')
+                AND
+            </if>
             <if test="searchKey != null and searchKey != ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
@@ -201,42 +282,50 @@
     <select id="getLawSatistifyByCode" resultMap="adminLawSatistifyReasonListMap">
         /* 특정 자본시장 범위충족기준 조회 */
         SELECT
-        l.law_satistify_code,
-        l.law_satistify_reason,
-        l.member_id,
-        l.law_satistify_whether,
-        l.code_reg_day
+            l.law_satistify_code,
+            l.law_satistify_reason,
+            l.member_id,
+            l.law_satistify_whether,
+            l.code_reg_day
         FROM
-        law_satistify_reason AS l
+            law_satistify_reason AS l
         WHERE
-        l.law_satistify_code = #{lawSatistifyCode};
+            l.law_satistify_code = #{lawSatistifyCode};
     </select>
 
     <!-- 부적합 업종 목록 조회 -->
     <select id="getIncogruitySectorsList" resultMap="adminIncongruitySectorsListMap">
         /* 부적합 업종 목록 조회 */
         SELECT
-        i.incongruity_sectors_code,
-        i.incongruity_sectors_business,
-        i.member_id,
-        i.incongruity_sectors_whether,
-        i.code_reg_day
+            i.incongruity_sectors_code,
+            i.incongruity_sectors_business,
+            i.member_id,
+            i.incongruity_sectors_whether,
+            i.code_reg_day
         FROM
-        incongruity_sectors AS i;
+            incongruity_sectors AS i;
     </select>
 
     <!-- 검색조건에 따른 부적합 업종 목록 조회 -->
     <select id="getIncogruitySectorsListBySearch" parameterType="String" resultMap="adminIncongruitySectorsListMap">
         /* 검색조건에 따른 부적합 업종 목록 조회 */
         SELECT
-        i.incongruity_sectors_code,
-        i.incongruity_sectors_business,
-        i.member_id,
-        i.incongruity_sectors_whether,
-        i.code_reg_day
+            i.incongruity_sectors_code,
+            i.incongruity_sectors_business,
+            i.member_id,
+            i.incongruity_sectors_whether,
+            i.code_reg_day
         FROM
-        incongruity_sectors AS i
+            incongruity_sectors AS i
         <where>
+            <if test="amDateSettStartDate != null and amDateSettStartDate != ''">
+                DATE_FORMAT(i.code_reg_day, '%Y-%m-%d') >= #{amDateSettStartDate}
+                AND
+            </if>
+            <if test="amDateSettEndDate != null and amDateSettEndDate != ''">
+                #{amDateSettEndDate} >= DATE_FORMAT(i.code_reg_day, '%Y-%m-%d')
+                AND
+            </if>
             <if test="searchKey != null and searchKey != ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
@@ -247,58 +336,66 @@
     <select id="getIncogruitySectorsByCode" parameterType="String" resultMap="adminIncongruitySectorsListMap">
         /* 특정 부적합 업종 조회 */
         SELECT
-        i.incongruity_sectors_code,
-        i.incongruity_sectors_business,
-        i.member_id,
-        i.incongruity_sectors_whether,
-        i.code_reg_day
+            i.incongruity_sectors_code,
+            i.incongruity_sectors_business,
+            i.member_id,
+            i.incongruity_sectors_whether,
+            i.code_reg_day
         FROM
-        incongruity_sectors AS i
+            incongruity_sectors AS i
         WHERE
-        i.incongruity_sectors_code = #{incongruitySectorsCode};
+            i.incongruity_sectors_code = #{incongruitySectorsCode};
     </select>
 
     <!-- 기업가치 평가결과 목록 조회 -->
     <select id="getCorporateValueEvaluationList" resultMap="adminCorporateValueEvaluationListMap">
         /* 기업가치 평가결과 목록 조회 */
         SELECT
-        i.investment_request_judge_code AS investmentRequestJudgeCode,
-        i.investment_request_subject AS investmentRequestSubject,
-        i.member_id_seller AS memberIdSeller,
-        c.corporate_value_evaluation_code,
-        c.member_id,
-        c.evaluated_corp_value,
-        c.stock_price,
-        c.corp_value_fulfill,
-        c.corp_value_evaluate_day
+            i.investment_request_judge_code AS investmentRequestJudgeCode,
+            i.investment_request_subject AS investmentRequestSubject,
+            i.member_id_seller AS memberIdSeller,
+            c.corporate_value_evaluation_code,
+            c.member_id,
+            c.evaluated_corp_value,
+            c.stock_price,
+            c.corp_value_fulfill,
+            c.corp_value_evaluate_day
         FROM
-        corporate_value_evaluation AS c
-        INNER JOIN
-        investment_request_judge AS i
-        ON
-        c.corporate_value_evaluation_code = i.corporate_value_evaluation_code;
+            corporate_value_evaluation AS c
+            INNER JOIN
+            investment_request_judge AS i
+            ON
+            c.corporate_value_evaluation_code = i.corporate_value_evaluation_code;
     </select>
 
     <!-- 검색조건에 따른 기업가치 평가결과 목록 조회 -->
     <select id="getCorporateValueEvaluationListBySearch" parameterType="String" resultMap="adminCorporateValueEvaluationListMap">
         /* 검색조건에 따른 기업가치 평가결과 목록 조회 */
         SELECT
-        i.investment_request_judge_code AS investmentRequestJudgeCode,
-        i.investment_request_subject AS investmentRequestSubject,
-        i.member_id_seller AS memberIdSeller,
-        c.corporate_value_evaluation_code,
-        c.member_id,
-        c.evaluated_corp_value,
-        c.stock_price,
-        c.corp_value_fulfill,
-        c.corp_value_evaluate_day
+            i.investment_request_judge_code AS investmentRequestJudgeCode,
+            i.investment_request_subject AS investmentRequestSubject,
+            i.member_id_seller AS memberIdSeller,
+            c.corporate_value_evaluation_code,
+            c.member_id,
+            c.evaluated_corp_value,
+            c.stock_price,
+            c.corp_value_fulfill,
+            c.corp_value_evaluate_day
         FROM
-        corporate_value_evaluation AS c
-        INNER JOIN
-        investment_request_judge AS i
-        ON
-        c.corporate_value_evaluation_code = i.corporate_value_evaluation_code
+            corporate_value_evaluation AS c
+            INNER JOIN
+            investment_request_judge AS i
+            ON
+            c.corporate_value_evaluation_code = i.corporate_value_evaluation_code
         <where>
+            <if test="amDateSettStartDate != null and amDateSettStartDate != ''">
+                DATE_FORMAT(c.corp_value_evaluate_day, '%Y-%m-%d') >= #{amDateSettStartDate}
+                AND
+            </if>
+            <if test="amDateSettEndDate != null and amDateSettEndDate != ''">
+                #{amDateSettEndDate} >= DATE_FORMAT(c.corp_value_evaluate_day, '%Y-%m-%d')
+                AND
+            </if>
             <if test="searchKey != null and searchKey != ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
@@ -308,51 +405,51 @@
     <select id="getCorporateValueEvaluationByCode" resultMap="adminCorporateValueEvaluationListMap">
         /* 특정 기업가치 평가결과 조회 */
         SELECT
-        i.investment_request_judge_code AS investmentRequestJudgeCode,
-        i.investment_request_subject AS investmentRequestSubject,
-        i.member_id_seller AS memberIdSeller,
-        c.corporate_value_evaluation_code,
-        c.member_id,
-        c.operating_profit,
-        c.depreciation,
-        c.ebitda,
-        c.ev_ebitda,
-        c.convert_ev,
-        c.net_debt,
-        c.evaluated_corp_value,
-        c.stock_number,
-        c.stock_price,
-        c.corp_value_fulfill,
-        c.corp_value_evaluate_day
+            i.investment_request_judge_code AS investmentRequestJudgeCode,
+            i.investment_request_subject AS investmentRequestSubject,
+            i.member_id_seller AS memberIdSeller,
+            c.corporate_value_evaluation_code,
+            c.member_id,
+            c.operating_profit,
+            c.depreciation,
+            c.ebitda,
+            c.ev_ebitda,
+            c.convert_ev,
+            c.net_debt,
+            c.evaluated_corp_value,
+            c.stock_number,
+            c.stock_price,
+            c.corp_value_fulfill,
+            c.corp_value_evaluate_day
         FROM
-        corporate_value_evaluation AS c
-        INNER JOIN
-        investment_request_judge AS i
-        ON
-        c.corporate_value_evaluation_code = i.corporate_value_evaluation_code
+            corporate_value_evaluation AS c
+            INNER JOIN
+            investment_request_judge AS i
+            ON
+            c.corporate_value_evaluation_code = i.corporate_value_evaluation_code
         WHERE
-        c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
+            c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </select>
 
     <insert id="addLawSatistify" parameterType="ksmart.ks48team02.admin.dto.investment.AdminLawSatistifyReason">
         <selectKey keyProperty="lawSatistifyCode" resultType="String" order="BEFORE">
             /* 자본시장법 범위충족코드 자동증가 */
             SELECT
-            (CASE
-            WHEN COUNT(l.code_reg_day) = 0 THEN CONCAT('law_stf_', CURDATE()+0, '_0001')
-            WHEN COUNT(l.code_reg_day) > 9999 THEN CONCAT('law_stf_', CURDATE()+0, '_', COUNT(l.code_reg_day)+1)
-            ELSE CONCAT('law_stf_', CURDATE()+0, '_', LPAD(COUNT(l.code_reg_day)+1, 4, '0'))
-            END) AS lawSatistifyCode
+                (CASE
+                WHEN COUNT(l.code_reg_day) = 0 THEN CONCAT('law_stf_', CURDATE()+0, '_0001')
+                WHEN COUNT(l.code_reg_day) > 9999 THEN CONCAT('law_stf_', CURDATE()+0, '_', COUNT(l.code_reg_day)+1)
+                ELSE CONCAT('law_stf_', CURDATE()+0, '_', LPAD(COUNT(l.code_reg_day)+1, 4, '0'))
+                END) AS lawSatistifyCode
             FROM
-            law_satistify_reason AS l
+                law_satistify_reason AS l
             WHERE
-            DATE_FORMAT(l.code_reg_day, '%Y-%m-%d') = CURDATE();
+                DATE_FORMAT(l.code_reg_day, '%Y-%m-%d') = CURDATE();
         </selectKey>
         /* 자본시장법 범위충족기준 등록 */
         INSERT INTO law_satistify_reason
-        (law_satistify_code, member_id, law_satistify_reason, law_satistify_whether, code_reg_day)
+            (law_satistify_code, member_id, law_satistify_reason, law_satistify_whether, code_reg_day)
         VALUES
-        (#{lawSatistifyCode}, #{memberId}, #{lawSatistifyReason}, 1, CURRENT_TIMESTAMP());
+            (#{lawSatistifyCode}, #{memberId}, #{lawSatistifyReason}, 1, CURRENT_TIMESTAMP());
     </insert>
 
     <!-- 자본시장 범위충족기준 수정 -->
@@ -374,7 +471,7 @@
             </if>
         </set>
         WHERE
-        law_satistify_code = #{lawSatistifyCode};
+            law_satistify_code = #{lawSatistifyCode};
     </update>
 
     <!-- 부적합 업종 수정 -->
@@ -396,7 +493,7 @@
             </if>
         </set>
         WHERE
-        incongruity_sectors_code = #{incongruitySectorsCode};
+            incongruity_sectors_code = #{incongruitySectorsCode};
     </update>
 
 </mapper>

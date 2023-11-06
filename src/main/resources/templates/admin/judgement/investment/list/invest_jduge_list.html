@@ -22,22 +22,22 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
-    <div class="sett-total-data admin-content-wrapper form-table" th:fragment="settlementInfoHeader">
-        <div class="sett-total-item">
+    <div th:each="l, index : ${investmentRequestJudgeList}" th:if="${index.index} < 1" class="sett-total-data admin-content-wrapper form-table">
+        <div    class="sett-total-item">
             <h5>오늘 들어온 심사 요청</h5>
-            <div class="sett-total-item-data"><a class="today-add-count" th:href="@{#}" data-value="0">0</a>건</div>
+            <div class="sett-total-item-data"><a class="today-add-count" th:href="@{#}" th:text="${l.todayRequestCnt}"></a>건</div>
         </div>
         <div class="sett-total-item">
             <h5>처리중</h5>
-            <div class="sett-total-item-data"><a class="progress-add-count" th:href="@{#}" data-value="3">0</a>건</div>
+            <div class="sett-total-item-data"><a class="progress-add-count" th:href="@{#}" th:text="${l.standbyCnt}">0</a>건</div>
         </div>
         <div class="sett-total-item">
             <h5>오늘 처리 완료</h5>
-            <div class="sett-total-item-data"><a class="progress-completed-count" th:href="@{#}" data-value="0">0</a>건</div>
+            <div class="sett-total-item-data"><a class="progress-completed-count" th:href="@{#}" th:text="${l.todayApproveCnt}">0</a>건</div>
         </div>
         <div class="sett-total-item">
             <h5>심사 반려</h5>
-            <div class="sett-total-item-data"><a class="progress-error-count" th:href="@{#}" data-value="1">0</a>건</div>
+            <div class="sett-total-item-data"><a class="progress-error-count" th:href="@{/admin/investment/search/judge(investJudgeResult=2)}" th:text="${l.rejectCnt}">0</a>건</div>
         </div>
     </div>
 
@@ -97,6 +97,9 @@
             </thead>
             <tbody>
             <tr th:if="${investmentRequestJudgeList == null}">
+                <td>
+                    <input type="checkbox" name="selectList">
+                </td>
                 <td colspan="13">투자 심사요청 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${investmentRequestJudgeList == null}" th:each="l : ${investmentRequestJudgeList}">

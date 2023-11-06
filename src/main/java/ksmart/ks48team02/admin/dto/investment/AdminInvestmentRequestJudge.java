@@ -28,6 +28,10 @@ public class AdminInvestmentRequestJudge {
     private String investJudgeDate;
     private String memberId;
     private int investJudgeResult;
+    private int todayRequestCnt;
+    private int standbyCnt;
+    private int todayApproveCnt;
+    private int rejectCnt;
 
     public String getInvestmentRequestJudgeCode() {
         return investmentRequestJudgeCode;
@@ -186,10 +190,42 @@ public class AdminInvestmentRequestJudge {
         this.investJudgeResult = investJudgeResult;
     }
 
+    public int getTodayRequestCnt() {
+        return todayRequestCnt;
+    }
+
+    public void setTodayRequestCnt(int todayRequestCnt) {
+        this.todayRequestCnt = todayRequestCnt;
+    }
+
+    public int getStandbyCnt() {
+        return standbyCnt;
+    }
+
+    public void setStandbyCnt(int standbyCnt) {
+        this.standbyCnt = standbyCnt;
+    }
+
+    public int getTodayApproveCnt() {
+        return todayApproveCnt;
+    }
+
+    public void setTodayApproveCnt(int todayApproveCnt) {
+        this.todayApproveCnt = todayApproveCnt;
+    }
+
+    public int getRejectCnt() {
+        return rejectCnt;
+    }
+
+    public void setRejectCnt(int rejectCnt) {
+        this.rejectCnt = rejectCnt;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Icosdfn [investmentRequestJudgeCode=");
+        builder.append("AdminInvestmentRequestJudge [investmentRequestJudgeCode=");
         builder.append(investmentRequestJudgeCode);
         builder.append(", lawSatistifyCode=");
         builder.append(lawSatistifyCode);
@@ -241,6 +277,14 @@ public class AdminInvestmentRequestJudge {
         builder.append(memberId);
         builder.append(", investJudgeResult=");
         builder.append(investJudgeResult);
+        builder.append(", todayRequestCnt=");
+        builder.append(todayRequestCnt);
+        builder.append(", standbyCnt=");
+        builder.append(standbyCnt);
+        builder.append(", todayApproveCnt=");
+        builder.append(todayApproveCnt);
+        builder.append(", rejectCnt=");
+        builder.append(rejectCnt);
         builder.append("]");
         return builder.toString();
     }
