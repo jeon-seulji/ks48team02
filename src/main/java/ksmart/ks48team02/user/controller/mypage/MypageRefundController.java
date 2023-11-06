@@ -8,9 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user/mypage/refund")
 public class MypageRefundController {
 
+    //환불 페이지
     @GetMapping(value={"","/"})
-    public String refundMain(){
+    public String refundMainPage(){
 
         return"user/mypage/refund/main";
+    }
+
+    //취소 페이지
+    @GetMapping("cancel")
+    public String cancelMainPage(){
+
+        return"user/mypage/cancel/main";
     }
 }

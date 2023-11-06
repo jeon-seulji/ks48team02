@@ -41,17 +41,20 @@ public class InvestmentController {
     @GetMapping("/search/judge")
     public String getInvestmentJudgeList(Model model
                                         ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                        ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue) {
+                                        ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue
+                                        ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
+                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate) {
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
         if(searchKey != null) {
-            investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue);
+            investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
         }else {
             investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList();
         }
 
-        model.addAttribute("title", "투자 펀딩 심사 요청 목록");
-        model.addAttribute("contentsTitle","투자 펀딩 심사 요청 목록");
+        model.addAttribute("title", "관리자 : 투자 펀딩 심사 요청");
+        model.addAttribute("contentsTitle","투자 펀딩 심사 요청");
+        model.addAttribute("contentsSubTitle","투자 펀딩 심사 요청을 관리합니다");
         model.addAttribute("investmentRequestJudgeList", investmentRequestJudgeList);
 
         return "admin/judgement/investment/list/invest_jduge_list";
@@ -69,8 +72,9 @@ public class InvestmentController {
             lawSatistifyReasonList = investmentService.getLawSatistifyList();
         }
 
-        model.addAttribute("title", "자본시장법 범위충족기준 목록");
-        model.addAttribute("contentsTitle","자본시장법 범위충족기준 목록");
+        model.addAttribute("title", "관리자 : 자본시장법 범위충족기준");
+        model.addAttribute("contentsTitle","자본시장법 범위충족기준");
+        model.addAttribute("contentsSubTitle","자본시장법 범위충족기준을 관리합니다");
         model.addAttribute("lawSatistifyReasonList", lawSatistifyReasonList);
 
         return "admin/judgement/investment/list/law_satistify_list";
@@ -88,8 +92,8 @@ public class InvestmentController {
             incongruitySectorsList = investmentService.getIncogruitySectorsList();
         }
 
-        model.addAttribute("title", "부적합 업종 목록");
-        model.addAttribute("contentsTitle","부적합 업종 목록");
+        model.addAttribute("title", "관리자 : 부적합 업종");
+        model.addAttribute("contentsTitle","부적합 업종");
         model.addAttribute("incongruitySectorsList", incongruitySectorsList);
 
         return "admin/judgement/investment/list/incongruity_sectors_list";
@@ -107,8 +111,8 @@ public class InvestmentController {
             corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList();
         }
 
-        model.addAttribute("title", "기업가치 평가 결과 목록");
-        model.addAttribute("contentsTitle","기업가치 평가 결과 목록");
+        model.addAttribute("title", "관리자 : 기업가치 평가");
+        model.addAttribute("contentsTitle","기업가치 평가");
         model.addAttribute("corporateValueEvaluationList", corporateValueEvaluationList);
 
         return "admin/judgement/investment/list/corporate_value_evaluation_list";
@@ -118,8 +122,8 @@ public class InvestmentController {
 
         AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
 
-        model.addAttribute("title", "투자 펀딩 심사 요청");
-        model.addAttribute("contentsTitle","투자 펀딩 심사 요청");
+        model.addAttribute("title", "관리자 : 투자 펀딩 심사 요청 상세");
+        model.addAttribute("contentsTitle","투자 펀딩 심사 요청 상세");
         model.addAttribute("investmentRequestJudgeInfo", investmentRequestJudgeInfo);
 
         return "admin/judgement/investment/view/invest_jduge_view";

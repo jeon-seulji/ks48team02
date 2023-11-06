@@ -36,43 +36,43 @@
         ul.d-flex li:hover {
             cursor: pointer;
         }
-        .donation-item-box{
+        .investment-item-box{
             width: 350px;
             height: 300px;
         }
-        .donation-item-first-child{
+        .investment-item-first-child{
             background: grey;
             width: 350px;
             height: 200px;
             border-radius: 5px;
         }
-        .donation-item-second-child{
+        .investment-item-second-child{
             width: 350px;
             height: auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .donation-item-third-child{
+        .investment-item-third-child{
             width: 350px;
             height: auto;
             font-weight: bolder;
             color: black;
             font-size: 15px;
         }
-        .donation-item-fourth-child{
+        .investment-item-fourth-child{
             width: 350px;
             height: auto;
         }
-        .donation-item-span-first{
+        .investment-item-span-first{
             font-weight: bold;
             font-size: 20px;
             color: #235FD9;
         }
-        .donation-item-span-second{
+        .investment-item-span-second{
             margin-left: 5px;
         }
-        .donation-item-span-third{
+        .investment-item-span-third{
             margin-left: auto;
             color: #235FD9;
             background: #cce5ff;
@@ -94,9 +94,6 @@
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
-
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<!--  다음 주소찾기 api   -->
 
 
 
@@ -250,24 +247,8 @@
                 });
             });
 
-            //주소 찾기 클릭시 daum주소 api 호출
-            $('.findAddrBtn, #deliverMemberAddr').click(function(){
-
-                new daum.Postcode({
-                    oncomplete: function(data) { //선택시 입력값 세팅
-                        $('#deliverMemberAddr').val(data.address); // 주소 넣기
-                    }
-                }).open();
-            })
 
 
-
-        })
-        //사용 포인트 음수로 입력하지 못하게
-        $(document).on('change', '#usePoint', function(){
-            if($(this).val() < 0) {
-                $(this).val(0);
-            }
         })
 
 
@@ -331,9 +312,6 @@
                                         <span class="optionName ml-2">옵션 1</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="optionContents ml-2">옵션1 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
                                         <span class="ml-2">주문 수량</span>
                                         <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
@@ -363,9 +341,6 @@
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="optionName ml-2">옵션 2</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionContents ml-2">옵션2 상세 내용~~~</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">주문 수량</span>
@@ -400,9 +375,6 @@
                                         <span class="optionName ml-2">옵션 3</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="optionContents ml-2">옵션3 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
                                         <span class="ml-2">주문 수량</span>
                                         <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
@@ -433,9 +405,6 @@
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="optionName ml-2">옵션 4</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionContents ml-2">옵션4 상세 내용~~~</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">주문 수량</span>
@@ -470,9 +439,6 @@
                                         <span class="optionName ml-2">옵션 5</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="optionContents ml-2">옵션5 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
                                         <span class="ml-2">주문 수량</span>
                                         <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
@@ -503,9 +469,6 @@
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="optionName ml-2">옵션 6</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionContents ml-2">옵션6 상세 내용~~~</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">주문 수량</span>
@@ -615,10 +578,9 @@
                                         <br>
                                         <label for="deliverMemberAddr" class="font-weight-bold text-dark mt-lg-2">주소</label>
                                         <br>
-                                        <button type="button" class="findAddrBtn btn btn-small btn-secondary" id="findAddrBtn">주소 찾기</button>
+                                        <button type="button" class="btn btn-small btn-secondary" id="findAddrBtn">주소 찾기</button>
                                         <br>
-                                        <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddr" value="" style="height: 35px" placeholder="주소를 입력해 주세요" readonly="readonly">
-                                        <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddrDetail" value="" style="height: 35px" placeholder="상세 주소를 입력해 주세요">
+                                        <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddr" value="" style="height: 35px" placeholder="상세 주소">
                                         <br>
                                         <label for="deliverRequest" class="font-weight-bold text-dark mt-lg-2">배송 요청사항</label>
                                         <br>

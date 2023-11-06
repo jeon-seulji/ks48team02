@@ -78,7 +78,24 @@
             <ul class="nav child_menu">
               <li><a href="tables.html">리워드 심사 관리(상민)</a></li>
               <li><a th:href="@{/admin/donation/judgement}">!기부 심사 관리(정민)</a></li>
-              <li><a th:href="@{/admin/investment/judge-main}">!투자 심사 관리(오진)</a></li>
+              <li>
+                <a >!투자 심사 관리(오진)</a>
+                <!-- 3 depth -->
+                <ul class="nav child_menu">
+                  <li class="sub_menu">
+                    <a th:href="@{/admin/investment/search/judge}">!투자 펀딩 심사 요청</a>
+                  </li>
+                  <li class="sub_menu">
+                    <a th:href="@{/admin/investment/search/corporate-value}">!기업가치 평가</a>
+                  </li>
+                  <li>
+                    <a th:href="@{/admin/investment/search/law-satistify}">!자본시장법 범위충족기준</a>
+                  </li>
+                  <li>
+                    <a th:href="@{/admin/investment/search/incongruity-sectors}">!부적합 업종</a>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
           <li>
