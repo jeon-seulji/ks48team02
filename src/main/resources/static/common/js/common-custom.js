@@ -129,11 +129,11 @@ function yearDateSettingFn(date, $obj){
     });
 }
 
-const projectPointColor = [
-    'rgb(253,169,185)', // 리워드
-    'rgb(158,227,215)', // 기부
-    'rgb(198,173,246)' // 투자
-]
+const projectPointColor = {
+    rewardColor : 'rgb(253,169,185)', // 리워드
+    donationColor : 'rgb(158,227,215)', // 기부
+    investColor : 'rgb(198,173,246)' // 투자
+}
 
 // 진현
 // popup 형태 새로운 브라우저 open function
@@ -272,4 +272,20 @@ function onlyNumberValidationFn($els,addValue){
         }
     });
     return isFalse;
+}
+
+
+// 현재 날짜에서 max 이전 날짜까지 셋팅 fn
+function monthAndDaySetting(max){
+    const date = new Date();
+
+    // 날짜 변환
+    date.setDate(date.getDate() - max);
+
+    // 날짜를 원하는 형식으로 포맷팅
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var day = String(date.getDate()).padStart(2, '0');
+
+    return month + '-' + day;
 }
