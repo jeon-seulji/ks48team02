@@ -16,6 +16,45 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
+        // backgroundColor: (context) => {
+        //     const bgColor = [
+        //         'rgba(234,84,85,0.25)',
+        //         'rgba(254,182,146,0.59)'
+        //     ];
+        //     if (!context.chart.chartArea){
+        //         return;
+        //     }
+        //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
+        //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+        //     gradientBg.addColorStop(0, bgColor[0]);
+        //     gradientBg.addColorStop(1, bgColor[1]);
+        //     return gradientBg;
+        // },
+        /* chart js data set */
+        // reward data Obj
+        const rewardData = {
+            // barThickness: 10,
+            data: [86,114,1006,107,221,783,2458,1520],
+            label: "rewardData",
+            backgroundColor: projectPointColor['rewardColor'],
+            fill: true
+        }
+        // donation data Obj
+        const donationData = {
+            // barThickness: 10,
+            data: [282,1350,1411,502,635,809,947],
+            label: "donationData",
+            backgroundColor: projectPointColor['donationColor'],
+            fill: true
+        }
+        // invest data Obj
+        const investData = {
+            // barThickness: 10,
+            data: [1680,1270,178,930,1203,1276,708],
+            label: "investData",
+            backgroundColor: projectPointColor['investColor'],
+            fill: true
+        }
 
         // chart code
         new Chart(document.getElementById("adminDateChart"), {
@@ -23,68 +62,7 @@
 
             data: {
                 labels: ['10/13','10/14','10/15','10/16','10/17','10/18','10/19'],
-                datasets: [{
-                    barThickness: 20,
-                    data: [86,114,1006,107,221,783,2478],
-                    label: "리워드",
-                    backgroundColor: projectPointColor[0],
-                    // backgroundColor: (context) => {
-                    //     const bgColor = [
-                    //         'rgba(234,84,85,0.25)',
-                    //         'rgba(254,182,146,0.59)'
-                    //     ];
-                    //     if (!context.chart.chartArea){
-                    //         return;
-                    //     }
-                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
-                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
-                    //     gradientBg.addColorStop(0, bgColor[0]);
-                    //     gradientBg.addColorStop(1, bgColor[1]);
-                    //     return gradientBg;
-                    // },
-                    fill: true
-                },{
-                    barThickness: 20,
-                    data: [282,1350,1411,502,635,809,947],
-                    label: "기부",
-                    backgroundColor: projectPointColor[1],
-                    // backgroundColor: (context) => {
-                    //     const bgColor = [
-                    //         'rgba(50,204,236,0.2)',
-                    //         'rgba(144,247,236,0.6)'
-                    //     ];
-                    //     if (!context.chart.chartArea){
-                    //         return;
-                    //     }
-                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
-                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
-                    //     gradientBg.addColorStop(0, bgColor[0]);
-                    //     gradientBg.addColorStop(1, bgColor[1]);
-                    //     return gradientBg;
-                    // },
-                    fill: true
-                },
-                {
-                    barThickness: 20,
-                    data: [1680,1270,178,930,1203,1276,708],
-                    label: "투자",
-                    backgroundColor: projectPointColor[2],
-                    // backgroundColor: (context) => {
-                    //     const bgColor = [
-                    //         'rgba(206,159,252,0.2)',
-                    //         'rgba(115,103,240,0.72)'
-                    //     ];
-                    //     if (!context.chart.chartArea){
-                    //         return;
-                    //     }
-                    //     const { ctx, data, chartArea: {top, bottom}} = context.chart;
-                    //     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
-                    //     gradientBg.addColorStop(0, bgColor[0]);
-                    //     gradientBg.addColorStop(1, bgColor[1]);
-                    //     return gradientBg;
-                    // },
-                    fill: true
-                }]
+                datasets: [rewardData, donationData, investData]
             },
             options: {
                 title: {
