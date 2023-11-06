@@ -15,4 +15,6 @@ public class mypageController {
         model.addAttribute("contentsTitle","판매자 개인 정보 수정");
         return "seller/mypage/mypage";
     }
+
+
 }
