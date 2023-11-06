@@ -45,6 +45,7 @@
             element.classList.add("selected");
         }
 
+        let projectTotal = 0;
         // 조건에 맞는 tr들만 모아 놓음
         function twoSort(classification, reason) {
             const $trEles = [];
@@ -64,6 +65,7 @@
                 });
             }
 
+            projectTotal = $trEles.length;
         }
 
 
@@ -83,26 +85,35 @@
 
             if(selectedValues.classification == 0 && selectedValues.status == 0){
                 $('table.settlement-log tbody tr').show();
+                projectTotal = $('table.settlement-log tbody tr').length -1;
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
                 if($('table.settlement-log tbody tr').length == 1){
                     $('table.settlement-log tbody tr.not-contents').show();
+                    projectTotal = 0;
                 }else{
                     $('table.settlement-log tbody tr.not-contents').hide();
                 }
             }else if(selectedValues.classification == 0 && selectedValues.status == 1){
                 $(`table.settlement-log tbody tr .judge-reason:contains("심사승인")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .judge-reason:contains("심사승인")`).closest('tr').length;
             }else if(selectedValues.classification == 0 && selectedValues.status == 2){
                 $(`table.settlement-log tbody tr .judge-reason:contains("심사반려")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .judge-reason:contains("심사반려")`).closest('tr').length;
             }else if(selectedValues.classification == 0 && selectedValues.status == 3){
                 $(`table.settlement-log tbody tr .judge-reason:contains("심사중")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .judge-reason:contains("심사중")`).closest('tr').length;
             }else if(selectedValues.classification == 0 && selectedValues.status == 4){
                 $(`table.settlement-log tbody tr .judge-reason:contains("진행중")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .judge-reason:contains("진행중")`).closest('tr').length;
             }else if(selectedValues.classification == 0 && selectedValues.status == 5){
                 $(`table.settlement-log tbody tr .judge-reason:contains("성공")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .judge-reason:contains("성공")`).closest('tr').length;
             }else if(selectedValues.classification == 0 && selectedValues.status == 6){
                 $(`table.settlement-log tbody tr .judge-reason:contains("실패")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .judge-reason:contains("실패")`).closest('tr').length;
             }else if(selectedValues.classification == 1 && selectedValues.status == 0){
                 $(`table.settlement-log tbody tr .project-classification:contains("리워드")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .project-classification:contains("리워드")`).closest('tr').length;
             }else if(selectedValues.classification == 1 && selectedValues.status == 1){
                 twoSort('리워드', '심사승인');
             }else if(selectedValues.classification == 1 && selectedValues.status == 2){
@@ -117,6 +128,7 @@
                 twoSort('리워드', '실패');
             }else if(selectedValues.classification == 2 && selectedValues.status == 0){
                 $(`table.settlement-log tbody tr .project-classification:contains("기부")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .project-classification:contains("기부")`).closest('tr').length;
             }else if(selectedValues.classification == 2 && selectedValues.status == 1){
                 twoSort('기부', '심사승인');
             }else if(selectedValues.classification == 2 && selectedValues.status == 2){
@@ -131,6 +143,7 @@
                 twoSort('기부', '실패');
             }else if(selectedValues.classification == 3 && selectedValues.status == 0){
                 $(`table.settlement-log tbody tr .project-classification:contains("투자")`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .project-classification:contains("투자")`).closest('tr').length;
             }else if(selectedValues.classification == 3 && selectedValues.status == 1){
                 twoSort('투자', '심사승인');
             }else if(selectedValues.classification == 3 && selectedValues.status == 2){
@@ -149,6 +162,8 @@
         // 셀렉트 박스 변경 이벤트 핸들러
         $('.project-classification-select, .project-select').on('change', function () {
             filterTable();
+            // 총 프로젝트 개수 띄우기
+            $('.total-list').text(projectTotal);
         });
 
         // 목록 진입 시 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주기 위해 설정 (초기화)
@@ -158,7 +173,7 @@
             $('table.settlement-log tbody tr.not-contents').hide();
         }
 
-        // 총 프로젝트 개수 띄우기
+        // 총 프로젝트 개수 초기화
         $('.total-list').text($('table.settlement-log tbody tr').length -1);
 
         $('.printBtn').click(function(){
