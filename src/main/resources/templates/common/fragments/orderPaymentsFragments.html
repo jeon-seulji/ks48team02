@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="orderPayments">
+    <div class="project-info-title" style="margin: 0 0 20px;">
+        <h5>결제 코드</h5>
+        <p style="color: var(--maincolor);">RWP_20230922_00001</p>
+    </div>
+    <table class="settlement-log application-info-detail" style="border:none;">
+        <!-- contents -->
+        <tr>
+            <td>
+                주문자명
+            </td>
+            <td colspan="6">
+                신형만
+            </td>
+        </tr>
+        <tr style="height: auto;">
+            <td colspan="7" style="height: 35px;">
+                상세
+            </td>
+        </tr>
+        <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
+            <td style="height: 35px; width: 17%;">주문 금액</td>
+            <td style="height: 35px;">배송비</td>
+            <td style="height: 35px;">총 주문금액</td>
+            <td style="height: 35px;">사용 적립금액</td>
+            <td style="height: 35px;">등급 할인 금액</td>
+            <td style="height: 35px;">쿠폰 할인 금액</td>
+            <td style="height: 35px;">결제 예정금액</td>
+        </tr>
+        <tr>
+            <td style="background: #fff;"><span>35,000</span> 원</td>
+            <td><span>0</span> 원</td>
+            <td><span>35,000</span> 원</td>
+            <td><span>2000</span> 원</td>
+            <td><span>150</span> 원</td>
+            <td><span>0</span> 원</td>
+            <td><span>32,850</span> 원</td>
+        </tr>
+        <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
+            <td style="height: 35px; width: 17%;">결제 수단</td>
+            <td style="height: 35px;">입금계좌번호</td>
+            <td style="height: 35px;">입금자명</td>
+            <td style="height: 35px;">환불계좌번호</td>
+            <td style="height: 35px;">결제완료금액</td>
+            <td style="height: 35px;">결제기한</td>
+            <td style="height: 35px;">결제상태</td>
+        </tr>
+        <tr>
+            <td style="background: #fff;">
+                <select id="paymentsBank" type="text" name="paymentsBank">
+                    <option value="kb">국민</option>
+                    <option value="ibk" selected>기업</option>
+                    <option value="lh">농협</option>
+                    <option value="woori">우리</option>
+                    <option value="shinhan">신한</option>
+                    <option value="hana">하나</option>
+                    <option value="mg">새마을금고</option>
+                    <option value="kakaobank">카카오뱅크</option>
+                    <option value="tossbank">토스뱅크</option>
+                    <option value="noBank">무통장입금</option>
+                </select>
+            </td>
+            <td><input id="orderBankNumber" type="text" name="orderBankNumber" value="50342-13-6453432"></td>
+            <td><input type="text" name="paymentsName" value="신형만"></td>
+            <td><input id="refundBankNumber" type="text" name="refundBankNumber" value="50342-13-6453432"></td>
+            <td><span>63,500</span> 원</td>
+            <td>2023-10-05 23:59</td>
+            <td>결제완료</td>
+        </tr>
+
+    </table>
+</th:block>
+
+</html>

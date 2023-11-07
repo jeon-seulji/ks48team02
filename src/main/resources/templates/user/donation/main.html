@@ -153,63 +153,9 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <section id="main-swiper-slide" class="swiper mySwiper">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide slide-1">
-                <div class="container">
-                    <div>
-                        <div class="sub-title">NEW</div>
-                        <h2>
-                            플로키 투자회원 전용
-                            <br>
-                            카톡방 오픈
-                        </h2>
-                        <div class="slide-description">
-                            플로키 회원이라면 누구나 입장 가능
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide slide-2">
-                <div class="container">
-                    <div>
-                        <div class="sub-title">EVENT</div>
-                        <h2>
-                            특별히 검증된 상품만 모았어요
-                            <br>
-                            신상품 10% 할인
-                        </h2>
-                        <div class="slide-description">
-                            이벤트 페이지 참조
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide slide-3">
-                <div class="container">
-                    <div>
-                        <div class="sub-title">REWARD</div>
-                        <h2>
-                            시선집중 스페셜 기획전
-                            <br>
-                            추천 프로젝트를 만나보세요
-                        </h2>
-                        <div class="slide-description">
-                            펀딩 마감기간 임박
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="controller-area">
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-            </div>
-        </div>
-        <div class="swiper-pagination"></div>
-    </section>
-
+    <!-- main swiper slide start -->
+    <th:block th:replace="~{common/fragments/mainSlideFragments :: mainSlide}"></th:block>
+    <!-- main swiper slide end -->
 
     <!-- category start-->
     <div style="margin-top: 50px"></div>
