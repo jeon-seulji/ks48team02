@@ -4,6 +4,34 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.admin.mapper.investment.AdminInvestmentMapper">
 
+    <resultMap type="ksmart.ks48team02.admin.dto.investment.AdminInvestment" id="adminInvestmentListMap">
+        <id property="investmentCode" column="investment_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="storeCode" column="store_code"/>
+        <result property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
+        <result property="totalCategoryCode" column="total_category_code"/>
+        <result property="memberIdSeller" column="member_id_seller"/>
+        <result property="investmentSubject" column="investment_subject"/>
+        <result property="investmentContent" column="investment_content"/>
+        <result property="investmentImage" column="investment_image"/>
+        <result property="investmentLike" column="investment_like"/>
+        <result property="investmentAmount" column="investment_amount"/>
+        <result property="investmentAchievementMoney" column="investment_achievement_money"/>
+        <result property="investAchievementPercent" column="invest_achievement_percent"/>
+        <result property="investmentCompany" column="investment_company"/>
+        <result property="searchCount" column="search_count"/>
+        <result property="investCount" column="invest_count"/>
+        <result property="securitiesClassification" column="securities_classification"/>
+        <result property="investmentDisplayDate" column="investment_display_date"/>
+        <result property="investmentRegDate" column="investment_reg_date"/>
+        <result property="investmentDeadline" column="investment_deadline"/>
+        <result property="investment_report" column="investmentReport"/>
+        <result property="basicFee" column="basic_fee"/>
+        <result property="contractFeeRate" column="contract_fee_rate"/>
+        <result property="contractFile" column="contract_file"/>
+        <result property="investJudgeSituation" column="invest_judge_situation"/>
+    </resultMap>
+
     <resultMap type="ksmart.ks48team02.admin.dto.investment.AdminInvestmentRequestJudge" id="adminInvestmentRequestJudgeListMap">
         <id property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
         <result property="lawSatistifyCode" column="law_satistify_code"/>
@@ -13,7 +41,9 @@
         <result property="storeCode" column="store_code"/>
         <result property="investmentRequestSubject" column="investment_request_subject"/>
         <result property="memberIdSeller" column="member_id_seller"/>
+        <result property="storeName" column="store_name"/>
         <result property="investmentCompany" column="investment_company"/>
+        <result property="representativeName" column="representative_name"/>
         <result property="invBusinessType" column="business_type"/>
         <result property="investmentRequestContent" column="investment_request_content"/>
         <result property="investmentAchievementMoney" column="investment_achievement_money"/>
@@ -27,6 +57,39 @@
         <result property="investJudgeDate" column="invest_judge_date"/>
         <result property="memberId" column="member_id"/>
         <result property="investJudgeResult" column="invest_judge_result"/>
+        <result property="todayRequestCnt" column="todayRequestCnt"/>
+        <result property="standbyCnt" column="standbyCnt"/>
+        <result property="todayProceedCnt" column="todayProceedCnt"/>
+        <result property="rejectCnt" column="rejectCnt"/>
+        <result property="cbtBusinessType" column="cbtBusinessType"/>
+
+        <association property="adminInvestment" javaType="ksmart.ks48team02.admin.dto.investment.AdminInvestment">
+            <id property="investmentCode" column="investment_code"/>
+            <result property="memberId" column="member_id"/>
+            <result property="storeCode" column="store_code"/>
+            <result property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
+            <result property="totalCategoryCode" column="total_category_code"/>
+            <result property="memberIdSeller" column="member_id_seller"/>
+            <result property="investmentSubject" column="investment_subject"/>
+            <result property="investmentContent" column="investment_content"/>
+            <result property="investmentImage" column="investment_image"/>
+            <result property="investmentLike" column="investment_like"/>
+            <result property="investmentAmount" column="investment_amount"/>
+            <result property="investmentAchievementMoney" column="investment_achievement_money"/>
+            <result property="investAchievementPercent" column="invest_achievement_percent"/>
+            <result property="investmentCompany" column="investment_company"/>
+            <result property="searchCount" column="search_count"/>
+            <result property="investCount" column="invest_count"/>
+            <result property="securitiesClassification" column="securities_classification"/>
+            <result property="investmentDisplayDate" column="investment_display_date"/>
+            <result property="investmentRegDate" column="investment_reg_date"/>
+            <result property="investmentDeadline" column="investment_deadline"/>
+            <result property="investment_report" column="investmentReport"/>
+            <result property="basicFee" column="basic_fee"/>
+            <result property="contractFeeRate" column="contract_fee_rate"/>
+            <result property="contractFile" column="contract_file"/>
+            <result property="investJudgeSituation" column="invest_judge_situation"/>
+        </association>
     </resultMap>
 
     <resultMap type="ksmart.ks48team02.admin.dto.investment.AdminLawSatistifyReason" id="adminLawSatistifyReasonListMap">
@@ -93,10 +156,10 @@
             i.investment_request_judge_code,
             i.investment_request_subject,
             i.member_id_seller,
-            s.store_name AS storeName,
+            s.store_name,
             s.corporate_name AS corporateName,
             i.investment_company,
-            s.representative_name AS representativeName,
+            s.representative_name,
             i.investment_achievement_money,
             i.investment_request_date,
             i.invest_judge_date,
@@ -148,10 +211,10 @@
             i.investment_request_judge_code,
             i.investment_request_subject,
             i.member_id_seller,
-            s.store_name AS storeName,
+            s.store_name,
             s.corporate_name AS corporateName,
             i.investment_company,
-            s.representative_name AS representativeName,
+            s.representative_name,
             i.investment_achievement_money,
             i.investment_request_date,
             i.invest_judge_date,
@@ -175,16 +238,18 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 1
+            (i.invest_judge_result = 1
+            OR
+            i.invest_judge_result = 0)
             AND
             DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
-            ) AS todayApproveCnt,
+            ) AS todayProceedCnt,
             (SELECT
             COUNT(i.invest_judge_result)
             FROM
             investment_request_judge AS i
-            WHERE
-            i.invest_judge_result = 0) rejectCnt
+        WHERE
+        i.invest_judge_result = 0) rejectCnt
         FROM
             investment_request_judge AS i
             INNER JOIN
@@ -210,6 +275,13 @@
     <select id="getInvestmentRequestJudgeByCode" parameterType="String" resultMap="adminInvestmentRequestJudgeListMap">
         /* 코드에 따른 특정 투자펀딩 심사요청 조회 */
         SELECT
+            inv.investment_code,
+            inv.investment_subject,
+            inv.investment_content,
+            inv.investment_achievement_money,
+            inv.investment_amount,
+            inv.invest_achievement_percent,
+            inv.investment_deadline,
             i.investment_request_judge_code,
             i.law_satistify_code,
             i.incongruity_sectors_code,
@@ -218,10 +290,10 @@
             i.store_code,
             i.investment_request_subject,
             i.member_id_seller,
-            s.store_name AS storeName,
+            s.store_name,
             s.corporate_name AS corporateName,
             i.investment_company,
-            s.representative_name AS representativeName,
+            s.representative_name,
             c.business_type AS cbtBusinessType,
             i.business_type,
             i.investment_request_content,
@@ -239,6 +311,10 @@
         FROM
             investment_request_judge AS i
             INNER JOIN
+            investment AS inv
+            ON
+            i.investment_request_judge_code = inv.investment_request_judge_code
+            INNER JOIN
             store AS s
             ON
             i.store_code = s.store_code
@@ -254,52 +330,53 @@
     <select id="getInvestmentRequestJudgeByResult" parameterType="String" resultMap="adminInvestmentRequestJudgeListMap">
         /* 심사결과에 따른 특정 투자펀딩 심사요청 조회 */
         SELECT
+            inv.investment_code,
+            inv.investment_subject,
+            inv.investment_content,
+            inv.investment_achievement_money,
+            inv.investment_amount,
+            inv.invest_achievement_percent,
+            inv.investment_deadline,
             i.investment_request_judge_code,
+            i.law_satistify_code,
+            i.incongruity_sectors_code,
+            i.company_business_type_code,
+            i.corporate_value_evaluation_code,
+            i.store_code,
             i.investment_request_subject,
             i.member_id_seller,
-            s.store_name AS storeName,
+            s.store_name,
             s.corporate_name AS corporateName,
             i.investment_company,
-            s.representative_name AS representativeName,
+            s.representative_name,
+            c.business_type AS cbtBusinessType,
+            i.business_type,
+            i.investment_request_content,
             i.investment_achievement_money,
+            i.law_satistify_reason,
+            i.business_profits,
+            i.depreciation,
+            i.net_debt,
+            i.stock_number,
+            i.issue_stock_number,
             i.investment_request_date,
             i.invest_judge_date,
             i.member_id,
-            i.invest_judge_result,
-            (SELECT
-            COUNT(i.invest_judge_result)
-            FROM
-            investment_request_judge AS i
-            WHERE
-            DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
-            ) AS todayRequestCnt,
-            (SELECT
-            COUNT(i.invest_judge_result)
-            FROM
-            investment_request_judge AS i
-            WHERE
-            i.invest_judge_result = 2) standbyCnt,
-            (SELECT
-            COUNT(i.invest_judge_result)
-            FROM
-            investment_request_judge AS i
-            WHERE
-            i.invest_judge_result = 1
-            AND
-            DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
-            ) AS todayApproveCnt,
-            (SELECT
-            COUNT(i.invest_judge_result)
-            FROM
-            investment_request_judge AS i
-            WHERE
-            i.invest_judge_result = 0) rejectCnt
+            i.invest_judge_result
         FROM
             investment_request_judge AS i
+            INNER JOIN
+            investment AS inv
+            ON
+            i.investment_request_judge_code = inv.investment_request_judge_code
             INNER JOIN
             store AS s
             ON
             i.store_code = s.store_code
+            INNER JOIN
+            company_business_type AS c
+            ON
+            i.company_business_type_code = c.company_business_type_code
         WHERE
             i.invest_judge_result = #{rejectCnt};
     </select>

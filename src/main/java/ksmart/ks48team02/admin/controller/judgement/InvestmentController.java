@@ -41,11 +41,9 @@ public class InvestmentController {
                                         ,@RequestParam(name = "searchKey", required = false) String searchKey
                                         ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                         ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
-                                        ,@RequestParam(name = "investJudgeResult", required = false) String investJudgeResult) {
+                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate) {
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
-        List<AdminInvestSearch> adminInvestSearch = new ArrayList<AdminInvestSearch>();
 
         if(searchKey != null) {
             investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
