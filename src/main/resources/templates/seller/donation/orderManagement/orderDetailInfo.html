@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{seller/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <title th:text="${title}"></title>
+    <style>
+        #slSettlementBankInfo input,
+        #slSettlementBankInfo select{
+            border: 1px solid var(--borderColor);
+            height: 25px;
+            padding: 3px;
+        }
+        #slSettlementBankInfo label {
+            margin: 0 6px 0 15px;
+        }
+        #slSettlementBankInfo input:focus,
+        #slSettlementBankInfo select:focus{
+            border: 1px solid var(--maincolor);
+        }
+
+    </style>
+    <link rel="stylesheet" th:href="@{/admin/css/order_detail_style.css}">
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+    <script th:src="@{/common/js/submenuJs.js}"></script>
+    <script th:src="@{/admin/js/settlement/settlementJs.js}"></script>
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+    <script>
+        $('.more-btn').on('click', function(){
+            $('#projectInfoDetail').toggleClass('active');
+            $(this).toggleClass('active');
+        });
+        console.log(CURRENT_URL,'<-- CURRENT_URL');
+        console.log(document.referrer,'<-- document.referrer');
+
+
+        // price count
+        const $optionInfoTrEls = $('.option-info-tr');
+        $('.sub-title-td').attr('rowspan', $($optionInfoTrEls).length +1);
+
+        const $priceValue = $('.order-total-price span');
+        console.log($priceValue);
+        $($priceValue).each((idx, item) => {
+            let max = $(item).attr('data-value')
+            counterLong(item, max);
+        })
+
+        //  배송 예정일 setting
+        $('input[name="delivedDateInput"]').on('change', function(){
+            let value = $(this).val();
+            $('input[name="delivedDate"]').val(value);
+            $(this).val('');
+        });
+
+
+    </script>
+</th:block>
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+    <div class="admin-wrapper"> <!-- 수정 -->
+
+        <div class="order-total-info">
+            <div class="info-items">
+                <h5>환산 금액</h5>
+                <p class="order-total-price"><span class="price-data" data-value="350000">0</span>원</p>
+            </div>
+            <span class="sign">=</span>
+            <div class="info-items">
+                <h5>사용 재화 수</h5>
+                <p class="order-total-price"><span data-value="500">0</span>개</p>
+            </div>
+        </div>
+
+        <div id="orderInfoArea" class="admin-content-wrapper form-table">
+            <div class="project-info-title-area">
+                <div class="project-info-title">
+                    <h5>주문 코드</h5>
+                    <p style="color: var(--maincolor);">ORD_20230922_0000001</p>
+                </div>
+                <div class="info-more-btn">
+                    <a class="more-btn" th:href="@{#}" style="padding: 7px 10px 9px 19px;">
+                        <span>공고 상세 보기</span>
+                    </a>
+                </div>
+            </div>
+
+            <form id="orderInfoDetail" method="get">
+                <table class="settlement-log application-info-detail" style="border:none; margin-bottom: 10px;">
+                    <tbody>
+                        <!-- contents -->
+                        <tr>
+                            <td>
+                                주문 일자
+                            </td>
+                            <td colspan="4">
+                                2023-09-22 13:37
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                주문 공고
+                            </td>
+                            <td colspan="4">
+                                [글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                주문 상태
+                            </td>
+                            <td colspan="4">
+                                주문 완료
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                주문자
+                            </td>
+                            <td colspan="4">
+                                신형만
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                               주문 확정 일시
+                            </td>
+                            <td>
+                                2023-10-23
+                            </td>
+                            <td class="title-td" style=" width: 13%;">
+                                주문 취소 일시
+                            </td>
+                            <td colspan="2">
+                                -
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+<!--                <div class="btn-area">-->
+<!--                    <ul>-->
+<!--                        <li>-->
+<!--                            <button id="modifyBtn" class="submitBtn" type="button" onclick="confirmBtnFn(event.target)">수정</button>-->
+<!--                        </li>-->
+
+<!--                    </ul>-->
+<!--                </div>-->
+            </form>
+
+        </div>
+
+        <!-- contents -->
+            <form id="paymentInfoDetailBt" method="get">
+                <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
+                    <div class="project-info-title" style="margin: 0 0 20px;">
+                        <h5>결제 코드</h5>
+                        <p style="color: var(--maincolor);">IWP_20230922_00001</p>
+                    </div>
+
+                <table class="settlement-log application-info-detail" style="border:none;">
+                    <!-- contents -->
+                    <tr>
+                        <td>
+                            주문자명
+                        </td>
+                        <td colspan="6">
+                            신형만
+                        </td>
+                    </tr>
+                    <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
+                        <td rowspan="2" class="title-td" style="height: 35px;">주문 상세</td>
+                        <td class="title-td" style="height: 35px; width: 20%">사용 기부 재화</td>
+                        <td colspan="4" class="title-td" style="height: 35px;">총 금액</td>
+                    </tr>
+                    <!-- option contents -->
+                    <tr class="option-info-tr">
+                        <td style="height: 35px; background: #fff;">
+                            <input type="number" min="1" max="9999" value="500">
+                        </td>
+                        <td colspan="4" style="height: 35px; "><span>350,000</span>원</td>
+                    </tr>
+
+<!--                    <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">-->
+<!--                        <td style="height: 35px; width: 17%;">결제 여부</td>-->
+<!--                        <td style="height: 35px;"></td>-->
+<!--                        <td style="height: 35px;">총 주문금액</td>-->
+<!--                        <td style="height: 35px;">사용 적립금액</td>-->
+<!--                        <td style="height: 35px;">등급 할인 금액</td>-->
+<!--                        <td style="height: 35px;">쿠폰 할인 금액</td>-->
+<!--                        <td style="height: 35px;">결제 예정금액</td>-->
+<!--                    </tr>-->
+
+<!--                    <tr>-->
+<!--                        <td style="background: #fff;"><span>35,000</span> 원</td>-->
+<!--                        <td><span>0</span> 원</td>-->
+<!--                        <td><span>35,000</span> 원</td>-->
+<!--                        <td><span>2000</span> 원</td>-->
+<!--                        <td><span>150</span> 원</td>-->
+<!--                        <td><span>0</span> 원</td>-->
+<!--                        <td><span>32,850</span> 원</td>-->
+<!--                    </tr>-->
+<!--                    <tr style="height: auto;">-->
+<!--                        <td colspan="7" style="height: 35px;">-->
+<!--                            결제 수단 상세 정보-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">-->
+<!--                        <td style="height: 35px; width: 17%;">입금 은행명</td>-->
+<!--                        <td style="height: 35px;">입금 계좌번호</td>-->
+<!--                        <td style="height: 35px;">입금 기한</td>-->
+<!--                        <td style="height: 35px;">환불 은행명</td>-->
+<!--                        <td style="height: 35px;">환불 계좌번호</td>-->
+<!--                        <td style="height: 35px;">결제기한</td>-->
+<!--                        <td style="height: 35px;">결제상태</td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td style="background: #fff;">-->
+<!--                            <select id="paymentsBank" type="text" name="paymentsBank">-->
+<!--                                <option value="kb">국민</option>-->
+<!--                                <option value="ibk" selected>기업</option>-->
+<!--                                <option value="lh">농협</option>-->
+<!--                                <option value="woori">우리</option>-->
+<!--                                <option value="shinhan">신한</option>-->
+<!--                                <option value="hana">하나</option>-->
+<!--                                <option value="mg">새마을금고</option>-->
+<!--                                <option value="kakaobank">카카오뱅크</option>-->
+<!--                                <option value="tossbank">토스뱅크</option>-->
+<!--                                <option value="noBank">무통장입금</option>-->
+<!--                            </select>-->
+<!--                        </td>-->
+<!--                        <td><input id="orderBankNumber" type="text" name="orderBankNumber" value="50342-13-6453432"></td>-->
+<!--                        <td>2023-11-02 23:59:59</td>-->
+<!--                        <td>-->
+<!--                            <select id="paymentsBank" type="text" name="paymentsBank">-->
+<!--                                <option value="kb">국민</option>-->
+<!--                                <option value="ibk" selected>기업</option>-->
+<!--                                <option value="lh">농협</option>-->
+<!--                                <option value="woori">우리</option>-->
+<!--                                <option value="shinhan">신한</option>-->
+<!--                                <option value="hana">하나</option>-->
+<!--                                <option value="mg">새마을금고</option>-->
+<!--                                <option value="kakaobank">카카오뱅크</option>-->
+<!--                                <option value="tossbank">토스뱅크</option>-->
+<!--                                <option value="noBank">무통장입금</option>-->
+<!--                            </select>-->
+<!--                        </td>-->
+<!--                        <td><input id="refundBankNumber" type="text" name="refundBankNumber" value="50342-13-6453432"></td>-->
+<!--                        <td>2023-10-05 23:59</td>-->
+<!--                        <td>결제완료</td>-->
+                    </tr>
+
+                </table>
+
+                <div class="btn-area">
+                    <ul>
+                        <li>
+                            <button id="deliveryRemoveBtn" onclick="confirmBtnFn(event.target)" class="submitBtn" type="button" >수정</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            </form>
+        <div class="btn-area" style="justify-content: flex-end;">
+            <ul>
+                <li>
+                    <button id="orderBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>

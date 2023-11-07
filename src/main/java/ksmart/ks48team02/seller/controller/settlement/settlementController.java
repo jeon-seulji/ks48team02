@@ -31,4 +31,12 @@ public class settlementController {
         model.addAttribute("contentsSubTitle","처리중 상태의 정산 신청은 정산 정보를 수정할 수 없습니다");
         return "seller/settlement/remove_settlement_object";
     }
+    // 정산 신청 정보 입력
+    @GetMapping("/addSettlement/info")
+    public String sellerSettlementAdd(Model model){
+        model.addAttribute("title","판매자 : 정산 신청 정보 입력");
+        model.addAttribute("contentsTitle","정산 신청 정보 입력");
+        model.addAttribute("contentsSubTitle","입력한 정산 정보 수정은 신청 정보 수정 페이지에서 수정 가능합니다");
+        return "seller/settlement/addSettlementDetail";
+    }
 }

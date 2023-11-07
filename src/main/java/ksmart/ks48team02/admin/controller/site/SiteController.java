@@ -15,24 +15,10 @@ public class SiteController {
         return "admin/site/category";
     }
 
-    // 카테고리 등록
-    @GetMapping("/categoryAdd")
-    public String categoryAddPage(){
-
-        return "admin/site/categoryAdd";
-    }
-
     // 알림 관리
     @GetMapping("/notification")
     public String notifiPage(){
 
         return "admin/site/notification";
-    }
-
-    // 알림 등록
-    @GetMapping("/notificationAdd")
-    public String notifiAddPage(){
-
-        return "admin/site/notificationAdd";
     }
 }

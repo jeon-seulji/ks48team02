@@ -137,11 +137,11 @@ const projectPointColor = [
 
 // 진현
 // popup 형태 새로운 브라우저 open function
-function popupOpen(customUrl, width, height) {
+function popupOpen(customUrl) {
     console.log("a");
     var url = customUrl;    //팝업창에 출력될 페이지 URL
-    var winWidth = width;
-    var winHeight = height;
+    var winWidth = 700;
+    var winHeight = 600;
 
     var popupX = (document.body.offsetWidth / 2) - (winWidth / 2);
     // 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
@@ -182,4 +182,10 @@ $('select[name="deliveryMessage"]').on('change', function(){
 $('#allSelectBtn').on('click', function(){
     let isChecked = $(this).prop('checked');
     $('input[name="selectList"]').prop('checked', isChecked);
+});
+
+// 공고 상세보기 btn controls
+$('.more-btn').on('click', function(){
+    $('#projectInfoDetail').toggleClass('active');
+    $(this).toggleClass('active');
 });

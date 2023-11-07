@@ -52,25 +52,11 @@ public class BoardController {
         return "admin/board/eventModify1";
     }
 
-    // 이벤트 등록 페이지
-    @GetMapping("/eventAdd")
-    public String eventAddPage(){
-
-        return "admin/board/eventAdd";
-    }
-
 
     // 쿠폰 관리
     @GetMapping("/coupon")
     public String couponPage(){
 
         return "admin/board/coupon";
-    }
-
-    // 쿠폰 등록
-    @GetMapping("/couponAdd")
-    public String couponAddPage(){
-
-        return "admin/board/couponAdd";
     }
 }

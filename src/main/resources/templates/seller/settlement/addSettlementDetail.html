@@ -6,39 +6,26 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <title th:text="${title}"></title>
-    <style>
-        #slSettlementBankInfo input,
-        #slSettlementBankInfo select{
-            border: 1px solid var(--borderColor);
-            height: 25px;
-            padding: 3px;
-        }
-        #slSettlementBankInfo label {
-            margin: 0 6px 0 15px;
-        }
-        #slSettlementBankInfo input:focus,
-        #slSettlementBankInfo select:focus{
-            border: 1px solid var(--maincolor);
-        }
-    </style>
 </head>
 
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
+    <script th:src="@{/admin/js/settlement/settlementJs.js}"></script>
     <script th:src="@{/common/js/submenuJs.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-    <script>
 
-    </script>
 </th:block>
+
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
     <div class="admin-wrapper"> <!-- 수정 -->
+
+        <!-- 여기부터 작업 -->
         <div class="admin-content-wrapper form-table">
             <div class="project-info-title-area">
                 <div class="project-info-title">
@@ -52,62 +39,121 @@
                 </div>
             </div>
             <form id="projectInfoDetail" method="get">
-                <table class="settlement-log application-info-detail" style="border:none;">
+                <table class="settlement-log application-info-detail" style="border:none; margin-bottom: 10px;">
                     <tbody>
-                        <!-- contents -->
-                        <tr>
-                            <td>
-                                카테고리
-                            </td>
-                            <td colspan="4">
-                                카테고리 내용
-                            </td>
+                    <!-- contents -->
+                    <tr>
+                        <td>
+                            카테고리
+                        </td>
+                        <td colspan="4">
+                            카테고리 내용
+                        </td>
 
-                        </tr>
-                        <tr>
-                            <td>
-                               프로젝트 제목
-                            </td>
-                            <td colspan="4">
-                                [글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!
-                            </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            프로젝트 제목
+                        </td>
+                        <td colspan="4">
+                            [글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!
+                        </td>
 
-                        </tr>
-                        <tr>
-                            <td>
-                                프로젝트 내용
-                            </td>
-                            <td colspan="4">
-                                휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                               공고 마감일
-                            </td>
-                            <td colspan="4">
-                                2023-10-23
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5">
-                                상세
-                            </td>
-                        </tr>
-                        <tr class="sub-table-area sub-table sub-table-tr">
-                            <td>펀딩 목표 금액</td>
-                            <td>총 주문 완료 수</td>
-                            <td>주문 취소 수</td>
-                            <td>펀딩 달성 금액</td>
-                            <td>펀딩 달성률</td>
-                        </tr>
-                        <tr>
-                            <td style="background: #fff;"><span>500,000</span> 원</td>
-                            <td><span>34502</span> 건</td>
-                            <td><span>42</span> 건</td>
-                            <td><span>314,000,000</span> 원</td>
-                            <td><span>628</span> %</td>
-                        </tr>
+                    </tr>
+                    <tr>
+                        <td>
+                            프로젝트 내용
+                        </td>
+                        <td colspan="4">
+                            휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            공고 마감일
+                        </td>
+                        <td colspan="4">
+                            2023-10-23
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            상세
+                        </td>
+                    </tr>
+                    <tr class="sub-table-area sub-table sub-table-tr">
+                        <td>펀딩 목표 금액</td>
+                        <td>총 주문 완료 수</td>
+                        <td>주문 취소 수</td>
+                        <td>펀딩 달성 금액</td>
+                        <td>펀딩 달성률</td>
+                    </tr>
+                    <tr>
+                        <td style="background: #fff;"><span>500,000</span> 원</td>
+                        <td><span>34502</span> 건</td>
+                        <td><span>42</span> 건</td>
+                        <td><span>314,000,000</span> 원</td>
+                        <td><span>628</span> %</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <table class="settlement-log application-info-detail" style="border:none; margin-bottom: 10px;">
+                    <tbody>
+                    <!-- contents -->
+                    <tr>
+                        <td>
+                            카테고리
+                        </td>
+                        <td colspan="4">
+                            카테고리 내용
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            프로젝트 제목
+                        </td>
+                        <td colspan="4">
+                            [글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            프로젝트 내용
+                        </td>
+                        <td colspan="4">
+                            휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            공고 마감일
+                        </td>
+                        <td colspan="4">
+                            2023-10-23
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            상세
+                        </td>
+                    </tr>
+                    <tr class="sub-table-area sub-table sub-table-tr">
+                        <td>펀딩 목표 금액</td>
+                        <td>총 주문 완료 수</td>
+                        <td>주문 취소 수</td>
+                        <td>펀딩 달성 금액</td>
+                        <td>펀딩 달성률</td>
+                    </tr>
+                    <tr>
+                        <td style="background: #fff;"><span>500,000</span> 원</td>
+                        <td><span>34502</span> 건</td>
+                        <td><span>42</span> 건</td>
+                        <td><span>314,000,000</span> 원</td>
+                        <td><span>628</span> %</td>
+                    </tr>
 
                     </tbody>
                 </table>

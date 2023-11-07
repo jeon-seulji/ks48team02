@@ -1,13 +1,11 @@
 .pop_modify{
-    width: 700px;
+    width: 600px;
     margin: 0 auto;
 }
 .ui-header table{
     width: 100%;
 }
 .sidebar{
-    text-align: center;
-    width: 100px;
     background-color: #FAEDEC;
 }
 .option{
