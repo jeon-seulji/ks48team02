@@ -187,12 +187,15 @@
                     let rewardSubject = $('#rewardSubject').val();
                     let rewardPrice = $('#rewardPrice').val();
                     let rewardContents = $('#rewardContents').val();
-                    let rewardDelever = $('#deliverStartDate').val();
+                    let rewardDeliver = $('#deliverStartDate').val();
+                    let rewardLimitQuantity = $('#rewardLimitQuantity').val();
+                    let rewardDeliverPrice = $('#rewardDeliverPrice').val();
 
                     let card = $(' <div class="rewardOption swiper-slide">\n' +
                         '                    <div class="card border-primary mb-4 shadow-sm">\n' +
                         '                      <div class="card-header ">\n' +
-                        '                        <h5 class="rewardSebjectH my-0 fw-normal"></h5>\n' +
+                        '                       <span style="background: red; color: white; border-radius: 5px; padding: 2px;"><span class="rewardLimitQuantity">300</span>개</span><br>\n' +
+                        '                       <span><h5 class="rewardSebjectH my-0 fw-normal"></h5></span>\n' +
                         '                      </div>\n' +
                         '                      <div class="card-body">\n' +
                         '                        <p class="text-dark">리워드 내용</p>\n' +
@@ -200,7 +203,9 @@
                         '                        <p class="text-dark">리워드 금액</p>\n' +
                         '                        <input class="rewardPriceInput" type="text" readonly value="">\n' +
                         '                        <p class="text-dark">예상 배송일</p>\n' +
-                        '                        <input class="rewardDeleverInput" type="text" readonly value="">\n' +
+                        '                        <input class="rewardDeliverInput" type="text" readonly value="">\n' +
+                        '                        <p class="text-dark">배송비</p>\n' +
+                        '                        <input class="rewardDeliverPrice" type="number" readonly value="">\n' +
                         '                        <br><br>\n' +
                         '                        <button type="button" class="modifyBtn w-70 btn btn-sm btn-primary">수정</button>\n' +
                         '                        <button type="button" class="delBtn w-70 btn btn-sm btn-danger">삭제</button>\n' +
@@ -208,10 +213,12 @@
                         '                    </div>\n' +
                         '                  </div>')
 
+                    $(card).find('.rewardLimitQuantity').text(rewardLimitQuantity);
                     $(card).find('.rewardSebjectH').text(rewardSubject);
                     $(card).find('.rewardContents').text(rewardContents);
-                    $(card).find('.rewardPriceInput').val(`${Number(rewardPrice.replaceAll(',', '')).toLocaleString('ko-KR')}원`);
-                    $(card).find('.rewardDeleverInput').val(rewardDelever);
+                    $(card).find('.rewardPriceInput').val(`${Number(rewardPrice).toLocaleString('ko-KR')}원`);
+                    $(card).find('.rewardDeliverInput').val(rewardDeliver);
+                    $(card).find('.rewardDeliverPrice').val(rewardDeliverPrice);
                     $('.swiper-wrapper').append($(card));
 
                     swiper();
@@ -280,8 +287,8 @@
             $(document).on('click','.submitBtn',function(){
                 let rewardOptionLength = $('.rewardOption').length;
                 let validCheck = $('#projectRegistrationForm').find('input, select, #detailComent')
-                    .not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]')
-                    .not('#rewardPrice').not('#rewardSubject').not('#rewardContents').not('#deliverStartDate');
+                    .not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]').not('#rewardLimitQuantity')
+                    .not('#rewardPrice').not('#rewardSubject').not('#rewardContents').not('#deliverStartDate').not('#deliverPrice');
 
                 let isValid = validationCheck(validCheck);
 
@@ -306,13 +313,18 @@
         $(document).on('click', '.modifyBtn', function () {
             let rewardSubject = $(this).parent().prev().find('.rewardSebjectH').text();
             let rewardPrice = $(this).siblings('.rewardPriceInput').val();
-            let rewardDelever = $(this).siblings('.rewardDeleverInput').val();
+            let rewardDeliver = $(this).siblings('.rewardDeliverInput').val();
             let rewardContents = $(this).siblings('.rewardContents').val();
+            let rewardLimitQuantity =  $(this).parent().prev().find('.rewardLimitQuantity').text();
+            let rewardDeliverPrice = $(this).siblings('.rewardDeliverPrice').val();
+
 
             $('#rewardSubject').val(rewardSubject);
             $('#rewardPrice').val(Number(rewardPrice.replaceAll(',','').replaceAll('원','')));
-            $('#deliverStartDate').val(rewardDelever);
+            $('#rewardDeliverPrice').val(Number(rewardDeliverPrice.replaceAll(',','').replaceAll('원','')));
+            $('#deliverStartDate').val(rewardDeliver);
             $('#rewardContents').val(rewardContents);
+            $('#rewardLimitQuantity').val(Number(rewardLimitQuantity));
 
             $(this).parents('.swiper-slide').remove();
 
@@ -548,11 +560,23 @@
                         </div>
 
                         <div class="col-8">
+                            <label for="rewardLimitQuantity" class="form-label fw-bord text-dark">제한 수량</label>
+                            <input type="number" class="form-control" id="rewardLimitQuantity" placeholder="제한 수량을 입력해주세요.">
+                            <br>
+                        </div>
+
+                        <div class="col-8">
                             <label for="deliverStartDate" class="form-label fw-bord text-dark">예상 배송일</label><br>
                             <input type="text" id="deliverStartDate" class="form-control-sm" readonly="readonly">
+                            <br>
                         </div>
                         <div class="col-8">
-                            <br>
+                            <label for="rewardDeliverPrice" class="form-label fw-bord text-dark">배송비</label><br>
+                            <input type="number" id="rewardDeliverPrice" class="form-control-sm" placeholder="배송비">
+                            <br><br>
+                        </div>
+
+                        <div class="col-8">
                             <button id="rewardAddBtn" class="w-80 btn btn-primary btn" type="button">리워드 추가하기</button>
                             <button id="rewardInitializeBtn" class="w-80 btn btn-secondary btn" type="button">초기화</button>
                             <br>
