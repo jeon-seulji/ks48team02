@@ -23,15 +23,15 @@ public class DonationController {
         return "seller/donation/products/search_tag_modify";
     }
 
+    @GetMapping("/products/modify")
+    public String productModifyPage(){
+        return "seller/donation/products/modify";
+    }
+
     @GetMapping("/projectRegistration")
     public String projectRegistrationPage(){
         return "seller/donation/projectRegistration/donation_insert";
     }
-
-/*    @GetMapping("/orderManagement")
-    public String orderManagementMainPage(){
-        return "seller/donation/orderManagement/main";
-    }*/
 
     @GetMapping("/condition")
     public String conditionMainPage(Model model){
@@ -78,6 +78,8 @@ public class DonationController {
     public String newsModifyPage(){
         return "seller/donation/news/modify";
     }
+
+
 
 
 }

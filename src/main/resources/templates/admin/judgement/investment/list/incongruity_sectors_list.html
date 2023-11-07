@@ -40,7 +40,7 @@
             </tr>
             <tr th:unless="${incongruitySectorsList == null}" th:each="l : ${incongruitySectorsList}">
                 <td>
-                    <a th:href="@{/admin/investment/view/incongruity-sectors(incongruitySectorsCode=${l.incongruitySectorsCode})}" th:text="${l.incongruitySectorsCode}"></a>
+                    <a class="detail-link" th:href="@{/admin/investment/view/incongruity-sectors(incongruitySectorsCode=${l.incongruitySectorsCode})}" th:text="${l.incongruitySectorsCode}"></a>
                 </td>
                 <td th:text="${l.incongruitySectorsBusiness}"></td>
                 <td th:text="${l.memberId}"></td>

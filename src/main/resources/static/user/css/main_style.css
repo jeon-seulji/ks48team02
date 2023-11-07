@@ -15,14 +15,14 @@
 }
 .main-rank-area.active li:nth-child(3){
     animation-name: rankAni;
-    animation-duration: 1s;
+    animation-duration: .9s;
 }
 .main-rank-area.active li:nth-child(4){
     animation-name: rankAni;
-    animation-duration: 1.5s;
+    animation-duration: 1.3s;
 }.main-rank-area.active li:nth-child(5){
      animation-name: rankAni;
-     animation-duration: 2.1s;
+     animation-duration: 1.7s;
  }
 
 * {
@@ -195,7 +195,7 @@
     width: calc(30% - 40px);
 }
 #project-rank .main-title {
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 
 .contents-area .swiper-slide .slide-thumb{
@@ -308,4 +308,26 @@
 }
 .link-btn:hover span::after {
     background: url("../images/arrow_o.png") no-repeat center center/ cover;
+}
+
+/* rankReload css */
+#rankReload {
+    width: 24px;
+    height: 24px;
+    background: url('../../common/images/reload-icon.svg') no-repeat center center / 100%;
+    font-size: 0;
+    text-indent: -9999px;
+    overflow: hidden;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+#rankReload:focus {
+    border: none;
+}
+.rang-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 20px;
 }

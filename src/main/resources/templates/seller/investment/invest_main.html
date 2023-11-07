@@ -6,6 +6,9 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <style>
+        #investInsertBtn {
+            width: 400px;
+        }
         .category-button {
             border: none;
             border-radius: 25px; /* 라운드 처리 반경을 조정합니다. */
@@ -221,7 +224,7 @@
 
     </div>
     <br>
-    <button type="button" class="seller-management-page-add-btn" th:onclick="|location.href='@{/seller/investment/insert/judge}'|">
+    <button type="button" id="investInsertBtn" class="seller-management-page-add-btn" th:onclick="|location.href='@{/seller/investment/insert/judge}'|">
         공고 등록하러 가기
     </button>
 

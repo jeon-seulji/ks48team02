@@ -33,7 +33,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue) {
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -54,7 +54,7 @@ public class InvestmentService {
                 searchKey = "s.representative_name";
                 break;
         }
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue);
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
 
         return investmentRequestJudgeList;
     }
