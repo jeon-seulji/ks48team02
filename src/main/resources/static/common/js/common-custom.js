@@ -137,11 +137,11 @@ const projectPointColor = [
 
 // 진현
 // popup 형태 새로운 브라우저 open function
-function popupOpen(customUrl) {
+function popupOpen(customUrl, width, height) {
     console.log("a");
     var url = customUrl;    //팝업창에 출력될 페이지 URL
-    var winWidth = 700;
-    var winHeight = 600;
+    var winWidth = width;
+    var winHeight = height;
 
     var popupX = (document.body.offsetWidth / 2) - (winWidth / 2);
     // 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
