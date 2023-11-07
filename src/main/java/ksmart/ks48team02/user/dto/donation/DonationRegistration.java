@@ -1,4 +1,4 @@
-package ksmart.ks48team02.seller.dto.donation;
+package ksmart.ks48team02.user.dto.donation;
 
 import org.thymeleaf.spring6.processor.SpringObjectTagProcessor;
 
