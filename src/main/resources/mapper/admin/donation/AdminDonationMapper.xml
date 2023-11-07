@@ -6,7 +6,7 @@
 
     <resultMap id="DonationResultMap" type="Donation">
     <id property="donationCode" column="donation_code"></id>
-    <result property="storeCode" column="store_code"></result>
+    <result property="storeName" column="store_name"></result>
     <result property="memberId" column="member_id"></result>
     <result property="donationCategoryCode" column="donation_category_code"></result>
     <result property="donationJudgementReasonCode" column="donation_judgement_reason_code"></result>
@@ -30,7 +30,7 @@
     <select id="getDonationList" resultType="Donation">
         SELECT
             d.donation_code AS donationCode,
-            d.store_code AS storeCode,
+            s.store_name AS storeName,
             d.member_id AS memberId,
             d.donation_judgement_reason_code AS donationJudgementReasonCode,
             d.admin_member_id AS adminMemberId,
@@ -51,6 +51,10 @@
             d.donation_condition AS donationCondition
         FROM
             donation as d
+            INNER JOIN
+            store AS s
+            ON
+            d.member_id = s.member_id
         WHERE
             d.donation_condition = 0;
     </select>
