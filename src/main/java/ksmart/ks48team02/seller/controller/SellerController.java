@@ -13,5 +13,4 @@ public class SellerController {
 
         return "seller/index";
     }
-
 }
