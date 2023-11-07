@@ -9,10 +9,6 @@ form{
 .addBtnArea{
     text-align: right;
 }
-.top{
-    border: 1px solid #dee1e8;
-    background-color: #f0f3fc;
-}
 .modify{
     display: inline-block;
     width: 40px;
