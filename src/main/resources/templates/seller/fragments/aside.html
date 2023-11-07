@@ -32,11 +32,11 @@
 
         <ul class="nav side-menu">
           <li><a th:href="@{/seller}"><i class="fa fa-home"></i> 홈 <span class="fa fa-chevron-down"></span></a></li>
-          <li><a><i class="fa fa-user"></i> 스토어 관리# <span class="fa fa-chevron-down"></span></a>
+          <li><a><i class="fa fa-user"></i> 스토어 관리(설아)<span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a th:href="@{#}">스토어 추가/삭제/수정#</a></li>
-              <li><a href="index2.html">직원관리#</a></li>
-              <li><a href="index3.html">스토어 소식 관리#</a></li>
+              <li><a th:href="@{/seller/store}">스토어 추가/삭제/수정(설아)</a></li>
+              <li><a th:href="@{/seller/store/staffAdd}">직원관리(설아)</a></li>
+              <li><a th:href="@{/seller/store/news}">스토어 소식 관리(설아)</a></li>
             </ul>
           </li>
           <li><a><i class="fa fa-edit"></i> #리워드 프로젝트 관리 (상민) <span class="fa fa-chevron-down"></span></a>
