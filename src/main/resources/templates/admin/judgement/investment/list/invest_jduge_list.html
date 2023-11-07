@@ -93,8 +93,6 @@
                 <th>심사완료일자</th>
                 <th>심사자</th>
                 <th>심사결과</th>
-                <th>수정</th>
-                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
@@ -116,19 +114,13 @@
                 <td th:text="${l.storeName}"></td>
                 <td th:text="${l.investmentCompany}"></td>
                 <td th:text="${l.representativeName}"></td>
-                <td th:text="${l.investmentAchievementMoney}"></td>
+                <td th:text="${#numbers.formatInteger(l.investmentAchievementMoney,3,'COMMA')} + ' 원'"></td>
                 <td th:text="${l.investmentRequestDate}"></td>
                 <td th:text="${l.investJudgeDate}"></td>
                 <td th:text="${l.memberId}"></td>
                 <td th:if="${l.investJudgeResult == 0}">심사 반려</td>
                 <td th:if="${l.investJudgeResult == 1}">심사 승인</td>
                 <td th:if="${l.investJudgeResult == 2}">심사 대기</td>
-                <td>
-                    <a th:href="@{/admin/investment/update/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}">수정</a>
-                </td>
-                <td>
-                    <a th:href="@{/admin/investment/delete/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}">삭제</a>
-                </td>
             </tr>
             </tbody>
         </table>
