@@ -35,11 +35,11 @@ caption{
     border: 1px solid black;
     background-color: black;
     transition: background-color 0.3s;
-    color: #EEE;
     border-radius: 20px 20px 20px 20px;
     padding: 10px;
+    color: #EEEEEE;
 }
 .registration:hover{
     background-color: blue;
-    color: #EEEEEE;
+    color: white;
 }

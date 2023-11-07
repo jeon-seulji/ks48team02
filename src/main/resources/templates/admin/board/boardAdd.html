@@ -13,8 +13,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
 
 </head>
+<style>
+    .inputTitleText{
+        width: 100%;
+    }
+    .RW{
+        background: #e5dddd;
+        text-align: left;
+    }
+</style>
 
 
+<body>
 
 
 <th:block layout:fragment="customContents">
@@ -42,14 +52,15 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row" class="RW Comment">내용</th>
+                            <th scope="row" class="RW">내용</th>
                             <td>
                                 <div id="summernote"></div>
                                 <script>
                                     $('#summernote').summernote({
                                         placeholder: '공지사항을 입력 해주세요.',
                                         tabsize: 2,
-                                        height: 100
+                                        height: 300,
+                                        width: 700
                                     });
                                 </script>
                             </td>
@@ -64,6 +75,21 @@
 
 </th:block>
     <div class="boardBtn">
-        <a class="cancel">취소</a> <a class="registration">글 등록</a>
+        <a href="#" class="cancel">취소</a> <a href="#" class="registration">글 등록</a>
     </div>
+<script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
+<script>
+    // 취소 버튼 누르면 알림창
+    $('.cancel').click(function (e){
+        //  취소 누르면 뒤로가기
+        e.preventDefault();
+    if(confirm('정말 취소하시겠습니까?')){
+    // 확인 누르면 실행될 내용 작성
+    // 창이 사라진다.
+    console.log(11);
+    window.close();
+        }
+    })
+</script>
+</body>
 </html>

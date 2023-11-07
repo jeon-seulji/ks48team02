@@ -66,4 +66,11 @@ public class BoardController {
 
         return "admin/board/coupon";
     }
+
+    // 쿠폰 등록
+    @GetMapping("/couponAdd")
+    public String couponAddPage(){
+
+        return "admin/board/couponAdd";
+    }
 }
