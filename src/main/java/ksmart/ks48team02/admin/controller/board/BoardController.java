@@ -15,20 +15,10 @@ public class BoardController {
         return "admin/board/main";
     }
     // 공지사항 수정 페이지
-    @GetMapping("/modify1")
-    public String modifyNotice1(){
+    @GetMapping("/modify")
+    public String modifyNotice(){
 
-        return "admin/board/modifyNotice1";
-    }
-    @GetMapping("/modify2")
-    public String modifyNotice2(){
-
-        return "admin/board/modifyNotice2";
-    }
-    @GetMapping("/modify3")
-    public String modifyNotice3(){
-
-        return "admin/board/modifyNotice3";
+        return "admin/board/modifyNotice";
     }
     // 공지사항 등록
     @GetMapping("/boardAdd")
@@ -46,10 +36,10 @@ public class BoardController {
     }
 
     // 이벤트 수정 페이지
-    @GetMapping("/eventModify1")
-    public String eventPageNotice1(){
+    @GetMapping("/eventModify")
+    public String eventPageNotice(){
 
-        return "admin/board/eventModify1";
+        return "admin/board/eventModify";
     }
 
     // 이벤트 등록 페이지
