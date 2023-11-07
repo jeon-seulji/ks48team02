@@ -25,6 +25,14 @@ public class OrderManagement {
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
         return "admin/order/list";
     }
+    // 주문 목록
+    @GetMapping( "/detail")
+    public String adminOrderDetail(Model model){
+        model.addAttribute("title","관리자 : 주문 상세");
+        model.addAttribute("contentsTitle","주문 상세");
+        model.addAttribute("contentsSubTitle","관리자 주문 상세");
+        return "admin/order/orderDetailInfo";
+    }
     // 배송 관리
     @GetMapping( "/delivery")
     public String adminOrderDelivery(Model model){
@@ -32,6 +40,14 @@ public class OrderManagement {
         model.addAttribute("contentsTitle","배송 관리");
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
         return "admin/order/delivery";
+    }
+    // 배송 정보
+    @GetMapping( "/delivery/detail")
+    public String adminOrderDeliveryInfo(Model model){
+        model.addAttribute("title","관리자 : 배송 정보");
+        model.addAttribute("contentsTitle","배송 정보");
+        model.addAttribute("contentsSubTitle","관리자 배송 정보");
+        return "admin/order/deliveryDetailInfo";
     }
     // 교환 환불 신청 관리
     @GetMapping( "/refundSwapping")

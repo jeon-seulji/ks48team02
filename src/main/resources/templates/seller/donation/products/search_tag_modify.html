@@ -192,16 +192,18 @@
 
         });
 
+        let hashtags = [];
+        const $hashtagsContainer = $('#hashtags-container');
         const $commentBoxClose = $('#commentBoxClose');
         $commentBoxClose.click(function (){
             $tagModifyBox.css('display', 'none'); // 버튼 클릭 시 댓글 창 종료
+            $hashtagsContainer.empty();
+            hashtags = [];
         });
 
         const hashtagsInput = document.getElementById("hashtags");
         const hashtagsContainer = document.getElementById("hashtags-container");
         const hiddenHashtagsInput = document.getElementById("hashtags-hidden");
-
-        let hashtags = [];
 
         function addHashtag(tag) {
             tag = tag.replace(/[\[\]]/g, '').trim();

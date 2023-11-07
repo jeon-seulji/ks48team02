@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.ks48team02.admin.mapper.donation.AdminDonationMapper">
+
+    <resultMap id="DonationResultMap" type="Donation">
+    <id property="donationCode" column="donation_code"></id>
+    <result property="storeCode" column="store_code"></result>
+    <result property="memberId" column="member_id"></result>
+    <result property="donationCategoryCode" column="donation_category_code"></result>
+    <result property="donationJudgementReasonCode" column="donation_judgement_reason_code"></result>
+    <result property="adminMemberId" column="admin_member_id"></result>
+    <result property="donationSubject" column="donation_subject"></result>
+    <result property="donationContents" column="donation_contents"></result>
+    <result property="donationImage" column="donation_image"></result>
+    <result property="donationRegCompany" column="donation_reg_company"></result>
+    <result property="donationRegDate" column="donation_reg_date"></result>
+    <result property="donationStartDate" column="donation_start_date"></result>
+    <result property="donationEndDate" column="donation_end_date"></result>
+    <result property="donationAchievementMoney" column="donation_achievement_money"></result>
+    <result property="donationGoalMoney" column="donation_goal_money"></result>
+    <result property="donationAchievementPercent" column="donation_achievement_percent"></result>
+    <result property="donationJudgmentReasonDetail" column="donation_judgment_reason_detail"></result>
+    <result property="donationJudgementDate" column="donation_judgement_date"></result>
+    <result property="searchCount" column="search_count"></result>
+    <result property="donationCondition" column="donation_condition"></result>
+    </resultMap>
+
+    <select id="getDonationList" resultType="Donation">
+        SELECT
+            d.donation_code AS donationCode,
+            d.store_code AS storeCode,
+            d.member_id AS memberId,
+            d.donation_category_code AS donationCategoryCode,
+            d.donation_judgement_reason_code AS donationJudgementReasonCode,
+            d.admin_member_id AS adminMemberId,
+            d.donation_subject AS donationSubject,
+            d.donation_contents AS donationContents,
+            d.donation_image AS donationImage,
+            d.donation_reg_company AS donationRegCompany,
+            d.donation_reg_date AS donationRegDate,
+            d.donation_start_date AS donationStartDate,
+            d.donation_end_date AS donationEndDate,
+            d.donation_achievement_money AS donationAchievementMoney,
+            d.donation_goal_money AS donationGoalMoney,
+            d.donation_achievement_percent AS donationAchievementPercent,
+            d.donation_judgment_reason_detail AS donationJudgmentReasonDetail,
+            d.donation_judgement_date AS donationJudgementDate,
+            d.search_count AS searchCount,
+            d.donation_condition AS donationCondition
+        FROM
+            donation as d
+        WHERE
+            d.donation_condition = 0;
+    </select>
+
+
+</mapper>
