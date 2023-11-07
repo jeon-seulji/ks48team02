@@ -19,7 +19,7 @@ public class storeController {
 
     @GetMapping(value = "/registration")
     public String storeRegisterPage(Model model) { // 대표자 스토어 등록 페이지
-        model.addAttribute("contentsTitle","스토어 등록");
+        model.addAttribute("contentsTitle","스토어 만들기");
         return "seller/store/registration";
     }
 
@@ -34,6 +34,5 @@ public class storeController {
         model.addAttribute("contentsTitle","스토어 새소식 관리");
         return "seller/store/news";
     }
-
 
 }
