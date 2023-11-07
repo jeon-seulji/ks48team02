@@ -170,7 +170,7 @@
             //     }
             // });
 
-            //summerNote
+            //summerNote Api
             $('#detailComent').summernote({
                 placeholder: '프로젝트 스토리를 입력해주세요',
                 lang: 'ko-KR',
@@ -178,25 +178,10 @@
                 height: 300
             });
 
-            $('#')
-
-
-
             //리워드 추가 버튼 클릭 시 값이 비어있지 않다면 슬라이더 폼 추가
             $('#rewardAddBtn').click(function () {
-
-                let isValid = true;
-
-                $(this).parents('#rewardAddDiv').find('#rewardPrice, #rewardSubject, #rewardContents, #deliverStartDate').each((idx,item) =>{
-
-                    isValid = validationCheck($(item).val());
-
-                    if(!isValid) {
-                        $(item).focus();
-                        alert(`${$(item).siblings('label').text()}를 입력해 주세요`);
-                    }
-                    return isValid;
-                });
+                let validCheck = $('#rewardAddDiv').find('input, textarea');
+                let isValid = validationCheck(validCheck);
 
                 if(isValid) {
                     let rewardSubject = $('#rewardSubject').val();
@@ -231,7 +216,7 @@
 
                     swiper();
 
-                    $(this).parents('#rewardAddDiv').find('#rewardPrice, #rewardSubject, #rewardContents, #deliverStartDate').each((idx,item) =>{
+                    $(validCheck).each((idx,item) =>{
                         $(item).val('');
                     });
                 }
@@ -244,7 +229,6 @@
                     setImageFromFile(this, '.img-thumbnail');
                 }
             });
-
             function setImageFromFile(input, expression) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -253,7 +237,7 @@
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
-            }
+            };
 
             //초기화 버튼 클릭 시 추가된 슬라이더 폼 모두 삭제
             $('#rewardInitializeBtn').click(function () {
@@ -294,16 +278,21 @@
 
             //제출하기 버튼 클릭 시 이벤트 (동적바인딩)
             $(document).on('click','.submitBtn',function(){
-
                 let rewardOptionLength = $('.rewardOption').length;
+                let validCheck = $('#projectRegistrationForm').find('input, select, #detailComent')
+                    .not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]')
+                    .not('#rewardPrice').not('#rewardSubject').not('#rewardContents').not('#deliverStartDate');
 
-                console.log(rewardOptionLength);
+                let isValid = validationCheck(validCheck);
 
-                if(rewardOptionLength < 1) {
-                    alert('리워드 옵션을 추가해주세요.')
-                } else if(confirm('정말 프로젝트를 등록하시겠습니까?')) {
-                    //프로젝트 등록 이벤트
+                if(isValid) {
+                    if(rewardOptionLength < 1) {
+                        alert('리워드 옵션을 추가해주세요.');
+                    } else if(confirm('정말 프로젝트를 등록하시겠습니까?')){
+                        submit();
+                    }
                 }
+
             });
         });
 
@@ -367,7 +356,7 @@
                 </ul>
             </div>
 
-            <form class="rewardInfo col-lg-10">
+            <form id="projectRegistrationForm" class=" col-lg-10">
                 <!-- defaultInfo area -->
                 <div id="defaultInfo" class="info-contents-area" style="display: block;">
                     <h5 class="mb-2 fw-bord">프로젝트의 성공 조건 & 수수료 안내</h5>
@@ -410,7 +399,7 @@
 
                             <br>
                             <span  class="w-bord text-dark">
-                            <label for="searchTag" class="form-label">프로젝트 검색 키워드 를 입력해주세요.</label>
+                            <label for="searchTag" class="form-label">프로젝트 검색 키워드를 입력해주세요.</label>
                             <br>제목 외에도 키워드 검색 시 검색 결과에 프로젝트가 나타납니다.
                             </span>
 
@@ -456,7 +445,7 @@
                         </div>
 
                         <div class="col-8 text-dark">
-                            <label class="form-label fw-bord text-dark">프로젝트 마감 날짜를 입력해주세요.</label>
+                            <label class="form-label fw-bord text-dark" for="projectEndDate">프로젝트 마감 날짜를 입력해주세요.</label>
                             <p>프로젝트 심사부터 리워드 제작 기간 등 전체 일정을 고려해 설정해 주세요.</p>
                             <br>
                             <div style="background: #fff1f1; border-radius: 5px; padding: 10px; font-size: 12px">
@@ -469,7 +458,8 @@
                                     프로젝트가 승인되고 나면 바꿀 수 없어요.
                                     <br>
                                     <b>⚠️프로젝트 종료(리워드 준비~발송)</b><br>
-                                    프로젝트를 성공적으로 종료하면 약속한 날짜에 리워드 발송을 시작해야 해요.</p>
+                                    프로젝트를 성공적으로 종료하면 약속한 날짜에 리워드 발송을 시작해야 해요.
+                                </p>
                             </div>
                             <br>
                             <span>
@@ -510,10 +500,6 @@
                             <input type="text" class="form-control w-75" id="detailMovie" placeholder="동영상 주소를 적어주세요."
                                    value="" required="">
                             <br>
-
-
-
-
 
                             <div class="mb-3">
                                 <label for="detailComent" class="form-label">프로젝트 스토리를 적어주세요</label>
