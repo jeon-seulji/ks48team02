@@ -67,7 +67,7 @@ public class AccountController {
     @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
-        return "redirect:/user/account/login";
+        return "redirect:/user";
     }
 
 

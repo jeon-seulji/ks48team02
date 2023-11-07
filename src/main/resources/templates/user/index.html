@@ -108,7 +108,11 @@
 			<section class="main-section main-contents-1">
 				<div class="container">
 					<div id="mdJoinProject">
-						<h3 class="main-title"><span class="section-name">김플루</span><span> 님 </span> 추천 프로젝트</h3>
+						<h3 class="main-title">
+							<span class="section-name" th:if="${session.SID == null}">TODAY</span>
+							<span class="section-name" th:unless="${session.SID == null}" th:text="${session.SNAME}"></span>
+							<span th:unless="${session.SID == null}"> 님 </span>
+							추천 프로젝트</h3>
 
 						<!-- Swiper -->
 						<div class="swiper mySwiper">
