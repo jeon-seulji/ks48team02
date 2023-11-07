@@ -40,7 +40,7 @@
             </tr>
             <tr th:unless="${lawSatistifyReasonList == null}" th:each="l : ${lawSatistifyReasonList}">
                 <td>
-                    <a th:href="@{/admin/investment/view/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}" th:text="${l.lawSatistifyCode}"></a>
+                    <a class="detail-link" th:href="@{/admin/investment/view/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}" th:text="${l.lawSatistifyCode}"></a>
                 </td>
                 <td th:text="${l.lawSatistifyReason}"></td>
                 <td th:text="${l.memberId}"></td>

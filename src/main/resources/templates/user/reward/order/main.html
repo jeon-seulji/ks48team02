@@ -95,6 +95,9 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
 
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!--  다음 주소찾기 api   -->
+
 
 
 </th:block>
@@ -246,6 +249,16 @@
                     }
                 });
             });
+
+            //주소 찾기 클릭시 daum주소 api 호출
+            $('.findAddrBtn, #deliverMemberAddr').click(function(){
+
+                new daum.Postcode({
+                    oncomplete: function(data) { //선택시 입력값 세팅
+                        $('#deliverMemberAddr').val(data.address); // 주소 넣기
+                    }
+                }).open();
+            })
 
 
 
@@ -602,9 +615,10 @@
                                         <br>
                                         <label for="deliverMemberAddr" class="font-weight-bold text-dark mt-lg-2">주소</label>
                                         <br>
-                                        <button type="button" class="btn btn-small btn-secondary" id="findAddrBtn">주소 찾기</button>
+                                        <button type="button" class="findAddrBtn btn btn-small btn-secondary" id="findAddrBtn">주소 찾기</button>
                                         <br>
-                                        <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddr" value="" style="height: 35px" placeholder="상세 주소">
+                                        <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddr" value="" style="height: 35px" placeholder="주소를 입력해 주세요" readonly="readonly">
+                                        <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddrDetail" value="" style="height: 35px" placeholder="상세 주소를 입력해 주세요">
                                         <br>
                                         <label for="deliverRequest" class="font-weight-bold text-dark mt-lg-2">배송 요청사항</label>
                                         <br>

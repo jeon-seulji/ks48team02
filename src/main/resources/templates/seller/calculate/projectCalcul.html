@@ -73,7 +73,7 @@
             label:'리워드',
             type:'bar',
             data:[13,8],
-            backgroundColor: projectPointColor[0],
+            backgroundColor: projectPointColor['rewardColor'],
             borderWidth:0
         }
         const donationData = {
@@ -81,7 +81,7 @@
             label:'기부',
             type:'bar',
             data:[7,10],
-            backgroundColor:projectPointColor[1],
+            backgroundColor:projectPointColor['donationColor'],
             borderWidth:0
         }
         const investmentData = {
@@ -89,7 +89,7 @@
             label:'투자',
             type:'bar',
             data:[2,1],
-            backgroundColor: projectPointColor[2],
+            backgroundColor: projectPointColor['investColor'],
             borderWidth:0
         }
 
@@ -151,12 +151,7 @@
         counterLong($projectCalCountEls, projectMaxValue);
 
         // 선택 버튼 제어
-        // 전체 선택 버튼 제어
-        $('#allSelectBtn').on('click', function(){
-            console.log('a');
-            let isChecked = $(this).prop('checked');
-            $('input[name="selectList"]').prop('checked', isChecked);
-        });
+
     </script>
 </th:block>
 

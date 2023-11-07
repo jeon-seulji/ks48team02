@@ -32,10 +32,7 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        $('.more-btn').on('click', function(){
-            $('#projectInfoDetail').toggleClass('active');
-            $(this).toggleClass('active');
-        });
+
     </script>
 </th:block>
 
@@ -54,7 +51,7 @@
                     </a>
                 </div>
             </div>
-            <form id="projectInfoDetail" method="get">
+            <form class="projectInfoDetail" method="get">
                 <table class="settlement-log application-info-detail" style="border:none;">
                     <tbody>
                         <!-- contents -->

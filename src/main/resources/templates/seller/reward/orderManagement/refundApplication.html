@@ -38,12 +38,6 @@
 
 
 
-    // 전체 선택 버튼 제어
-    $('#allSelectBtn').on('click', function(){
-      console.log('a');
-      let isChecked = $(this).prop('checked');
-      $('input[name="selectList"]').prop('checked', isChecked);
-    });
 
     // loaded category checkbox all checked
     const $categoryEls = $('.order-category-select input');
@@ -61,49 +55,63 @@
     <form id="amYearChartForm" method="get">
       <table class="partition-select">
         <tbody>
-        <tr>
-          <td>
-            기간
-          </td>
-          <td>
-            <input type="date" name="amDateSettStartDate" value="">
-            <span> - </span>
-            <input type="date" name="amDateSettEndDate" value="">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            주문 상태
-          </td>
-          <td class="order-category-select">
-            <ul>
-              <li>
-                <input id="swapping_r" type="checkbox" name="swapping_r">
-                <label for="swapping_r">교환</label>
-              </li>
-              <li>
-                <input id="refund_r" type="checkbox" name="refund_r">
-                <label for="refund_r">환불</label>
-              </li>
-              <li>
-                <input id="companion_r" type="checkbox" name="companion_r">
-                <label for="companion_r">반려</label>
-              </li>
-              <li>
-                <input id="progressing_r" type="checkbox" name="progressing_r">
-                <label for="progressing_r">처리중</label>
-              </li>
-              <li>
-                <input id="progressed_r" type="checkbox" name="progressed_r">
-                <label for="progressed_r">처리완료</label>
-              </li>
+          <tr>
+            <td>
+              기간
+            </td>
+            <td>
+              <input type="date" name="amDateSettStartDate" value="">
+              <span> - </span>
+              <input type="date" name="amDateSettEndDate" value="">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              주문 상태
+            </td>
+            <td class="order-category-select">
+              <ul>
+                <li>
+                  <input id="swapping_r" type="checkbox" name="swapping_r">
+                  <label for="swapping_r">교환</label>
+                </li>
+                <li>
+                  <input id="refund_r" type="checkbox" name="refund_r">
+                  <label for="refund_r">환불</label>
+                </li>
+                <li>
+                  <input id="companion_r" type="checkbox" name="companion_r">
+                  <label for="companion_r">반려</label>
+                </li>
+                <li>
+                  <input id="progressing_r" type="checkbox" name="progressing_r">
+                  <label for="progressing_r">처리중</label>
+                </li>
+                <li>
+                  <input id="progressed_r" type="checkbox" name="progressed_r">
+                  <label for="progressed_r">처리완료</label>
+                </li>
 
-              </li>
+                </li>
 
-            </ul>
+              </ul>
 
-          </td>
-        </tr>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              검색 키워드
+            </td>
+            <td class="order-category-select">
+              <select name="searchKey">
+                <option value="total">전체</option>
+                <option value="settlementCode">공고코드</option>
+                <option value="settlementId">신청아이디</option>
+                <option value="projectName">공고명</option>
+              </select>
+              <input type="search" name="searchValue">
+            </td>
+          </tr>
         </tbody>
       </table>
       <div class="btn-area">
@@ -188,7 +196,7 @@
                 <a>-</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -226,7 +234,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
               </td>
               <td  class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 <a >-</a>
@@ -270,7 +278,7 @@
                 <a>-</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -308,7 +316,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
               </td>
               <td  class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 <a >-</a>
@@ -352,7 +360,7 @@
                 <a>-</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -390,7 +398,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
               </td>
               <td  class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 <a >-</a>
@@ -434,7 +442,7 @@
                 <a>-</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -472,7 +480,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
               </td>
               <td  class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 <a >-</a>
@@ -516,7 +524,7 @@
                 <a>-</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -554,7 +562,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
               </td>
               <td  class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 <a >-</a>
@@ -598,7 +606,7 @@
                 <a>-</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -636,7 +644,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
               </td>
               <td  class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 <a >-</a>
@@ -680,7 +688,7 @@
                 <a>-</a>
               </td>
               <td class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/refund/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 id100
@@ -718,7 +726,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
               </td>
               <td  class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 <a >-</a>
@@ -759,7 +767,7 @@
                 <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
               </td>
               <td  class="table-data-center">
-                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/deteil}">ORD_20230922_000001</a>
+                <a class="detail-link" th:href="@{/seller/reword/order/Swapping/detail}">ORD_20230922_000001</a>
               </td>
               <td class="table-data-center">
                 <a >-</a>

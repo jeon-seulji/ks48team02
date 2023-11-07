@@ -35,10 +35,7 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        $('.more-btn').on('click', function(){
-            $('#projectInfoDetail').toggleClass('active');
-            $(this).toggleClass('active');
-        });
+
         console.log(CURRENT_URL,'<-- CURRENT_URL');
         console.log(document.referrer,'<-- document.referrer');
 
@@ -61,16 +58,7 @@
             $(this).val('');
         });
 
-        // 배송 메세지 직접 입력
-        $('select[name="deliveryMessage"]').on('change', function(){
-            let selectedValue = $(this).val();
 
-            console.log(selectedValue, '<--');
-            if(selectedValue == '5') {
-                $('input[name="deliveryMessageDirect"]').attr('disabled', false);
-                $('input[name="deliveryMessageDirect"]').focus();
-            }
-        });
     </script>
 </th:block>
 
@@ -95,315 +83,21 @@
             </div>
         </div>
 
+        <!-- order info area start -->
         <div id="orderInfoArea" class="admin-content-wrapper form-table">
-            <div class="project-info-title-area">
-                <div class="project-info-title">
-                    <h5>주문 코드</h5>
-                    <p style="color: var(--maincolor);">ORD_20230922_0000001</p>
-                </div>
-                <div class="info-more-btn">
-                    <a class="more-btn" th:href="@{#}" style="padding: 7px 10px 9px 19px;">
-                        <span>공고 상세 보기</span>
-                    </a>
-                </div>
-            </div>
-
-            <form id="orderInfoDetail" method="get">
-                <table class="settlement-log application-info-detail" style="border:none; margin-bottom: 10px;">
-                    <tbody>
-                        <!-- contents -->
-                        <tr>
-                            <td>
-                                주문 일자
-                            </td>
-                            <td colspan="4">
-                                2023-09-22 13:37
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                주문 공고
-                            </td>
-                            <td colspan="4">
-                                [글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                주문 상태
-                            </td>
-                            <td colspan="4">
-                                공고중
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                주문자
-                            </td>
-                            <td colspan="4">
-                                신형만
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                               주문 확정 일시
-                            </td>
-                            <td>
-                                2023-10-23
-                            </td>
-                            <td class="title-td" style=" width: 13%;">
-                                주문 취소 일시
-                            </td>
-                            <td colspan="2">
-                                2023-10-23
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table class="order-option-table settlement-log">
-                    <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
-                        <td class="sub-title-td" style="height: 35px; width:13%;">주문 옵션</td>
-                        <td class="title-td" style="height: 35px; width: 5%"><input id="allSelectBtn" type="checkbox"></td>
-                        <td class="title-td" style="height: 35px; width: 50%">옵션명</td>
-                        <td class="title-td" style="height: 35px; width: 8%">갯수</td>
-                        <td class="title-td" style="height: 35px; width: 10%">단가</td>
-                        <td class="title-td" style="height: 35px; width: 20%">총 금액</td>
-                    </tr>
-                    <!-- option contents -->
-                    <tr class="option-info-tr">
-                        <td style="height: 35px; background: #fff; width: 20px;">
-                            <input type="checkbox" name="selectList">
-                        </td>
-                        <td style="height: 35px; text-align: left !important;">
-                            <select name="orderOption">
-
-                                <option value="1">
-                                    [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                                </option>
-                                <option value="2">
-                                    옵션 2
-                                </option>
-                                <option value="3">
-                                    옵션 3
-                                </option>
-                                <option value="4">
-                                    옵션 4
-                                </option>
-                            </select>
-                        </td>
-                        <td style="height: 35px; ">
-                            <input type="number" min="1" max="9999" value="2">
-                        </td>
-                        <td style="height: 35px; "><span>17,500</span>원</td>
-                        <td style="height: 35px; "><span>35,000</span>원</td>
-                    </tr>
-                    <tr class="option-info-tr">
-                        <td style="height: 35px; background: #fff; width: 20px;">
-                            <input type="checkbox" name="selectList">
-                        </td>
-                        <td style="height: 35px; text-align: left !important;">
-                            <select name="orderOption">
-
-                                <option value="1">
-                                    [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                                </option>
-                                <option value="2">
-                                    옵션 2
-                                </option>
-                                <option value="3">
-                                    옵션 3
-                                </option>
-                                <option value="4">
-                                    옵션 4
-                                </option>
-                            </select>
-                        </td>
-                        <td style="height: 35px; ">
-                            <input type="number" min="1" max="9999" value="2">
-                        </td>
-                        <td style="height: 35px; "><span>17,500</span>원</td>
-                        <td style="height: 35px; "><span>35,000</span>원</td>
-                    </tr>
-                    <tr class="option-info-tr">
-                        <td style="height: 35px; background: #fff; width: 20px;">
-                            <input type="checkbox" name="selectList">
-                        </td>
-                        <td style="height: 35px; text-align: left !important;">
-                            <select name="orderOption">
-
-                                <option value="1">
-                                    [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                                </option>
-                                <option value="2">
-                                    옵션 2
-                                </option>
-                                <option value="3">
-                                    옵션 3
-                                </option>
-                                <option value="4">
-                                    옵션 4
-                                </option>
-                            </select>
-                        </td>
-                        <td style="height: 35px; ">
-                            <input type="number" min="1" max="9999" value="2">
-                        </td>
-                        <td style="height: 35px; "><span>17,500</span>원</td>
-                        <td style="height: 35px; "><span>35,000</span>원</td>
-                    </tr>
-                    <tr class="option-info-tr">
-                        <td style="height: 35px; background: #fff; width: 20px;">
-                            <input type="checkbox" name="selectList">
-                        </td>
-                        <td style="height: 35px; text-align: left !important;">
-                            <select name="orderOption">
-
-                                <option value="1">
-                                    [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                                </option>
-                                <option value="2">
-                                    옵션 2
-                                </option>
-                                <option value="3">
-                                    옵션 3
-                                </option>
-                                <option value="4">
-                                    옵션 4
-                                </option>
-                            </select>
-                        </td>
-                        <td style="height: 35px; ">
-                            <input type="number" min="1" max="9999" value="2">
-                        </td>
-                        <td style="height: 35px; "><span>17,500</span>원</td>
-                        <td style="height: 35px; "><span>35,000</span>원</td>
-                    </tr>
-                    <tr class="option-info-tr">
-                        <td style="height: 35px; background: #fff; width: 20px;">
-                            <input type="checkbox" name="selectList">
-                        </td>
-                        <td style="height: 35px; text-align: left !important;">
-                            <select name="orderOption">
-
-                                <option value="1">
-                                    [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                                </option>
-                                <option value="2">
-                                    옵션 2
-                                </option>
-                                <option value="3">
-                                    옵션 3
-                                </option>
-                                <option value="4">
-                                    옵션 4
-                                </option>
-                            </select>
-                        </td>
-                        <td style="height: 35px; ">
-                            <input type="number" min="1" max="9999" value="2">
-                        </td>
-                        <td style="height: 35px; "><span>17,500</span>원</td>
-                        <td style="height: 35px; "><span>35,000</span>원</td>
-                    </tr>
-
-
-
-
-                </table>
-
-                <div class="btn-area">
-                    <ul>
-                        <li>
-                            <button id="removeBtn" class="submitBtn" type="button" onclick="confirmBtnFn(event.target)">수정</button>
-                        </li>
-                        <li>
-                            <button id="clearBtn" class="submitBtn" type="button" onclick="confirmBtnFn(event.target)">삭제</button>
-                        </li>
-                    </ul>
-                </div>
-            </form>
-
+            <th:block th:replace="~{common/fragments/orderDetailInfoFragments :: orderInfoArea}"></th:block>
         </div>
+        <!-- order info area end -->
 
         <!-- contents -->
-            <form id="paymentInfoDetailBt" method="get">
-                <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
-                    <div class="project-info-title" style="margin: 0 0 20px;">
-                        <h5>결제 코드</h5>
-                        <p style="color: var(--maincolor);">RWP_20230922_00001</p>
-                    </div>
-                <table class="settlement-log application-info-detail" style="border:none;">
-                    <!-- contents -->
-                    <tr>
-                        <td>
-                            배송
-                        </td>
-                        <td colspan="6">
-                            신형만
-                        </td>
-                    </tr>
-                    <tr style="height: auto;">
-                        <td colspan="7" style="height: 35px;">
-                            상세
-                        </td>
-                    </tr>
-                    <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
-                        <td style="height: 35px; width: 17%;">주문 금액</td>
-                        <td style="height: 35px;">배송비</td>
-                        <td style="height: 35px;">총 주문금액</td>
-                        <td style="height: 35px;">사용 적립금액</td>
-                        <td style="height: 35px;">등급 할인 금액</td>
-                        <td style="height: 35px;">쿠폰 할인 금액</td>
-                        <td style="height: 35px;">결제 예정금액</td>
-                    </tr>
-                    <tr>
-                        <td style="background: #fff;"><span>35,000</span> 원</td>
-                        <td><span>0</span> 원</td>
-                        <td><span>35,000</span> 원</td>
-                        <td><span>2000</span> 원</td>
-                        <td><span>150</span> 원</td>
-                        <td><span>0</span> 원</td>
-                        <td><span>32,850</span> 원</td>
-                    </tr>
-                    <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
-                        <td style="height: 35px; width: 17%;">결제 수단</td>
-                        <td style="height: 35px;">입금계좌번호</td>
-                        <td style="height: 35px;">입금자명</td>
-                        <td style="height: 35px;">환불계좌번호</td>
-                        <td style="height: 35px;">결제완료금액</td>
-                        <td style="height: 35px;">결제기한</td>
-                        <td style="height: 35px;">결제상태</td>
-                    </tr>
-                    <tr>
-                        <td style="background: #fff;">
-                            <select id="paymentsBank" type="text" name="paymentsBank">
-                                <option value="kb">국민</option>
-                                <option value="ibk" selected>기업</option>
-                                <option value="lh">농협</option>
-                                <option value="woori">우리</option>
-                                <option value="shinhan">신한</option>
-                                <option value="hana">하나</option>
-                                <option value="mg">새마을금고</option>
-                                <option value="kakaobank">카카오뱅크</option>
-                                <option value="tossbank">토스뱅크</option>
-                                <option value="noBank">무통장입금</option>
-                            </select>
-                        </td>
-                        <td><input id="orderBankNumber" type="text" name="orderBankNumber" value="50342-13-6453432"></td>
-                        <td><input type="text" name="paymentsName" value="신형만"></td>
-                        <td><input id="refundBankNumber" type="text" name="refundBankNumber" value="50342-13-6453432"></td>
-                        <td><span>63,500</span> 원</td>
-                        <td>2023-10-05 23:59</td>
-                        <td>결제완료</td>
-                    </tr>
-
-                </table>
-
-                <!-- 배송정보 영역 -->
-                <th:block th:replace="~{seller/fragments/deliverInfo :: delriverInfo}">
-
-                </th:block>
+        <form id="paymentInfoDetailBt" method="get">
+            <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
+                <!-- payments info area start -->
+                <th:block th:replace="~{common/fragments/orderPaymentsFragments :: orderPayments}"></th:block>
+                <!-- payments info area end -->
+                <!-- delivery info area start -->
+                <th:block th:replace="~{common/fragments/deliverInfo :: delriverInfo}"></th:block>
+                <!-- delivery info area end -->
                 <div class="btn-area">
                     <ul>
                         <li>
@@ -415,8 +109,7 @@
                     </ul>
                 </div>
             </div>
-
-            </form>
+        </form>
         <div class="btn-area" style="justify-content: flex-end;">
             <ul>
                 <li>
