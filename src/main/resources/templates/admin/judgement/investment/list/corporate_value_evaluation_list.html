@@ -104,18 +104,19 @@
                     <input type="checkbox" name="selectList">
                 </td>
                 <td>
-                    <a class="detail-link" th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
+                    <a class="detail-link" th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.adminInvestmentRequestJudge.investmentRequestJudgeCode})}" th:text="${l.adminInvestmentRequestJudge.investmentRequestJudgeCode}"></a>
                 </td>
-                <td th:text="${l.investmentRequestSubject}"></td>
-                <td th:text="${l.memberIdSeller}"></td>
+                <td th:text="${l.adminInvestmentRequestJudge.investmentRequestSubject}"></td>
+                <td th:text="${l.adminInvestmentRequestJudge.memberIdSeller}"></td>
                 <td>
                     <a class="detail-link" th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}" th:text="${l.corporateValueEvaluationCode}"></a>
                 </td>
                 <td th:text="${l.memberId}"></td>
                 <td th:text="${l.evaluatedCorpValue}"></td>
                 <td th:text="${l.stockPrice}"></td>
-                <td th:if="${l.corpValueFulfill == 1}">심사 통과</td>
                 <td th:if="${l.corpValueFulfill == 0}">심사 반려</td>
+                <td th:if="${l.corpValueFulfill == 1}">심사 통과</td>
+                <td th:if="${l.corpValueFulfill == 2}">심사 대기</td>
                 <td th:text="${l.corpValueEvaluateDay}"></td>
                 <td>
                     <a th:href="@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}">수정</a>

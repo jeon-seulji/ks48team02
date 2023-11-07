@@ -33,7 +33,7 @@
             <div class="project-info-title-area">
                 <div class="project-info-title">
                     <h5>투자 심사요청 코드</h5>
-                    <p th:text="*{investmentRequestJudgeCode}" style="color: var(--maincolor);"></p>
+                    <p th:text="*{adminInvestmentRequestJudge.investmentRequestJudgeCode}" style="color: var(--maincolor);"></p>
                 </div>
                 <div class="info-more-btn">
                     <a class="more-btn" style="padding: 7px 10px 9px 19px;">
@@ -129,13 +129,13 @@
                         <td>
                             심사요청 제목
                         </td>
-                        <td th:text="*{investmentRequestSubject}" colspan="5"></td>
+                        <td th:text="*{adminInvestmentRequestJudge.investmentRequestSubject}" colspan="5"></td>
                     </tr>
                     <tr>
                         <td>
                             심사요청한 아이디
                         </td>
-                        <td th:text="*{memberIdSeller}" colspan="5"></td>
+                        <td th:text="*{adminInvestmentRequestJudge.memberIdSeller}" colspan="5"></td>
                     </tr>
                     <tr>
                         <td>

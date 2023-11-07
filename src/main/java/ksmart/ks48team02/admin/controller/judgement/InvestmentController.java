@@ -1,18 +1,16 @@
 package ksmart.ks48team02.admin.controller.judgement;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import ksmart.ks48team02.admin.dto.investment.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ksmart.ks48team02.admin.dto.investment.AdminLawSatistifyReason;
 import ksmart.ks48team02.admin.service.investment.InvestmentService;
-import ksmart.ks48team02.admin.dto.investment.AdminIncongruitySectors;
-import ksmart.ks48team02.admin.dto.investment.AdminCorporateValueEvaluation;
-import ksmart.ks48team02.admin.dto.investment.AdminInvestmentRequestJudge;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller("judgementInvestmentController")
@@ -43,9 +41,12 @@ public class InvestmentController {
                                         ,@RequestParam(name = "searchKey", required = false) String searchKey
                                         ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                         ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate) {
+                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                        ,@RequestParam(name = "investJudgeResult", required = false) String investJudgeResult) {
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
+        List<AdminInvestSearch> adminInvestSearch = new ArrayList<AdminInvestSearch>();
+
         if(searchKey != null) {
             investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
         }else {

@@ -66,8 +66,8 @@ public class InvestmentService {
         return investmentRequestJudgeInfo;
     }
 
-    public AdminInvestmentRequestJudge getInvestmentRequestJudgeByResult(String investJudgeResult) {
-        AdminInvestmentRequestJudge investmentRequestJudgeInfoByResult = adminInvestmentMapper.getInvestmentRequestJudgeByResult(investJudgeResult);
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeByResult(String rejectCnt) {
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeInfoByResult = adminInvestmentMapper.getInvestmentRequestJudgeByResult(rejectCnt);
 
         return investmentRequestJudgeInfoByResult;
     }

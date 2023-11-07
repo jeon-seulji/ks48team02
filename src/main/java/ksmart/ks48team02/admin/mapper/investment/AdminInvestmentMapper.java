@@ -22,7 +22,7 @@ public interface AdminInvestmentMapper {
     public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String investmentRequestJudgeCode);
 
     // 심사결과에 따른 특정 투자펀딩 심사요청 조회
-    public AdminInvestmentRequestJudge getInvestmentRequestJudgeByResult(String investJudgeResult);
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeByResult(String rejectCnt);
 
     // 자본시장법 범위충족기준 목록 조회
     public List<AdminLawSatistifyReason> getLawSatistifyList();

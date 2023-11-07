@@ -30,7 +30,7 @@ public class AdminInvestmentRequestJudge {
     private int investJudgeResult;
     private int todayRequestCnt;
     private int standbyCnt;
-    private int todayApproveCnt;
+    private int todayProceedCnt;
     private int rejectCnt;
 
     public String getInvestmentRequestJudgeCode() {
@@ -189,35 +189,27 @@ public class AdminInvestmentRequestJudge {
     public void setInvestJudgeResult(int investJudgeResult) {
         this.investJudgeResult = investJudgeResult;
     }
-
     public int getTodayRequestCnt() {
         return todayRequestCnt;
     }
-
     public void setTodayRequestCnt(int todayRequestCnt) {
         this.todayRequestCnt = todayRequestCnt;
     }
-
     public int getStandbyCnt() {
         return standbyCnt;
     }
-
     public void setStandbyCnt(int standbyCnt) {
         this.standbyCnt = standbyCnt;
     }
-
-    public int getTodayApproveCnt() {
-        return todayApproveCnt;
+    public int getTodayProceedCnt() {
+        return todayProceedCnt;
     }
-
-    public void setTodayApproveCnt(int todayApproveCnt) {
-        this.todayApproveCnt = todayApproveCnt;
+    public void setTodayProceedCnt(int todayProceedCnt) {
+        this.todayProceedCnt = todayProceedCnt;
     }
-
     public int getRejectCnt() {
         return rejectCnt;
     }
-
     public void setRejectCnt(int rejectCnt) {
         this.rejectCnt = rejectCnt;
     }
@@ -281,8 +273,8 @@ public class AdminInvestmentRequestJudge {
         builder.append(todayRequestCnt);
         builder.append(", standbyCnt=");
         builder.append(standbyCnt);
-        builder.append(", todayApproveCnt=");
-        builder.append(todayApproveCnt);
+        builder.append(", todayProceedCnt=");
+        builder.append(todayProceedCnt);
         builder.append(", rejectCnt=");
         builder.append(rejectCnt);
         builder.append("]");

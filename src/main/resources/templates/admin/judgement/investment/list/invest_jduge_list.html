@@ -22,24 +22,26 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
-    <div th:each="l, index : ${investmentRequestJudgeList}" th:if="${index.index} < 1" class="sett-total-data admin-content-wrapper form-table">
-        <div    class="sett-total-item">
-            <h5>오늘 들어온 심사 요청</h5>
-            <div class="sett-total-item-data"><a class="today-add-count" th:href="@{#}" th:text="${l.todayRequestCnt}"></a>건</div>
+    <form>
+        <div th:each="l, index : ${investmentRequestJudgeList}" th:if="${index.index} < 1" class="sett-total-data admin-content-wrapper form-table">
+            <div class="sett-total-item">
+                <h5>오늘 들어온 심사 요청</h5>
+                <div class="sett-total-item-data"><a class="today-add-count" th:href="@{#}" th:text="${l.todayRequestCnt}"></a>건</div>
+            </div>
+            <div class="sett-total-item">
+                <h5>처리중</h5>
+                <div class="sett-total-item-data"><a class="progress-add-count" th:href="@{#}" th:text="${l.standbyCnt}">0</a>건</div>
+            </div>
+            <div class="sett-total-item">
+                <h5>오늘 처리 완료</h5>
+                <div class="sett-total-item-data"><a class="progress-completed-count" th:href="@{#}" th:text="${l.todayProceedCnt}">0</a>건</div>
+            </div>
+            <div class="sett-total-item">
+                <h5>심사 반려</h5>
+                <div class="sett-total-item-data"><a class="progress-error-count" th:href="@{/admin/investment/search/judge(investJudgeResult=0)}" th:text="${l.rejectCnt}">0</a>건</div>
+            </div>
         </div>
-        <div class="sett-total-item">
-            <h5>처리중</h5>
-            <div class="sett-total-item-data"><a class="progress-add-count" th:href="@{#}" th:text="${l.standbyCnt}">0</a>건</div>
-        </div>
-        <div class="sett-total-item">
-            <h5>오늘 처리 완료</h5>
-            <div class="sett-total-item-data"><a class="progress-completed-count" th:href="@{#}" th:text="${l.todayApproveCnt}">0</a>건</div>
-        </div>
-        <div class="sett-total-item">
-            <h5>심사 반려</h5>
-            <div class="sett-total-item-data"><a class="progress-error-count" th:href="@{/admin/investment/search/judge(investJudgeResult=2)}" th:text="${l.rejectCnt}">0</a>건</div>
-        </div>
-    </div>
+    </form>
 
     <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div><br>
 
@@ -118,9 +120,9 @@
                 <td th:text="${l.investmentRequestDate}"></td>
                 <td th:text="${l.investJudgeDate}"></td>
                 <td th:text="${l.memberId}"></td>
-                <td th:if="${l.investJudgeResult == 0}">심사 대기</td>
+                <td th:if="${l.investJudgeResult == 0}">심사 반려</td>
                 <td th:if="${l.investJudgeResult == 1}">심사 승인</td>
-                <td th:if="${l.investJudgeResult == 2}">심사 반려</td>
+                <td th:if="${l.investJudgeResult == 2}">심사 대기</td>
                 <td>
                     <a th:href="@{/admin/investment/update/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}">수정</a>
                 </td>
