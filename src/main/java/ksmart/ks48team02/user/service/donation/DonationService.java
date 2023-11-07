@@ -14,8 +14,8 @@ public class DonationService{
     }
 
     public void addDonation(DonationRegistration donationRegistration){
+        System.out.println(donationRegistration);
         int result = donationRegistrationMapper.addDonation(donationRegistration);
     }
-
 
 }
