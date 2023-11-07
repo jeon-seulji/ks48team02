@@ -133,6 +133,45 @@
             display: flex;
             justify-content: center;
         }
+
+        /*  검은 버튼  */
+        .submitBtn_black {
+            background: #191919;
+            padding: 7px 23px;
+            transition: all .4s;
+            color: #fff;
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid #191919;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-left: 7px;
+        }
+
+        .submitBtn_black:hover {
+            background: var(--maincolor);
+            border: 1px solid var(--maincolor);
+        }
+
+        /* 흰 버튼 */
+        .submitBtn_white {
+            background: #fff;
+            padding: 7px 23px;
+            transition: all .4s;
+            color: #191919;
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid #191919;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+        .submitBtn_white:hover {
+            background: var(--maincolor);
+            border: 1px solid var(--maincolor);
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -160,9 +199,10 @@
             <form class="join-form">
                 <div class="mb-3" id="id-check">
                     <label for="duplicationCheck" class="form-label">ID</label>
-                    <div style="display: flex; gap:20px;">
+                    <div style="display: flex; gap:10px;">
                         <input type="text" class="form-control" id="duplicationCheck" placeholder="아이디 입력">
-                        <button type="submit" class="btn btn-dark" >중복 확인</button>
+
+                        <button type="submit" class="submitBtn_black" style="width:105px;" ; >중복확인</button>
                     </div>
                 </div>
                 <div id="emailHelp" class="form-text"></div>
@@ -609,7 +649,7 @@ Fax: 02)0000-0000
                 </div>
             </form>
             <div class="d-grid gap-2" >
-                <button class="btn btn-primary btn-lg" type="button" id="join-button">회원가입</button>
+                <button type="submit" class="btn btn-primary btn-lg" id="join-button">회원가입</button>
 
             </div>
         </div>
@@ -637,6 +677,13 @@ Fax: 02)0000-0000
         })
 
         /* 체크박스 : 개별 항목 전부 체크시 전체동의 체크 */
+        $individualAgree.forEach(checkbox => { // 개별 항목마다 이벤트 리스너를 걸어 주기
+            checkbox.addEventListener('change', () => {
+                const $checkedBoxes = document.querySelectorAll('.form-check-input.individual[type="checkbox"]:checked');
+
+                $allAgree.checked = $checkedBoxes.length === $individualAgree.length;
+            });
+        });
 
     </script>
 
