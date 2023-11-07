@@ -3,8 +3,12 @@
         <div class="top_nav" th:fragment="headerFragment">
           <div class="nav_menu">
           	<div class="user-welcome-message">
-          		<span class="session-name">김플루</span>님 <span class="session-level">판매자</span> 권한으로 로그인
-          		<span class="log-data">마지막 접속일자 : 2023/10/12 00:00:00</span>
+          		<span  class="session-name" th:text="${session.SNAME}">김플루</span>
+                님
+                <span class="session-level" th:if="${session.STYPECODE == 'mem_type_01'}">관리자</span>
+                <span class="session-level" th:unless="${session.STYPECODE == 'mem_type_01'}">판매자</span>
+                권한으로 로그인
+          		<span class="log-data" >마지막 접속일자 : 2023/10/12 00:00:00</span>
           	</div>
             <nav>
               <div class="title_right">
