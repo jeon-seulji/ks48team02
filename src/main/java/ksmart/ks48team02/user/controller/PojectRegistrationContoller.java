@@ -58,6 +58,9 @@ public class PojectRegistrationContoller {
     // 기부 프로젝트 등록 폼
     @GetMapping("/donation")
     public String donationRegistrationPage(Model model) {
+        List<TotalCategory> categoryList = totalCategoryService.categoryByPatition("donation");
+        model.addAttribute("categoryList",categoryList);
+
         return "user/projectRegistration/donation/donation_insert";
     }
 

@@ -10,6 +10,7 @@ public class DonationRegistration {
     private String adminMemberId;
     private String totalCategoryCode;
     private String donationSubject;
+    private String donationLike;
     private String donationContents;
     private String donationImage;
     private String donationRegCompany;
@@ -34,6 +35,7 @@ public class DonationRegistration {
         sb.append(", adminMemberId='").append(adminMemberId).append('\'');
         sb.append(", totalCategoryCode='").append(totalCategoryCode).append('\'');
         sb.append(", donationSubject='").append(donationSubject).append('\'');
+        sb.append(", donationLike='").append(donationLike).append('\'');
         sb.append(", donationContents='").append(donationContents).append('\'');
         sb.append(", donationImage='").append(donationImage).append('\'');
         sb.append(", donationRegCompany='").append(donationRegCompany).append('\'');
@@ -51,6 +53,12 @@ public class DonationRegistration {
         return sb.toString();
     }
 
+    public String getDonationLike() {
+        return donationLike;
+    }
+    public void setDonationLike(String donationLike) {
+        this.donationLike = donationLike;
+    }
     public String getDonationCode() {
         return donationCode;
     }
