@@ -56,11 +56,51 @@
 					console.log(err);
 				})
 			}
+			// reload button click ajax
+			$('#rankReload').on('click', function(){
+				rankAjax('achievementPercent', function(list){
+					console.log(list);
+					// 여기에서 작업
+					$(`.main-rank-area`).addClass('active');
+					$(`.main-rank-area ul li`).remove();
+
+					$(list).each((idx, item) => {
+						// append 로 수정해보기
+						let listElement = "";
+						listElement += "<li>";
+						listElement += `	<a href='/user/donation/detail?projectCode=${item.projectCode}'>`;
+						listElement += `      <em>${item.rankCount}</em>`;
+						listElement += `      <div>`;
+						listElement += `        <h5>${item.subject}</h5>`;
+						listElement += "        <div class='product-detail-info'>";
+						listElement += "			<p class='funding-percent'><span>"+item.achievementPercent+"</span>%</p>";
+						listElement += "          	<p class='category'>";
+						listElement += (item.categoryName == '')?"<span>카테고리 없음</span>":"<span>"+item.categoryName+"</span>";
+						listElement += "            ·" ;
+						listElement += "            <span>"+item.projectType+"</span>";
+						listElement += "          	</p>";
+						listElement += "        </div>";
+						listElement += "        </div>";
+						listElement += "      <div class='project-img' style=";
+						listElement += (item.imageUrl == null)? "'background:#eee;'>": `'background:url("${item.imageUrl}") no-repeat center center / cover'`;
+						listElement += "      </div>";
+						listElement += "    </a>";
+						listElement += "</li>";
+						console.log(listElement);
+
+						$(`.main-rank-area ul`).append(listElement);
+
+					});
+				})
+
+				$('.tab-menu-btn li').removeClass('active');
+				$('.tab-menu-btn li:first-child').addClass('active');
+			});
+
 			// rank tab function
 			$('.tab-menu-btn li').on('click',function(){
 				let tabData = $(this).attr('data-tab');
 				$('.main-rank-area').removeClass('active');
-				console.log(tabData, '<-- tabData');
 				rankAjax(tabData, function(list){
 					console.log(list);
 					// 여기에서 작업
@@ -76,7 +116,8 @@
 						listElement += `      <div>`;
 						listElement += `        <h5>${item.subject}</h5>`;
 						listElement += "        <div class='product-detail-info'>";
-						listElement += "          <p class='funding-percent'><span>"+item.achievementPercent+"</span>%</p>";
+						listElement += (tabData == 'achievementPercent')?"<p class='funding-percent'><span>"+item.achievementPercent+"</span>%</p>"
+																		:"<p class='funding-percent'><span>"+item.likeCount+"</span>개</p>";
 						listElement += "          <p class='category'>";
 						listElement += (item.categoryName == '')?"<span>카테고리 없음</span>":"<span>"+item.categoryName+"</span>";
 						listElement += "            ·" ;
@@ -98,8 +139,6 @@
 
 				$('.tab-menu-btn li').removeClass('active');
 				$(this).addClass('active');
-				// let tabData = $(this).attr('data-tab');
-				// $('#'+tabData).show().addClass('active');
 			});
 
 			// contents swiper slide
@@ -332,7 +371,7 @@
 						<div>
 							<ul class="tab-menu-btn">
 								<li data-tab="achievementPercent" class="active">펀딩 순위</li>
-								<li data-tab="likeCount">스토어 순위</li>
+								<li data-tab="likeCount">찜하기 순위</li>
 							</ul>
 							<div class="main-rank-area active">
 								<ul>
