@@ -15,6 +15,8 @@
           integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
     <style>
         .info-contents-area {
@@ -36,7 +38,7 @@
     <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
     <script src=" https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/locales/bootstrap-datepicker.ko.min.js"></script>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 </th:block>
 
@@ -54,15 +56,31 @@
                 //1.인수 값이 객체일 경우
                 if (typeof data == 'object') {
 
-                    $.each(data, function () {
+                    $.each(data, function (idx, item) {
                         let checkValue = $(this).val();
-                        if (checkValue === null || checkValue === '' || checkValue === 'undefined' ) {
-                            isValid = false;
-                            let eleId = $(this).attr('id');
-                            let cate = $(`label[for="${eleId}"]`).text();
-                            alert(`${cate} 필수 입력 항목입니다.`);
-                            $(this).focus();
-                            return isValid;
+
+                        if($(item).attr('id') == 'detailComent') {
+                            let noteIsEmpty = $('#detailComent').summernote('isEmpty');
+                            console.log(noteIsEmpty);
+
+                            if($('#detailComent').summernote('isEmpty')){
+                                isValid = false;
+                                let eleId = $(this).attr('id');
+                                let cate = $(`label[for="${eleId}"]`).text();
+                                alert(`${cate} 필수 입력 항목입니다.`);
+                                $('#detailComent').summernote('focus');
+                                return isValid;
+                            }
+                        }
+                        else{
+                            if (checkValue === null || checkValue === '' || checkValue === 'undefined' ) {
+                                isValid = false;
+                                let eleId = $(this).attr('id');
+                                let cate = $(`label[for="${eleId}"]`).text();
+                                alert(`${cate} 필수 입력 항목입니다.`);
+                                $(this).focus();
+                                return isValid;
+                            }
                         }
                     });
                     //2.인수 값이 객체가 아니고 String일 경우
@@ -94,14 +112,17 @@
                 let clickBunDataTab = $(this).attr('data-tab');
                 $('.info-contents-area').hide();
                 $('#' + clickBunDataTab).show();
-            })
+            });
+
+
 
             //다음 단계 버튼 클릭시 화면전환, 빈 값 있는지 유효성 검사.
-            $('.nextBtn').click(function () {
-
-                let validCheck = $(this).parents('.info-contents-area').find('input, select, textarea').not('#modalSearchTagAdd');
+            $(document).on('click', '.nextBtn', function(){
+                let validCheck = $(this).parents('.info-contents-area').find('input, select, #detailComent').not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]');
+                console.log(validCheck)
                 let isValid = validationCheck(validCheck);
 
+                console.log(isValid);
                 if(isValid) {
                     let dataTab = $(this).parents('.info-contents-area').attr('id');
                     let nextDataTab = $(this).parents('.info-contents-area').next().attr('id');
@@ -110,8 +131,8 @@
                     $(this).parents('.info-contents-area').hide();
                     $(this).parents('.info-contents-area').next().show();
                 }
-
             });
+
 
             //이전 단계 버튼 클릭시 화면전환
             $('.prevBtn').click(function () {
@@ -139,6 +160,7 @@
                 autoclose: true
             });
 
+            //프로젝트 시작 일자 선택하면 프로젝트 마감 일자 시작일자 이전 날짜는 선택 못하게.
             $('#projectStartDate').change(function () {
                 let projectEndDate = $('#projectEndDate');
                 let startDate = new Date($(this).val());
@@ -151,6 +173,17 @@
                     $(projectEndDate).val('');
                 }
             });
+
+            //summerNote
+            $('#detailComent').summernote({
+                placeholder: '프로젝트 스토리를 입력해주세요',
+                lang: 'ko-KR',
+                tabsize: 2,
+                height: 300
+            });
+
+            $('#')
+
 
 
             //리워드 추가 버튼 클릭 시 값이 비어있지 않다면 슬라이더 폼 추가
@@ -194,7 +227,6 @@
                         '                    </div>\n' +
                         '                  </div>')
 
-
                     $(card).find('.rewardSebjectH').text(rewardSubject);
                     $(card).find('.rewardContents').text(rewardContents);
                     $(card).find('.rewardPriceInput').val(`${Number(rewardPrice.replaceAll(',', '')).toLocaleString('ko-KR')}원`);
@@ -207,33 +239,32 @@
                         $(item).val('');
                     });
                 }
-
-
             });
 
-            //스마트에디터
-            var oEditors = [];
+            // $('#thumbnailImage').change(function(){
+            //     console.log($(this).val());
+            //    $('.img-thumbnail').attr('src',$(this).val());
+            //
+            // })
 
-            nhn.husky.EZCreator.createInIFrame({
-                oAppRef: oEditors,
-                elPlaceHolder: "ir1",
-                sSkinURI: "/smarteditor/SmartEditor2Skin.html",
-                fCreator: "createSEditor2"
+            $('#thumbnailImage').change(function(){
+
+                setImageFromFile(this, '.img-thumbnail');
             });
 
-            /*
-            function submitContents(elClickedObj) {
-                // 에디터의 내용이 textarea에 적용된다.
-                oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
+            function setImageFromFile(input, expression) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $(expression).attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
 
-                // 에디터의 내용에 대한 값 검증은 이곳에서
-                // document.getElementById("ir1").value를 이용해서 처리한다.
 
-                try {
-                    elClickedObj.form.submit();
-                } catch(e) {}
-            };
-*/
+
+
             //초기화 버튼 클릭 시 추가된 슬라이더 폼 모두 삭제
             $('#rewardInitializeBtn').click(function () {
                 $('.swiper-slide').remove();
@@ -284,8 +315,6 @@
                     //프로젝트 등록 이벤트
                 }
             });
-
-
         });
 
         //추가된 리워드 폼에서 삭제 버튼 클릭 시 폼 삭제
@@ -386,10 +415,14 @@
 
                             <div class="mb-3">
                                 <label for="thumbnailImage" class="form-label fw-bord text-dark">썸네일 이미지를 등록해주세요.</label>
-                                <div class="banner-content" style="background-color: #7D7D7D">썸네일 이미지</div>
-                                <!--                <img src="..." class="img-thumbnail" alt="...">-->
+                                <!--                                <div class=" banner-content" style="background-color: #7D7D7D">썸네일 이미지</div>-->
+                                <br>
+                                <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
+                                    <img src="" class="img-thumbnail" alt="썸네일이미지" style="height: 200px; width: 350px; display: none;">
+                                </div>
+
                                 <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
-                                <input class="form-control" id="thumbnailImage" type="file">
+                                <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
                             </div>
 
 
@@ -473,27 +506,27 @@
 
                 <form class="rewardInfo" >
                     <div class="row g">
-                        <div class="col-8">
+                        <div class="col-10">
                             <div class="mb-3">
                                 <label for="detailImage" class="form-label fw-bord text-dark">상세 이미지를 등록해주세요.</label>
                                 <div class="banner-content" style="background-color: #7D7D7D">상세 이미지</div>
                                 <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
-                                <input class="form-control" id="detailImage" type="file">
+                                <input class="form-control w-75" id="detailImage" type="file">
                             </div>
 
                             <label for="detailMovie" class="form-label fw-bord text-dark">동영상 주소를 적어주세요</label>
-                            <input type="text" class="form-control" id="detailMovie" placeholder="동영상 주소를 적어주세요."
+                            <input type="text" class="form-control w-75" id="detailMovie" placeholder="동영상 주소를 적어주세요."
                                    value="" required="">
                             <br>
 
 
-                            <textarea class="form-control" name="ir1" id="ir1" rows="10" cols="100">기본 작성 글은 여기에 추가해서 로드</textarea>
 
 
-                            <!--                            <div class="mb-3">-->
-                            <!--                                <label for="detailComent" class="form-label">프로젝트 스토리를 적어주세요</label>-->
-                            <!--                                <textarea class="form-control" id="detailComent" rows="20"></textarea>-->
-                            <!--                            </div>-->
+
+                            <div class="mb-3">
+                                <label for="detailComent" class="form-label">프로젝트 스토리를 적어주세요</label>
+                                <div id="detailComent"></div>
+                            </div>
 
                             <br><br>
                             <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>

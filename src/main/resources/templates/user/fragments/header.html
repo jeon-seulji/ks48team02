@@ -66,7 +66,7 @@
 					<li><a th:unless="${session.SID == null}" th:href="@{/user/account/logout}">로그아웃</a></li>
 	        	</ul>
 	        	<div class="make-project-btn">
-	        		<a th:href="@{/user/projectRegistration}">프로젝트 만들기</a>
+	        		<a th:if="${session.STYPECODE == 'mem_type_03' || session.STYPECODE == 'mem_type_04'}" th:href="@{/user/projectRegistration}">프로젝트 만들기</a>
 	        	</div>
 	        </div>
 	    </div>
