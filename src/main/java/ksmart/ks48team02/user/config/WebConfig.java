@@ -35,8 +35,18 @@ public class WebConfig implements WebMvcConfigurer{
         // 정적 리소스 주소는 배제한 나머지 동적 리소스 주소만 설정
         registry.addInterceptor(commonInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**")
-                .excludePathPatterns("/js/**")
+                .excludePathPatterns("/admin/build/**")
+                .excludePathPatterns("/admin/css/**")
+                .excludePathPatterns("/admin/images/**")
+                .excludePathPatterns("/admin/js/**")
+                .excludePathPatterns("/admin/vendors/**")
+                .excludePathPatterns("/common/css/**")
+                .excludePathPatterns("/common/images/**")
+                .excludePathPatterns("/common/js/**")
+                .excludePathPatterns("/user/css/**")
+                .excludePathPatterns("/user/fonts/**")
+                .excludePathPatterns("/user/images/**")
+                .excludePathPatterns("/user/js/**")
                 .excludePathPatterns("/favicon.ico");
 
 		/*
