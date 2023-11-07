@@ -56,8 +56,13 @@
         display: flex;
         justify-content: space-between;
         padding:35px;
-
     }
+
+    .staff-info{
+        padding-left:  30px;
+        color:darkgray;
+    }
+
 </style>
 </head>
 
@@ -99,16 +104,18 @@
 
                            <div style="display: flex; justify-content: space-evenly;">
                                 <ul>
-                                    <li class="staff-member">
-                                        <dl class="staff-row" style="display: flex; justify-content: space-evenly; gap:60px;">
-
-                                            <dd class="staff-name" style="font-weight: bold;">신짱구</dd>
-
-                                            <dd class="staff-position">직원</dd>
-
-                                            <dd class="staff-role">댓글 관리와 게시물 관리</dd>
-
-                                            <dd style="color: dimgray; text-decoration: underline; ">편집</dd>
+                                    <li class="staff-member" style="display: flex; justify-content: space-evenly; gap:60px;
+                                                border:1px solid dimgrey;">
+                                        <dl class="staff-row-name" >
+                                            <dd class="staff-name" style="font-weight: bold; font-size:medium;">신짱구</dd>
+                                            <dd style="color: dimgray; text-decoration: underline; margin-top:20px;
+                                                margin-left: 6px;" data-toggle="modal" data-target="#editModal" >수정</dd>
+                                        </dl>
+                                        <dl class="staff-row-info" >
+                                            <dt>직급 </dt>
+                                            <dd class="staff-info">직원</dd>
+                                            <dt>업무 </dt>
+                                            <dd class="staff-info">댓글 관리와 게시물 관리</dd>
                                         </dl>
                                     </li>
                                 </ul>
@@ -118,7 +125,7 @@
                     </div>
 
                     <!-- 스토어 프로필 편집 Modal -->
-                    <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
