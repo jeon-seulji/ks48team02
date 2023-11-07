@@ -97,8 +97,11 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
 
-    <!--주소 api-->
+    <!-- 다음 주소 api-->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <!-- common js -->
+    <script src="/common/js/common-custom.js"></script>
 
 
 </th:block>
@@ -159,81 +162,25 @@
 
         $(function(){
 
-            // 다음 버튼 클릭시 페이지 이동, 선택한 옵션 정보 입력
+            // 다음 버튼 클릭시 페이지 이동
             $('.nextBtn').click(function(){
 
-                if($('#orderInfo').find('input[type="checkbox"]:checked').length < 1) {
-                    alert('필수입력사항을 입력해주세요.');
+                const targetEls = $('#investOrderInfoForm input, #investOrderInfoForm select');
+                // 값 유효성 검사
+                if(!validationEmptyFn(targetEls)) {
                     return;
                 }
+                // 청약 가능 수량 검사
+                const stockEls = $('#stockNumber').val();
+                if(stockEls > $('#maxStock').text() && stockEls < $('#minStock').text()){
+                    alert('청약 가능 수량이 아닙니다.');
+                    return ;
+                }
+
                 $(this).parents('.info-contents-area').hide();
                 $(this).parents('.info-contents-area').next().show();
 
-                $('#selectedOption').html('');
 
-                let selectOption = $('#orderInfo').find('input[type="checkbox"]:checked').parents('.selectOption');
-                $(selectOption).each(function(idx,item){
-
-                    let optionName = $(item).find('.optionName').text();
-                    let optionPrice =$(item).find('.optionPrice').text();
-                    let optionAmount =$(item).find('.optionAmount').val();
-                    let optionDeliverPrice = $(item).find('.optionDeliverPrice').text();
-
-
-                    let addSelectedOption;
-                    if(idx === $(selectOption).length-1) {
-
-                        addSelectedOption = $('<div>\n' +
-                            '                                    <span class="orderOptionName ml-2"></span>\n' +
-                            '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
-                            '                                    <span class="font-weight-bold float-right mr-lg-2">수량:<span class="orderOptionAmount"></span>개</span>\n' +
-
-                            '                                    <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>\n' +
-                            '\n' +
-                            '                                    <span class="orderOptionDeliverPrice ml-2">배송비</span>\n' +
-                            '                                    <span id="deliverPrice" class ="font-weight-bold float-right mr-2">무료 배송</span>\n' +
-                            '                                    <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
-                            '\n' +
-                            '                                    <span class="ml-2">쿠폰 사용</span>\n' +
-                            '                                    <span class ="font-weight-bold float-right mr-2">사용 가능한 쿠폰이 없습니다</span>\n' +
-                            '                                    <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
-                            '\n' +
-                            '                                    <span class="ml-2">포인트 사용</span>\n' +
-                            '                                    <div class="form-check float-right font-weight-bold float-right mr-1">\n' +
-                            '                                        <input class="form-check-input" type="checkbox" value="" id="pointAllCheck">\n' +
-                            '                                        <label class="form-check-label" for="pointAllCheck">\n' +
-                            '                                            모두 사용 (보유 포인트<span id="havePoint">0</span>P)\n' +
-                            '                                        </label>\n' +
-                            '                                        <br>\n' +
-                            '                                        <input id="usePoint" type="number" class="float-right mr-2 h-75" value="0" style="width: 80px;">\n' +
-                            '                                    </div>\n' +
-                            '                                    <br><br>\n' +
-                            '                                    <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>\n' +
-                            '                                </div>');
-
-                        $(addSelectedOption).find('.orderOptionName').text(optionName);
-                        $(addSelectedOption).find('.orderOptionPrice').text(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount);
-                        $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
-                        $(addSelectedOption).find('.orderOptionDeliverPrice').text(optionDeliverPrice);
-                    } else{
-
-                        addSelectedOption = $('<div class="my-lg-1" style="height: 35px">\n' +
-                            '                                    <span class="orderOptionName ml-2"></span>\n' +
-                            '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
-                            '                                    <span class="font-weight-bold float-right mr-lg-2">수량:<span class="orderOptionAmount"></span>개</span>\n' +
-                            '                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
-                            '                                    <br>\n' +
-                            '                                </div>');
-
-                        $(addSelectedOption).find('.orderOptionName').text(optionName);
-                        $(addSelectedOption).find('.orderOptionPrice').text(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount);
-                        $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
-                    }
-
-
-
-                    $('#selectedOption').append($(addSelectedOption));
-                });
 
             });
 
@@ -268,6 +215,14 @@
                     }
                 });
             });
+
+            $('#stockNumber').on('input', function(){
+                let stockPrice = $('#stockPrice').data('stockPrice');
+                let stockAmount = $(this).val();
+                let result = (stockPrice*stockAmount).toLocaleString('ko-kr') + '원';
+                $('.total-price').text(result);
+            });
+
 
 
 
@@ -314,12 +269,12 @@
 
                     <div class="col-lg-8">
 
-                        <form>
+                        <form id="investOrderInfoForm">
                             <h5 style="font-weight: bold;">증권 계좌 입력</h5>
                             <div style="color: black; font-size: 18px;">주식이 입고될 증권계좌를 입력해 주세요</div>
                             <br>
                             <div class="cal-12">
-                                <div for="memIvsSecurCode" class="mt20 mb4">증권사 선택</div>
+                                <label for="memIvsSecurCode" class="mt20 mb4" style="color: black">증권사 선택</label>
                                 <select id="memIvsSecurCode" class="custom-select">
                                     <option value="" disabled="disabled" selected="selected">증권사를 선택해 주세요</option>
                                     <option value="1">교보증권</option>
@@ -344,9 +299,9 @@
                                     <option value="71">다올투자증권</option>
                                     <option value="753">코리아에셋투자증권</option>
                                 </select>
-
-                                <div for="stockAccountNumber" class="mt20 mb4">증권 계좌 번호 입력</div>
-                                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="d_form large" id="stockAccountNumber" placeholder="'-'없이 숫자만 입력해주세요." value required>
+                                <br><br>
+                                <label for="stockAccountNumber" class="mt20 mb4" style="color: black">증권 계좌 번호 입력</label><br>
+                                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="d_form large" id="stockAccountNumber" name="stockAccountNumber" placeholder="'-'없이 숫자만 입력해주세요." value required>
                             </div><br>
                             <div class="mt30">
                                 투자자 본인 명의의 증권 계좌로 교부됩니다. 직접 주식거래가 가능한 증권 계좌번호를 입력해 주세요.&nbsp;
@@ -354,12 +309,15 @@
 
                             <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div><br><br>
 
-                            <h5 style="font-weight: bold;">주소 입력</h5>
+                            <h5 style="font-weight: bold;">배송지</h5>
                             <div style="color: black; font-size: 18px;">주소를 입력해 주세요.</div>
                             <br>
+                            <label for="postcode" class="mt20 mb4" style="color: black">우편번호</label><br>
                             <input type="text" id="postcode" class="d_form mini" placeholder="우편번호" />
                             <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="d_btn"><br>
+                            <label for="address" class="mt20 mb4" style="color: black">주소</label><br>
                             <input type="text" id="address" placeholder="주소" class="d_form large" /> <br>
+                            <label for="detailAddress" class="mt20 mb4" style="color: black">상세주소</label><br>
                             <input type="text" id="detailAddress" placeholder="상세주소" class="d_form"/>
                             <!--<input type="text" id="sample6_extraAddress" class="d_form" placeholder="참고항목">-->
                             <br><br>
@@ -370,7 +328,52 @@
 
                             <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div><br>
 
-                            <h5 style="font-weight: bold;">청약 주식 수</h5>
+                            <h5 style="font-weight: bold;">청약 주식 수</h5><br>
+
+                            <div class="row" style="color: black; font-size: 18px";>
+                                <div class="col-lg-5">
+                                    <ul class="tight">
+                                        <li>
+                                            <dl>
+                                                <dd>김플루님의 크라우드펀딩 투자 한도</dd>
+                                                <dt id="investLimit" th:text="${#numbers.formatInteger(5000000,3,'COMMA') + '원'}" th:data-invest-limit="${5000000}"></dt>
+                                            </dl>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-3">
+                                    <ul class="tight">
+                                        <li>
+                                            <dl>
+                                                <dd>1주당 가격</dd>
+                                                <dt id="stockPrice" th:text="${#numbers.formatInteger(5000,3,'COMMA') + '원'}" th:data-stock-price="${5000}"></dt>
+                                            </dl>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-4">
+                                    <ul class="tight">
+                                        <li>
+                                            <dl th:with="minStock=${5000000/5000/5}, maxStock=${5000000/5000}">
+                                                <dd>청약 가능 수량</dd>
+                                                <dt><span id="minStock" th:text="${minStock}"></span>~<span id="maxStock" th:text="${maxStock}"></span>주</dt>
+                                            </dl>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div><br>
+                            <div class="mt30">
+                                투자 한도 내에서 투자가 가능합니다.
+                            </div><br><br>
+
+                            <div style="color: black; font-size: 18px;">청약하실 주식 수를 입력해 주세요.</div><br>
+                            <div class="payments-form col-5">
+                                <label for="stockNumber" class="mt20 mb4" style="color: black">청약 주식 수</label>
+                                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="d_form col-12" id="stockNumber" placeholder="청약 주식 수 입력" value required>
+                                <label class="form-text text-muted text-right col-12" style="font-size: 18px"><span>주문금액</span> <span class="total-price">0<i></i>원</span></label>
+                            </div>
+                            <br>
+                            <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
 
                             <button class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button>
