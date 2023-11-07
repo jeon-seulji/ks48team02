@@ -18,14 +18,17 @@ public interface AdminInvestmentMapper {
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
     public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate);
 
-    // 특정 투자펀딩 심사요청 조회
+    // 코드에 따른 특정 투자펀딩 심사요청 조회
     public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String investmentRequestJudgeCode);
+
+    // 심사결과에 따른 특정 투자펀딩 심사요청 조회
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeByResult(String rejectCnt);
 
     // 자본시장법 범위충족기준 목록 조회
     public List<AdminLawSatistifyReason> getLawSatistifyList();
 
     // 검색조건에 따른 자본시장법 범위충족기준 목록 조회
-    public List<AdminLawSatistifyReason> getLawSatistifyListBySearch(String searchKey, String searchValue);
+    public List<AdminLawSatistifyReason> getLawSatistifyListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate);
 
     // 특정 자본시장 범위충족기준 조회
     public AdminLawSatistifyReason getLawSatistifyByCode(String lawSatistifyCode);
@@ -34,7 +37,7 @@ public interface AdminInvestmentMapper {
     public List<AdminIncongruitySectors> getIncogruitySectorsList();
 
     // 검색조건에 따른 부적합 업종 목록 조회
-    public List<AdminIncongruitySectors> getIncogruitySectorsListBySearch(String searchKey, String searchValue);
+    public List<AdminIncongruitySectors> getIncogruitySectorsListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate);
 
     // 특정 부적합 업종 조회
     public AdminIncongruitySectors getIncogruitySectorsByCode(String incongruitySectorsCode);
@@ -44,7 +47,7 @@ public interface AdminInvestmentMapper {
 
     // 검색조건에 따른 기업가치 평과결가 목록 조회
 
-    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationListBySearch(String searchKey, String searchValue);
+    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate);
 
     // 특정 기업가치 평가결과 조회
     public AdminCorporateValueEvaluation getCorporateValueEvaluationByCode(String corporateValueEvaluationCode);

@@ -2,9 +2,6 @@ package ksmart.ks48team02.admin.dto.investment;
 
 public class AdminCorporateValueEvaluation {
 
-    private String investmentRequestJudgeCode;
-    private String investmentRequestSubject;
-    private String memberIdSeller;
     private String corporateValueEvaluationCode;
     private String memberId;
     private long operatingProfit;
@@ -19,113 +16,124 @@ public class AdminCorporateValueEvaluation {
     private int corpValueFulfill;
     private String corpValueEvaluateDay;
 
-    public String getInvestmentRequestJudgeCode() {
-        return investmentRequestJudgeCode;
-    }
-    public void setInvestmentRequestJudgeCode(String investmentRequestJudgeCode) {
-        this.investmentRequestJudgeCode = investmentRequestJudgeCode;
-    }
-    public String getInvestmentRequestSubject() {
-        return investmentRequestSubject;
-    }
-    public void setInvestmentRequestSubject(String investmentRequestSubject) {
-        this.investmentRequestSubject = investmentRequestSubject;
-    }
-    public String getMemberIdSeller() {
-        return memberIdSeller;
-    }
-    public void setMemberIdSeller(String memberIdSeller) {
-        this.memberIdSeller = memberIdSeller;
-    }
+    public AdminInvestmentRequestJudge adminInvestmentRequestJudge;
+
     public String getCorporateValueEvaluationCode() {
         return corporateValueEvaluationCode;
     }
+
     public void setCorporateValueEvaluationCode(String corporateValueEvaluationCode) {
         this.corporateValueEvaluationCode = corporateValueEvaluationCode;
     }
+
     public String getMemberId() {
         return memberId;
     }
+
     public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
+
     public long getOperatingProfit() {
         return operatingProfit;
     }
+
     public void setOperatingProfit(long operatingProfit) {
         this.operatingProfit = operatingProfit;
     }
+
     public long getDepreciation() {
         return depreciation;
     }
+
     public void setDepreciation(long depreciation) {
         this.depreciation = depreciation;
     }
+
     public long getEbitda() {
         return ebitda;
     }
+
     public void setEbitda(long ebitda) {
         this.ebitda = ebitda;
     }
+
     public float getEvEbitda() {
         return evEbitda;
     }
+
     public void setEvEbitda(float evEbitda) {
         this.evEbitda = evEbitda;
     }
+
     public long getConvertEv() {
         return convertEv;
     }
+
     public void setConvertEv(long convertEv) {
         this.convertEv = convertEv;
     }
+
     public long getNetDebt() {
         return netDebt;
     }
+
     public void setNetDebt(long netDebt) {
         this.netDebt = netDebt;
     }
+
     public long getEvaluatedCorpValue() {
         return evaluatedCorpValue;
     }
+
     public void setEvaluatedCorpValue(long evaluatedCorpValue) {
         this.evaluatedCorpValue = evaluatedCorpValue;
     }
+
     public int getStockNumber() {
         return stockNumber;
     }
+
     public void setStockNumber(int stockNumber) {
         this.stockNumber = stockNumber;
     }
+
     public int getStockPrice() {
         return stockPrice;
     }
+
     public void setStockPrice(int stockPrice) {
         this.stockPrice = stockPrice;
     }
+
     public int getCorpValueFulfill() {
         return corpValueFulfill;
     }
+
     public void setCorpValueFulfill(int corpValueFulfill) {
         this.corpValueFulfill = corpValueFulfill;
     }
+
     public String getCorpValueEvaluateDay() {
         return corpValueEvaluateDay;
     }
+
     public void setCorpValueEvaluateDay(String corpValueEvaluateDay) {
         this.corpValueEvaluateDay = corpValueEvaluateDay;
+    }
+
+    public AdminInvestmentRequestJudge getAdminInvestmentRequestJudge() {
+        return adminInvestmentRequestJudge;
+    }
+
+    public void setAdminInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+        this.adminInvestmentRequestJudge = adminInvestmentRequestJudge;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Icosdfn [investmentRequestJudgeCode=");
-        builder.append(investmentRequestJudgeCode);
-        builder.append(", investmentRequestSubject=");
-        builder.append(investmentRequestSubject);
-        builder.append(", memberIdSeller=");
-        builder.append(memberIdSeller);
-        builder.append(", corporateValueEvaluationCode=");
+        builder.append("AdminCorporateValueEvaluation [corporateValueEvaluationCode=");
         builder.append(corporateValueEvaluationCode);
         builder.append(", memberId=");
         builder.append(memberId);
@@ -151,7 +159,10 @@ public class AdminCorporateValueEvaluation {
         builder.append(corpValueFulfill);
         builder.append(", corpValueEvaluateDay=");
         builder.append(corpValueEvaluateDay);
+        builder.append(", adminInvestmentRequestJudge=");
+        builder.append(adminInvestmentRequestJudge);
         builder.append("]");
         return builder.toString();
     }
+
 }
