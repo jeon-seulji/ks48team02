@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout/default}">
+
+<head>
+    <!--  사용자별 css file 추가 부분 -->
+    <!-- Link Swiper's CSS -->
+    <style>
+        .category-button {
+            border: none;
+            border-radius: 25px; /* 라운드 처리 반경을 조정합니다. */
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .category-li{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-left: 20px;
+        }
+        .selected {
+            font-weight: bold;
+            color: black;
+        }
+        ul.d-flex li:hover {
+            cursor: pointer;
+        }
+        .investment-item-box{
+            width: 350px;
+            height: 300px;
+        }
+        .investment-item-first-child{
+            background: grey;
+            width: 350px;
+            height: 200px;
+            border-radius: 5px;
+        }
+        .investment-item-second-child{
+            width: 350px;
+            height: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .investment-item-third-child{
+            width: 350px;
+            height: auto;
+            font-weight: bolder;
+            color: black;
+            font-size: 15px;
+        }
+        .investment-item-fourth-child{
+            width: 350px;
+            height: auto;
+        }
+        .investment-item-span-first{
+            font-weight: bold;
+            font-size: 20px;
+            color: #235FD9;
+        }
+        .investment-item-span-second{
+            margin-left: 5px;
+        }
+        .investment-item-span-third{
+            margin-left: auto;
+            color: #235FD9;
+            background: #cce5ff;
+            font-size: 12px;
+            padding: 2px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
+    <link rel="stylesheet" th:href="@{/user/css/main_style.css}" />
+
+    <link rel="stylesheet" href="//t1.daumcdn.net/postcode/cssjs/guide/1695281969613/guide.v2.min.css">
+
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
+
+    <!--주소 api-->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+
+</th:block>
+
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+
+    <script>
+        // 주소입력
+        function sample6_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if(data.userSelectedType === 'R'){
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        // 조합된 참고항목을 해당 필드에 넣는다.
+                        //document.getElementById("extraAddress").value = extraAddr;
+
+                    } else {
+                        //document.getElementById("extraAddress").value = '';
+                    }
+                    console.log(data)
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('postcode').value = data.zonecode;
+                    document.getElementById("address").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("detailAddress").focus();
+                }
+            }).open();
+        }
+
+        $(function(){
+
+            // 다음 버튼 클릭시 페이지 이동, 선택한 옵션 정보 입력
+            $('.nextBtn').click(function(){
+
+                if($('#orderInfo').find('input[type="checkbox"]:checked').length < 1) {
+                    alert('필수입력사항을 입력해주세요.');
+                    return;
+                }
+                $(this).parents('.info-contents-area').hide();
+                $(this).parents('.info-contents-area').next().show();
+
+                $('#selectedOption').html('');
+
+                let selectOption = $('#orderInfo').find('input[type="checkbox"]:checked').parents('.selectOption');
+                $(selectOption).each(function(idx,item){
+
+                    let optionName = $(item).find('.optionName').text();
+                    let optionPrice =$(item).find('.optionPrice').text();
+                    let optionAmount =$(item).find('.optionAmount').val();
+                    let optionDeliverPrice = $(item).find('.optionDeliverPrice').text();
+
+
+                    let addSelectedOption;
+                    if(idx === $(selectOption).length-1) {
+
+                        addSelectedOption = $('<div>\n' +
+                            '                                    <span class="orderOptionName ml-2"></span>\n' +
+                            '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
+                            '                                    <span class="font-weight-bold float-right mr-lg-2">수량:<span class="orderOptionAmount"></span>개</span>\n' +
+
+                            '                                    <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>\n' +
+                            '\n' +
+                            '                                    <span class="orderOptionDeliverPrice ml-2">배송비</span>\n' +
+                            '                                    <span id="deliverPrice" class ="font-weight-bold float-right mr-2">무료 배송</span>\n' +
+                            '                                    <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
+                            '\n' +
+                            '                                    <span class="ml-2">쿠폰 사용</span>\n' +
+                            '                                    <span class ="font-weight-bold float-right mr-2">사용 가능한 쿠폰이 없습니다</span>\n' +
+                            '                                    <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
+                            '\n' +
+                            '                                    <span class="ml-2">포인트 사용</span>\n' +
+                            '                                    <div class="form-check float-right font-weight-bold float-right mr-1">\n' +
+                            '                                        <input class="form-check-input" type="checkbox" value="" id="pointAllCheck">\n' +
+                            '                                        <label class="form-check-label" for="pointAllCheck">\n' +
+                            '                                            모두 사용 (보유 포인트<span id="havePoint">0</span>P)\n' +
+                            '                                        </label>\n' +
+                            '                                        <br>\n' +
+                            '                                        <input id="usePoint" type="number" class="float-right mr-2 h-75" value="0" style="width: 80px;">\n' +
+                            '                                    </div>\n' +
+                            '                                    <br><br>\n' +
+                            '                                    <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>\n' +
+                            '                                </div>');
+
+                        $(addSelectedOption).find('.orderOptionName').text(optionName);
+                        $(addSelectedOption).find('.orderOptionPrice').text(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount);
+                        $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
+                        $(addSelectedOption).find('.orderOptionDeliverPrice').text(optionDeliverPrice);
+                    } else{
+
+                        addSelectedOption = $('<div class="my-lg-1" style="height: 35px">\n' +
+                            '                                    <span class="orderOptionName ml-2"></span>\n' +
+                            '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
+                            '                                    <span class="font-weight-bold float-right mr-lg-2">수량:<span class="orderOptionAmount"></span>개</span>\n' +
+                            '                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
+                            '                                    <br>\n' +
+                            '                                </div>');
+
+                        $(addSelectedOption).find('.orderOptionName').text(optionName);
+                        $(addSelectedOption).find('.orderOptionPrice').text(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount);
+                        $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
+                    }
+
+
+
+                    $('#selectedOption').append($(addSelectedOption));
+                });
+
+            });
+
+            // 이전 버튼 클릭시 페이지 이동
+            $('.prevBtn').click(function(){
+                $(this).parents('.info-contents-area').hide();
+                $(this).parents('.info-contents-area').prev().show();
+            });
+
+
+            //약관 체크 모두 될 시 모두 동의에 체크.
+            $('.essential').not('#agreeNews').click(function(){
+                let checkLength = $('.essential').not('#agreeNews').length;
+                let checkedLength = $('.essential:checked').not('#agreeNews').length;
+                let isAllCheck = checkLength === checkedLength;
+                $('#allCheck').prop('checked',isAllCheck);
+            });
+
+            //약관 모두 동의 체크시 모두 동의
+            $('#allCheck').click(function(){
+                $('.essential').not('#agreeNews').prop('checked',$(this).prop('checked'));
+            });
+
+
+            //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
+            $('.paymentBtn').click(function(){
+                $('.essential').each(function(idx,item){
+                    if(!$(item).prop('checked')) {
+                        alert('필수 약관에 모두 동의해주세요');
+                        $(item).focus();
+                        return false;
+                    }
+                });
+            });
+
+
+
+        })
+
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+
+    <section id="storeInnerGroup" class="content-wrap">
+
+        <div class="main-section container">
+
+
+
+
+            <div id="orderInfo" class="info-contents-area" style="display: block;">
+
+                <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+                    <figure class="text-center">
+                        <blockquote class="blockquote">
+                            <br>
+                            <h3 style="font-weight: bold;">청약 정보 입력</h3><br>
+                        </blockquote>
+                    </figure>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2"></div>
+
+                    <div class="col-lg-8">
+
+                        <form>
+                            <h5 style="font-weight: bold;">증권 계좌 입력</h5>
+                            <div style="color: black; font-size: 18px;">주식이 입고될 증권계좌를 입력해 주세요</div>
+                            <br>
+                            <div class="cal-12">
+                                <div for="memIvsSecurCode" class="mt20 mb4">증권사 선택</div>
+                                <select id="memIvsSecurCode" class="custom-select">
+                                    <option value="" disabled="disabled" selected="selected">증권사를 선택해 주세요</option>
+                                    <option value="1">교보증권</option>
+                                    <option value="2">신한금융투자</option>
+                                    <option value="3">한국투자증권</option>
+                                    <option value="4">대신증권</option>
+                                    <option value="5">미래에셋증권</option>
+                                    <option value="6">신영증권</option>
+                                    <option value="8">유진투자증권</option>
+                                    <option value="10">메리츠증권</option>
+                                    <option value="12">NH투자증권</option>
+                                    <option value="17">KB증권</option>
+                                    <option value="22">현대차증권</option>
+                                    <option value="24">유안타증권</option>
+                                    <option value="25">SK증권</option>
+                                    <option value="29">상상인증권</option>
+                                    <option value="30">삼성증권</option>
+                                    <option value="31">DB금융투자</option>
+                                    <option value="46">하이투자증권</option>
+                                    <option value="50">키움증권</option>
+                                    <option value="68">IBK투자증권</option>
+                                    <option value="71">다올투자증권</option>
+                                    <option value="753">코리아에셋투자증권</option>
+                                </select>
+
+                                <div for="stockAccountNumber" class="mt20 mb4">증권 계좌 번호 입력</div>
+                                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="d_form large" id="stockAccountNumber" placeholder="'-'없이 숫자만 입력해주세요." value required>
+                            </div><br>
+                            <div class="mt30">
+                                투자자 본인 명의의 증권 계좌로 교부됩니다. 직접 주식거래가 가능한 증권 계좌번호를 입력해 주세요.&nbsp;
+                            </div><br>
+
+                            <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div><br><br>
+
+                            <h5 style="font-weight: bold;">주소 입력</h5>
+                            <div style="color: black; font-size: 18px;">주소를 입력해 주세요.</div>
+                            <br>
+                            <input type="text" id="postcode" class="d_form mini" placeholder="우편번호" />
+                            <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="d_btn"><br>
+                            <input type="text" id="address" placeholder="주소" class="d_form large" /> <br>
+                            <input type="text" id="detailAddress" placeholder="상세주소" class="d_form"/>
+                            <!--<input type="text" id="sample6_extraAddress" class="d_form" placeholder="참고항목">-->
+                            <br><br>
+
+                            <div class="ivs-pro-desc1 mt30">
+                                본 주소는 유상증자 등기 시, 투자자 혜택이 있는 경우 배송 주소지 등으로 사용되니, 상세주소를 포함한 정확한 주소를 입력해 주세요.
+                            </div><br>
+
+                            <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div><br>
+
+                            <h5 style="font-weight: bold;">청약 주식 수</h5>
+
+
+                            <button class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div id="paymentInfo" class="info-contents-area" style="display: none;">
+
+                <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+                    <figure class="text-center">
+                        <blockquote class="blockquote">
+                            <br>
+                            <h3>결제 정보를 작성해주세요</h3>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            <cite title="Source Title">지금 바로 플로키에서!</cite>
+                        </figcaption>
+                    </figure>
+                </div>
+
+                <div class="row text-dark">
+                    <div class="col-lg-2"></div>
+
+                    <div class="col-lg-8">
+
+                        <form>
+                            <h5>결제 하기</h5>
+                            <br>
+                            <div id="selectedOption">
+
+                            </div>
+
+
+                            <br><br><br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="mr-lg-2">서포터</h5>
+                                    <div class=" ml-lg-2 bg-light">
+                                        <div class="ml-lg-2">
+
+                                            <p class="font-weight-bold">이름</p>
+                                            <p id="memberName">홍길동</p>
+                                            <p class="mt-lg-3 font-weight-bold">이메일</p>
+                                            <p id="memberEmail">email01@email.com</p>
+                                            <p class="mt-lg-3 font-weight-bold">휴대폰 번호</p>
+                                            <p id="memberMobile" class="mb-lg-5">010-1111-1111</p>
+
+                                            <div class="form-check">
+                                                <input class="essential form-check-input" type="checkbox" value="" id="agreeNews">
+                                                <label class="form-check-label" for="agreeNews">
+                                                    (필수) 프로젝트 진행에 대한 새소식 및 결제 관련 안내를 받습니다
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="ml-lg-3">
+                                        <h5 class="mr-lg-2">리워드 배송지</h5>
+
+                                        <div class="form-check mt-lg-3">
+                                            <input class="form-check-input" type="checkbox" value="" id="memberAddr">
+                                            <label class="form-check-label font-weight-bold" for="memberAddr">
+                                                기존 배송지 추가
+                                            </label>
+                                        </div>
+
+                                        <label for="deliverMemberName" class="font-weight-bold text-dark mt-lg-2">이름</label>
+                                        <br>
+                                        <input type="text" class="w-100" id="deliverMemberName" value="" style="height: 35px">
+                                        <br>
+                                        <label for="deliverMemberMobile" class="font-weight-bold text-dark mt-lg-2">휴대폰번호</label>
+                                        <br>
+                                        <input type="text" class="w-100" id="deliverMemberMobile" value="" style="height: 35px">
+                                        <br>
+                                        <label for="deliverMemberAddr" class="font-weight-bold text-dark mt-lg-2">주소</label>
+                                        <br>
+                                        <button type="button" class="btn btn-small btn-secondary" id="findAddrBtn">주소 찾기</button>
+                                        <br>
+                                        <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddr" value="" style="height: 35px" placeholder="상세 주소">
+                                        <br>
+                                        <label for="deliverRequest" class="font-weight-bold text-dark mt-lg-2">배송 요청사항</label>
+                                        <br>
+                                        <select id="deliverRequest">
+                                            <option value="DELM_001">문 앞에 두고 가주세요</option>
+                                            <option value="DELM_002">배송 전에 연락 해주세요</option>
+                                            <option value="DELM_003">부재시 문 앞에 놓아주세요</option>
+                                            <option value="DELM_004">부재시 경비실에 맡겨주세요</option>
+                                            <option value="DELM_005">기타</option>
+                                        </select>
+                                        <!--                                        <input type="text" class="w-100" id="deliverRequest" value="" style="height: 35px">-->
+                                        <br>
+                                        <input type="text" class="w-100 mt-lg-2" id="elseDeliverRequest" value="" style="height: 35px" placeholder="기타" disabled>
+                                        <br>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-lg-5 mb-lg-5" style="border: 2px solid #4d4d4d; margin: 5px; width: 100%"></div>
+
+                            <div class="ml-lg-2">
+                                <h5>결제 수단</h5>
+                                <div class="ml-lg-3 mt-lg-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="naverPay">
+                                        <label class="form-check-label" for="naverPay">
+                                            네이버페이
+                                        </label>
+                                    </div>
+                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="kakaoPay">
+                                        <label class="form-check-label" for="kakaoPay">
+                                            카카오페이
+                                        </label>
+                                    </div>
+                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="creditCard">
+                                        <label class="form-check-label" for="creditCard">
+                                            신용카드
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ml-lg-2 mt-lg-5">
+                                <h5>약관 동의</h5>
+                                <div class="ml-lg-3 mt-lg-4">
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="allCheck">
+                                        <label class="form-check-label" for="allCheck">
+                                            필수 약관 모두동의
+                                        </label>
+                                    </div>
+                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                                    <div class="form-check">
+                                        <input class="essential form-check-input" type="checkbox" value="" id="agree1">
+                                        <label class="form-check-label" for="agree1">
+                                            구매조건, 결제 진행 및 결제 대행 서비스 동의(필수)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="essential form-check-input" type="checkbox" value="" id="agree2">
+                                        <label class="form-check-label" for="agree2">
+                                            개인정보 제3자 제공 동의 (필수)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="essential form-check-input" type="checkbox" value="" id="agree3">
+                                        <label class="form-check-label" for="agree3">
+                                            책임 규정에 대한 동의 (필수)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <br><br>
+                            <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
+                            <button class="paymentBtn w-80 btn btn-primary  btn-lg" type="button">결제하기</button>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+</th:block>
+</html>

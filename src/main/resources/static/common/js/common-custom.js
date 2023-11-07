@@ -129,11 +129,11 @@ function yearDateSettingFn(date, $obj){
     });
 }
 
-const projectPointColor = [
-    'rgb(253,169,185)', // 리워드
-    'rgb(158,227,215)', // 기부
-    'rgb(198,173,246)' // 투자
-]
+const projectPointColor = {
+    rewardColor : 'rgb(253,169,185)', // 리워드
+    donationColor : 'rgb(158,227,215)', // 기부
+    investColor : 'rgb(198,173,246)' // 투자
+}
 
 // 진현
 // popup 형태 새로운 브라우저 open function
@@ -186,6 +186,107 @@ $('#allSelectBtn').on('click', function(){
 
 // 공고 상세보기 btn controls
 $('.more-btn').on('click', function(){
-    $('#projectInfoDetail').toggleClass('active');
+    $('.projectInfoDetail').toggleClass('active');
     $(this).toggleClass('active');
 });
+
+
+/* 유효성 검사 Fn */
+let regExpKr = /[^ㄱ-ㅎ가-힣]/g;
+let regExpEn = /[^a-zA-Z]/g;
+let regExpNum = /[^0-9]/g;
+let regEmpty = /\s/;
+
+// 공백 유효성 검사
+function validationEmptyFn($els){
+    let isFalse = true;
+    $($els).each((idx, item) => {
+        let value = $(item).val();
+        let labelId = $(item).attr('id');
+        console.log(labelId, '<--?')
+
+        if(value == null || value == '' || typeof value == 'undefined') {
+            let labelText = $(`label[for=${labelId}]`).text();
+            alert(labelText+'는 필수 입력 항목입니다');
+            $(item).focus();
+            isFalse = false;
+            return false;
+        }
+    });
+    return isFalse;
+}
+// 한글 유효성 검사
+function validationOnlyKoreanFn($els){
+    let isFalse = true;
+    $($els).each((idx, item) => {
+        // 초기화
+        $(item).siblings('.error-message').remove();
+        // 대상 value 반환
+        let value = $(item).val();
+
+        // 공백 검증
+        let emptyMatches = value.match(regEmpty) ; // 공백 반환
+        if(emptyMatches) {
+            $(item).focus().val('').after('<span class="error-message">공백 없이 입력해주세요</span>');
+            isFalse = false;
+            return false;
+        }
+
+        // 한글 유효성 검증
+        let valueMatches = value.match(regExpKr) ; // value 중 한글이 아닌 값 반환
+
+        if(valueMatches) {
+            $(item).focus().val('').after('<span class="error-message">한글만 입력해주세요</span>');
+            isFalse = false;
+            return false;
+        }
+    });
+    return isFalse;
+}
+/*
+*
+* */
+// 숫자 유효성 검사
+function onlyNumberValidationFn($els,addValue){
+    let regExpNum = new RegExp('[^0-9' + addValue + ']', 'g');
+    let isFalse = true;
+    $($els).each((idx, item) => {
+        $(item).siblings('.error-message').remove();
+
+        let value = $(item).val();
+
+        let emptyMatches = value.match(regEmpty) ;
+
+        if(emptyMatches) {
+            $(item).focus().val('').after('<span class="error-message">공백 없이 입력해주세요</span>');
+            isFalse = false;
+            return false;
+        }
+
+        // 숫자 유효성 검사
+        let valueMatches = value.match(regExpNum) ;
+        if(valueMatches) {
+            $(item).focus().val('').after('<span class="error-message">숫자만 입력해주세요</span>');
+            isFalse = false;
+            return false;
+        }
+    });
+    return isFalse;
+}
+
+
+// 현재 날짜에서 max 이전 날짜까지 셋팅 fn
+function monthAndDaySetting(max){
+    const date = new Date();
+
+    // 날짜 변환
+    date.setDate(date.getDate() - max);
+
+    // 날짜를 원하는 형식으로 포맷팅
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var day = String(date.getDate()).padStart(2, '0');
+
+    return month + '-' + day;
+}
+

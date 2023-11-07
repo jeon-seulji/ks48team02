@@ -222,18 +222,6 @@
             swiper();
         })
 
-
-        $('#submitBtn').click(function(){
-            console.log($('.needs-validation').val());
-        })
-
-
-
-
-
-
-
-
     </script>
 
 
@@ -252,6 +240,7 @@
 
     <div class="main-section container">
         <div class="row">
+            <form id="addDonationForm" th:action="@{/user/projectRegistration/donation}" method="post">
             <div class="col-lg-2 order-md-first">
                 <!--      <div class="col-md-5 col-lg-4 order-md-last">-->
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -279,17 +268,16 @@
 
                 <br><br>
 
-                <form class="needs-validation" novalidate="">
                     <div class="row g">
                         <div class="col-8">
-                            <label for="projectSubject" class="form-label fw-bord text-dark">프로젝트의 제목을 적어주세요</label>
-                            <input type="text" class="form-control" id="projectSubject" placeholder="제목을 입력해 주세요." value="" required="">
+                            <label for="donationSubject" class="form-label fw-bord text-dark">프로젝트의 제목을 적어주세요</label>
+                            <input type="text" class="form-control" id="donationSubject" name="donationSubject" placeholder="제목을 입력해 주세요." value="" required="">
                             <br>
                         </div>
 
                         <div class="col-8">
-                            <label for="projectGoalMoney" class="form-label fw-bord text-dark">목표 금액을 적어주세요</label>
-                            <input type="text" class="form-control" id="projectGoalMoney" placeholder="목표 금액을 입력해주세요." value="" required="">
+                            <label for="donationGoalMoney" class="form-label fw-bord text-dark">목표 금액을 적어주세요</label>
+                            <input type="text" class="form-control" id="donationGoalMoney" name="donationGoalMoney" placeholder="목표 금액을 입력해주세요." value="" required="">
                             <br>
                         </div>
 
@@ -349,8 +337,8 @@
                         </div>
 
                         <div class="col-8">
-                            <label for="date-picker" class="form-label fw-bord text-dark">프로젝트 진행 기간을 적어주세요</label><br>
-                            <input type="text" id="date-picker" class="form-control-sm">
+                            <label for="donationEndDate" class="form-label fw-bord text-dark">프로젝트 마감 기간을 적어주세요</label><br>
+                            <input type="date" id="donationEndDate" name="donationEndDate" class="form-control-sm">
                         </div>
 
                         <div class="col-8">
@@ -360,7 +348,6 @@
                     </div>
 
                     <hr class="my-4">
-                </form>
             </div>
 
             <!-- storyInfo area -->
@@ -371,40 +358,37 @@
                 <h6 class="mb-2">영상과 이미지를 함께 등록할 경우, 영상이 먼저 보여집니다.</h6>
                 <br><br>
 
-                <form class="needs-validation" novalidate="">
-                    <div class="row g">
-                        <div class="col-8">
-                            <div class="mb-3">
-                                <label for="detailImage" class="form-label fw-bord text-dark">상세 이미지를 등록해주세요.</label>
-                                <div class="banner-content">상세 이미지</div>
-                                <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
-                                <input class="form-control" id="detailImage" type="file">
-                            </div>
-                        </div>
-
-                        <div class="col-10">
-                            <label for="detailMovie" class="form-label fw-bord text-dark">동영상 주소를 적어주세요</label>
-                            <input type="text" class="form-control" id="detailMovie" placeholder="동영상 주소를 적어주세요." value="" required="">
-                            <br>
-                        </div>
-
-                        <div class="col-10">
-                            <div class="mb-3">
-                                <label for="detailComent" class="form-label">프로젝트 스토리를 적어주세요</label>
-                                <textarea class="form-control" id="detailComent" rows="20"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-8">
-                            <br><br>
-                            <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
-                            <button class="submitBtn w-80 btn btn-primary btn-lg" type="button">제출하기</button>
+                <div class="row g">
+                    <div class="col-8">
+                        <div class="mb-3">
+                            <label for="detailImage" class="form-label fw-bord text-dark">상세 이미지를 등록해주세요.</label>
+                            <div class="banner-content">상세 이미지</div>
+                            <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
+                            <input class="form-control" id="detailImage" type="file">
                         </div>
                     </div>
 
-                    <hr class="my-4">
+                    <div class="col-10">
+                        <label for="detailMovie" class="form-label fw-bord text-dark">동영상 주소를 적어주세요</label>
+                        <input type="text" class="form-control" id="detailMovie" placeholder="동영상 주소를 적어주세요." value="" required="">
+                        <br>
+                    </div>
 
-                </form>
+                    <div class="col-10">
+                        <div class="mb-3">
+                            <label for="donationContents" class="form-label">프로젝트 스토리를 적어주세요</label>
+                            <textarea class="form-control" id="donationContents" name="donationContents" rows="20"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-8">
+                        <br><br>
+                        <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
+                        <button class="submitBtn w-80 btn btn-primary btn-lg" type="submit">제출하기</button>
+                    </div>
+                </div>
+
+                <hr class="my-4">
             </div>
 
 

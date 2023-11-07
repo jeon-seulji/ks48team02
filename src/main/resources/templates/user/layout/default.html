@@ -89,7 +89,12 @@
 
 	<!-- 공용 js code -->
 	<script type="text/javascript">
-		console.log("a");
+		// header menu slidedown
+		$('.user-connection-menu li').hover(function(){
+			$(this).find('.header-menu-submenu').stop().slideDown(300);
+		}, function(){
+			$(this).find('.header-menu-submenu').stop().slideUp(300);
+		})
 
 
 

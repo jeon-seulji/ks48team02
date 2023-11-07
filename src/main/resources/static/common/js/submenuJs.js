@@ -15,6 +15,7 @@ var subsetContentHeight = function () {
 
 // 서브 메뉴 active
 $SIDEBAR_MENU.find('a').filter(function () {
+    console.log(this.href == document.referrer, '<--??');
     return this.href == document.referrer;
 }).parent('li').addClass('current-page').parents('ul').slideDown(function() {
     subsetContentHeight();
