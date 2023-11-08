@@ -10,7 +10,6 @@ public class Donation {
     private String donationSubject;
     private String donationContents;
     private String donationImage;
-    private String donationRegCompany;
     private String donationRegDate;
     private String donationStartDate;
     private String donationEndDate;
@@ -34,7 +33,6 @@ public class Donation {
         sb.append(", donationSubject='").append(donationSubject).append('\'');
         sb.append(", donationContents='").append(donationContents).append('\'');
         sb.append(", donationImage='").append(donationImage).append('\'');
-        sb.append(", donationRegCompany='").append(donationRegCompany).append('\'');
         sb.append(", donationRegDate='").append(donationRegDate).append('\'');
         sb.append(", donationStartDate='").append(donationStartDate).append('\'');
         sb.append(", donationEndDate='").append(donationEndDate).append('\'');
@@ -119,14 +117,6 @@ public class Donation {
 
     public void setDonationImage(String donationImage) {
         this.donationImage = donationImage;
-    }
-
-    public String getDonationRegCompany() {
-        return donationRegCompany;
-    }
-
-    public void setDonationRegCompany(String donationRegCompany) {
-        this.donationRegCompany = donationRegCompany;
     }
 
     public String getDonationRegDate() {
