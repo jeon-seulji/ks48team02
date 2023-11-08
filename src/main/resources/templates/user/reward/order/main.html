@@ -96,7 +96,7 @@
     <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
 
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<!--  다음 주소찾기 api   -->
+    <!--  다음 주소찾기 api   -->
 
 
 
@@ -122,15 +122,31 @@
                 $('#selectedOption').html('');
 
                 let selectOption = $('#orderInfo').find('input[type="checkbox"]:checked').parents('.selectOption');
+                // 총 리워드 주문 금액
+                let totalRewardPrice = 0;
+                // 주문 시 배송비
+                let orderDeliverPrice = 0;
+
                 $(selectOption).each(function(idx,item){
 
                     let optionName = $(item).find('.optionName').text();
-                    let optionPrice =$(item).find('.optionPrice').text();
-                    let optionAmount =$(item).find('.optionAmount').val();
+                    let optionPrice = $(item).find('.optionPrice').text();
+                    let optionAmount = $(item).find('.optionAmount').val();
                     let optionDeliverPrice = $(item).find('.optionDeliverPrice').text();
 
+                    //배송비가 무료배송이면 합산 x 아니면 가장 높은 배송비 할당.
+                    if(optionDeliverPrice != '무료 배송') {
+                        let deliverEle = Number(optionDeliverPrice.replaceAll('원','').replaceAll(',',''));
+                        if(deliverEle > orderDeliverPrice) {
+                            orderDeliverPrice = deliverEle;
+                        }
+                    }
+                    //선택된 옵션 순회하면서 옵션 금액을 리워드 금액에 합산
+                    totalRewardPrice += (Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount);
 
+                    // 선택한 옵션태그 담을 변수
                     let addSelectedOption;
+
                     if(idx === $(selectOption).length-1) {
 
                         addSelectedOption = $('<div>\n' +
@@ -140,12 +156,19 @@
 
                             '                                    <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>\n' +
                             '\n' +
-                            '                                    <span class="orderOptionDeliverPrice ml-2">배송비</span>\n' +
-                            '                                    <span id="deliverPrice" class ="font-weight-bold float-right mr-2">무료 배송</span>\n' +
+                            '                                    <span class="ml-2">배송비</span>\n' +
+                            '                                    <span class="orderOptionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>\n' +
                             '                                    <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
                             '\n' +
                             '                                    <span class="ml-2">쿠폰 사용</span>\n' +
-                            '                                    <span class ="font-weight-bold float-right mr-2">사용 가능한 쿠폰이 없습니다</span>\n' +
+                            '                                    <span class ="font-weight-bold float-right mr-2">' +
+                            '                                       <select class="orderUseCoupon">' +
+                            '                                          <option value="">===쿠폰을 선택해주세요===</option>' +
+                            '                                           <option value="7">~~~~~~~~~~쿠폰</option>' +
+                            '                                           <option value="10">~~~~~~~~~~~~~쿠폰</option>' +
+                            '                                           <option value="3000">~~~~~~쿠폰</option>' +
+                            '                                       </select>' +
+                            '                                    </span>\n' +
                             '                                    <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
                             '\n' +
                             '                                    <span class="ml-2">포인트 사용</span>\n' +
@@ -161,12 +184,8 @@
                             '                                    <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>\n' +
                             '                                </div>');
 
-                        $(addSelectedOption).find('.orderOptionName').text(optionName);
-                        $(addSelectedOption).find('.orderOptionPrice').text(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount);
-                        $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
-                        $(addSelectedOption).find('.orderOptionDeliverPrice').text(optionDeliverPrice);
-                    } else{
 
+                    } else{
                         addSelectedOption = $('<div class="my-lg-1" style="height: 35px">\n' +
                             '                                    <span class="orderOptionName ml-2"></span>\n' +
                             '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
@@ -175,17 +194,104 @@
                             '                                    <br>\n' +
                             '                                </div>');
 
-                        $(addSelectedOption).find('.orderOptionName').text(optionName);
-                        $(addSelectedOption).find('.orderOptionPrice').text(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount);
-                        $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
+
                     }
 
-
-
+                    $(addSelectedOption).find('.orderOptionName').text(optionName);
+                    $(addSelectedOption).find('.orderOptionPrice').text(`${(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount).toLocaleString('ko-KR')} 원`);
+                    $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
                     $('#selectedOption').append($(addSelectedOption));
                 });
 
+                // 최종 리워드 비용
+                $('#totalRewardPrice').text(`${totalRewardPrice.toLocaleString('ko-KR')}원`);
+
+                // 배송비에 따라 최종 결제 배송비, 결제비용
+                if(orderDeliverPrice == 0) {
+                    $('.orderOptionDeliverPrice').text('무료 배송');
+                    $('#totalOrderDeliverPrice').text('무료 배송');
+                    $('#totalPayPriceHidden').val(totalRewardPrice);
+                    $('#totalPayPrice').text(`${totalRewardPrice.toLocaleString('ko-KR')}원`);
+                } else {
+                    $('.orderOptionDeliverPrice').text(`${orderDeliverPrice.toLocaleString('ko-KR')}원`);
+                    $('#totalOrderDeliverPrice').text(`${orderDeliverPrice.toLocaleString('ko-KR')}원`);
+                    $('#totalPayPriceHidden').val(totalRewardPrice + orderDeliverPrice)
+                    $('#totalPayPrice').text(`${(totalRewardPrice + orderDeliverPrice).toLocaleString('ko-KR')}원`)
+                }
             });
+
+            //쿠폰 사용시 쿠폰 혜택 최종 결제금액에 적용
+            $(document).on('change','.orderUseCoupon',function(){
+                let totalRewardPrice = Number($('#totalRewardPrice').text().replaceAll('원','').replaceAll(',',''));
+
+                let point = Number($('#usePoint').val());
+                let coupon = Number($(this).val());
+                let deliver = $('#totalOrderDeliverPrice').text();
+                if(deliver =='무료 배송') {
+                    deliver = 0;
+                } else {
+                    deliver = Number(deliver.replaceAll('원','').replaceAll(',',''));
+                }
+
+                let paymentPrice =0;
+
+
+                if(coupon <= 0) {
+
+                    paymentPrice =(totalRewardPrice - coupon - point  + deliver);
+                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
+                    $('#totalOrderCoupon').text(`${coupon.toLocaleString('ko-KR')}원`);
+
+                } else if( coupon > 100) {
+                    //일정 금액 할인
+                    alert(`${coupon.toLocaleString('ko-KR')} 원 할인`)
+                    paymentPrice =(totalRewardPrice - coupon - point  + deliver);
+                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
+                    $('#totalOrderCoupon').text(`${coupon.toLocaleString('ko-KR')}원`);
+
+                } else{
+                    //퍼센트 할인
+                    alert(`${coupon}% 할인`)
+                    paymentPrice = (totalRewardPrice*(1 - coupon/100) - point  + deliver);
+                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
+                    $('#totalOrderCoupon').text(`${(totalRewardPrice*coupon/100).toLocaleString('ko-KR')}원`)
+                }
+
+            });
+
+
+            //포인트 사용 시 최종 결제 금액에 사용한 포인트 금액 표시, 최종 결제 금액 이상 포인트는 사용 못하게.
+            $(document).on('change','#usePoint',function(){
+
+                let totalRewardPrice = Number($('#totalRewardPrice').text().replaceAll('원','').replaceAll(',',''));
+                let totalPayPrice = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
+                let point = Number($(this).val());
+                let coupon = Number($('.orderUseCoupon').val());
+                let deliver = $('#totalOrderDeliverPrice').text();
+                if(deliver =='무료 배송') {
+                    deliver = 0;
+                } else {
+                    deliver = Number(deliver.replaceAll('원','').replaceAll(',',''));
+                }
+
+                let paymentPrice =0;
+
+                if(point > totalPayPrice) {
+                    alert('포인트는 결제 금액을 넘길 수 없습니다')
+                    $(this).val(0);
+                    point = 0;
+                }
+                if(coupon > 0 && coupon <= 100) {
+                    paymentPrice = (totalRewardPrice*(1 - coupon/100) - point  + deliver);
+                } else {
+                    paymentPrice =(totalRewardPrice - coupon - point  + deliver);
+                }
+                $('#totalOrderPoint').text(`${point.toLocaleString('ko-KR')}원`);
+                $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
+
+            });
+
+
 
             // 이전 버튼 클릭시 페이지 이동
             $('.prevBtn').click(function(){
@@ -200,9 +306,7 @@
                     $('#elseDeliverRequest').val('');
                 }
                 $('#elseDeliverRequest').prop('disabled',!isElseSelected);
-
-
-            })
+            });
 
             //약관 체크 모두 될 시 모두 동의에 체크.
             $('.essential').not('#agreeNews').click(function(){
@@ -222,7 +326,7 @@
                 if($(this).val() < 1) {
                     $(this).val(1);
                 }
-            })
+            });
 
             //옵션 선택될 시 기본값 1주고 수량 바꿀 수 있게, 선택 안될 시 값0으로 주고 수량 못바꾸게
             $('.selectOption input:checkbox').change(function(){
@@ -241,6 +345,7 @@
 
             //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
             $('.paymentBtn').click(function(){
+
                 $('.essential').each(function(idx,item){
                     if(!$(item).prop('checked')) {
                         alert('필수 약관에 모두 동의해주세요');
@@ -258,17 +363,16 @@
                         $('#deliverMemberAddr').val(data.address); // 주소 넣기
                     }
                 }).open();
-            })
+            });
 
+        });
 
-
-        })
         //사용 포인트 음수로 입력하지 못하게
         $(document).on('change', '#usePoint', function(){
             if($(this).val() < 0) {
                 $(this).val(0);
             }
-        })
+        });
 
 
 
@@ -339,7 +443,7 @@
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">배송비</span>
-                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>
+                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">5,000원</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">발송 시작일</span>
@@ -373,7 +477,7 @@
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">배송비</span>
-                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>
+                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">3,000원</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">발송 시작일</span>
@@ -638,7 +742,50 @@
                                 </div>
                             </div>
 
-                            <div class="mt-lg-5 mb-lg-5" style="border: 2px solid #4d4d4d; margin: 5px; width: 100%"></div>
+                            <div class="mt-lg-5 mb-lg-5" style="border: 1px solid #4d4d4d; margin: 5px; width: 100%"></div>
+
+                            <div class="ml-lg-2">
+                                <h5>결제 금액</h5>
+                                <div id="paymentPrice" class="ml-lg-3 mt-lg-4">
+
+                                    <div>
+                                        <input type="number" id="totalPayPriceHidden" hidden="hidden" ></input>
+                                        <span class="ml-2">리워드 금액</span>
+                                        <span id="totalRewardPrice" class=" font-weight-bold float-right mr-lg-2">35000원</span>
+                                        <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                                        <span class="ml-2">포인트 사용 금액</span>
+                                        <span id="totalOrderPoint"  class=" font-weight-bold float-right mr-lg-2">0원</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                                        <span class="ml-2">쿠폰 할인 금액</span>
+                                        <span id="totalOrderCoupon" class=" font-weight-bold float-right mr-lg-2">0원</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                                        <span class="ml-2">등급 할인 금액</span>
+                                        <span id="memberRankDiscount" class=" font-weight-bold float-right mr-lg-2">0원</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                                        <span class="ml-2">배송비</span>
+                                        <span id="totalOrderDeliverPrice" class=" font-weight-bold float-right mr-lg-2">무료 배송</span>
+                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                                        <span class="ml-2 text-primary">적립 금액</span>
+                                        <span id="memberRankSave" class=" font-weight-bold float-right mr-lg-2 text-primary">0원</span>
+                                        <div style="border: 2px solid #f3f4f5; margin: 10px; width: 100%"></div>
+
+                                        <span class="ml-2 font-weight-bold" style="font-size: 20px">총 결제 금액</span>
+                                        <span id="totalPayPrice" class="font-weight-bold float-right mr-lg-2" style="font-size: 20px">70000원</span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="mt-lg-5 mb-lg-5" style="border: 1px solid #4d4d4d; margin: 5px; width: 100%"></div>
 
                             <div class="ml-lg-2">
                                 <h5>결제 수단</h5>

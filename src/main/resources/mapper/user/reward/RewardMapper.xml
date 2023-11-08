@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.user.mapper.reward.RewardMapper">
 
+    <!--   리워드 프로젝트 resultMap -->
     <resultMap id="RewardResultMap" type="RewardProject">
         <id property="rewardProjectCode" column="reward_project_code"/>
         <result property="rewardCategoryCode" column="reward_category_code"/>
@@ -37,5 +38,72 @@
             <result property="optionName" column="option_name"/>
         </collection>
     </resultMap>
+
+    <!--회원 resultMap-->
+    <resultMap type="Member" id="memberResultMap">
+        <id property="memberId" column="member_id"/>
+        <result property ="memberTypeCode" column="member_type_code"/>
+        <result property="memberName" column="member_name"/>
+        <result property="memberPw" column="member_pw"/>
+        <result property="memberRegDate" column="member_reg_date"/>
+        <result property="memberEmail" column="member_email"/>
+        <result property="memberContactInfo" column="contact_info"/>
+        <result property="unRegDate" column="unreg_date"/>
+        <result property="unRegStatus" column="unreg_status"/>
+
+        <association property="customer" javaType="Customer">
+            <id property="customerCode" column="customer_code"/>
+            <result property="memberId" column="member_id"/>
+            <result property="rewardRankCode" column="reward_rank_code"/>
+            <result property="donationRankCode" column="donation_rank_code"/>
+            <result property="customerGender" column="costomer_gender"/>
+            <result property="customerBirth" column="customer_birth"/>
+            <result property="customerAddr" column="customer_addr"/>
+            <result property="customerAddrDetail" column="customer_addr_detail"/>
+            <result property="customerPoint" column="customer_point"/>
+            <result property="customerFlover" column="customer_flover"/>
+            <result property="customerCoupon" column="customer_coupon"/>
+        </association>
+
+        <association property="rewardCustomerRank" javaType="RewardCustomerRank">
+            <id property="rewardRankCode" column="reward_rank_code"/>
+            <result property="rankName" column="rank_name"/>
+            <result property="discountRate" column="discount_rate"/>
+            <result property="rankUpgradeAmount" column="rank_upgrade_amount"/>
+            <result property="pointSavingRate" column="point_saving_rate"/>
+        </association>
+    </resultMap>
+
+    <select id="getRankById" parameterType="String" resultType="RewardCustomerRank">
+
+        SELECT
+            m.member_name,
+            m.member_email,
+            m.contact_info,
+            c.costomer_gender,
+            c.customer_birth,
+            c.customer_addr,
+            c.customer_addr_dtail,
+            c.customer_point,
+            cr.rank_name,
+            cr.discount_rate,
+            cr.point_saving_rate
+        FROM
+            member AS m
+        INNER JOIN
+            customer AS c
+        on
+            m.member_id= c.member_id
+        INNER JOIN
+            reward_customer_rank AS cr
+        ON
+            c.reward_rank_code = cr.reward_rank_code
+        INNER JOIN
+            donation_customer_rank AS dr
+        ON
+            c.donation_rank_code = dr.donation_rank_code
+        WHERE
+            m.member_id = #{memberId};
+    </select>
 
 </mapper>
