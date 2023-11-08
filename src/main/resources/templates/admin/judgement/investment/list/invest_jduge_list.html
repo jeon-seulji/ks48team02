@@ -21,11 +21,67 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
+
+    <form>
+        <div th:each="l, index : ${investmentRequestJudgeList}" th:if="${index.index} < 1" class="sett-total-data admin-content-wrapper form-table">
+            <div class="sett-total-item">
+                <h5>오늘 들어온 심사 요청</h5>
+                <div class="sett-total-item-data"><a class="today-add-count" th:href="@{#}" th:text="${l.todayRequestCnt}"></a>건</div>
+            </div>
+            <div class="sett-total-item">
+                <h5>처리중</h5>
+                <div class="sett-total-item-data"><a class="progress-add-count" th:href="@{#}" th:text="${l.standbyCnt}">0</a>건</div>
+            </div>
+            <div class="sett-total-item">
+                <h5>오늘 처리 완료</h5>
+                <div class="sett-total-item-data"><a class="progress-completed-count" th:href="@{#}" th:text="${l.todayProceedCnt}">0</a>건</div>
+            </div>
+            <div class="sett-total-item">
+                <h5>심사 반려</h5>
+                <div class="sett-total-item-data"><a class="progress-error-count" th:href="@{/admin/investment/search/judge(investJudgeResult=0)}" th:text="${l.rejectCnt}">0</a>건</div>
+            </div>
+        </div>
+    </form>
+
     <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div><br>
+
+    <h4 class="admin-content-title">투자 심사요청 목록</h4>
+
     <div class="admin-content-wrapper">
-        <table>
+
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>심사 요청 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
+            </div>
+            <div class="list-count-selector">
+                <select name="orderby">
+                    <option value="regist_d">신청일 순</option>
+                    <option value="regist_a">신청일 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">심사요청 제목순</option>
+                    <option value="project_name_a">심사요청 제목역순</option>
+                    <option>-----------------</option>
+                    <option value="appli_progress_p">심사 승인</option>
+                    <option value="appli_progress_i">심사 대기</option>
+                    <option value="appli_progress_c">심사 반려</option>
+                </select>
+                <select name="count-select">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="settlement-log">
             <thead>
             <tr>
+                <th>
+                    <input type="checkbox" name="allSelect" id="allSelectBtn">
+                </th>
                 <th>투자 심사요청 코드</th>
                 <th>투자 심사요청 제목</th>
                 <th>요청한 판매자 아이디</th>
@@ -43,11 +99,17 @@
             </thead>
             <tbody>
             <tr th:if="${investmentRequestJudgeList == null}">
+                <td>
+                    <input type="checkbox" name="selectList">
+                </td>
                 <td colspan="13">투자 심사요청 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${investmentRequestJudgeList == null}" th:each="l : ${investmentRequestJudgeList}">
                 <td>
-                    <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
+                    <input type="checkbox" name="selectList">
+                </td>
+                <td>
+                    <a class="detail-link" th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}" th:text="${l.investmentRequestJudgeCode}"></a>
                 </td>
                 <td th:text="${l.investmentRequestSubject}"></td>
                 <td th:text="${l.memberIdSeller}"></td>
@@ -58,9 +120,9 @@
                 <td th:text="${l.investmentRequestDate}"></td>
                 <td th:text="${l.investJudgeDate}"></td>
                 <td th:text="${l.memberId}"></td>
-                <td th:if="${l.investJudgeResult == 0}">심사 대기</td>
+                <td th:if="${l.investJudgeResult == 0}">심사 반려</td>
                 <td th:if="${l.investJudgeResult == 1}">심사 승인</td>
-                <td th:if="${l.investJudgeResult == 2}">심사 반려</td>
+                <td th:if="${l.investJudgeResult == 2}">심사 대기</td>
                 <td>
                     <a th:href="@{/admin/investment/update/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}">수정</a>
                 </td>

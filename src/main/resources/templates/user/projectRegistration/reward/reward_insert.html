@@ -10,11 +10,13 @@
     <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}"/>
     <link rel="stylesheet" th:href="@{/user/css/main_style.css}"/>
 
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
           integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
     <style>
         .info-contents-area {
@@ -34,9 +36,9 @@
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
-
     <script src=" https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/locales/bootstrap-datepicker.ko.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 </th:block>
 
@@ -44,7 +46,7 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
 
-    <script>
+    <script type="text/javascript">
         $(function () {
 
             //유효성 검사를 위한 validationCheck 함수.
@@ -54,15 +56,31 @@
                 //1.인수 값이 객체일 경우
                 if (typeof data == 'object') {
 
-                    $.each(data, function () {
+                    $.each(data, function (idx, item) {
                         let checkValue = $(this).val();
-                        if (checkValue === null || checkValue === '' || checkValue === 'undefined' ) {
-                            isValid = false;
-                            let eleId = $(this).attr('id');
-                            let cate = $(`label[for="${eleId}"]`).text();
-                            alert(`${cate} 필수 입력 항목입니다.`);
-                            $(this).focus();
-                            return isValid;
+
+                        if($(item).attr('id') == 'detailComent') {
+                            let noteIsEmpty = $('#detailComent').summernote('isEmpty');
+                            console.log(noteIsEmpty);
+
+                            if($('#detailComent').summernote('isEmpty')){
+                                isValid = false;
+                                let eleId = $(this).attr('id');
+                                let cate = $(`label[for="${eleId}"]`).text();
+                                alert(`${cate} 필수 입력 항목입니다.`);
+                                $('#detailComent').summernote('focus');
+                                return isValid;
+                            }
+                        }
+                        else{
+                            if (checkValue === null || checkValue === '' || checkValue === 'undefined' ) {
+                                isValid = false;
+                                let eleId = $(this).attr('id');
+                                let cate = $(`label[for="${eleId}"]`).text();
+                                alert(`${cate} 필수 입력 항목입니다.`);
+                                $(this).focus();
+                                return isValid;
+                            }
                         }
                     });
                     //2.인수 값이 객체가 아니고 String일 경우
@@ -70,13 +88,13 @@
                     if (data === null || data === '' || data === 'undefined') {
                         isValid = false;
                     }
-                    //3. 인수 값이 객체가 아니고 Number일 경우
                 }
                 return isValid;
             }
 
             //Swiper 생성자 함수
             let swiper = function () {
+
                 new Swiper(".contents-area", {
                     slidesPerView: 3,
                     spaceBetween: 20,
@@ -94,17 +112,27 @@
                 let clickBunDataTab = $(this).attr('data-tab');
                 $('.info-contents-area').hide();
                 $('#' + clickBunDataTab).show();
-            })
+            });
 
-            //다음 단계 버튼 클릭시 화면전환
-            $('.nextBtn').click(function () {
-                let dataTab = $(this).parents('.info-contents-area').attr('id');
-                let nextDataTab = $(this).parents('.info-contents-area').next().attr('id');
-                $(`li[data-tab=${dataTab}]`).removeClass('active');
-                $(`li[data-tab=${nextDataTab}]`).addClass('active');
-                $(this).parents('.info-contents-area').hide();
-                $(this).parents('.info-contents-area').next().show();
-            })
+
+
+            //다음 단계 버튼 클릭시 화면전환, 빈 값 있는지 유효성 검사.
+            $(document).on('click', '.nextBtn', function(){
+                let validCheck = $(this).parents('.info-contents-area').find('input, select, #detailComent').not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]');
+                console.log(validCheck)
+                let isValid = validationCheck(validCheck);
+
+                console.log(isValid);
+                if(isValid) {
+                    let dataTab = $(this).parents('.info-contents-area').attr('id');
+                    let nextDataTab = $(this).parents('.info-contents-area').next().attr('id');
+                    $(`li[data-tab=${dataTab}]`).removeClass('active');
+                    $(`li[data-tab=${nextDataTab}]`).addClass('active');
+                    $(this).parents('.info-contents-area').hide();
+                    $(this).parents('.info-contents-area').next().show();
+                }
+            });
+
 
             //이전 단계 버튼 클릭시 화면전환
             $('.prevBtn').click(function () {
@@ -114,67 +142,60 @@
                 $(`li[data-tab=${prevDataTab}]`).addClass('active');
                 $(this).parents('.info-contents-area').hide();
                 $(this).parents('.info-contents-area').prev().show();
-            })
-
-
-            $('#projectStartDate, #deliverStartDate').datepicker({
-                format: "yyyy-mm-dd",
-                startDate: "today",
-                language: "ko",
-                autoclose: true,
-                todayHighlight: true
-            })
-
-            $('#projectEndDate').datepicker({
-                format: "yyyy-mm-dd",
-                language: "ko",
-                autoclose: true
-            })
-
-
-
-
-            $('#projectStartDate').change(function () {
-                let projectEndDate = $('#projectEndDate');
-                let startDate = new Date($(this).val());
-                let endDate = new Date($(projectEndDate).val());
-
-                $(projectEndDate).prop('disabled', startDate == null);
-                projectEndDate.datepicker('setStartDate', startDate);
-
-                if (startDate >= endDate) {
-                    $(projectEndDate).val('');
-                }
-
             });
 
+            let projectStartDate = new Date();
+            projectStartDate.setDate(projectStartDate.getDate() + 7)
+
+            //데이트피커 객체 생성
+            $('#deliverStartDate, #projectEndDate').datepicker({
+
+                format: "yyyy-mm-dd",
+                startDate: projectStartDate,
+                language: "ko",
+                autoclose: true
+            });
+
+            //프로젝트 시작 일자 선택하면 프로젝트 마감 일자 시작일자 이전 날짜는 선택 못하게.
+            // $('#projectStartDate').change(function () {
+            //     let projectEndDate = $('#projectEndDate');
+            //     let startDate = new Date($(this).val());
+            //     let endDate = new Date($(projectEndDate).val());
+            //
+            //     $(projectEndDate).prop('disabled', startDate == null);
+            //     projectEndDate.datepicker('setStartDate', startDate);
+            //
+            //     if (startDate >= endDate) {
+            //         $(projectEndDate).val('');
+            //     }
+            // });
+
+            //summerNote Api
+            $('#detailComent').summernote({
+                placeholder: '프로젝트 스토리를 입력해주세요',
+                lang: 'ko-KR',
+                tabsize: 2,
+                height: 300
+            });
 
             //리워드 추가 버튼 클릭 시 값이 비어있지 않다면 슬라이더 폼 추가
             $('#rewardAddBtn').click(function () {
-
-                let isValid = true;
-
-                $(this).parents('#rewardAddDiv').find('#rewardPrice, #rewardSubject, #rewardContents, #deliverStartDate').each((idx,item) =>{
-
-                    isValid = validationCheck($(item).val());
-
-                    if(!isValid) {
-                        $(item).focus();
-                        alert(`${$(item).siblings('label').text()}를 입력해 주세요`);
-                    }
-                    return isValid;
-                });
+                let validCheck = $('#rewardAddDiv').find('input, textarea');
+                let isValid = validationCheck(validCheck);
 
                 if(isValid) {
                     let rewardSubject = $('#rewardSubject').val();
                     let rewardPrice = $('#rewardPrice').val();
                     let rewardContents = $('#rewardContents').val();
-                    let rewardDelever = $('#deliverStartDate').val();
+                    let rewardDeliver = $('#deliverStartDate').val();
+                    let rewardLimitQuantity = $('#rewardLimitQuantity').val();
+                    let rewardDeliverPrice = $('#rewardDeliverPrice').val();
 
-                    let card = $(' <div class="swiper-slide">\n' +
+                    let card = $(' <div class="rewardOption swiper-slide">\n' +
                         '                    <div class="card border-primary mb-4 shadow-sm">\n' +
                         '                      <div class="card-header ">\n' +
-                        '                        <h5 class="rewardSebjectH my-0 fw-normal"></h5>\n' +
+                        '                       <span style="background: red; color: white; border-radius: 5px; padding: 2px;"><span class="rewardLimitQuantity">300</span>개</span><br>\n' +
+                        '                       <span><h5 class="rewardSebjectH my-0 fw-normal"></h5></span>\n' +
                         '                      </div>\n' +
                         '                      <div class="card-body">\n' +
                         '                        <p class="text-dark">리워드 내용</p>\n' +
@@ -182,7 +203,9 @@
                         '                        <p class="text-dark">리워드 금액</p>\n' +
                         '                        <input class="rewardPriceInput" type="text" readonly value="">\n' +
                         '                        <p class="text-dark">예상 배송일</p>\n' +
-                        '                        <input class="rewardDeleverInput" type="text" readonly value="">\n' +
+                        '                        <input class="rewardDeliverInput" type="text" readonly value="">\n' +
+                        '                        <p class="text-dark">배송비</p>\n' +
+                        '                        <input class="rewardDeliverPrice" type="number" readonly value="">\n' +
                         '                        <br><br>\n' +
                         '                        <button type="button" class="modifyBtn w-70 btn btn-sm btn-primary">수정</button>\n' +
                         '                        <button type="button" class="delBtn w-70 btn btn-sm btn-danger">삭제</button>\n' +
@@ -190,27 +213,43 @@
                         '                    </div>\n' +
                         '                  </div>')
 
-
+                    $(card).find('.rewardLimitQuantity').text(rewardLimitQuantity);
                     $(card).find('.rewardSebjectH').text(rewardSubject);
                     $(card).find('.rewardContents').text(rewardContents);
-                    $(card).find('.rewardPriceInput').val(`${Number(rewardPrice.replaceAll(',', '')).toLocaleString('ko-KR')}원`);
-                    $(card).find('.rewardDeleverInput').val(rewardDelever);
+                    $(card).find('.rewardPriceInput').val(`${Number(rewardPrice).toLocaleString('ko-KR')}원`);
+                    $(card).find('.rewardDeliverInput').val(rewardDeliver);
+                    $(card).find('.rewardDeliverPrice').val(rewardDeliverPrice);
                     $('.swiper-wrapper').append($(card));
 
                     swiper();
 
-                    $(this).parents('#rewardAddDiv').find('#rewardPrice, #rewardSubject, #rewardContents, #deliverStartDate').each((idx,item) =>{
+                    $(validCheck).each((idx,item) =>{
                         $(item).val('');
                     });
                 }
-
             });
+
+            //썸네일 이미지 추가 시, 이미지 표시
+            $('#thumbnailImage').change(function(){
+                if($(this).val() != null) {
+                    $('.img-thumbnail').css('display','block');
+                    setImageFromFile(this, '.img-thumbnail');
+                }
+            });
+            function setImageFromFile(input, expression) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $(expression).attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            };
 
             //초기화 버튼 클릭 시 추가된 슬라이더 폼 모두 삭제
             $('#rewardInitializeBtn').click(function () {
                 $('.swiper-slide').remove();
-                swiper();
-            })
+            });
 
             //검색 태그 추가 버튼 클릭시 모달 창 열기
             $('#modalOpenBtn').click(function (e) {
@@ -242,39 +281,56 @@
                 if(inputValue <= 0) {
                     $(this).val(1);
                 }
-            })
+            });
 
+            //제출하기 버튼 클릭 시 이벤트 (동적바인딩)
+            $(document).on('click','.submitBtn',function(){
+                let rewardOptionLength = $('.rewardOption').length;
+                let validCheck = $('#projectRegistrationForm').find('input, select, #detailComent')
+                    .not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]').not('#rewardLimitQuantity')
+                    .not('#rewardPrice').not('#rewardSubject').not('#rewardContents').not('#deliverStartDate').not('#deliverPrice');
 
-        })
+                let isValid = validationCheck(validCheck);
+
+                if(isValid) {
+                    if(rewardOptionLength < 1) {
+                        alert('리워드 옵션을 추가해주세요.');
+                    } else if(confirm('정말 프로젝트를 등록하시겠습니까?')){
+                        submit();
+                    }
+                }
+
+            });
+        });
 
         //추가된 리워드 폼에서 삭제 버튼 클릭 시 폼 삭제
         $(document).on('click', '.delBtn', function () {
             $(this).parents('.swiper-slide').remove();
 
-            swiper();
         });
 
         //추가된 리워드 폼에서 수정 버튼 클릭 시 폼 삭제 후 리워드 추가 폼에 수정할 데이터 입력
         $(document).on('click', '.modifyBtn', function () {
             let rewardSubject = $(this).parent().prev().find('.rewardSebjectH').text();
             let rewardPrice = $(this).siblings('.rewardPriceInput').val();
-            let rewardDelever = $(this).siblings('.rewardDeleverInput').val();
+            let rewardDeliver = $(this).siblings('.rewardDeliverInput').val();
             let rewardContents = $(this).siblings('.rewardContents').val();
+            let rewardLimitQuantity =  $(this).parent().prev().find('.rewardLimitQuantity').text();
+            let rewardDeliverPrice = $(this).siblings('.rewardDeliverPrice').val();
+
 
             $('#rewardSubject').val(rewardSubject);
             $('#rewardPrice').val(Number(rewardPrice.replaceAll(',','').replaceAll('원','')));
-            $('#deliverStartDate').val(rewardDelever);
+            $('#rewardDeliverPrice').val(Number(rewardDeliverPrice.replaceAll(',','').replaceAll('원','')));
+            $('#deliverStartDate').val(rewardDeliver);
             $('#rewardContents').val(rewardContents);
+            $('#rewardLimitQuantity').val(Number(rewardLimitQuantity));
 
             $(this).parents('.swiper-slide').remove();
 
-            swiper();
         });
 
-        //제출버튼 클릭 시 이벤트
-        $('#submitBtn').click(function () {
-            console.log($('.needs-validation').val());
-        });
+
 
 
     </script>
@@ -312,56 +368,62 @@
                 </ul>
             </div>
 
+            <form id="projectRegistrationForm" class=" col-lg-10">
+                <!-- defaultInfo area -->
+                <div id="defaultInfo" class="info-contents-area" style="display: block;">
+                    <h5 class="mb-2 fw-bord">프로젝트의 성공 조건 & 수수료 안내</h5>
+                    <h6 class="mb-2">프로젝트 종료일 기준 모금액이 목표금액의 100% 이상인 경우에만 프로젝트가 성공하게 됩니다.<br>
+                        프로젝트가 성공한 경우, 크라우디는 모금액에서 수수료(12%, vat 별도)를 제한 금액을 정산해드립니다.</h6>
+                    <br><br>
 
-            <!-- defaultInfo area -->
-            <div id="defaultInfo" class="info-contents-area col-lg-10" style="display: block;">
-                <h5 class="mb-2 fw-bord">프로젝트의 성공 조건 & 수수료 안내</h5>
-                <h6 class="mb-2">프로젝트 종료일 기준 모금액이 목표금액의 100% 이상인 경우에만 프로젝트가 성공하게 됩니다.<br>
-                    프로젝트가 성공한 경우, 크라우디는 모금액에서 수수료(12%, vat 별도)를 제한 금액을 정산해드립니다.</h6>
-                <br><br>
 
-                <form class="rewardInfo">
-                    <div class="row g">
+                    <div class="row">
+
                         <div class="col-8">
+                            <label for="projectCategory" class="form-label fw-bord text-dark">카테고리를 선택해 주세요</label>
+                            <br>
+                            <select id="projectCategory" name="projectCategory">
+                                <option value="">==선택==</option>
+                                <option th:if="${categoryList != null}" th:each="l : ${categoryList}" th:text="${l.categoryName}" th:value="${l.totalCategoryCode}"></option>
+                            </select>
+                            <br><br>
+
                             <label for="projectSubject" class="form-label fw-bord text-dark">프로젝트의 제목을 적어주세요</label>
-                            <input type="text" class="form-control" id="projectSubject" placeholder="제목을 입력해 주세요."
-                                   value="" required="">
+                            <input type="text" class="form-control" id="projectSubject" placeholder="제목을 입력해 주세요.">
                             <br>
-                        </div>
 
-                        <div class="col-8">
                             <label for="projectGoalMoney" class="form-label fw-bord text-dark">목표 금액을 적어주세요</label>
-                            <input type="number" class="form-control" id="projectGoalMoney" placeholder="목표 금액을 입력해주세요."
-                                   value="" required="">
+                            <input type="number" class="form-control" id="projectGoalMoney" placeholder="목표 금액을 입력해주세요.">
                             <br>
-                        </div>
 
-                        <div class="col-8">
                             <div class="mb-3">
-                                <label for="thumbnailImage" class="form-label fw-bord text-dark">썸네일 이미지를
-                                    등록해주세요.</label>
-                                <div class="banner-content" style="background-color: #7D7D7D">썸네일 이미지</div>
-                                <!--                <img src="..." class="img-thumbnail" alt="...">-->
+                                <label for="thumbnailImage" class="form-label fw-bord text-dark">썸네일 이미지를 등록해주세요.</label>
+                                <!--                                <div class=" banner-content" style="background-color: #7D7D7D">썸네일 이미지</div>-->
+                                <br>
+                                <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
+                                    <img src="" class="img-thumbnail" alt="썸네일이미지" style="height: 200px; width: 350px; display: none;">
+                                </div>
+
                                 <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
-                                <input class="form-control" id="thumbnailImage" type="file">
+                                <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
                             </div>
 
-                        </div>
 
-                        <div class="col-10">
                             <br>
-                            <label for="searchTag" class="form-label fw-bord text-dark">프로젝트 검색 키워드를 입력해주세요 <br>
-                                제목 외에도 키워드 검색 시 검색 결과에 프로젝트가 나타납니다.</label>
+                            <span  class="w-bord text-dark">
+                            <label for="searchTag" class="form-label">프로젝트 검색 키워드를 입력해주세요.</label>
+                            <br>제목 외에도 키워드 검색 시 검색 결과에 프로젝트가 나타납니다.
+                            </span>
 
                             <div class="input-group input-group-sm mb-3">
-                <span class="input-group-text" style="background-color: #235fd9">
-                  <!-- 모달 진입 버튼 -->
-                  <button id="modalOpenBtn" class="btn btn-primary">추가</button>
-                </span>
-                                <input type="text" class="form-control font-weight-bold" id="searchTag" placeholder="검색 키워드를 입력해주세요." readonly="readonly">
+                                <span class="input-group-text" style="background-color: #235fd9">
+                                  <!-- 모달 진입 버튼 -->
+                                  <button id="modalOpenBtn" class="btn btn-primary">추가</button>
+                                </span>
+                                <input type="text" class="form-control font-weight-bold" id="searchTag" placeholder="검색 키워드를 입력해주세요.">
                             </div>
 
-                            <!-- 회원가입 확인 Modal-->
+                            <!-- 검색태그 추가 Modal-->
                             <div class="modal fade" id="modalSearchTag" tabindex="-1" role="dialog"
                                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -395,12 +457,26 @@
                         </div>
 
                         <div class="col-8 text-dark">
-                            <label class="form-label fw-bord text-dark">프로젝트 진행 기간을 적어주세요</label><br>
-
-                            <span>시작 : </span><input type="text" id="projectStartDate" readonly="readonly">
+                            <label class="form-label fw-bord text-dark" for="projectEndDate">프로젝트 마감 날짜를 입력해주세요.</label>
+                            <p>프로젝트 심사부터 리워드 제작 기간 등 전체 일정을 고려해 설정해 주세요.</p>
                             <br>
-                            <span>종료 : </span><input type="text" id="projectEndDate" readonly="readonly" disabled="disabled">
-
+                            <div style="background: #fff1f1; border-radius: 5px; padding: 10px; font-size: 12px">
+                                <p>
+                                    <b>⚠️프로젝트 심사(요건확인, 콘텐츠 확인)</b><br>
+                                    심사가 끝나면 프로젝트를 공개할 수 있어요. 프로젝트 특성이나 완성도에 따라 걸리는 시간은 달라져요.
+                                    <br>
+                                    <b>⚠️프로젝트 진행(공개~종료)</b><br>
+                                    공개부터 종료까지 보통 30일 정도 진행해요. 프로젝트 상황에 따라 자유롭게 선택할 수 있지만<br>
+                                    프로젝트가 승인되고 나면 바꿀 수 없어요.
+                                    <br>
+                                    <b>⚠️프로젝트 종료(리워드 준비~발송)</b><br>
+                                    프로젝트를 성공적으로 종료하면 약속한 날짜에 리워드 발송을 시작해야 해요.
+                                </p>
+                            </div>
+                            <br>
+                            <span>
+                                마감 일자 : <input type="text" id="projectEndDate" readonly="readonly">
+                            </span>
                             <br>
 
                         </div>
@@ -412,43 +488,36 @@
                     </div>
 
                     <hr class="my-4">
-                </form>
-            </div>
+                </div>
 
-            <!-- storyInfo area -->
+                <!-- storyInfo area -->
 
-            <div id="storyInfo" class="info-contents-area col-lg-10">
+                <div id="storyInfo" class="info-contents-area">
 
-                <h5 class="mb-2 fw-bord">프로젝트 소개 영상과 이미지를 등록해주세요</h5>
-                <h6 class="mb-2">영상과 이미지를 함께 등록할 경우, 영상이 먼저 보여집니다.</h6>
-                <br><br>
+                    <h5 class="mb-2 fw-bord">프로젝트 소개 영상과 이미지를 등록해주세요</h5>
+                    <h6 class="mb-2">영상과 이미지를 함께 등록할 경우, 영상이 먼저 보여집니다.</h6>
+                    <br><br>
 
-                <form class="rewardInfo" >
+
                     <div class="row g">
-                        <div class="col-8">
+                        <div class="col-10">
                             <div class="mb-3">
                                 <label for="detailImage" class="form-label fw-bord text-dark">상세 이미지를 등록해주세요.</label>
                                 <div class="banner-content" style="background-color: #7D7D7D">상세 이미지</div>
                                 <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
-                                <input class="form-control" id="detailImage" type="file">
+                                <input class="form-control w-75" id="detailImage" type="file">
                             </div>
-                        </div>
 
-                        <div class="col-10">
                             <label for="detailMovie" class="form-label fw-bord text-dark">동영상 주소를 적어주세요</label>
-                            <input type="text" class="form-control" id="detailMovie" placeholder="동영상 주소를 적어주세요."
+                            <input type="text" class="form-control w-75" id="detailMovie" placeholder="동영상 주소를 적어주세요."
                                    value="" required="">
                             <br>
-                        </div>
 
-                        <div class="col-10">
                             <div class="mb-3">
                                 <label for="detailComent" class="form-label">프로젝트 스토리를 적어주세요</label>
-                                <textarea class="form-control" id="detailComent" rows="20"></textarea>
+                                <div id="detailComent"></div>
                             </div>
-                        </div>
 
-                        <div class="col-8">
                             <br><br>
                             <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
                             <button class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button>
@@ -457,19 +526,18 @@
 
                     <hr class="my-4">
 
-                </form>
-            </div>
 
-            <!-- rewardInfo area -->
-            <div id="rewardInfo" class="info-contents-area col-lg-10">
-                <h5 class="mb-2 fw-bord">프로젝트 리워드를 구성해주세요</h5>
-                <h6 class="mb-2">프로젝트 시작을 위해서는 최소 1개 이상의 리워드가 있어야 합니다.<br>
-                    배송이 필요한 리워드는 배송비가 포함된 가격을 적어주세요.</h6>
-                <br>
+                </div>
 
-                <form class="rewardInfo" novalidate="">
+                <!-- rewardInfo area -->
+                <div id="rewardInfo" class="info-contents-area">
+                    <h5 class="mb-2 fw-bord">프로젝트 리워드를 구성해주세요</h5>
+                    <h6 class="mb-2">프로젝트 시작을 위해서는 최소 1개 이상의 리워드가 있어야 합니다.<br>
+                        배송이 필요한 리워드는 배송비가 포함된 가격을 적어주세요.</h6>
+                    <br>
 
-                    <div id="rewardAddDiv" class="row bg-light border border-primary col-10" style="margin-left : 10px">
+
+                    <div id="rewardAddDiv" class="row bg-light border border-primary w-75" style="margin-left : 10px">
 
                         <div class="col-8">
                             <br>
@@ -492,11 +560,23 @@
                         </div>
 
                         <div class="col-8">
+                            <label for="rewardLimitQuantity" class="form-label fw-bord text-dark">제한 수량</label>
+                            <input type="number" class="form-control" id="rewardLimitQuantity" placeholder="제한 수량을 입력해주세요.">
+                            <br>
+                        </div>
+
+                        <div class="col-8">
                             <label for="deliverStartDate" class="form-label fw-bord text-dark">예상 배송일</label><br>
                             <input type="text" id="deliverStartDate" class="form-control-sm" readonly="readonly">
+                            <br>
                         </div>
                         <div class="col-8">
-                            <br>
+                            <label for="rewardDeliverPrice" class="form-label fw-bord text-dark">배송비</label><br>
+                            <input type="number" id="rewardDeliverPrice" class="form-control-sm" placeholder="배송비">
+                            <br><br>
+                        </div>
+
+                        <div class="col-8">
                             <button id="rewardAddBtn" class="w-80 btn btn-primary btn" type="button">리워드 추가하기</button>
                             <button id="rewardInitializeBtn" class="w-80 btn btn-secondary btn" type="button">초기화</button>
                             <br>
@@ -510,8 +590,8 @@
                             <br>
                             <h3 class="main-title">리워드 옵션<br>미리보기</h3>
                             <!-- Swiper -->
-                            <div class="swiper mySwiper contents-area">
-                                <div class="swiper-wrapper">
+                            <div class="swiper contents-area">
+                                <div class="rewardOptionSwiper swiper-wrapper">
 
                                 </div>
                             </div>
@@ -522,17 +602,18 @@
 
 
                     <div>
-                        <div class="col-8">
-                            <br><br>
 
-                            <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
-                            <button class="submitBtn w-80 btn btn-primary btn-lg" type="submit">제출하기</button>
-                        </div>
+                        <br><br>
+
+                        <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
+                        <button class="submitBtn w-80 btn btn-primary btn-lg" type="button">제출하기</button>
+
                     </div>
 
                     <hr class="my-4">
-                </form>
-            </div>
+
+                </div>
+            </form>
         </div>
     </div>
 

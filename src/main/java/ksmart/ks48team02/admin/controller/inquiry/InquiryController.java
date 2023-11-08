@@ -34,14 +34,4 @@ public class InquiryController {
 
         return "admin/inquiry/reportModify1";
     }
-    @GetMapping("/reportModify2")
-    public String reportModi2Page(){
-
-        return "admin/inquiry/reportModify2";
-    }
-    @GetMapping("/reportModify3")
-    public String reportModi3Page(){
-
-        return "admin/inquiry/reportModify3";
-    }
 }

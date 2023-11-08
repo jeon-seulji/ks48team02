@@ -21,11 +21,45 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
+
     <div th:include="~{admin/judgement/investment/search/incongruity_sectors_search :: searchFragment}"></div><br>
+
+    <h4 class="admin-content-title">부적합 업종 목록</h4>
+
     <div class="admin-content-wrapper">
-        <table>
+
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>업종 개수 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
+            </div>
+            <div class="list-count-selector">
+                <select name="orderby">
+                    <option value="regist_d">등록일 순</option>
+                    <option value="regist_a">등록일 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">업종 코드순</option>
+                    <option value="project_name_a">업종 코드 역순</option>
+                    <option>-----------------</option>
+                    <option value="appli_progress_p">업종순</option>
+                    <option value="appli_progress_i">업종 역순</option>
+                </select>
+                <select name="count-select">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="settlement-log">
             <thead>
             <tr>
+                <th>
+                    <input type="checkbox" name="allSelect" id="allSelectBtn">
+                </th>
                 <th>부적합 업종 코드</th>
                 <th>부적합 업종</th>
                 <th>등록한 아이디</th>
@@ -36,11 +70,17 @@
             </thead>
             <tbody>
             <tr th:if="${incongruitySectorsList == null}">
+                <td>
+                    <input type="checkbox" name="selectList">
+                </td>
                 <td colspan="6">부적합 업종 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${incongruitySectorsList == null}" th:each="l : ${incongruitySectorsList}">
                 <td>
-                    <a th:href="@{/admin/investment/view/incongruity-sectors(incongruitySectorsCode=${l.incongruitySectorsCode})}" th:text="${l.incongruitySectorsCode}"></a>
+                    <input type="checkbox" name="selectList">
+                </td>
+                <td>
+                    <a class="detail-link" th:href="@{/admin/investment/view/incongruity-sectors(incongruitySectorsCode=${l.incongruitySectorsCode})}" th:text="${l.incongruitySectorsCode}"></a>
                 </td>
                 <td th:text="${l.incongruitySectorsBusiness}"></td>
                 <td th:text="${l.memberId}"></td>

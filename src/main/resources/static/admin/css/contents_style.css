@@ -7,11 +7,15 @@ body {
     margin: 0; padding: 0;
     box-sizing: border-box;
 }
-select {
+select,
+input{
     background: #fff;
     padding: 5px 10px;
     border: 1px solid #ccc;
     font-size: 12px;
+}
+input.elsFocus:focus {
+    border: 1px solid var(--errorColor) !important;
 }
 #orderInfoArea input:not([type='checkbox']):focus ,
 #orderInfoArea select:focus,
@@ -553,7 +557,7 @@ a {cursor: pointer;}
 .more-btn:hover span {
     color: #fff;
 }
-.project-info-title-area ~ form {
+.project-info-title-area ~ form:not(.projectInfoDetail) {
     margin-top: 14px;
 }
 .project-info-title-area ~ form .sub-table {
@@ -585,7 +589,7 @@ form .settlement-log tbody .sub-table-tr ~ tr td {
 }
 
 /* projectInfoDetail css */
-#projectInfoDetail {
+.projectInfoDetail {
     height: 0;
     overflow: hidden;
     opacity: 0;
@@ -593,7 +597,7 @@ form .settlement-log tbody .sub-table-tr ~ tr td {
     transition: height .4s, opacity .2s, visibility .2s, margin-top .2s;
     margin-top: 0;
 }
-#projectInfoDetail.active {
+.projectInfoDetail.active {
     height: 268px;
     visibility: visible;
     opacity: 1;

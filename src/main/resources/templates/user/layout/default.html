@@ -57,6 +57,10 @@
 
 
 
+
+	<!--    네이버 스마트에디터 api-->
+	<script type="text/javascript" th:src="@{/smarteditor/js/service/HuskyEZCreator.js}" charset="utf-8"></script>
+
     <!-- Custom Theme Scripts -->
 	<script th:src="@{/user/js/jquery.min.js}"></script>
 	<script th:src="@{/user/js/jquery-migrate-3.0.1.min.js}"></script>
@@ -89,7 +93,12 @@
 
 	<!-- 공용 js code -->
 	<script type="text/javascript">
-		console.log("a");
+		// header menu slidedown
+		$('.user-connection-menu li').hover(function(){
+			$(this).find('.header-menu-submenu').stop().slideDown(300);
+		}, function(){
+			$(this).find('.header-menu-submenu').stop().slideUp(300);
+		})
 
 
 

@@ -21,11 +21,45 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
+
     <div th:include="~{admin/judgement/investment/search/law_satistify_search :: searchFragment}"></div><br>
+
+    <h4 class="admin-content-title">자본시장법 범위충족기준 목록</h4>
+
     <div class="admin-content-wrapper">
-        <table>
+
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>충족기준 개수 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
+            </div>
+            <div class="list-count-selector">
+                <select name="orderby">
+                    <option value="regist_d">등록일 순</option>
+                    <option value="regist_a">등록일 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">충족기준 코드순</option>
+                    <option value="project_name_a">충종기준 코드 역순</option>
+                    <option>-----------------</option>
+                    <option value="appli_progress_p">충족 사유순</option>
+                    <option value="appli_progress_i">중족 사유 역순</option>
+                </select>
+                <select name="count-select">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="settlement-log">
             <thead>
             <tr>
+                <th>
+                    <input type="checkbox" name="allSelect" id="allSelectBtn">
+                </th>
                 <th>자본시장법 범위충족 코드</th>
                 <th>자본시장법 범위충족 사유</th>
                 <th>등록자 아이디</th>
@@ -36,11 +70,17 @@
             </thead>
             <tbody>
             <tr th:if="${lawSatistifyReasonList == null}">
+                <td>
+                    <input type="checkbox" name="selectList">
+                </td>
                 <td colspan="6">자본시장법 범위충족 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${lawSatistifyReasonList == null}" th:each="l : ${lawSatistifyReasonList}">
                 <td>
-                    <a th:href="@{/admin/investment/view/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}" th:text="${l.lawSatistifyCode}"></a>
+                    <input type="checkbox" name="selectList">
+                </td>
+                <td>
+                    <a class="detail-link" th:href="@{/admin/investment/view/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}" th:text="${l.lawSatistifyCode}"></a>
                 </td>
                 <td th:text="${l.lawSatistifyReason}"></td>
                 <td th:text="${l.memberId}"></td>

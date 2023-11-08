@@ -33,7 +33,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue) {
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -54,7 +54,7 @@ public class InvestmentService {
                 searchKey = "s.representative_name";
                 break;
         }
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue);
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
 
         return investmentRequestJudgeList;
     }
@@ -66,6 +66,12 @@ public class InvestmentService {
         return investmentRequestJudgeInfo;
     }
 
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeByResult(String rejectCnt) {
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeInfoByResult = adminInvestmentMapper.getInvestmentRequestJudgeByResult(rejectCnt);
+
+        return investmentRequestJudgeInfoByResult;
+    }
+
     // 자본시장법 범위충족기준 목록 조회
     public List<AdminLawSatistifyReason> getLawSatistifyList() {
         List<AdminLawSatistifyReason> lawSatistifyReasonList = adminInvestmentMapper.getLawSatistifyList();
@@ -74,7 +80,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 자본시장법 범위충족기준 목록 조회
-    public List<AdminLawSatistifyReason> getLawSatistifyList(String searchKey, String searchValue) {
+    public List<AdminLawSatistifyReason> getLawSatistifyList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
         switch (searchKey) {
             case "lawSatistifyCode":
                 searchKey = "l.law_satistify_code";
@@ -86,7 +92,7 @@ public class InvestmentService {
                 searchKey = "l.member_id";
                 break;
         }
-        List<AdminLawSatistifyReason> lawSatistifyReasonList = adminInvestmentMapper.getLawSatistifyListBySearch(searchKey, searchValue);
+        List<AdminLawSatistifyReason> lawSatistifyReasonList = adminInvestmentMapper.getLawSatistifyListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
 
         return lawSatistifyReasonList;
     }
@@ -106,7 +112,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 부적합 업종 목록
-    public List<AdminIncongruitySectors> getIncogruitySectorsList(String searchKey, String searchValue) {
+    public List<AdminIncongruitySectors> getIncogruitySectorsList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
         switch (searchKey) {
             case "incongruitySectorsCode":
                 searchKey = "i.incongruity_sectors_code";
@@ -118,7 +124,7 @@ public class InvestmentService {
                 searchKey = "i.member_id";
                 break;
         }
-        List<AdminIncongruitySectors> incongruitySectorsList = adminInvestmentMapper.getIncogruitySectorsListBySearch(searchKey, searchValue);
+        List<AdminIncongruitySectors> incongruitySectorsList = adminInvestmentMapper.getIncogruitySectorsListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
 
         return incongruitySectorsList;
     }
@@ -138,7 +144,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 기업가치 평가결과 목록 조회
-    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList(String searchKey, String searchValue) {
+    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -159,7 +165,7 @@ public class InvestmentService {
                 searchKey = "c.corp_value_fulfill";
                 break;
         }
-        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationListBySearch(searchKey, searchValue);
+        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
 
         return corporateValueEvaluationList;
     }

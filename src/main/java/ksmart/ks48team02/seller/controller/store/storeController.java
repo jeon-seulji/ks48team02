@@ -10,23 +10,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/seller/store")
 public class storeController {
 
-    //소속된 스토어 정보 조회 페이지(스토어 정보, 등록된 직원 목록...)
-    @GetMapping(value = {"", "/"})
-    public String storePage(Model model) {
 
+    @GetMapping(value = {"", "/"})
+    public String storePage(Model model) { // 스토어 메인페이지 : 소속된 스토어 정보 조회 페이지(스토어 정보, 등록된 직원 목록...)
+        model.addAttribute("contentsTitle","My 스토어");
         return "seller/store/main";
     }
-    //대표자 스토어 등록 페이지
-    @GetMapping(value = "/register")
-    public String storeRegisterPage(Model model) {
 
-        return "seller/store/register";
+    @GetMapping(value = "/registration")
+    public String storeRegisterPage(Model model) { // 대표자 스토어 등록 페이지
+        model.addAttribute("contentsTitle","스토어 만들기");
+        return "seller/store/registration";
     }
-    //대표자 직원 등록 페이지
-    @GetMapping(value = "/staffAdd")
-    public String staffAddPage(Model model) {
 
+    @GetMapping(value = "/staffAdd")
+    public String staffAddPage(Model model) { //대표자 직원 관리 페이지
+        model.addAttribute("contentsTitle","스토어 직원 관리");
         return "seller/store/staff_add";
+    }
+
+    @GetMapping("news")
+    public String storeNews(Model model){ // 스토어 새소식 관리
+        model.addAttribute("contentsTitle","스토어 새소식 관리");
+        return "seller/store/news";
     }
 
 }

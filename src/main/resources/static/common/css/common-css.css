@@ -8,7 +8,15 @@
 a {
 	cursor: pointer;
 }
+
 .error-message {
 	color: var(--errorColor);
-	transition: background-color 0.3s;
+}
+.payments-form input {
+	text-align: right;
+}
+.payments-form label {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
 }

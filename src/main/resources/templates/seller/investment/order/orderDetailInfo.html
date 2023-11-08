@@ -35,10 +35,6 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        $('.more-btn').on('click', function(){
-            $('#projectInfoDetail').toggleClass('active');
-            $(this).toggleClass('active');
-        });
         console.log(CURRENT_URL,'<-- CURRENT_URL');
         console.log(document.referrer,'<-- document.referrer');
 
