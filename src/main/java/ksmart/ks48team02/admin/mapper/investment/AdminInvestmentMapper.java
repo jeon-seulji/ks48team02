@@ -58,6 +58,11 @@ public interface AdminInvestmentMapper {
     // 자본시장 범위충족기준 수정
     public int modifyLawSatistify(AdminLawSatistifyReason adminLawSatistifyReason);
 
+    // 투자펀딩 심사요청 수정
+    public int modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge);
+
     // 부적합 업종 수정
     public int modifyIncongruitySectors(AdminIncongruitySectors adminIncongruitySectors);
+
+
 }

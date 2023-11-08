@@ -185,7 +185,7 @@
                             <td th:text="*{companyBusinessTypeCode}"></td>
                             <td th:text="*{cbtBusinessType}"></td>
                             <td th:if="*{corporateValueEvaluationCode == null}">해당없음</td>
-                            <td th:unless="*{corporateValueEvaluationCode == null}" th:text="*{corporateValueEvaluationCode}"></td>
+                            <td><a th:unless="*{corporateValueEvaluationCode == null}" class="detail-link" th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}" th:text="*{corporateValueEvaluationCode}"></a></td>
                         </tr>
                         <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
                             <td style="height: 35px;">목표펀딩금액</td>
