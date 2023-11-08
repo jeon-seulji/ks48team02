@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface AdminCouponMapper {
-    List<Coupon> getCouponList();
+    public List<Coupon> getCouponList();
 }

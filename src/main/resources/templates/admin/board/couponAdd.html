@@ -12,6 +12,9 @@
             width: 200px;
             background: #e5dddd;
         }
+        .count{
+            width: 200px;
+        }
         .comment{
             width: 700px;
         }
@@ -74,10 +77,14 @@
                     <td><input type="text" class="comment"/></td>
                 </tr>
                 <tr class="row-2">
+                    <th class="banner" scope="row">쿠폰고유번호 <i class="bi bi-patch-check-fill"></i></th>
+                    <td><input type="text" class="comment"/></td>
+                </tr>
+                <tr class="row-3">
                     <th class="banner" cope="row">쿠폰이름 <i class="bi bi-patch-check-fill"></i></th>
                     <td><input type="text" class="comment" /></td>
                 </tr>
-                <tr class="row-3">
+                <tr class="row-4">
                     <th class="banner" scope="row">할인구분</th>
                     <td>
                         <div class="cForm">
@@ -92,19 +99,23 @@
                             <input type="number" class="discountAmount" placeholder="원" style="display: none;">
                     </td>
                 </tr>
+                <tr class="row-5">
+                    <th class="banner" scope="row">쿠폰 제한 수량</th>
+                    <td><input class="count" type="number" placeholder="쿠폰의 제한 수량을 입력해주세요."> 개</td>
+                </tr>
 
-                <tr class="row-4">
+                <tr class="row-6">
                     <th class="banner" scope="row">쿠폰 사용 가능 기간</th>
                     <td><input type="date" class="commentDate1"/>
                         -
                         <input type="date" class="commentDate2">
                     </td>
                 </tr>
-                <tr class="row-5">
+                <tr class="row-7">
                     <th class="banner" scope="row">쿠폰 사용 조건</th>
                     <td><input type="text" class="comment"/></td>
                 </tr>
-                <tr class="row-6">
+                <tr class="row-8">
                     <th class="banner" scope="row">관리자 ID</th>
                     <td><input type="text" class="comment"/></td>
                 </tr>
