@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Controller("admimDonationController")
+@Controller("adminDonationController")
 @RequestMapping("/admin/donation")
 public class DonationController {
     private static final Logger log = LoggerFactory.getLogger(DonationController.class);
