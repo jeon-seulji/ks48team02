@@ -91,6 +91,7 @@ public class PojectRegistrationContoller {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
             jsonObject.addProperty("url", "/summernoteImage/"+savedFileName);
+            jsonObject.addProperty("fileName", savedFileName);
             jsonObject.addProperty("responseCode", "success");
 
         } catch (IOException e) {

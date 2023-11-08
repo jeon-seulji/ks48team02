@@ -122,6 +122,16 @@
             }else if($clickedButton.attr('id') == 'commentAddBtn'){
                 // TODO 심사 반려 사유 버튼 눌렀을 시 구현
             }
+
+            // 심사 승인 눌렀을 시
+            if($clickedButton.prop('class') == 'judgement-approve-btn'){
+                let donationCode = $(this).parent('td').parent('tr').children('td:eq(0)').text();
+                // TODO 도네이션 코드를 받아와서 버튼으로 폼 submit -> dto로 전송 후 데이터 셀렉 후 업데이트
+                $(this).parent('td').parent('tr').children('td:eq(0)').attr('name', 'donationCode');
+
+                alert('심사가 승인 되었습니다.');
+            }
+
         });
 
         const $commentBoxClose = $('#commentBoxClose');
@@ -184,24 +194,26 @@
                 <tr class="not-contents">
                     <td colspan="11" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                 </tr>
-                <!-- contents -->
-                <tr th:unless="${donationList == null}" th:each="l : ${donationList}">
-                    <td class="table-data-center" th:text="${l.donationCode}"></td>
-                    <td class="table-data-center application-id" th:text="${l.memberId}"></td>
-                    <td th:text="${l.donationSubject}"></td>
-                    <td th:text="${l.storeName}"></td>
-                    <td>
-                        <div style="float: left;"><span class="goal-money" th:text="${l.donationGoalMoney}"></span> 원</div>
-                    </td>
-                    <td class="table-data-center" th:text="${l.donationRegDate}"></td>
-                    <td class="table-data-center" th:text="${l.donationEndDate}"></td>
-                    <td class="table-data-center">
-                        <button class="judgement-approve-btn" >심사승인</button>
-                    </td>
-                    <td class="table-data-center">
-                        <button type="button" class="judgement-reject-btn" >심사거절</button>
-                    </td>
-                </tr>
+                <form>
+                    <!-- contents -->
+                    <tr th:unless="${donationList == null}" th:each="l : ${donationList}">
+                        <td class="table-data-center" th:text="${l.donationCode}"></td>
+                        <td class="table-data-center application-id" th:text="${l.memberId}"></td>
+                        <td th:text="${l.donationSubject}"></td>
+                        <td th:text="${l.storeName}"></td>
+                        <td>
+                            <div style="float: left;"><span class="goal-money" th:text="${l.donationGoalMoney}"></span> 원</div>
+                        </td>
+                        <td class="table-data-center" th:text="${l.donationRegDate}"></td>
+                        <td class="table-data-center" th:text="${l.donationEndDate}"></td>
+                        <td class="table-data-center">
+                            <button type="button" class="judgement-approve-btn" >심사승인</button>
+                        </td>
+                        <td class="table-data-center">
+                            <button type="button" class="judgement-reject-btn" >심사거절</button>
+                        </td>
+                    </tr>
+                </form>
 
 
                 </tbody>
