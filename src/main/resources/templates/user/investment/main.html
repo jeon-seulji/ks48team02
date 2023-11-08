@@ -64,6 +64,16 @@
             padding: 2px;
             border-radius: 5px;
         }
+
+        /* project title */
+        .project-title a {
+            display: block;
+            width : 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #191919;
+        }
     </style>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
@@ -111,8 +121,7 @@
             const sortItemWrap = document.querySelector("#sort-item-wrap li:first-child");
             sortItemWrap.classList.add("selected");
 
-            const categoryItemWrap = document.querySelector("#category-wrap li:first-child");
-            categoryItemWrap.classList.add("selected");
+
         });
     </script>
 
@@ -151,139 +160,139 @@
                     </div>
                 </div>
 
-                <div class="container" style="width: 100%; height: 100%">
+                <div class="container stretch">
                     <div class="row">
                         <div class="col investment-item-box">
                             <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                                <img class="donation-item-third-child-image" src="https://ohmycompany.imgix.net/uploads/invest/main/MAIN_202308250201186818d6.jpg?lossless=1&h=450">
+                                <img class="investment-item-third-child-image" src="https://ohmycompany.imgix.net/uploads/invest/main/MAIN_202308250201186818d6.jpg?lossless=1&h=450">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼, 커핑커피</a>
+                            <div class="investment-item-third-child project-title">
+                                <a title="마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼, 커핑커피" th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼, 커핑커피</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)
                             </div>
                         </div>
                         <div class="col investment-item-box">
-                            <div class="investment-item-first-child">
-                            </div>
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
+                                    </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            <div class="investment-item-third-child project-title">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)
                             </div>
                         </div>
                         <div class="col investment-item-box">
-                            <div class="investment-item-first-child">
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            <div class="investment-item-third-child project-title">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)
                             </div>
                         </div>
                         <div class="col investment-item-box">
-                            <div class="investment-item-first-child">
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            <div class="investment-item-third-child project-title">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)
                             </div>
                         </div>
                         <div class="col investment-item-box">
-                            <div class="investment-item-first-child">
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            <div class="investment-item-third-child project-title">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)
                             </div>
                         </div>
                         <div class="col investment-item-box">
-                            <div class="investment-item-first-child">
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            <div class="investment-item-third-child project-title">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)
                             </div>
                         </div>
                         <div class="col investment-item-box">
-                            <div class="investment-item-first-child">
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            <div class="investment-item-third-child project-title">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)
                             </div>
                         </div>
                         <div class="col investment-item-box">
-                            <div class="investment-item-first-child">
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            <div class="investment-item-third-child project-title">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)
                             </div>
                         </div>
                         <div class="col investment-item-box">
-                            <div class="investment-item-first-child">
+                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first">103% 달성</span>
                                 <span class="investment-item-span-second">1,033,580,000원</span>
                                 <span class="investment-item-span-third">5일 남음</span>
                             </div>
-                            <div class="investment-item-third-child">
-                                [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
+                            <div class="investment-item-third-child project-title">
+                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
                             </div>
                             <div class="investment-item-fourth-child">
                                 플라이강원(주)

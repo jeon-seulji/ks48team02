@@ -19,7 +19,6 @@ public class AdminDonationService {
 
     public List<Donation> getDonationList(){
         List<Donation> donationList = adminDonationMapper.getDonationList();
-
         return donationList;
     }
 
