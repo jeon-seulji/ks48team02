@@ -4,9 +4,116 @@
       layout:decorate="~{user/layout/default}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>나의 쿠폰</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        .couponArea{
+            width: 900px;
+            margin: 0 auto;
+        }
+        ul.couponArea {
+            display: flex;
+            gap: 10px;
+        }
+        ul.couponArea li {
+            padding: 5px 0;
+        }
+        .title{
+            width: 900px;
+            margin: 0 auto;
+            max-width: 1000px;
+            line-height: 36px;
+            color: rgba(0,0,0,.87);
+            font-size: 28px;
+            font-weight: 700;
+            box-sizing: content-box;
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+        .couponHeader{
+            color: #44484b;
+            padding-right: 20px;
+            /*border-bottom: 1px solid rgba(0,0,0,.08);*/
+
+        }
+        .couponTitle{
+            margin-right: 20px;
+        }
+        .myCouponPage{
+            margin-top: 40px;
+            color: black;
+            font-size: 19px;
+            margin-bottom: 50px;
+        }
+        .userCouponAdd{
+            display: flex;
+            background: transparent;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            /*border-bottom: 1px solid ;*/
+        }
+        .userCouponAdd:focus{
+            outline: none;
+        }
+        .downloadArea{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+        }
+        .tab-btn-area {
+            border-bottom: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
+<th:block layout:fragment="customContents">
 
+    <div class="couponArea">
+        <h2 class="title">쿠폰</h2>
+    </div>
+    <div class="tab-btn-area">
+        <ul class="couponArea">
+            <li>
+                <a class="couponTitle" th:href="@{'#'}">나의 쿠폰</a>
+            </li>
+
+            <li>
+                <a class="couponTitle" th:href="@{'#'}">쿠폰존</a>
+            </li>
+
+            <li>
+                <a class="couponTitle" th:href="@{'#'}">지난 쿠폰 내역</a>
+            </li>
+
+        </ul>
+    </div>
+
+    <div class="couponArea">
+        <div class="myCouponPage couponArea">
+            <strong class="couponPageTitle">
+                현재 사용가능 쿠폰
+                <span class="couponCount">
+                    0장
+                </span>
+            </strong>
+        </div>
+        <div class="downloadArea">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+            </svg>
+            <button type="button" class="userCouponAdd">쿠폰 등록하기</button>
+
+        </div>
+
+    </div>
+
+
+
+</th:block>
 </body>
 </html>

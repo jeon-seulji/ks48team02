@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @Transactional
 public class AdminCouponService {
-    // DI
+    // DI 의존성
     private final AdminCouponMapper adminCouponMapper;
 
     // 생성자 메소드를 통한 DI

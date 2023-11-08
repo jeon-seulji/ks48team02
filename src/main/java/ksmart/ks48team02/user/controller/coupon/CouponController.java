@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user/coupon")
 public class CouponController {
 
-    @GetMapping(value = {"","/"})
+    @GetMapping("/main")
     public String userCouponMainPage(){
 
         return "user/coupon/main";
