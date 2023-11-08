@@ -59,21 +59,20 @@
                     $.each(data, function (idx, item) {
                         let checkValue = $(this).val();
 
-                        if($(item).attr('id') == 'detailComent') {
-                            let noteIsEmpty = $('#detailComent').summernote('isEmpty');
+                        if ($(item).attr('id') == 'donationContents') {
+                            let noteIsEmpty = $('#donationContents').summernote('isEmpty');
                             console.log(noteIsEmpty);
 
-                            if($('#detailComent').summernote('isEmpty')){
+                            if ($('#donationContents').summernote('isEmpty')) {
                                 isValid = false;
                                 let eleId = $(this).attr('id');
                                 let cate = $(`label[for="${eleId}"]`).text();
                                 alert(`${cate} 필수 입력 항목입니다.`);
-                                $('#detailComent').summernote('focus');
+                                $('#donationContents').summernote('focus');
                                 return isValid;
                             }
-                        }
-                        else{
-                            if (checkValue === null || checkValue === '' || checkValue === 'undefined' ) {
+                        } else {
+                            if (checkValue === null || checkValue === '' || checkValue === 'undefined') {
                                 isValid = false;
                                 let eleId = $(this).attr('id');
                                 let cate = $(`label[for="${eleId}"]`).text();
@@ -84,7 +83,7 @@
                         }
                     });
                     //2.인수 값이 객체가 아니고 String일 경우
-                } else{
+                } else {
                     if (data === null || data === '' || data === 'undefined') {
                         isValid = false;
                     }
@@ -115,15 +114,14 @@
             });
 
 
-
             //다음 단계 버튼 클릭시 화면전환, 빈 값 있는지 유효성 검사.
-            $(document).on('click', '.nextBtn', function(){
-                let validCheck = $(this).parents('.info-contents-area').find('input, select, #detailComent').not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]');
+            $(document).on('click', '.nextBtn', function () {
+                let validCheck = $(this).parents('.info-contents-area').find('input, select, #donationContents').not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]');
                 console.log(validCheck)
                 let isValid = validationCheck(validCheck);
 
                 console.log(isValid);
-                if(isValid) {
+                if (isValid) {
                     let dataTab = $(this).parents('.info-contents-area').attr('id');
                     let nextDataTab = $(this).parents('.info-contents-area').next().attr('id');
                     $(`li[data-tab=${dataTab}]`).removeClass('active');
@@ -146,97 +144,18 @@
 
             let projectStartDate = new Date();
             projectStartDate.setDate(projectStartDate.getDate() + 7)
-
             //데이트피커 객체 생성
             $('#deliverStartDate, #donationEndDate').datepicker({
-
                 format: "yyyy-mm-dd",
                 startDate: projectStartDate,
                 language: "ko",
                 autoclose: true
             });
 
-            //프로젝트 시작 일자 선택하면 프로젝트 마감 일자 시작일자 이전 날짜는 선택 못하게.
-            // $('#projectStartDate').change(function () {
-            //     let projectEndDate = $('#projectEndDate');
-            //     let startDate = new Date($(this).val());
-            //     let endDate = new Date($(projectEndDate).val());
-            //
-            //     $(projectEndDate).prop('disabled', startDate == null);
-            //     projectEndDate.datepicker('setStartDate', startDate);
-            //
-            //     if (startDate >= endDate) {
-            //         $(projectEndDate).val('');
-            //     }
-            // });
-
-            //summerNote
-            $('#detailComent').summernote({
-                placeholder: '프로젝트 스토리를 입력해주세요',
-                lang: 'ko-KR',
-                tabsize: 2,
-                height: 300
-            });
-
-            //리워드 추가 버튼 클릭 시 값이 비어있지 않다면 슬라이더 폼 추가
-            $('#rewardAddBtn').click(function () {
-
-                let isValid = true;
-
-                $(this).parents('#rewardAddDiv').find('#rewardPrice, #rewardSubject, #rewardContents, #deliverStartDate').each((idx,item) =>{
-
-                    isValid = validationCheck($(item).val());
-
-                    if(!isValid) {
-                        $(item).focus();
-                        alert(`${$(item).siblings('label').text()}를 입력해 주세요`);
-                    }
-                    return isValid;
-                });
-
-                if(isValid) {
-                    let rewardSubject = $('#rewardSubject').val();
-                    let rewardPrice = $('#rewardPrice').val();
-                    let rewardContents = $('#rewardContents').val();
-                    let rewardDelever = $('#deliverStartDate').val();
-
-                    let card = $(' <div class="rewardOption swiper-slide">\n' +
-                        '                    <div class="card border-primary mb-4 shadow-sm">\n' +
-                        '                      <div class="card-header ">\n' +
-                        '                        <h5 class="rewardSebjectH my-0 fw-normal"></h5>\n' +
-                        '                      </div>\n' +
-                        '                      <div class="card-body">\n' +
-                        '                        <p class="text-dark">리워드 내용</p>\n' +
-                        '                        <textarea class="rewardContents" rows="3" readonly="readonly" style="width: 205px"></textarea>\n' +
-                        '                        <p class="text-dark">리워드 금액</p>\n' +
-                        '                        <input class="rewardPriceInput" type="text" readonly value="">\n' +
-                        '                        <p class="text-dark">예상 배송일</p>\n' +
-                        '                        <input class="rewardDeleverInput" type="text" readonly value="">\n' +
-                        '                        <br><br>\n' +
-                        '                        <button type="button" class="modifyBtn w-70 btn btn-sm btn-primary">수정</button>\n' +
-                        '                        <button type="button" class="delBtn w-70 btn btn-sm btn-danger">삭제</button>\n' +
-                        '                      </div>\n' +
-                        '                    </div>\n' +
-                        '                  </div>')
-
-                    $(card).find('.rewardSebjectH').text(rewardSubject);
-                    $(card).find('.rewardContents').text(rewardContents);
-                    $(card).find('.rewardPriceInput').val(`${Number(rewardPrice.replaceAll(',', '')).toLocaleString('ko-KR')}원`);
-                    $(card).find('.rewardDeleverInput').val(rewardDelever);
-                    $('.swiper-wrapper').append($(card));
-
-                    swiper();
-
-                    $(this).parents('#rewardAddDiv').find('#rewardPrice, #rewardSubject, #rewardContents, #deliverStartDate').each((idx,item) =>{
-                        $(item).val('');
-                    });
-                }
-            });
-
             //썸네일 이미지 추가 시, 이미지 표시
-            $('#thumbnailImage').change(function(){
-                if($(this).val() != null) {
-                    $('.img-thumbnail').css('display','block');
+            $('#thumbnailImage').change(function () {
+                if ($(this).val() != null) {
+                    $('.img-thumbnail').css('display', 'block');
                     setImageFromFile(this, '.img-thumbnail');
                 }
             });
@@ -269,9 +188,9 @@
 
             //모달 창 추가 버튼 누를 시 검색태그 추가
             $('#modalActionBtn').click(function () {
-                let addTag =$('#modalSearchTagAdd').val();
+                let addTag = $('#modalSearchTagAdd').val();
 
-                if(validationCheck(addTag)) {
+                if (validationCheck(addTag)) {
                     let addTagVal = `#${addTag} `;
                     let searchTag = $('#searchTag').val() + addTagVal;
                     $('#searchTag').val(searchTag);
@@ -281,39 +200,91 @@
             });
 
             //금액 입력하는 input 태그 0원 이하로 입력하지 못하게
-            $('input[type="number"]').change(function(){
+            $('input[type="number"]').change(function () {
                 let inputValue = $(this).val();
-                if(inputValue <= 0) {
+                if (inputValue <= 0) {
                     $(this).val(1);
                 }
             });
 
+            //추가된 리워드 폼에서 삭제 버튼 클릭 시 폼 삭제
+            $(document).on('click', '.delBtn', function () {
+                $(this).parents('.swiper-slide').remove();
 
-        });
+            });
 
-        //추가된 리워드 폼에서 삭제 버튼 클릭 시 폼 삭제
-        $(document).on('click', '.delBtn', function () {
-            $(this).parents('.swiper-slide').remove();
+            //추가된 리워드 폼에서 수정 버튼 클릭 시 폼 삭제 후 리워드 추가 폼에 수정할 데이터 입력
+            $(document).on('click', '.modifyBtn', function () {
+                let rewardSubject = $(this).parent().prev().find('.rewardSebjectH').text();
+                let rewardPrice = $(this).siblings('.rewardPriceInput').val();
+                let rewardDelever = $(this).siblings('.rewardDeleverInput').val();
+                let rewardContents = $(this).siblings('.rewardContents').val();
 
-        });
+                $('#rewardSubject').val(rewardSubject);
+                $('#rewardPrice').val(Number(rewardPrice.replaceAll(',', '').replaceAll('원', '')));
+                $('#deliverStartDate').val(rewardDelever);
+                $('#rewardContents').val(rewardContents);
 
-        //추가된 리워드 폼에서 수정 버튼 클릭 시 폼 삭제 후 리워드 추가 폼에 수정할 데이터 입력
-        $(document).on('click', '.modifyBtn', function () {
-            let rewardSubject = $(this).parent().prev().find('.rewardSebjectH').text();
-            let rewardPrice = $(this).siblings('.rewardPriceInput').val();
-            let rewardDelever = $(this).siblings('.rewardDeleverInput').val();
-            let rewardContents = $(this).siblings('.rewardContents').val();
+                $(this).parents('.swiper-slide').remove();
 
-            $('#rewardSubject').val(rewardSubject);
-            $('#rewardPrice').val(Number(rewardPrice.replaceAll(',','').replaceAll('원','')));
-            $('#deliverStartDate').val(rewardDelever);
-            $('#rewardContents').val(rewardContents);
+            });
 
-            $(this).parents('.swiper-slide').remove();
+            //summerNote
+            $('#donationContents').summernote({
+                height: 300,                 // 에디터 높이
+                minHeight: null,             // 최소 높이
+                maxHeight: null,             // 최대 높이
+                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR",					// 한글 설정
+                placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
+                callbacks: {	//여기 부분이 이미지를 첨부하는 부분
+                    onImageUpload : function(files) {
+                        uploadSummernoteImageFile(files[0],this);
+                    },
+                    onPaste: function (e) {
+                        var clipboardData = e.originalEvent.clipboardData;
+                        if (clipboardData && clipboardData.items && clipboardData.items.length) {
+                            var item = clipboardData.items[0];
+                            if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                                e.preventDefault();
+                            }
+                        }
+                    }
+                }
+            });
 
-        });
 
 
+            /**
+             * 이미지 파일 업로드
+             */
+            function uploadSummernoteImageFile(file, editor) {
+                data = new FormData();
+                data.append("file", file);
+                $.ajax({
+                    data : data,
+                    type : "POST",
+                    url : "/user/projectRegistration/uploadSummernoteImageFile",
+                    contentType : false,
+                    processData : false,
+                    success : function(data) {
+                        //항상 업로드된 파일의 url이 있어야 한다.
+                        $(editor).summernote('insertImage', data.url);
+                    }
+                });
+            }
+
+            // summernote 드래그 & 드랍 구현
+            $("div.note-editable").on('drop',function(e){
+                for(i=0; i< e.originalEvent.dataTransfer.files.length; i++){
+                    uploadSummernoteImageFile(e.originalEvent.dataTransfer.files[i],$("#donationContents")[0]);
+                }
+                e.preventDefault();
+            })
+
+
+
+        }); // end
     </script>
 
 
@@ -499,12 +470,8 @@
 
 
                             <div class="mb-3">
-                                <label for="detailComent" class="form-label">프로젝트 스토리를 적어주세요</label>
-                                <div>
-                                    <form method="post" action="/write">
-                                        <textarea id="detailComent" name="donationContents"></textarea>
-                                    </form>
-                                </div>
+                                <label for="donationContents" class="form-label">프로젝트 스토리를 적어주세요</label>
+                                <textarea id="donationContents" name="donationContents"></textarea>
                             </div>
 
                             <br><br>
@@ -522,7 +489,6 @@
 
                     <hr class="my-4">
 
-                </div>
             </form>
         </div>
     </div>
