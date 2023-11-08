@@ -10,9 +10,9 @@ public class DonationRegistration {
     private String adminMemberId;
     private String totalCategoryCode;
     private String donationSubject;
+    private String donationLike;
     private String donationContents;
     private String donationImage;
-    private String donationRegCompany;
     private String donationRegDate;
     private String donationStartDate;
     private String donationEndDate;
@@ -34,9 +34,9 @@ public class DonationRegistration {
         sb.append(", adminMemberId='").append(adminMemberId).append('\'');
         sb.append(", totalCategoryCode='").append(totalCategoryCode).append('\'');
         sb.append(", donationSubject='").append(donationSubject).append('\'');
+        sb.append(", donationLike='").append(donationLike).append('\'');
         sb.append(", donationContents='").append(donationContents).append('\'');
         sb.append(", donationImage='").append(donationImage).append('\'');
-        sb.append(", donationRegCompany='").append(donationRegCompany).append('\'');
         sb.append(", donationRegDate='").append(donationRegDate).append('\'');
         sb.append(", donationStartDate='").append(donationStartDate).append('\'');
         sb.append(", donationEndDate='").append(donationEndDate).append('\'');
@@ -107,6 +107,14 @@ public class DonationRegistration {
         this.donationSubject = donationSubject;
     }
 
+    public String getDonationLike() {
+        return donationLike;
+    }
+
+    public void setDonationLike(String donationLike) {
+        this.donationLike = donationLike;
+    }
+
     public String getDonationContents() {
         return donationContents;
     }
@@ -121,14 +129,6 @@ public class DonationRegistration {
 
     public void setDonationImage(String donationImage) {
         this.donationImage = donationImage;
-    }
-
-    public String getDonationRegCompany() {
-        return donationRegCompany;
-    }
-
-    public void setDonationRegCompany(String donationRegCompany) {
-        this.donationRegCompany = donationRegCompany;
     }
 
     public String getDonationRegDate() {
