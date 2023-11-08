@@ -180,14 +180,14 @@
 
             //리워드 추가 버튼 클릭 시 값이 비어있지 않다면 슬라이더 폼 추가
             $('#rewardAddBtn').click(function () {
-                let validCheck = $('#rewardAddDiv').find('input, textarea');
+                let validCheck = $('#rewardAddDiv').find('input, textarea').not('input[placeholder="무료배송"]');
                 let isValid = validationCheck(validCheck);
 
                 if(isValid) {
                     let rewardSubject = $('#rewardSubject').val();
                     let rewardPrice = $('#rewardPrice').val();
                     let rewardContents = $('#rewardContents').val();
-                    let rewardDeliver = $('#deliverStartDate').val();
+                    let deliverStartDate = $('#deliverStartDate').val();
                     let rewardLimitQuantity = $('#rewardLimitQuantity').val();
                     let rewardDeliverPrice = $('#rewardDeliverPrice').val();
 
@@ -203,9 +203,9 @@
                         '                        <p class="text-dark">리워드 금액</p>\n' +
                         '                        <input class="rewardPriceInput" type="text" readonly value="">\n' +
                         '                        <p class="text-dark">예상 배송일</p>\n' +
-                        '                        <input class="rewardDeliverInput" type="text" readonly value="">\n' +
+                        '                        <input class="deliverStartDate" type="text" readonly value="">\n' +
                         '                        <p class="text-dark">배송비</p>\n' +
-                        '                        <input class="rewardDeliverPrice" type="number" readonly value="">\n' +
+                        '                        <input class="rewardDeliverPrice" type="text" readonly value="">\n' +
                         '                        <br><br>\n' +
                         '                        <button type="button" class="modifyBtn w-70 btn btn-sm btn-primary">수정</button>\n' +
                         '                        <button type="button" class="delBtn w-70 btn btn-sm btn-danger">삭제</button>\n' +
@@ -217,8 +217,14 @@
                     $(card).find('.rewardSebjectH').text(rewardSubject);
                     $(card).find('.rewardContents').text(rewardContents);
                     $(card).find('.rewardPriceInput').val(`${Number(rewardPrice).toLocaleString('ko-KR')}원`);
-                    $(card).find('.rewardDeliverInput').val(rewardDeliver);
-                    $(card).find('.rewardDeliverPrice').val(rewardDeliverPrice);
+                    $(card).find('.deliverStartDate').val(deliverStartDate);
+
+                    if($('#rewardDeliverSelect').val() == 1) {
+                        $(card).find('.rewardDeliverPrice').val(`${Number(rewardDeliverPrice).toLocaleString('ko-KR')}원`);
+                    } else{
+                        $(card).find('.rewardDeliverPrice').val('무료배송');
+                    }
+
                     $('.swiper-wrapper').append($(card));
 
                     swiper();
@@ -288,7 +294,8 @@
                 let rewardOptionLength = $('.rewardOption').length;
                 let validCheck = $('#projectRegistrationForm').find('input, select, #detailComent')
                     .not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]').not('#rewardLimitQuantity')
-                    .not('#rewardPrice').not('#rewardSubject').not('#rewardContents').not('#deliverStartDate').not('#deliverPrice');
+                    .not('#rewardPrice').not('#rewardSubject').not('#rewardContents').not('#deliverStartDate').not('#rewardDeliverPrice')
+                    .not('#rewardDeliverSelect');
 
                 let isValid = validationCheck(validCheck);
 
@@ -299,9 +306,24 @@
                         submit();
                     }
                 }
+            });
 
+
+            //리워드 옵션배송비 선택 시 배송비 입력할 수 있게
+            $('#rewardDeliverSelect').change(function(){
+                let isDeliverPrice = $(this).val();
+
+                if(isDeliverPrice == 1) {
+                    $('#rewardDeliverPrice').attr('placeholder','배송비');
+                    $('#rewardDeliverPrice').prop('readonly',false);
+                } else{
+                    $('#rewardDeliverPrice').attr('placeholder','무료배송');
+                    $('#rewardDeliverPrice').val('');
+                    $('#rewardDeliverPrice').prop('readonly',true);
+                }
             });
         });
+
 
         //추가된 리워드 폼에서 삭제 버튼 클릭 시 폼 삭제
         $(document).on('click', '.delBtn', function () {
@@ -313,7 +335,7 @@
         $(document).on('click', '.modifyBtn', function () {
             let rewardSubject = $(this).parent().prev().find('.rewardSebjectH').text();
             let rewardPrice = $(this).siblings('.rewardPriceInput').val();
-            let rewardDeliver = $(this).siblings('.rewardDeliverInput').val();
+            let deliverStartDate = $(this).siblings('.deliverStartDate').val();
             let rewardContents = $(this).siblings('.rewardContents').val();
             let rewardLimitQuantity =  $(this).parent().prev().find('.rewardLimitQuantity').text();
             let rewardDeliverPrice = $(this).siblings('.rewardDeliverPrice').val();
@@ -322,7 +344,7 @@
             $('#rewardSubject').val(rewardSubject);
             $('#rewardPrice').val(Number(rewardPrice.replaceAll(',','').replaceAll('원','')));
             $('#rewardDeliverPrice').val(Number(rewardDeliverPrice.replaceAll(',','').replaceAll('원','')));
-            $('#deliverStartDate').val(rewardDeliver);
+            $('#deliverStartDate').val(deliverStartDate);
             $('#rewardContents').val(rewardContents);
             $('#rewardLimitQuantity').val(Number(rewardLimitQuantity));
 
@@ -398,16 +420,12 @@
 
                             <div class="mb-3">
                                 <label for="thumbnailImage" class="form-label fw-bord text-dark">썸네일 이미지를 등록해주세요.</label>
-                                <!--                                <div class=" banner-content" style="background-color: #7D7D7D">썸네일 이미지</div>-->
                                 <br>
                                 <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
                                     <img src="" class="img-thumbnail" alt="썸네일이미지" style="height: 200px; width: 350px; display: none;">
                                 </div>
-
-                                <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
                                 <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
                             </div>
-
 
                             <br>
                             <span  class="w-bord text-dark">
@@ -572,7 +590,12 @@
                         </div>
                         <div class="col-8">
                             <label for="rewardDeliverPrice" class="form-label fw-bord text-dark">배송비</label><br>
-                            <input type="number" id="rewardDeliverPrice" class="form-control-sm" placeholder="배송비">
+                            <select id="rewardDeliverSelect">
+                                <option value="0">배송비 없음</option>
+                                <option value="1">배송비 있음</option>
+                            </select>
+                            <br>
+                            <input type="number" id="rewardDeliverPrice" class="form-control-sm" placeholder="무료배송" readonly="readonly">
                             <br><br>
                         </div>
 
@@ -592,7 +615,6 @@
                             <!-- Swiper -->
                             <div class="swiper contents-area">
                                 <div class="rewardOptionSwiper swiper-wrapper">
-
                                 </div>
                             </div>
                             <div class="swiper-button-next"></div>
