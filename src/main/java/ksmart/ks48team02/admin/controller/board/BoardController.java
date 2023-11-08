@@ -1,5 +1,8 @@
 package ksmart.ks48team02.admin.controller.board;
 
+import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,7 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller("adminBoardController")
 @RequestMapping("/admin/board")
 public class BoardController {
+    private static final Logger log = LoggerFactory.getLogger(BoardController.class);
 
+    private final AdminCouponService adminCouponService;
+
+    public BoardController(AdminCouponService adminCouponService) {
+        this.adminCouponService = adminCouponService;
+    }
     // 공지사항 관리
     @GetMapping("/main")
     public String mainPage(){

@@ -288,5 +288,13 @@ function monthAndDaySetting(max){
     var day = String(date.getDate()).padStart(2, '0');
 
     return month + '-' + day;
+
+    // 글자 입력하면 글자수 올라가는 세팅
+    // // 상품명 count
+    function productNameCount(e){
+        var count = $(e).val().length;
+        $('.typing-length').text(count);
+    }
+
 }
 

@@ -4,8 +4,6 @@
       layout:decorate="~{admin/layout/default}">
 
 <head>
-    <meta charset="UTF-8">
-    <title>카테고리 등록</title>
     <style>
         form{
             width: 1200px;
@@ -14,11 +12,6 @@
             padding: 30px 25px 25px 30px;
             border-radius: 16px;
             box-shadow: 0px 0px 8px rgba(0,0,0,0.16);
-        }
-        .sidebar{
-            text-align: center;
-            width: 150px;
-            background-color: #FAEDEC;
         }
         .textArea{
             width: 300px;
@@ -48,11 +41,34 @@
             font-weight: 700 !important; /*글자 두께*/
             color: #191919 !important;
         }
+        .category-list{
+            font-size: 13px;
+        }
+        .addCateArea{
+            text-align: center;
+        }
+        .category{
+            background-color: #f0f3fc;
+        }
+        .categoryGoods{
+            background-color: #f0f3fc;
+        }
+        .addCateBtn{
+            text-align: center;
+            min-width: 90px;
+            padding: 0 16px;
+            border: 1px solid transparent;
+            font-size: 13px;
+            color: #fff;
+            line-height: 28px;
+            background-color: #3971ff;
+        }
     </style>
-    <script type="text/javascript">
-
-    </script>
-
+    <!--    <link rel="stylesheet" href="./css/font/font.css">-->
+    <!-- css -->
+    <!--    <link rel="stylesheet" th:href="@{/admin/css/reset.css}">-->
+    <!--    <link rel="stylesheet" th:href="@{/admin/css/style_adnim.css}">-->
+    <link th:href="@{/admin/css/style_add_goods.css}" rel="stylesheet">
 </head>
 <body>
 <th:block layout:fragment="customContents">
@@ -61,53 +77,178 @@
     </div>
 
     <form>
+        <section class="admin-right-area">
 
-        <div class="boardTable">
-            <table border="1">
+            <!-- add goods module-->
+            <section class="admin-right-bt">
+                <section class="admin-addgoods-area">
+                    <h3 class="admin-title">카테고리 등록하기</h3>
+                    <form id="add-goods-frm" action="#" method="post">
+                        <table class="admin-table">
+                            <caption>카테고리 분류 표시설정</caption>
+                            <colgroup>
+                                <col class="product">
+                                <col style="width: auto; ">
+                            </colgroup>
+                            <thead class="goods-table-caption">
+                            <tr>
+                                <th colspan="2">상품 표시설정</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="goods-category">
+                                <input class="code_depth_1" type="hidden" name="c_code_depth_1">
+                                <input class="c_code_depth_2" type="hidden" name="c_code_depth_2">
+                                <th class="categoryGoods">상품분류선택</th>
+                                <td>
+                                    <table class="categoryArea" style="table-layout:fixed">
+                                        <caption class="category">상품분류 선택</caption>
+                                        <thead>
+                                        <tr>
+                                            <th class="category_title" colspan="2">
+                                                상품분류를 선택 후 상품분류 적용 버튼을 눌러주세요.
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="depth-1">
+                                                <div class="category-list">
+                                                    <ul depth="1">
+                                                        <li data-tab="nothing" value="N">(대분류) 없음</li>
+                                                        <li data-tab="reward-category" value="A">(대분류) 리워드</li>
+                                                        <li data-tab="donation-category" value="B">(대분류) 기부</li>
+                                                        <li data-tab="investment-category" value="C">(대분류) 투자</li>
+                                                    </ul>
 
-                <tr>
-                    <th class="sidebar">분류명</th>
-                    <td>
-                        <input type="text" class="textArea">
-                    </td>
-                </tr>
+                                                    <div class="addCateArea">
+                                                        <button class="addCateBtn">추가</button>
+                                                    </div>
 
-                <tr>
-                    <th class="sidebar">분류설명</th>
-                    <td>
-                        <textarea class="textArea"></textarea>
-                    </td>
-                </tr>
 
-                <tr>
-                    <th class="sidebar">표시상태</th>
-                    <td class="radio-btn-area">
+                                                </div>
+                                            </td>
+                                            <td  class="depth-2">
+                                                <div id="reward-category" class="category-list" style="display:none;">
+                                                    <ul depth="2">
+                                                        <li value="001">(소분류) 책</li>
+                                                        <li value="002">(소분류) 영화</li>
+                                                        <li value="003">(소분류) 그림</li>
+                                                        <li value="004">(소분류) 공연</li>
+                                                        <li value="005">(소분류) 전시</li>
+                                                    </ul>
+                                                </div>
+                                                <div id="donation-category" class="category-list" style="display:none;">
+                                                    <ul depth="2">
+                                                        <li value="001">(소분류) 환경</li>
+                                                        <li value="002">(소분류) 다문화</li>
+                                                        <li value="003">(소분류) 지구촌</li>
+                                                        <li value="004">(소분류) 시민사회</li>
+                                                        <li value="005">(소분류) 동물</li>
+                                                    </ul>
+
+                                                </div>
+                                                <div id="investment-category" class="category-list" style="display:none;">
+                                                    <ul depth="2">
+                                                        <li value="001">(소분류) 주식</li>
+                                                        <li value="002">(소분류) 채권</li>
+                                                    </ul>
+                                                </div>
+
+
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </td>
+                            </tr>
+                            <tr class="goods-rectrictions">
+                                <th class="category">표시제한</th>
+                                <td>
+                                    <input type="radio" name="g_restrictions" id="restrictions" checked>
+                                    <label for="restrictions" class="restrictions">모두에게 표시</label>
+                                    <input type="radio" name="g_restrictions" id="non-restrictions">
+                                    <label for="non-restrictions" class="non-restrictions">회원에게만 표시</label>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+
+                        <div class="boardTable">
+                            <table border="1">
+
+                                <tr>
+                                    <th class="category">분류명</th>
+                                    <td>
+                                        <input type="text" id="g_name" name="g_name" placeholder="예시 : 시민 문화 입니다."  onclick="this.placeholder=''" maxlength="250" oninput="productNameCount($(this))">
+                                        <span>[<em class="typing-length">0</em>/ 250 ]</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="category">분류설명</th>
+                                    <td>
+                                        <textarea class="textArea"></textarea>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="category">표시상태</th>
+                                    <td class="radio-btn-area">
                         <span>
                             <input id="displayStatus" type="radio" name="displayStatus" checked>
                             <label for="displayStatus" class="radioBtn">
                                 표시함
                             </label>
                         </span>
-                        <span>
+                                        <span>
                              <input id="nonDisplayStatus" type="radio" name="displayStatus">
                         <label for="nonDisplayStatus" class="radioBtn">
                             표시안함
                         </label>
                         </span>
 
-                    </td>
-                </tr>
+                                    </td>
+                                </tr>
 
-            </table>
-        </div>
-        <div class="btnCenter">
-            <a th:href="@{#}" class="registratioBtn">
-                <span>확인</span>
-            </a>
-        </div>
-    </form>
+                            </table>
+                        </div>
+                        <div class="btnCenter">
+                            <a th:href="@{#}" class="registratioBtn">
+                                <span>확인</span>
+                            </a>
+                        </div>
+                    </form>
 </th:block>
+<th:block layout:fragment="customJsCode">
+    <script>
 
+        $('.depth-1 ul').on('click', 'li', function(){
+            var clickDataTab = $(this).attr('data-tab');
+            var clickListValue = $(this).attr('value');
+            var categoryName = $(this).text();
+
+            $('.depth-2 > div').hide();
+            $("#" + clickDataTab).show();
+
+            $(".code_depth_1").val(clickListValue);
+            $('.category_title').text('').prepend("<span>" + categoryName + "</span>");
+        });
+
+        console.log('aa');
+
+        // // 상품명 count
+        function productNameCount(e){
+            var count = $(e).val().length;
+            $('.typing-length').text(count);
+        }
+
+    </script>
+</th:block>
 
 </body>
 </html>
