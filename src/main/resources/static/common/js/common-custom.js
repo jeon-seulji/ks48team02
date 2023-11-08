@@ -289,3 +289,4 @@ function monthAndDaySetting(max){
 
     return month + '-' + day;
 }
+

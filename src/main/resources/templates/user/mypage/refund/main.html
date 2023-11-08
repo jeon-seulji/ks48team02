@@ -120,7 +120,8 @@
 
                 <br>
                 <div class="col-lg-2"></div>
-                <div class="col-lg-4">
+
+                <div  class="col-lg-4">
                     <p class="text-center text-dark font-weight-bold"> 배송비 구매자 부담</p>
 
                     <div class="form-check text-center mt-lg-2">
@@ -156,17 +157,17 @@
                     </div>
                 </div>
 
+
+
                 <div class="col-lg-12 text-dark">
                     <hr style="color: #5a6268;">
-                    <p class="font-weight-bold ml-lg-2">상세 사유 입력</p>
-                    <textarea rows="5" class="w-100 rounded">
-
-                    </textarea>
+                    <label for="refundResultDetail" class="font-weight-bold ml-lg-2">상세 사유 입력</label>
+                    <textarea id="refundResultDetail" rows="5" class="w-100 rounded"></textarea>
 
                     <hr style="color: #5a6268; size:1px">
 
-                    <p class="font-weight-bold ml-lg-2">사진 등록</p>
-                    <input class="border border-secondary rounded w-100" id="refundImage" type="file">
+                    <label for="refundImage" class="font-weight-bold ml-lg-2">사진 등록</label>
+                    <input id="refundImage" class="border border-secondary rounded w-100" type="file">
 
                     <div class="d-flex justify-content-center my-lg-3">
 
@@ -244,6 +245,7 @@
                                 <button type="button" class="findAddrBtn btn btn-light btn-outline-dark" id="findAddrBtn" style="border-radius: 5px;">주소 찾기</button>
                                 <br>
                                 <input type="text" class="w-75 h-75 mt-lg-1" id="refundUserAddr" value="" style="height: 35px" placeholder="주소를 입력해 주세요" readonly="readonly">
+                                <label for ="refundUserAddrDetail" hidden="hidden">상세주소</label>
                                 <input type="text" class="w-75 h-75 mt-lg-1" id="refundUserAddrDetail" value="" style="height: 35px" placeholder="상세 주소를 입력해 주세요">
                                 <br><br>
                             </div>
@@ -252,16 +254,17 @@
                     </div>
 
                     <div class="refundDeliverOption2 displayDiv" style="display: none">
-                        <p class="font-weight-bold ml-lg-2 mb-lg-2">송장번호 입력</p>
-                        <select>
-                            <option>택배사를 선택해주세요</option>
-                            <option>우체국택배</option>
-                            <option>cj대한통운</option>
-                            <option>한진택배</option>
-                            <option>롯데택배</option>
-                            <option>로젠택배</option>
+                        <label for="refundDeliverNumberInvoice"  class="font-weight-bold ml-lg-2 mb-lg-2">송장번호 입력</label>
+                        <br>
+                        <select id="deliveryCourier">
+                            <option value="0">택배사를 선택해주세요</option>
+                            <option value="1">우체국택배</option>
+                            <option value="2">cj대한통운</option>
+                            <option value="3">한진택배</option>
+                            <option value="4">롯데택배</option>
+                            <option value="5">로젠택배</option>
                         </select>
-                        <input typeof="text" class="w-75">
+                        <input typeof="text" id="refundDeliverNumberInvoice" class="w-75" readonly="readonly" placeholder="택배사를 지정해주세요">
                     </div>
 
                     <div class="refundDeliverOption3 displayDiv" style="display: none">
@@ -290,7 +293,7 @@
 
                     <div class="d-flex justify-content-center my-lg-3">
                         <button class="prevBtn btn btn-secondary w-50 mt-lg-3 mr-lg-2">이전 단계로</button>
-                        <button class="nextBtn btn btn-primary w-50 mt-lg-3">환불신청</button>
+                        <button class="refundBtn btn btn-primary w-50 mt-lg-3">환불신청</button>
                     </div>
                 </div>
 
@@ -330,6 +333,34 @@
     <script>
         $(function(){
 
+            //유효성 검사
+            function validationCheck(data) {
+                let isValid = true;
+
+                console.log(typeof  data);
+
+                //1.인수 값이 객체일 경우
+                if (typeof data == 'object') {
+                    $.each(data, function () {
+                        let checkValue = $(this).val();
+                        if (checkValue === null || checkValue === '' || checkValue === 'undefined' ) {
+                            isValid = false;
+                            let eleId = $(this).attr('id');
+                            let cate = $(`label[for="${eleId}"]`).text();
+                            alert(`${cate} 필수 입력 항목입니다.`);
+                            $(this).focus();
+                            return isValid;
+                        }
+                    });
+                    //2.인수 값이 객체가 아니고 String일 경우
+                } else{
+                    if (data === null || data === '' || data === 'undefined') {
+                        isValid = false;
+                    }
+                }
+                return isValid;
+            }
+
             //전체체크 클릭 시 주문한 상품 모두 선택
             $('#allCheck').click(function(){
                 $('#orderList').find('input[type="checkbox"]').prop('checked',$(this).prop('checked'));
@@ -355,15 +386,17 @@
             $('.nextBtn').click(function(){
 
                 let checkedLength = $('.optionCheck:checked').length;
-                let isChecked = checkedLength < 1
+                let isChecked = checkedLength < 1;
 
                 if(isChecked) {
                     alert('환불할 상품을 선택해주세요');
-
+                    $('#allCheck').focus();
                 } else{
+
+                    $('#refundList').html('');
                     $('#refundResult').hide();
                     $('#refundInfo').show();
-                    $('#refundList').html('');
+
 
                     let selectedRefundOption = $('#orderList').find('input[type="checkbox"]:checked').parents('.options');
                     let refundTotalPrice = 0;
@@ -405,7 +438,7 @@
 
                 new daum.Postcode({
                     oncomplete: function(data) { //선택시 입력값 세팅
-                        $('#deliverMemberAddr').val(data.address); // 주소 넣기
+                        $('#refundUserAddr').val(data.address); // 주소 넣기
                     }
                 }).open();
             });
@@ -417,6 +450,32 @@
 
                 $('.refundDeliverType').find('.displayDiv').hide();
                 $(`.${refundDeliverOption}`).show();
+            });
+
+            //택배사 지정해야 송장번호 입력할 수 있게
+            $('#deliveryCourier').change(function(){
+                if($(this).val()>=1) {
+                    $('#refundDeliverNumberInvoice').prop('placeholder','송장번호를 입력해주세요');
+                    $('#refundDeliverNumberInvoice').prop('readonly',false);
+                } else{
+                    $('#refundDeliverNumberInvoice').val('');
+                    $('#refundDeliverNumberInvoice').prop('placeholder','택배사를 선택해주세요');
+                    $('#refundDeliverNumberInvoice').prop('readonly',true);
+                }
+            })
+
+            //환불하기 버튼 클릭 시 유효성 검사
+            $('.refundBtn').click(function(){
+
+                let refundDeliverOption = $('.refundDeliverType').find('input:checked').attr('id');
+
+                let validCheck = $(`.${refundDeliverOption}`).find('input').not('#memberAddr');
+                let isValid = validationCheck(validCheck);
+
+                if(isValid && confirm('정말로 환불을 진행하시겠습니까?')) {
+                    //환불 절차 구현
+                }
+
             });
 
         })

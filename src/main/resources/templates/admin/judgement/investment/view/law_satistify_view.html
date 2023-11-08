@@ -6,24 +6,8 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <style>
-        table{
-            display:flex;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            overflow-x: auto;
-            overflow-y: hidden;
-        }
-
-        tbody{
-            display:flex
-        }
-
-        th{
-            display:block
-        }
-
-        td{display:block;
-            width: 1000px;
+        #settDeleteBtn{
+            background-color: red;
         }
     </style>
 </head>
@@ -42,36 +26,55 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <div class="admin-content-wrapper">
-        <table th:object="${lawSatistifyInfo}">
-            <thead>
-            <tr>
-                <th>자본시장법 범위충족 코드</th>
-                <th>자본시장법 범위충족 사유</th>
-                <th>등록한 아이디</th>
-                <th>등록일시</th>
-                <th>수정</th>
-                <th>삭제</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${lawSatistifyInfo == null}">
-                <td colspan="5">자본시장법 범위충족 내용이 없습니다.</td>
-            </tr>
-            <tr th:unless="${lawSatistifyInfo == null}">
-                <td th:text="*{lawSatistifyCode}"></td>
-                <td th:text="*{lawSatistifyReason}"></td>
-                <td th:text="*{memberId}"></td>
-                <td th:text="*{codeRegDay}"></td>
-                <td>
-                    <a th:href="@{/admin/investment/update/law-satistify(lawSatistifyCode=*{lawSatistifyCode})}">수정</a>
-                </td>
-                <td>
-                    <a th:href="@{/admin/investment/delete/law-satistify(lawSatistifyCode=*{lawSatistifyCode})}">삭제</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+
+    <div class="admin-wrapper" th:object="${lawSatistifyInfo}">
+
+        <!-- contents -->
+        <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
+            <div class="project-info-title">
+                <h5>자본시장법 범위충족 코드</h5>
+                <p th:text="*{lawSatistifyCode}" style="color: var(--maincolor);"></p>
+            </div>
+            <form id="projectInfoDetailBt" method="get">
+                <table class="settlement-log application-info-detail" style="border:none;">
+                    <tbody>
+                    <!-- contents -->
+                    <td>
+                        자본시장법 범위충족 사유
+                    </td>
+                    <td th:text="*{lawSatistifyReason}" colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            등록한 아이디
+                        </td>
+                        <td th:text="*{memberId}" colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            등록일시
+                        </td>
+                        <td th:text="*{codeRegDay}" colspan="5"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="btn-area">
+                    <ul>
+                        <li>
+                            <button id="settBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로</button>
+                        </li>
+                        <li>
+                            <button id="settUpdateBtn" class="submitBtn" type="button" th:onclick="|location.href='@{/admin/investment/update/law-satistify(lawSatistifyCode=*{lawSatistifyCode})}'|">수정</button>
+                        </li>
+                        <li>
+                            <button id="settDeleteBtn" class="submitBtn" type="button" th:onclick="|location.href='@{/admin/investment/delete/law-satistify(lawSatistifyCode=*{lawSatistifyCode})}'|">삭제</button>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
     </div>
+
 </th:block>
 </html>
