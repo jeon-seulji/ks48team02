@@ -728,6 +728,15 @@
             <if test="netDebt != null and netDebt != ''">
                 net_debt = #{netDebt},
             </if>
+            <if test="stockNumber != null and stockNumber != ''">
+                stock_number = #{stockNumber},
+            </if>
+            <if test="issueStockNumber != null and issueStockNumber != ''">
+                issue_stock_number = #{issueStockNumber},
+            </if>
+            <if test="investJudgeResult != null and investJudgeResult != ''">
+                invest_judge_result = #{investJudgeResult}
+            </if>
         </set>
         WHERE
         law_satistify_code = #{lawSatistifyCode};

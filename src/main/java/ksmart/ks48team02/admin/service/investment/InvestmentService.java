@@ -187,6 +187,11 @@ public class InvestmentService {
         adminInvestmentMapper.modifyLawSatistify(adminLawSatistifyReason);
     }
 
+    // 투자펀딩 심사요청 수정
+    public void modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+        adminInvestmentMapper.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
+    }
+
     // 부적합 업종 수정
     public void modifyIncongruitySectors(AdminIncongruitySectors adminIncongruitySectors) {
         adminInvestmentMapper.modifyIncongruitySectors(adminIncongruitySectors);

@@ -211,12 +211,26 @@ public class InvestmentController {
     }
 
     @GetMapping("/update/judge")
-    public String modifyInvestmentJudge(Model model){
+    public String modifyInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model){
+
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+        List<AdminLawSatistifyReason> lawSatistifyReasonList = investmentService.getLawSatistifyList();
+        List<AdminIncongruitySectors> incongruitySectorsList = investmentService.getIncogruitySectorsList();
 
         model.addAttribute("title", "관리자 : 투자펀딩 심사요청 수정");
         model.addAttribute("contentsTitle","투자펀딩 심사요청 수정");
+        model.addAttribute("investmentRequestJudgeInfo", investmentRequestJudgeInfo);
+        model.addAttribute("lawSatistifyReasonList", lawSatistifyReasonList);
+        model.addAttribute("incongruitySectorsList", incongruitySectorsList);
 
         return "admin/judgement/investment/update/invest_jduge_update";
+    }
+
+    @PostMapping("/update/judge")
+    public String modifyLawSatistify(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+
+        investmentService.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
+        return "redirect:/admin/investment/search/law-satistify";
     }
 
     @GetMapping("/update/law-satistify")
