@@ -29,12 +29,12 @@
                 DATE_FORMAT(d.donation_reg_date, '%Y-%m-%d') = CURDATE();
         </selectKey>
         INSERT INTO donation
-        (donation_code, store_code, member_id, donation_judgement_reason_code, admin_member_id, total_category_code, donation_subject,
-        donation_contents, donation_image, donation_reg_company, donation_reg_date, donation_start_date, donation_end_date, donation_achievement_money,
+        (donation_code, store_code, member_id, donation_judgement_reason_code, admin_member_id, total_category_code, donation_subject, donation_like,
+        donation_contents, donation_image, donation_reg_date, donation_start_date, donation_end_date, donation_achievement_money,
         donation_goal_money, donation_achievement_percent, donation_judgment_reason_detail, donation_judgement_date, search_count, donation_condition)
         VALUES
-        (#{donationCode}, #{storeCode}, #{memberId}, NULL, NULL, 'category_code_006', #{donationSubject}, #{donationContents}
-        , '대표 Image url', '녹십자회', NOW(), NULL, #{donationEndDate}, 0, #{donationGoalMoney}, 0, NULL, NULL, 0, 0);
+        (#{donationCode}, #{storeCode}, #{memberId}, NULL, NULL, #{totalCategoryCode}, #{donationSubject}, 0, #{donationContents},
+        '대표 Image url', NOW(), NULL, #{donationEndDate}, 0, #{donationGoalMoney}, 0, NULL, NULL, 0, 0);
     </insert>
 
 </mapper>

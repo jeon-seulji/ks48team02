@@ -41,14 +41,104 @@
 					clickable: true,
 				},
 			});
+			// 추가 작업
+			function rankAjax(param, callback){
+				const request = $.ajax({
+					url: '/user/ajax/rankCategory',
+					method : 'POST',
+					data : {"rankCategory" : param},
+					dataType: 'json'
+				})
+				request.done(function(list){
+					callback(list);
+				});
+				request.fail(function(err){
+					console.log(err);
+				})
+			}
+			// reload button click ajax
+			$('#rankReload').on('click', function(){
+				rankAjax('achievementPercent', function(list){
+					console.log(list);
+					// 여기에서 작업
+					$(`.main-rank-area`).addClass('active');
+					$(`.main-rank-area ul li`).remove();
+
+					$(list).each((idx, item) => {
+						// append 로 수정해보기
+						let listElement = "";
+						listElement += "<li>";
+						listElement += `	<a href='/user/donation/detail?projectCode=${item.projectCode}'>`;
+						listElement += `      <em>${item.rankCount}</em>`;
+						listElement += `      <div>`;
+						listElement += `        <h5>${item.subject}</h5>`;
+						listElement += "        <div class='product-detail-info'>";
+						listElement += "			<p class='funding-percent'><span>"+item.achievementPercent+"</span>%</p>";
+						listElement += "          	<p class='category'>";
+						listElement += (item.categoryName == '')?"<span>카테고리 없음</span>":"<span>"+item.categoryName+"</span>";
+						listElement += "            ·" ;
+						listElement += "            <span>"+item.projectType+"</span>";
+						listElement += "          	</p>";
+						listElement += "        </div>";
+						listElement += "        </div>";
+						listElement += "      <div class='project-img' style=";
+						listElement += (item.imageUrl == null)? "'background:#eee;'>": `'background:url("${item.imageUrl}") no-repeat center center / cover'`;
+						listElement += "      </div>";
+						listElement += "    </a>";
+						listElement += "</li>";
+						console.log(listElement);
+
+						$(`.main-rank-area ul`).append(listElement);
+
+					});
+				})
+
+				$('.tab-menu-btn li').removeClass('active');
+				$('.tab-menu-btn li:first-child').addClass('active');
+			});
 
 			// rank tab function
 			$('.tab-menu-btn li').on('click',function(){
+				let tabData = $(this).attr('data-tab');
+				$('.main-rank-area').removeClass('active');
+				rankAjax(tabData, function(list){
+					console.log(list);
+					// 여기에서 작업
+					$(`.main-rank-area`).addClass('active');
+					$(`.main-rank-area ul li`).remove();
+
+					$(list).each((idx, item) => {
+						// append 로 수정해보기
+						let listElement = "";
+						listElement += "<li>";
+						listElement += `	<a href='/user/donation/detail?projectCode=${item.projectCode}'>`;
+						listElement += `      <em>${item.rankCount}</em>`;
+						listElement += `      <div>`;
+						listElement += `        <h5>${item.subject}</h5>`;
+						listElement += "        <div class='product-detail-info'>";
+						listElement += (tabData == 'achievementPercent')?"<p class='funding-percent'><span>"+item.achievementPercent+"</span>%</p>"
+																		:"<p class='funding-percent'><span>"+item.likeCount+"</span>개</p>";
+						listElement += "          <p class='category'>";
+						listElement += (item.categoryName == '')?"<span>카테고리 없음</span>":"<span>"+item.categoryName+"</span>";
+						listElement += "            ·" ;
+						listElement += "            <span>"+item.projectType+"</span>";
+						listElement += "          </p>";
+						listElement += "        </div>";
+						listElement += "        </div>";
+						listElement += "      <div class='project-img' style=";
+						listElement += (item.imageUrl == null)? "'background:#eee;'>": `'background:url("${item.imageUrl}") no-repeat center center / cover'`;
+						listElement += "      </div>";
+						listElement += "    </a>";
+						listElement += "</li>";
+						console.log(listElement);
+
+						$(`.main-rank-area ul`).append(listElement);
+
+					});
+				})
+
 				$('.tab-menu-btn li').removeClass('active');
 				$(this).addClass('active');
-				let tabData = $(this).attr('data-tab');
-				$('.main-rank-area').hide().removeClass('active');
-				$('#'+tabData).show().addClass('active');
 			});
 
 			// contents swiper slide
@@ -280,144 +370,32 @@
 
 						<div>
 							<ul class="tab-menu-btn">
-								<li data-tab="funding-rank" class="active">펀딩 순위</li>
-								<li data-tab="store-rank">스토어 순위</li>
+								<li data-tab="achievementPercent" class="active">펀딩 순위</li>
+								<li data-tab="likeCount">찜하기 순위</li>
 							</ul>
-							<div id="funding-rank" class="main-rank-area active" style="display: block;">
+							<div class="main-rank-area active">
 								<ul>
-									<li>
-										<a th:href="@{#}">
-											<em>1</em>
-											<div>
-												<h5>프로젝트 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
-										</a>
+									<li th:if="${rankList == null}">
+										등록된 프로젝트가 없습니다
 									</li>
-									<li>
-										<a th:href="@{#}">
-											<em>2</em>
-											<div>
-												<h5>프로젝트 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
-										</a>
-									</li>
-									<li>
-										<a th:href="@{#}">
-											<em>3</em>
-											<div>
-												<h5>프로젝트 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
-										</a>
-									</li>
-									<li>
-										<a th:href="@{#}">
-											<em>4</em>
-											<div>
-												<h5>프로젝트 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
-										</a>
-									</li>
-									<li>
-										<a th:href="@{#}">
-											<em>5</em>
-											<div>
-												<h5>프로젝트 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
-										</a>
-									</li>
-								</ul>
 
-							</div>
-							<div id="store-rank" class="main-rank-area">
-								<ul>
-									<li>
-										<a th:href="@{#}">
-											<em>1</em>
+									<li th:unless="${rankList == null}" th:each="l : ${rankList}">
+										<a th:href="@{/user/donation/detail?(projectCode=${l.projectCode})}">
+											<em th:text="${l.rankCount}">순위</em>
 											<div>
-												<h5>스토어 명 입니다</h5>
+												<h5 th:text="${l.subject}">프로젝트 명</h5>
 												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
+													<p class="funding-percent"><span th:text="${l.achievementPercent}"></span>%</p>
+													<p class="category" >
+														<span th:if="${l.categoryName == ''}">카테고리없음</span>
+														<span th:unless="${l.categoryName == ''}" th:text="${l.categoryName}">카테고리</span>
+														·
+														<span th:text="${l.projectType}">분류</span>
+													</p>
 												</div>
 											</div>
-											<div class="project-img"></div>
-										</a>
-									</li>
-									<li>
-										<a th:href="@{#}">
-											<em>2</em>
-											<div>
-												<h5>스토어 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
-										</a>
-									</li>
-									<li>
-										<a th:href="@{#}">
-											<em>3</em>
-											<div>
-												<h5>스토어 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
-										</a>
-									</li>
-									<li>
-										<a th:href="@{#}">
-											<em>4</em>
-											<div>
-												<h5>스토어 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
-										</a>
-									</li>
-									<li>
-										<a th:href="@{#}">
-											<em>5</em>
-											<div>
-												<h5>스토어 명 입니다</h5>
-												<div class="product-detail-info">
-													<p class="funding-percent">350%</p>
-													<span class="category">테크·가전</span>
-												</div>
-											</div>
-											<div class="project-img"></div>
+											<div class="project-img"
+												 th:style="|${l.imageUrl} == null ? 'background:#eee;':'background:url('${l.imageUrl}') no-repeat center center / cover'|" ></div>
 										</a>
 									</li>
 								</ul>
