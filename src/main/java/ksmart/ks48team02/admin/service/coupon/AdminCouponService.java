@@ -13,7 +13,7 @@ import java.util.List;
 public class AdminCouponService {
     // DI 의존성
     private final AdminCouponMapper adminCouponMapper;
-    public Coupon getCouponCodeById;
+
 
     // 생성자 메소드를 통한 DI
     public AdminCouponService(AdminCouponMapper adminCouponMapper){
@@ -34,11 +34,13 @@ public class AdminCouponService {
         return memberHaveCouponList;
     }
 
-//    // 쿠폰 수정
-//    public Coupon getCouponCodeById(String CouponCode){
-//        Coupon coupon = adminCouponMapper.getCouponCodeById(CouponCode);
-//
-//        return coupon;
-//    }
+    // 쿠폰 수정
+    public Coupon getCouponCodeById(String CouponCode){
+        Coupon couponCodeById = null;
+        couponCodeById = adminCouponMapper.getCouponCodeById(CouponCode);
+        
+        return couponCodeById;
+    }
+
     
 }
