@@ -2,6 +2,7 @@ package ksmart.ks48team02.admin.service.coupon;
 
 import ksmart.ks48team02.admin.dto.coupon.Coupon;
 import ksmart.ks48team02.admin.mapper.coupon.AdminCouponMapper;
+import ksmart.ks48team02.user.dto.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +27,18 @@ public class AdminCouponService {
         return couponList;
     }
 
-    // 쿠폰 수정
-    public Coupon getCouponCodeById(String CouponCode){
-        Coupon coupon = adminCouponMapper.getCouponCodeById(CouponCode);
-        
-        return coupon;
+    //회원 아이디 별 보유 쿠폰목록 조회
+    public List<Coupon> MemberHaveCouponById(String memberId) {
+        List<Coupon> memberHaveCouponList = adminCouponMapper.MemberHaveCouponById(memberId);
+
+        return memberHaveCouponList;
     }
+
+//    // 쿠폰 수정
+//    public Coupon getCouponCodeById(String CouponCode){
+//        Coupon coupon = adminCouponMapper.getCouponCodeById(CouponCode);
+//
+//        return coupon;
+//    }
     
 }

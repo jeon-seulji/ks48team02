@@ -1,6 +1,10 @@
 package ksmart.ks48team02.user.dto;
 
+import ksmart.ks48team02.admin.dto.coupon.Coupon;
+import ksmart.ks48team02.admin.dto.coupon.MemberCoupon;
 import ksmart.ks48team02.user.dto.reward.RewardCustomerRank;
+
+import java.util.List;
 
 public class Member {
 
@@ -17,6 +21,9 @@ public class Member {
     private RewardCustomerRank rewardCustomerRank;
     private Customer customer;
 
+    private List<Coupon> couponList;
+    private List<MemberCoupon> memberCouponList;
+
 
     @Override
     public String toString() {
@@ -32,7 +39,25 @@ public class Member {
                 ", unRegStatus='" + unRegStatus + '\'' +
                 ", rewardCustomerRank=" + rewardCustomerRank +
                 ", customer=" + customer +
+                ", couponList=" + couponList +
+                ", memberCouponList=" + memberCouponList +
                 '}';
+    }
+
+    public List<Coupon> getCouponList() {
+        return couponList;
+    }
+
+    public void setCouponList(List<Coupon> couponList) {
+        this.couponList = couponList;
+    }
+
+    public List<MemberCoupon> getMemberCouponList() {
+        return memberCouponList;
+    }
+
+    public void setMemberCouponList(List<MemberCoupon> memberCouponList) {
+        this.memberCouponList = memberCouponList;
     }
 
     public RewardCustomerRank getRewardCustomerRank() {

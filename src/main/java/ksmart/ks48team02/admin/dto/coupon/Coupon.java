@@ -11,6 +11,9 @@ public class Coupon {
     private int couponValidPeriod;
     private String couponTermsUse;
 
+    private MemberCoupon memberCoupon;
+
+
     @Override
     public String toString() {
         return "Coupon{" +
@@ -23,8 +26,18 @@ public class Coupon {
                 ", numberCouponsRemaining=" + numberCouponsRemaining +
                 ", couponValidPeriod=" + couponValidPeriod +
                 ", couponTermsUse='" + couponTermsUse + '\'' +
+                ", memberCoupon=" + memberCoupon +
                 '}';
     }
+
+    public MemberCoupon getMemberCoupon() {
+        return memberCoupon;
+    }
+
+    public void setMemberCoupon(MemberCoupon memberCoupon) {
+        this.memberCoupon = memberCoupon;
+    }
+
 
     public String getCouponCode() {
         return couponCode;

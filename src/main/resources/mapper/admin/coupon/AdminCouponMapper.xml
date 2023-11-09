@@ -3,7 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.admin.mapper.coupon.AdminCouponMapper">
-
+    
+    <!--쿠폰 resultMap-->
     <resultMap id="CouponResultMap" type="Coupon">
         <id property="couponCode" column="coupon_code"></id>
         <result property="couponSerialNumber" column="coupon_serial_number"></result>
@@ -14,8 +15,20 @@
         <result property="numberCouponRemaining" column="number_coupons_remaining"></result>
         <result property="couponValidPeriod" column="coupon_valid_period"></result>
         <result property="couponTermsUse" column="coupon_terms_use"></result>
+
+        <association property="memberCoupon" javaType="MemberCoupon">
+            <id property="couponIssueCode" column="coupon_issue_code"></id>
+            <result property="couponMemberId" column="member_id"></result>
+            <result property="couponCode" column="coupon_code"></result>
+            <result property="couponRegDate" column="coupon_reg_dateTime"></result>
+            <result property="couponEndDate" column="coupon_end_date"></result>
+            <result property="couponUsed" column="coupon_used"></result>
+        </association>
     </resultMap>
 
+    
+    
+    <!--전체 쿠폰 조회-->
     <select id="getCouponList" resultType="Coupon">
         select
             c.coupon_code as couponCode,
@@ -29,6 +42,29 @@
             c.coupon_terms_use as couponTermsUse
         from
             coupon_details as c
+    </select>
+
+    <!--회원별 보유 쿠폰 조회-->
+    <select id="MemberHaveCouponById" resultMap="CouponResultMap" parameterType="String">
+        SELECT
+            c.coupon_name,
+            c.coupon_discount_rate,
+            c.coupon_discount_amount,
+            mc.coupon_reg_dateTime,
+            mc.coupon_end_date,
+            mc.coupon_used
+        FROM
+            coupon_details	AS c
+        INNER JOIN
+            member_coupon AS mc
+        ON
+            c.coupon_code = mc.coupon_code
+        INNER JOIN
+            member AS m
+        ON
+            mc.member_id = m.member_id
+        WHERE
+            m.member_id = #{memberId} AND mc.coupon_end_date >= CURDATE() AND mc.coupon_used = 0;
     </select>
 
 </mapper>
