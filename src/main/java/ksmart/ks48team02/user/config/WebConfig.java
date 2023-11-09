@@ -5,6 +5,7 @@ import ksmart.ks48team02.user.interceptor.CommonInterceptor;
 import ksmart.ks48team02.user.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
@@ -35,8 +36,18 @@ public class WebConfig implements WebMvcConfigurer{
         // 정적 리소스 주소는 배제한 나머지 동적 리소스 주소만 설정
         registry.addInterceptor(commonInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**")
-                .excludePathPatterns("/js/**")
+                .excludePathPatterns("/admin/build/**")
+                .excludePathPatterns("/admin/css/**")
+                .excludePathPatterns("/admin/images/**")
+                .excludePathPatterns("/admin/js/**")
+                .excludePathPatterns("/admin/vendors/**")
+                .excludePathPatterns("/common/css/**")
+                .excludePathPatterns("/common/images/**")
+                .excludePathPatterns("/common/js/**")
+                .excludePathPatterns("/user/css/**")
+                .excludePathPatterns("/user/fonts/**")
+                .excludePathPatterns("/user/images/**")
+                .excludePathPatterns("/user/js/**")
                 .excludePathPatterns("/favicon.ico");
 
 		/*
@@ -54,6 +65,15 @@ public class WebConfig implements WebMvcConfigurer{
 		*/
 
         WebMvcConfigurer.super.addInterceptors(registry);
+    }
+
+    //web root가 아닌 외부 경로에 있는 리소스를 url로 불러올 수 있도록 설정
+    //현재 localhost:8088/summernoteImage/1234.jpg
+    //로 접속하면 C:/summernote_image/1234.jpg 파일을 불러온다.
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/summernoteImage/**")
+                .addResourceLocations("file:///C:/summernote_image/");
     }
 
 }

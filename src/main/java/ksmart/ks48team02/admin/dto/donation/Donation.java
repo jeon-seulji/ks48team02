@@ -2,7 +2,7 @@ package ksmart.ks48team02.admin.dto.donation;
 
 public class Donation {
     private String donationCode;
-    private String storeCode;
+    private String storeName;
     private String memberId;
     private String donationCategoryCode;
     private String donationJudgementReasonCode;
@@ -10,7 +10,6 @@ public class Donation {
     private String donationSubject;
     private String donationContents;
     private String donationImage;
-    private String donationRegCompany;
     private String donationRegDate;
     private String donationStartDate;
     private String donationEndDate;
@@ -22,6 +21,32 @@ public class Donation {
     private int searchCount;
     private int donationCondition;
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Donation{");
+        sb.append("donationCode='").append(donationCode).append('\'');
+        sb.append(", storeName='").append(storeName).append('\'');
+        sb.append(", memberId='").append(memberId).append('\'');
+        sb.append(", donationCategoryCode='").append(donationCategoryCode).append('\'');
+        sb.append(", donationJudgementReasonCode='").append(donationJudgementReasonCode).append('\'');
+        sb.append(", adminMemberId='").append(adminMemberId).append('\'');
+        sb.append(", donationSubject='").append(donationSubject).append('\'');
+        sb.append(", donationContents='").append(donationContents).append('\'');
+        sb.append(", donationImage='").append(donationImage).append('\'');
+        sb.append(", donationRegDate='").append(donationRegDate).append('\'');
+        sb.append(", donationStartDate='").append(donationStartDate).append('\'');
+        sb.append(", donationEndDate='").append(donationEndDate).append('\'');
+        sb.append(", donationAchievementMoney=").append(donationAchievementMoney);
+        sb.append(", donationGoalMoney=").append(donationGoalMoney);
+        sb.append(", donationAchievementPercent=").append(donationAchievementPercent);
+        sb.append(", donationJudgmentReasonDetail='").append(donationJudgmentReasonDetail).append('\'');
+        sb.append(", donationJudgementDate='").append(donationJudgementDate).append('\'');
+        sb.append(", searchCount=").append(searchCount);
+        sb.append(", donationCondition=").append(donationCondition);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public String getDonationCode() {
         return donationCode;
     }
@@ -30,12 +55,12 @@ public class Donation {
         this.donationCode = donationCode;
     }
 
-    public String getStoreCode() {
-        return storeCode;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setStoreCode(String storeCode) {
-        this.storeCode = storeCode;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public String getMemberId() {
@@ -92,14 +117,6 @@ public class Donation {
 
     public void setDonationImage(String donationImage) {
         this.donationImage = donationImage;
-    }
-
-    public String getDonationRegCompany() {
-        return donationRegCompany;
-    }
-
-    public void setDonationRegCompany(String donationRegCompany) {
-        this.donationRegCompany = donationRegCompany;
     }
 
     public String getDonationRegDate() {
@@ -180,31 +197,5 @@ public class Donation {
 
     public void setDonationCondition(int donationCondition) {
         this.donationCondition = donationCondition;
-    }
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("DonationRegistration{");
-        sb.append("donationCode='").append(donationCode).append('\'');
-        sb.append(", storeCode='").append(storeCode).append('\'');
-        sb.append(", memberId='").append(memberId).append('\'');
-        sb.append(", donationCategoryCode='").append(donationCategoryCode).append('\'');
-        sb.append(", donationJudgementReasonCode='").append(donationJudgementReasonCode).append('\'');
-        sb.append(", adminMemberId='").append(adminMemberId).append('\'');
-        sb.append(", donationSubject='").append(donationSubject).append('\'');
-        sb.append(", donationContents='").append(donationContents).append('\'');
-        sb.append(", donationImage='").append(donationImage).append('\'');
-        sb.append(", donationRegCompany='").append(donationRegCompany).append('\'');
-        sb.append(", donationRegDate='").append(donationRegDate).append('\'');
-        sb.append(", donationStartDate='").append(donationStartDate).append('\'');
-        sb.append(", donationEndDate='").append(donationEndDate).append('\'');
-        sb.append(", donationAchievementMoney=").append(donationAchievementMoney);
-        sb.append(", donationGoalMoney=").append(donationGoalMoney);
-        sb.append(", donationAchievementPercent=").append(donationAchievementPercent);
-        sb.append(", donationJudgmentReasonDetail='").append(donationJudgmentReasonDetail).append('\'');
-        sb.append(", donationJudgementDate='").append(donationJudgementDate).append('\'');
-        sb.append(", searchCount=").append(searchCount);
-        sb.append(", donationCondition=").append(donationCondition);
-        sb.append('}');
-        return sb.toString();
     }
 }
