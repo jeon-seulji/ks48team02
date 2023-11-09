@@ -60,7 +60,7 @@
     <div class="couponAdd">
         <h1>쿠폰 만들기</h1>
     </div>
-    <form>
+    <form id="modifyCouponForm" th:action="@{/admin/board/couponAdd}" method="post">
         <div class="section">
             <div class="title">
                 <h3>쿠폰 발급 정보</h3>
@@ -73,15 +73,15 @@
 
                 <tbody class="contentForm">
                 <tr class="row-1">
-                    <th class="banner" scope="row">쿠폰코드 <i class="bi bi-patch-check-fill"></i></th>
+                    <th class="banner" th:name="couponCode" scope="row">쿠폰코드 <i class="bi bi-patch-check-fill"></i></th>
                     <td><input type="text" class="comment"/></td>
                 </tr>
                 <tr class="row-2">
-                    <th class="banner" scope="row">쿠폰고유번호 <i class="bi bi-patch-check-fill"></i></th>
+                    <th class="banner" th:name="couponSerialNumber" scope="row">쿠폰고유번호 <i class="bi bi-patch-check-fill"></i></th>
                     <td><input type="text" class="comment"/></td>
                 </tr>
                 <tr class="row-3">
-                    <th class="banner" cope="row">쿠폰이름 <i class="bi bi-patch-check-fill"></i></th>
+                    <th class="banner" th:name="couponName" scope="row">쿠폰이름 <i class="bi bi-patch-check-fill"></i></th>
                     <td><input type="text" class="comment" /></td>
                 </tr>
                 <tr class="row-4">
@@ -92,30 +92,38 @@
                         </div>
                         <div class="discount-container">
                             <select class="discountType">
-                                <option value="A">할인율</option>
-                                <option value="B">할인금액</option>
+                                <option th:name="couponDiscountRate" value="A">할인율</option>
+                                <option th:name="couponDiscountAmount" value="B">할인금액</option>
                             </select>
                             <input type="number" class="discountRate" placeholder="%" style="display: block;">
                             <input type="number" class="discountAmount" placeholder="원" style="display: none;">
                     </td>
                 </tr>
                 <tr class="row-5">
-                    <th class="banner" scope="row">쿠폰 제한 수량</th>
+                    <th class="banner" th:name="couponStock" scope="row">쿠폰 제한 수량</th>
                     <td><input class="count" type="number" placeholder="쿠폰의 제한 수량을 입력해주세요."> 개</td>
                 </tr>
 
                 <tr class="row-6">
-                    <th class="banner" scope="row">쿠폰 사용 가능 기간</th>
+                    <th class="banner" th:name="numberCouponRemaining" scope="row">남은 쿠폰 갯수</th>
+                    <td>
+                        <input class="count" type="number"> 개
+                    </td>
+                </tr>
+
+                <tr class="row-7">
+                    <th class="banner" th:name="couponValidPeriod" scope="row">쿠폰 사용 가능 기간</th>
                     <td><input type="date" class="commentDate1"/>
                         -
                         <input type="date" class="commentDate2">
                     </td>
                 </tr>
-                <tr class="row-7">
-                    <th class="banner" scope="row">쿠폰 사용 조건</th>
+
+                <tr class="row-8">
+                    <th class="banner" th:name="couponTermsUse" scope="row">쿠폰 사용 조건</th>
                     <td><input type="text" class="comment"/></td>
                 </tr>
-                <tr class="row-8">
+                <tr class="row-9">
                     <th class="banner" scope="row">관리자 ID</th>
                     <td><input type="text" class="comment"/></td>
                 </tr>

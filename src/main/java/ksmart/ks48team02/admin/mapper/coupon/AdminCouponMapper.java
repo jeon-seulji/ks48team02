@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface AdminCouponMapper {
     public List<Coupon> getCouponList();
+
+    Coupon getCouponCodeById(String couponCode);
 }
