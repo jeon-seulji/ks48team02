@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class OrderManagementController {
         model.addAttribute("contentsSubTitle","관리자 주문 대시보드");
         return "";
     }
+
     // 주문 목록
     @GetMapping( "/list")
     public String adminOrderList(Model model){
@@ -40,6 +42,7 @@ public class OrderManagementController {
         model.addAttribute("contentsTitle","주문 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
 
+        // 주문 목록 진열
         List<OrderTotal> OrderList = orderService.getOrderList();
         log.info("주문 목록 : {}", OrderList);
 
@@ -47,14 +50,32 @@ public class OrderManagementController {
 
         return "admin/order/list";
     }
-    // 주문 목록
+
+    // 주문 상세
     @GetMapping( "/detail")
-    public String adminOrderDetail(Model model){
+    public String adminOrderDetail(Model model,
+                                   @RequestParam(name="orderCode") String orderCode){
+        log.info("주문 코드 {}", orderCode);
+
+        // 주문 상세 조회
+        OrderTotal OrderInfoById = orderService.getOrderInfoById(orderCode);
+        log.info("주문 상세 조회 {}", OrderInfoById);
+
+        model.addAttribute("OrderInfoById", OrderInfoById);
+
+        // 주문 분류 모델
+        String orderPartition = OrderInfoById.getGoodsCode();
+        orderPartition = orderPartition.substring(0,3);
+        log.info("orderPartition {}", orderPartition);
+        model.addAttribute("orderPartition", orderPartition);
+
         model.addAttribute("title","관리자 : 주문 상세");
         model.addAttribute("contentsTitle","주문 상세");
         model.addAttribute("contentsSubTitle","관리자 주문 상세");
+
         return "admin/order/orderDetailInfo";
     }
+
     // 배송 관리
     @GetMapping( "/delivery")
     public String adminOrderDelivery(Model model){
@@ -63,6 +84,7 @@ public class OrderManagementController {
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
         return "admin/order/delivery";
     }
+
     // 배송 정보
     @GetMapping( "/delivery/detail")
     public String adminOrderDeliveryInfo(Model model){
@@ -71,6 +93,7 @@ public class OrderManagementController {
         model.addAttribute("contentsSubTitle","관리자 배송 정보");
         return "admin/order/deliveryDetailInfo";
     }
+
     // 교환 환불 신청 관리
     @GetMapping( "/refundSwapping")
     public String adminOrderRefundSwapping(Model model){
@@ -88,4 +111,5 @@ public class OrderManagementController {
         model.addAttribute("contentsSubTitle","관리자 주문 확정 목록");
         return "admin/order/orderCompletedList";
     }
+
 }

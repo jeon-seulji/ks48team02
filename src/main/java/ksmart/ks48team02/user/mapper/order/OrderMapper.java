@@ -10,4 +10,8 @@ import java.util.List;
 public interface OrderMapper {
     // 주문 목록 조회
     public List<OrderTotal> getOrderList();
+
+    // 특정 주문 조회
+    public OrderTotal getOrderInfoById(String orderCode);
+
 }

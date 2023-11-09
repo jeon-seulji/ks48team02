@@ -12,7 +12,7 @@
     <result property="orderFundingName" column="order_funding_name"/>
     <result property="orderTotalPrice" column="order_total_price"/>
     <result property="orderCategoryDetail" column="order_category_detail"/>
-    <result property="goodsCode" column="goodsCode"/>
+    <result property="goodsCode" column="goods_code"/>
     <result property="orderApplicationDate" column="order_application_date"/>
     <result property="orderConfirmDate" column="order_confirm_date"/>
     <result property="orderCancellDate" column="order_cancell_date"/>
@@ -36,5 +36,25 @@
             order_table AS ot
     </select>
 
+    <!-- 특정 주문 조회 -->
+    <select id="getOrderInfoById" parameterType="String" resultMap="orderMap">
+        /* 특정 주문 상세 조회 */
+        SELECT
+            ot.order_code,
+            ot.member_id,
+            ot.order_category_code,
+            ot.order_name,
+            ot.order_funding_name,
+            ot.order_total_price,
+            ot.order_category_detail,
+            ot.goods_code,
+            ot.order_application_date,
+            ot.order_confirm_date,
+            ot.order_cancell_date
+        FROM
+            order_table AS ot
+        WHERE
+            ot.order_code = #{orderCode};
+    </select>
 
 </mapper>

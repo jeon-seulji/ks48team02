@@ -23,5 +23,11 @@ public class OrderService {
         return orderList;
     }
 
+    // 특정 주문 조회
+    public OrderTotal getOrderInfoById(String orderCode){
+        OrderTotal OrderInfoById = null;
+        OrderInfoById = orderMapper.getOrderInfoById(orderCode);
+        return OrderInfoById;
+    }
 
 }
