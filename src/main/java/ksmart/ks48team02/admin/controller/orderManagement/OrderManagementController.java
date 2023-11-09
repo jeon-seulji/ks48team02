@@ -1,8 +1,10 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
+import ksmart.ks48team02.common.dto.payments.RewardPayments;
 import ksmart.ks48team02.user.controller.MainController;
-import ksmart.ks48team02.user.dto.order.OrderTotal;
-import ksmart.ks48team02.user.service.order.OrderService;
+import ksmart.ks48team02.common.dto.order.OrderTotal;
+import ksmart.ks48team02.common.service.order.OrderService;
+import ksmart.ks48team02.common.service.payments.PaymentsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -21,9 +23,13 @@ public class OrderManagementController {
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     private final OrderService orderService;
+    private final PaymentsService paymentsService;
 
-    public OrderManagementController(OrderService orderService){
+    public OrderManagementController(OrderService orderService,
+                                     PaymentsService paymentsService){
+
         this.orderService = orderService;
+        this.paymentsService = paymentsService;
     }
 
     // 주문 대시보드
@@ -45,7 +51,6 @@ public class OrderManagementController {
         // 주문 목록 진열
         List<OrderTotal> OrderList = orderService.getOrderList();
         log.info("주문 목록 : {}", OrderList);
-
         model.addAttribute("OrderList", OrderList);
 
         return "admin/order/list";
@@ -54,7 +59,8 @@ public class OrderManagementController {
     // 주문 상세
     @GetMapping( "/detail")
     public String adminOrderDetail(Model model,
-                                   @RequestParam(name="orderCode") String orderCode){
+                                   @RequestParam(name="orderCode") String orderCode,
+                                   @RequestParam(name="goodsPartition") String goodsPartition){
         log.info("주문 코드 {}", orderCode);
 
         // 주문 상세 조회
@@ -63,11 +69,20 @@ public class OrderManagementController {
 
         model.addAttribute("OrderInfoById", OrderInfoById);
 
-        // 주문 분류 모델
+        // 주문 분류 모델 (필요 없으니 나중에 체크)
         String orderPartition = OrderInfoById.getGoodsCode();
         orderPartition = orderPartition.substring(0,3);
         log.info("orderPartition {}", orderPartition);
         model.addAttribute("orderPartition", orderPartition);
+
+        // 특정 결제 정보 조회
+        switch(goodsPartition){
+            case "rwd":
+                RewardPayments getRewardPaymentsById = paymentsService.getRewardPaymentsById(orderCode);
+                log.info("paymentsInfo {}", getRewardPaymentsById);
+                model.addAttribute("paymentsInfo", getRewardPaymentsById);
+                break;
+        }
 
         model.addAttribute("title","관리자 : 주문 상세");
         model.addAttribute("contentsTitle","주문 상세");

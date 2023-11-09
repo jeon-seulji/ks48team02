@@ -1,7 +1,7 @@
-package ksmart.ks48team02.user.mapper.order;
+package ksmart.ks48team02.common.mapper.order;
 
 
-import ksmart.ks48team02.user.dto.order.OrderTotal;
+import ksmart.ks48team02.common.dto.order.OrderTotal;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

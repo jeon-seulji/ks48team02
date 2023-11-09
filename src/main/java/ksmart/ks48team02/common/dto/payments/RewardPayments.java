@@ -1,6 +1,6 @@
-package ksmart.ks48team02.user.dto.payments;
+package ksmart.ks48team02.common.dto.payments;
 
-public class RewardPayment {
+public class RewardPayments {
     private String paymentCode;
     private String orderCode;
     private String memberId;
@@ -12,6 +12,7 @@ public class RewardPayment {
     private int useReservePrice;
     private String useReserveCode;
     private int discountRankPrice;
+    private String discountCouponPrice;
     private int paymentScheduledPrice;
     private String paymentMethod;
     private String depositName;
@@ -24,7 +25,7 @@ public class RewardPayment {
 
     @Override
     public String toString() {
-        return "RewardPayment{" +
+        return "RewardPayments{" +
                 "paymentCode='" + paymentCode + '\'' +
                 ", orderCode='" + orderCode + '\'' +
                 ", memberId='" + memberId + '\'' +
@@ -36,6 +37,7 @@ public class RewardPayment {
                 ", useReservePrice=" + useReservePrice +
                 ", useReserveCode='" + useReserveCode + '\'' +
                 ", discountRankPrice=" + discountRankPrice +
+                ", discountCouponPrice='" + discountCouponPrice + '\'' +
                 ", paymentScheduledPrice=" + paymentScheduledPrice +
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ", depositName='" + depositName + '\'' +
@@ -134,6 +136,14 @@ public class RewardPayment {
 
     public void setDiscountRankPrice(int discountRankPrice) {
         this.discountRankPrice = discountRankPrice;
+    }
+
+    public String getDiscountCouponPrice() {
+        return discountCouponPrice;
+    }
+
+    public void setDiscountCouponPrice(String discountCouponPrice) {
+        this.discountCouponPrice = discountCouponPrice;
     }
 
     public int getPaymentScheduledPrice() {
