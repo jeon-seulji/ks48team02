@@ -25,7 +25,7 @@
         WITH resultset AS (
             SELECT
                 r.reward_project_code AS projectCode,
-                r.reward_category_code AS categoryCode,
+                r.total_cagegory_code AS categoryCode,
                 r.project_subject AS subject,
                 r.store_code AS storeCode,
                 '리워드' AS projectType,

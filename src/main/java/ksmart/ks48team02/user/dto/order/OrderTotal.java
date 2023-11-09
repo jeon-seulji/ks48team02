@@ -1,6 +1,6 @@
 package ksmart.ks48team02.user.dto.order;
 
-public class Order {
+public class OrderTotal {
     private String orderCode;
     private String memberId;
     private String orderCategoryCode;

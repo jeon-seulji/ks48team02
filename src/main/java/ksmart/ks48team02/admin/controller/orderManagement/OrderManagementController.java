@@ -1,7 +1,7 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
 import ksmart.ks48team02.user.controller.MainController;
-import ksmart.ks48team02.user.dto.order.Order;
+import ksmart.ks48team02.user.dto.order.OrderTotal;
 import ksmart.ks48team02.user.service.order.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class OrderManagementController {
         model.addAttribute("contentsTitle","주문 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
 
-        List<Order> OrderList = orderService.getOrderList();
+        List<OrderTotal> OrderList = orderService.getOrderList();
         log.info("주문 목록 : {}", OrderList);
 
         model.addAttribute("OrderList", OrderList);

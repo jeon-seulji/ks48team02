@@ -194,7 +194,6 @@
                         <th style="width:10%;">주문 금액</th>
                         <th style="width:10%;">주문 확정 일시</th>
                         <th style="width:10%;">주문 취소 일시</th>
-                        <th style="width:8%;">배송 코드</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -233,9 +232,6 @@
                             </td>
                             <td th:text="${(l.orderCancellDate != null)?l.orderCancellDate:'-'}" class="table-data-center">
                                 -
-                            </td>
-                            <td class="table-data-center">
-                                <a class="table-detail-btn" th:href="@{/admin/order/delivery/detail}">배송정보</a>
                             </td>
                         </tr>
 

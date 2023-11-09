@@ -1,6 +1,6 @@
 package ksmart.ks48team02.user.service.order;
 
-import ksmart.ks48team02.user.dto.order.Order;
+import ksmart.ks48team02.user.dto.order.OrderTotal;
 import ksmart.ks48team02.user.mapper.order.OrderMapper;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +17,8 @@ public class OrderService {
     }
 
     // 주문 목록 조회
-    public List<Order> getOrderList(){
-        List<Order> orderList = null;
+    public List<OrderTotal> getOrderList(){
+        List<OrderTotal> orderList = null;
         orderList = orderMapper.getOrderList();
         return orderList;
     }
