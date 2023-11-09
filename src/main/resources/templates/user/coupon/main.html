@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>나의 쿠폰</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <style>
@@ -81,6 +81,20 @@
         .couponPolicy ol {
             margin-left: 30px;
         }
+        .modal-dialog{
+            width: 900px;
+            margin-top: 100px;
+        }
+        .modal-title{
+            font-size: 24px;
+        }
+        .couponCode{
+            text-align: center;
+        }
+        .couponSerialNum{
+            font-weight: bold;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -130,7 +144,7 @@
             </svg>
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                Launch static backdrop modal
+                쿠폰 등록하기
             </button>
 
             <!-- Modal -->
@@ -138,15 +152,24 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title" id="staticBackdropLabel">쿠폰번호를 입력해주세요</h5>
                         </div>
                         <div class="modal-body">
-                            ...
+                            <form>
+                                <div class="field">
+                                    <label class="couponSerialNum">쿠폰번호</label>
+                                    <br>
+                                    <div class="couponCode">
+                                        <input class="couponCode" name="couponCode" maxlength="15" placeholder="쿠폰번호 입력" type="text">
+                                        <br>
+                                        <em class="addCouponModal">최대 10자리 혹은 15자리 (~제외)</em>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Understood</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-primary">등록</button>
                         </div>
                     </div>
                 </div>

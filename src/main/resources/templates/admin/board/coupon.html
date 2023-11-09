@@ -113,7 +113,7 @@
                     <td th:text="${c.couponValidPeriod}"></td>
                     <td th:text="${c.couponTermsUse}"></td>
                     <td>
-                        <a th:href="@{/admin/board/couponAdd}" class="modify">수정</a>
+                        <a th:href="@{/admin/board/couponAdd?(couponCode=${c.couponCode})}" class="modify">수정</a>
                     </td>
                     <td>
                         <a th:href="@{#}" class="delete">삭제</a>
