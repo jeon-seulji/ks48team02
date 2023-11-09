@@ -333,10 +333,12 @@ table {
     font-weight: 700;
 }
 .settlement-log td {
-    padding: 2px 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 5px 15px;
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    height: auto !important;
+    min-height: 30px !important;
 }
 .settlement-log thead {
     height: 54px;

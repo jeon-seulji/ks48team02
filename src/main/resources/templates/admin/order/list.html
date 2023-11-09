@@ -6,7 +6,6 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <title th:text="${title}"></title>
-
 </head>
 
 
@@ -187,10 +186,10 @@
                         </th>
                         <th style="width:12%;">주문 관리코드</th>
                         <th style="width:10%;">주문 일시</th>
-                        <th style="width:6%;">주문자</th>
                         <th style="width:6%;">분류</th>
                         <th style="width:20%;">주문 공고</th>
                         <th style="width:10%;">주문 상태</th>
+                        <th style="width:6%;">주문자명</th>
                         <th style="width:10%;">주문 금액</th>
                         <th style="width:10%;">주문 확정 일시</th>
                         <th style="width:10%;">주문 취소 일시</th>
@@ -212,9 +211,6 @@
                             <td th:text="${l.orderApplicationDate}" th:title="${l.orderApplicationDate}" class="table-data-center">
                                 주문일시
                             </td>
-                            <td th:text="${l.orderName}"  class="table-data-center">
-                                주문자명
-                            </td>
                             <td  class="table-data-center">
                                 <span th:if="${l.goodsPartition.equals('rwd')}">리워드</span>
                                 <span th:if="${l.goodsPartition.equals('don')}">기부</span>
@@ -226,7 +222,9 @@
                             <td th:text="${l.orderCategoryDetail}" th:title="${l.orderCategoryDetail}">
                                 주문 상태
                             </td>
-
+                            <td th:text="${l.orderName}"  class="table-data-center">
+                                주문자명
+                            </td>
                             <td  class="table-data-center">
                                 <input type="hidden" name="orderPrice" th:value="${l.orderTotalPrice}">
                                 <span class="order-pay">0</span> 원

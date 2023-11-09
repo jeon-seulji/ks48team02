@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.common.mapper.payments.PaymentsMapper">
 
+    <!-- reward payments -->
     <resultMap type="RewardPayments" id="rewardPaymentsMap">
         <id property="paymentCode" column="reward_payment_code"/>
         <result property="orderCode" column="order_code"/>
@@ -28,7 +29,17 @@
         <result property="paymentCompletedDate" column="payment_completed_date"/>
     </resultMap>
 
-    <!-- payments list 조회 -->
+    <!-- donation payments -->
+    <resultMap id="donationPaymentsMap" type="DonationPayments">
+        <id property="donationOrderCode" column="donation_order_code"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="donationGoods" column="donation_goods"/>
+        <result property="donationPrice" column="donation_price"/>
+        <result property="donationName" column="donation_name"/>
+        <result property="donationSecurityNumber" column="donation_security_number"/>
+    </resultMap>
+
+    <!-- reward payments list 조회 -->
     <select id="getRewardPayments" resultMap="rewardPaymentsMap">
         SELECT
             rp.reward_payment_code,
@@ -56,7 +67,7 @@
             reward_payment AS rp;
     </select>
 
-    <!-- 특정 payments 정보 조회 -->
+    <!-- 특정 reward payments 정보 조회 -->
     <select id="getRewardPaymentsById" parameterType="String" resultMap="rewardPaymentsMap">
         SELECT
             rp.reward_payment_code,
@@ -85,5 +96,7 @@
         WHERE
             rp.order_code = #{orderCode};
     </select>
+
+    <!-- -->
 
 </mapper>
