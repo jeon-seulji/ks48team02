@@ -162,7 +162,7 @@
 
                 $(this).parents('.info-contents-area').hide();
                 $(this).parents('.info-contents-area').next().show();
-                $('#selectedOption').html('');
+
 
                 let selectOption = $('#orderInfo').find('input[type="checkbox"]:checked').parents('.selectOption');
                 // 총 리워드 주문 금액
@@ -190,59 +190,19 @@
                     // 선택한 옵션태그 담을 변수
                     let addSelectedOption;
 
-                    if(idx === $(selectOption).length-1) {
-
-                        addSelectedOption = $('<div>\n' +
-                            '                                    <span class="orderOptionName ml-2"></span>\n' +
-                            '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
-                            '                                    <span class="font-weight-bold float-right mr-lg-2">수량:<span class="orderOptionAmount"></span>개</span>\n' +
-
-                            '                                    <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>\n' +
-                            '\n' +
-                            '                                    <span class="ml-2">배송비</span>\n' +
-                            '                                    <span class="orderOptionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>\n' +
-                            '                                    <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
-                            '\n' +
-                            '                                    <span class="ml-2">쿠폰 사용</span>\n' +
-                            '                                    <span class ="font-weight-bold float-right mr-2">' +
-                            '                                       <select class="orderUseCoupon">' +
-                            '                                          <option value="">===쿠폰을 선택해주세요===</option>' +
-                            '                                           <option value="7">~~~~~~~~~~쿠폰</option>' +
-                            '                                           <option value="10">~~~~~~~~~~~~~쿠폰</option>' +
-                            '                                           <option value="3000">~~~~~~쿠폰</option>' +
-                            '                                       </select>' +
-                            '                                    </span>\n' +
-                            '                                    <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
-                            '\n' +
-                            '                                    <span class="ml-2">포인트 사용</span>\n' +
-                            '                                    <div class="form-check float-right font-weight-bold float-right mr-1">\n' +
-                            '                                        <input class="form-check-input" type="checkbox" value="" id="pointAllCheck">\n' +
-                            '                                        <label class="form-check-label" for="pointAllCheck">\n' +
-                            '                                            모두 사용 (보유 포인트 <span id="havePoint" class="text-primary">0</span> P)\n' +
-                            '                                        </label>\n' +
-                            '                                        <br>\n' +
-                            '                                        <input id="usePoint" type="number" class="float-right mr-2 h-75" value="0" style="width: 80px;">\n' +
-                            '                                    </div>\n' +
-                            '                                    <br><br>\n' +
-                            '                                    <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>\n' +
-                            '                                </div>');
+                    addSelectedOption = $('<div class="my-lg-1" style="height: 35px">\n' +
+                        '                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
+                        '                                    <span class="orderOptionName ml-2"></span>\n' +
+                        '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
+                        '                                    <span class="font-weight-bold float-right mr-lg-2">수량:<span class="orderOptionAmount"></span>개</span>\n' +
+                        '                                    <br>\n' +
+                        '                                </div>');
 
 
-                    } else{
-                        addSelectedOption = $('<div class="my-lg-1" style="height: 35px">\n' +
-                            '                                    <span class="orderOptionName ml-2"></span>\n' +
-                            '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
-                            '                                    <span class="font-weight-bold float-right mr-lg-2">수량:<span class="orderOptionAmount"></span>개</span>\n' +
-                            '                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
-                            '                                    <br>\n' +
-                            '                                </div>');
-
-
-                    }
                     $(addSelectedOption).find('.orderOptionName').text(optionName);
                     $(addSelectedOption).find('.orderOptionPrice').text(`${(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount).toLocaleString('ko-KR')} 원`);
                     $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
-                    $('#selectedOption').append($(addSelectedOption));
+                    $('#selectedOption').prepend($(addSelectedOption));
                 });
                 //보유 포인트
                 $('#havePoint').text(`${havePoint.toLocaleString('ko-KR')}`);
@@ -780,8 +740,43 @@
                             <h5>결제 하기</h5>
                             <br>
                             <div id="selectedOption">
-
                             </div>
+
+                            <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>
+
+                            <span class="ml-2">배송비</span>
+                            <span class="orderOptionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>
+                            <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                            <span class="ml-2">쿠폰 사용</span>
+                            <span class ="font-weight-bold float-right mr-2">
+                                <select class="orderUseCoupon">
+                                    <option value="">===쿠폰을 선택해주세요===</option>
+                                         <th:block th:if="${memberHaveCouponList == null}">
+                                            <option value="0">보유 쿠폰이 없습니다.</option>
+                                         </th:block>
+                                         <th:block th:unless="${memberHaveCouponList == null}" th:each="l : ${memberHaveCouponList}">
+                                            <option th:if="${l.couponDiscountRate > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountRate}"></option>
+                                            <option th:if="${l.couponDiscountAmount > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountAmount}"></option>
+                                          </th:block>
+                                </select>
+                            </span>
+                            <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+
+                            <span class="ml-2">포인트 사용</span>
+                            <div class="form-check float-right font-weight-bold float-right mr-1">
+                                <input class="form-check-input" type="checkbox" value="" id="pointAllCheck">
+                                <label class="form-check-label" for="pointAllCheck">
+                                    모두 사용 (보유 포인트 <span id="havePoint" class="text-primary">0</span> P)
+                                </label>
+                                <br>
+                                <input id="usePoint" type="number" class="float-right mr-2 h-75" value="0" style="width: 80px;">
+                            </div>
+
+                            <br><br>
+                            <div style="border: 0.3px solid black; margin: 5px; width: 100%"></div>
+
+
 
 
                             <br><br><br>
