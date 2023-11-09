@@ -1,7 +1,7 @@
-package ksmart.ks48team02.user.service.order;
+package ksmart.ks48team02.common.service.order;
 
-import ksmart.ks48team02.user.dto.order.OrderTotal;
-import ksmart.ks48team02.user.mapper.order.OrderMapper;
+import ksmart.ks48team02.common.dto.order.OrderTotal;
+import ksmart.ks48team02.common.mapper.order.OrderMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

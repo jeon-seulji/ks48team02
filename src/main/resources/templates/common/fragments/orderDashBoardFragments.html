@@ -5,17 +5,17 @@
         <div class="order-total-info">
             <div class="info-items">
                 <h5 >총 주문 금액</h5>
-                <p class="order-total-price"><span class="price-data" data-value="68500">0</span>원</p>
+                <p class="order-total-price"><span class="price-data" th:data-value="${paymentsInfo.orderTotalPrice}">0</span>원</p>
             </div>
             <span class="sign">=</span>
             <div class="info-items">
                 <h5>주문 금액</h5>
-                <p class="order-total-price"><span class="price-data" data-value="65000">0</span>원</p>
+                <p class="order-total-price"><span class="price-data" th:data-value="${paymentsInfo.orderPrice}">0</span>원</p>
             </div>
             <span class="sign">+</span>
             <div class="info-items">
                 <h5>배송비</h5>
-                <p class="order-total-price"><span class="price-data" data-value="3500">0</span>원</p>
+                <p class="order-total-price"><span class="price-data" th:data-value="${paymentsInfo.deliveryPrice}">0</span>원</p>
             </div>
         </div>
     </th:block>

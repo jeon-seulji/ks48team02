@@ -1,4 +1,4 @@
-package ksmart.ks48team02.user.dto.order;
+package ksmart.ks48team02.common.dto.order;
 
 public class OrderTotal {
     private String orderCode;
@@ -9,21 +9,14 @@ public class OrderTotal {
     private int orderTotalPrice;
     private String orderCategoryDetail;
     private String goodsCode;
+    private String goodsPartition;
     private String orderApplicationDate;
     private String orderConfirmDate;
     private String orderCancellDate;
 
-
-
-
-
-
-
-
-
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderTotal{" +
                 "orderCode='" + orderCode + '\'' +
                 ", memberId='" + memberId + '\'' +
                 ", orderCategoryCode='" + orderCategoryCode + '\'' +
@@ -32,6 +25,7 @@ public class OrderTotal {
                 ", orderTotalPrice=" + orderTotalPrice +
                 ", orderCategoryDetail='" + orderCategoryDetail + '\'' +
                 ", goodsCode='" + goodsCode + '\'' +
+                ", goodsPartition='" + goodsPartition + '\'' +
                 ", orderApplicationDate='" + orderApplicationDate + '\'' +
                 ", orderConfirmDate='" + orderConfirmDate + '\'' +
                 ", orderCancellDate='" + orderCancellDate + '\'' +
@@ -100,6 +94,13 @@ public class OrderTotal {
 
     public void setGoodsCode(String goodsCode) {
         this.goodsCode = goodsCode;
+    }
+    public String getGoodsPartition() {
+        return goodsPartition;
+    }
+
+    public void setGoodsPartition(String goodsPartition) {
+        this.goodsPartition = goodsPartition;
     }
 
     public String getOrderApplicationDate() {
