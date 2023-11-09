@@ -68,7 +68,12 @@ public class RewardController {
     @GetMapping("/order")
     public String orderPage(Model model, HttpSession session) {
 
+
         String memberId = (String) session.getAttribute("SID");
+
+        if(memberId == null) {
+            return "user/account/login";
+        }
         Member orderMemberInfo = rewardService.getOrderMemberInfo(memberId);
         List<Coupon> memberHaveCouponList = adminCouponService.MemberHaveCouponById(memberId);
 
