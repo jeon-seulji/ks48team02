@@ -3,10 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.admin.mapper.coupon.AdminCouponMapper">
-    
+
     <!--쿠폰 resultMap-->
     <resultMap id="CouponResultMap" type="Coupon">
-
         <id property="couponCode" column="coupon_code"></id>
         <result property="couponSerialNumber" column="coupon_serial_number"></result>
         <result property="couponName" column="coupon_name"></result>
@@ -16,7 +15,7 @@
         <result property="numberCouponRemaining" column="number_coupons_remaining"></result>
         <result property="couponValidPeriod" column="coupon_valid_period"></result>
         <result property="couponTermsUse" column="coupon_terms_use"></result>
-      
+
         <association property="memberCoupon" javaType="MemberCoupon">
             <id property="couponIssueCode" column="coupon_issue_code"></id>
             <result property="couponMemberId" column="member_id"></result>
@@ -27,10 +26,9 @@
         </association>
     </resultMap>
 
-    
 
-<!--    쿠폰 전체 조회-->
 
+    <!--전체 쿠폰 조회-->
     <select id="getCouponList" resultType="Coupon">
         select
             c.coupon_code as couponCode,
@@ -67,24 +65,6 @@
             mc.member_id = m.member_id
         WHERE
             m.member_id = #{memberId} AND mc.coupon_end_date >= CURDATE() AND mc.coupon_used = 0;
-   </select>
-
-    <select id="getCouponCodeById" parameterType="String" >
-        /*  특정 쿠폰 조회*/
-        select
-          c.coupon_code as couponCode,
-          c.coupon_serial_number as couponSerialNumber,
-          c.coupon_name as couponName,
-          c.coupon_discount_rate as couponDiscountRate,
-          c.coupon_discount_amount as couponDiscountAmount,
-          c.coupon_stock as couponStock,
-          c.number_coupons_remaining as numberCouponRemaining,
-          c.coupon_valid_period as couponValidPeriod,
-          c.coupon_terms_use as couponTermsUse
-        from
-          coupon_details as c
-        where
-          c.coupon_code = #{couponCode};
     </select>
 
 </mapper>
