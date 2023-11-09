@@ -7,7 +7,7 @@
     <!--   리워드 프로젝트 resultMap -->
     <resultMap id="RewardResultMap" type="RewardProject">
         <id property="rewardProjectCode" column="reward_project_code"/>
-        <result property="rewardCategoryCode" column="reward_category_code"/>
+        <result property="rewardCategoryCode" column="total_cagegory_code"/>
         <result property="projectJudgementReasonCode" column="project_judgement_reason_code"/>
         <result property="RegMemberId" column="member_id"/>
         <result property="adminMemberId" column="admin_member_id"/>
@@ -39,7 +39,7 @@
         </collection>
     </resultMap>
 
-    <!--회원 resultMap-->
+    <!--구매자 회원 정보 resultMap-->
     <resultMap type="Member" id="memberResultMap">
         <id property="memberId" column="member_id"/>
         <result property ="memberTypeCode" column="member_type_code"/>
@@ -53,10 +53,10 @@
 
         <association property="customer" javaType="Customer">
             <id property="customerCode" column="customer_code"/>
-            <result property="memberId" column="member_id"/>
+            <result property="customerMemberId" column="member_id"/>
             <result property="rewardRankCode" column="reward_rank_code"/>
             <result property="donationRankCode" column="donation_rank_code"/>
-            <result property="customerGender" column="costomer_gender"/>
+            <result property="customerGender" column="customer_gender"/>
             <result property="customerBirth" column="customer_birth"/>
             <result property="customerAddr" column="customer_addr"/>
             <result property="customerAddrDetail" column="customer_addr_detail"/>
@@ -74,16 +74,17 @@
         </association>
     </resultMap>
 
-    <select id="getRankById" parameterType="String" resultType="RewardCustomerRank">
+    <!--주문 회원 정보 조회-->
+    <select id="getOrderMemberInfo" parameterType="String" resultMap="memberResultMap">
 
         SELECT
             m.member_name,
             m.member_email,
             m.contact_info,
-            c.costomer_gender,
+            c.customer_gender,
             c.customer_birth,
             c.customer_addr,
-            c.customer_addr_dtail,
+            c.customer_addr_detail,
             c.customer_point,
             cr.rank_name,
             cr.discount_rate,
@@ -92,7 +93,7 @@
             member AS m
         INNER JOIN
             customer AS c
-        on
+        ON
             m.member_id= c.member_id
         INNER JOIN
             reward_customer_rank AS cr

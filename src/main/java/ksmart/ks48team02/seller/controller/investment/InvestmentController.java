@@ -108,23 +108,6 @@ public class InvestmentController {
         return "seller/investment/view/after_invest_division_view";
     }
 
-    @GetMapping("/insert/insert")
-    public String addInvestment(Model model) {
-
-        model.addAttribute("title", "투자펀딩 공고 등록");
-        model.addAttribute("contentsTitle","투자펀딩 공고 등록");
-
-        return "user/projectRegistration/investment/invest_insert";
-    }
-
-    @GetMapping("/insert/judge")
-    public String addInvestmentJudge(Model model) {
-
-        model.addAttribute("title", "투자펀딩 심사 요청 등록");
-        model.addAttribute("contentsTitle","투자펀딩 심사 요청 등록");
-
-        return "user/projectRegistration/investment/invest_judge_insert";
-    }
 
     @GetMapping("/insert/after-process")
     public String addInvestAfterProcess(Model model) {

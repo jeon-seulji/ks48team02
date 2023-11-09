@@ -79,18 +79,26 @@
 
     $('#cateSelect').change(function (){
       var selectedCategory = $(this).val();
+      console.log(selectedCategory); // 여기를 추가합니다.
 
       switch (selectedCategory){
         case '리워드':
           $('.rewardCate').closest('tr').show();
           $('.donationCate').closest('tr').hide();
+          $('.investmentCate').closest('tr').hide();
           break;
         case '기부':
           $('.donationCate').closest('tr').show();
           $('.rewardCate').closest('tr').hide();
+          $('.investmentCate').closest('tr').hide();
+          break;
+        case '투자':
+          $('.investmentCate').closest('tr').show();
+          $('.rewardCate').closest('tr').hide();
+          $('.donationCate').closest('tr').hide();
           break;
         default:
-          $('.rewardCate, .donationCate').closest('tr').show();
+          $('.rewardCate, .donationCate, .investmentCate').closest('tr').show();
           break;
       }
     });
@@ -110,6 +118,7 @@
           <option>카테고리 목록</option>
           <option>리워드</option>
           <option>기부</option>
+          <option>투자</option>
         </select>
       </div>
       <div class="addBtnArea">
@@ -124,7 +133,9 @@
           <th><input type="checkbox" id="allCheck"></th>
           <th>카테고리 코드</th>
           <th>카테고리 등록 관리자</th>
+          <th>분류</th>
           <th>카테고리 이름</th>
+          <th>분류 설명</th>
           <th>사용 여부</th>
           <th>등록 일시</th>
           <th>게시물 관리</th>
@@ -135,13 +146,15 @@
           <td>
             <input type="checkbox" class="rewardCate" name="admin_board">
           </td>
-          <td class="rewardCate">rwd_cate_001</td>
+          <td class="rewardCate">category_code_001</td>
           <td>id001</td>
+          <td>리워드</td>
           <td>책</td>
+          <td>책 입니다.</td>
           <td>1</td>
           <td>2023.11.04</td>
           <td>
-            <a class="modify" th:href="@{#}">수정</a>
+            <a class="modify" th:href="@{/admin/site/categoryAdd}">수정</a>
             <a class="delete" th:href="@{#}">삭제</a>
           </td>
         </tr>
@@ -149,10 +162,12 @@
           <td>
             <input type="checkbox" class="rewardCate" name="admin_board">
           </td>
-          <td class="rewardCate">rwd_cate_002</td>
+          <td class="rewardCate">category_code_002</td>
           <td>id001</td>
+          <td>리워드</td>
           <td>영화</td>
-          <td>0</td>
+          <td>최신 영화 입니다.</td>
+          <td>1</td>
           <td>2023.11.04</td>
           <td>
             <a class="modify" th:href="@{#}">수정</a>
@@ -163,9 +178,11 @@
           <td>
             <input type="checkbox" class="rewardCate" name="admin_board">
           </td>
-          <td class="rewardCate">rwd_cate_003</td>
+          <td class="rewardCate">category_code_003</td>
           <td>id001</td>
+          <td>리워드</td>
           <td>그림</td>
+          <td>갤러리아 그림 입니다.</td>
           <td>1</td>
           <td>2023.11.04</td>
           <td>
@@ -177,9 +194,11 @@
           <td>
             <input type="checkbox" class="rewardCate" name="admin_board">
           </td>
-          <td class="rewardCate">rwd_cate_004</td>
+          <td class="rewardCate">category_code_004</td>
           <td>id001</td>
+          <td>리워드</td>
           <td>공연</td>
+          <td>공연 리워드 입니다</td>
           <td>1</td>
           <td>2023.11.04</td>
           <td>
@@ -191,9 +210,11 @@
           <td>
             <input type="checkbox" class="rewardCate" name="admin_board">
           </td>
-          <td class="rewardCate">rwd_cate_005</td>
+          <td class="rewardCate">category_code_005</td>
           <td>id001</td>
+          <td>리워드</td>
           <td>전시</td>
+          <td>전시 공연 입니다</td>
           <td>1</td>
           <td>2023.11.04</td>
           <td>
@@ -205,9 +226,11 @@
           <td>
             <input type="checkbox" class="donationCate" name="admin_board">
           </td>
-          <td class="donationCate">don_ct_001</td>
+          <td class="donationCate">category_code_006</td>
           <td>id001</td>
+          <td>기부</td>
           <td>환경</td>
+          <td>지구 환경</td>
           <td>1</td>
           <td>2023.11.04</td>
           <td>
@@ -219,23 +242,11 @@
           <td>
             <input type="checkbox" class="donationCate" name="admin_board">
           </td>
-          <td class="donationCate">don_ct_002</td>
+          <td class="donationCate">category_code_007</td>
           <td>id001</td>
+          <td>기부</td>
           <td>다문화</td>
-          <td>0</td>
-          <td>2023.11.04</td>
-          <td>
-            <a class="modify" th:href="@{#}">수정</a>
-            <a class="delete" th:href="@{#}">삭제</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <input type="checkbox" class="donationCate" name="admin_board">
-          </td>
-          <td class="donationCate">don_ct_003</td>
-          <td>id001</td>
-          <td>지구촌</td>
+          <td>여러 다문화</td>
           <td>1</td>
           <td>2023.11.04</td>
           <td>
@@ -247,10 +258,12 @@
           <td>
             <input type="checkbox" class="donationCate" name="admin_board">
           </td>
-          <td class="donationCate">don_ct_004</td>
+          <td class="donationCate">category_code_008</td>
           <td>id001</td>
-          <td>시민사회</td>
-          <td>0</td>
+          <td>기부</td>
+          <td>지구촌</td>
+          <td>깔끔한 지구촌</td>
+          <td>1</td>
           <td>2023.11.04</td>
           <td>
             <a class="modify" th:href="@{#}">수정</a>
@@ -261,9 +274,59 @@
           <td>
             <input type="checkbox" class="donationCate" name="admin_board">
           </td>
-          <td class="donationCate">don_ct_005</td>
+          <td class="donationCate">category_code_009</td>
           <td>id001</td>
+          <td>기부</td>
+          <td>시민사회</td>
+          <td>시민 공연 투어</td>
+          <td>1</td>
+          <td>2023.11.04</td>
+          <td>
+            <a class="modify" th:href="@{#}">수정</a>
+            <a class="delete" th:href="@{#}">삭제</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" class="donationCate" name="admin_board">
+          </td>
+          <td class="donationCate">category_code_010</td>
+          <td>id001</td>
+          <td>기부</td>
           <td>동물</td>
+          <td>애견 용품 입니다.</td>
+          <td>1</td>
+          <td>2023.11.04</td>
+          <td>
+            <a class="modify" th:href="@{#}">수정</a>
+            <a class="delete" th:href="@{#}">삭제</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" class="investmentCate" name="admin_board">
+          </td>
+          <td class="investmentCate">category_code_011</td>
+          <td>id001</td>
+          <td>투자</td>
+          <td>주식</td>
+          <td>주식 입니다</td>
+          <td>1</td>
+          <td>2023.11.04</td>
+          <td>
+            <a class="modify" th:href="@{#}">수정</a>
+            <a class="delete" th:href="@{#}">삭제</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" class="investmentCate" name="admin_board">
+          </td>
+          <td class="investmentCate">category_code_012</td>
+          <td>id001</td>
+          <td>투자</td>
+          <td>채권</td>
+          <td>채권 입니다.</td>
           <td>1</td>
           <td>2023.11.04</td>
           <td>

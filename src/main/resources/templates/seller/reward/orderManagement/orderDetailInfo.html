@@ -65,23 +65,9 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
     <div class="admin-wrapper"> <!-- 수정 -->
+        <!-- dashboard-area start -->
 
-        <div class="order-total-info">
-            <div class="info-items">
-                <h5>총 주문 금액</h5>
-                <p class="order-total-price"><span class="price-data" data-value="68500">0</span>원</p>
-            </div>
-            <span class="sign">=</span>
-            <div class="info-items">
-                <h5>주문 금액</h5>
-                <p class="order-total-price"><span class="price-data" data-value="65000">0</span>원</p>
-            </div>
-            <span class="sign">+</span>
-            <div class="info-items">
-                <h5>배송비</h5>
-                <p class="order-total-price"><span class="price-data" data-value="3500">0</span>원</p>
-            </div>
-        </div>
+        <!-- dashboard-area end -->
 
         <!-- order info area start -->
         <div id="orderInfoArea" class="admin-content-wrapper form-table">
@@ -93,10 +79,10 @@
         <form id="paymentInfoDetailBt" method="get">
             <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
                 <!-- payments info area start -->
-                <th:block th:replace="~{common/fragments/orderPaymentsFragments :: orderPayments}"></th:block>
+                <th:block th:replace="~{common/fragments/orderPaymentsFragments :: rewardPayments}"></th:block>
                 <!-- payments info area end -->
                 <!-- delivery info area start -->
-                <th:block th:replace="~{common/fragments/deliverInfo :: delriverInfo}"></th:block>
+                <th:block th:if="${orderPartition == 'rwd'}" th:replace="~{common/fragments/deliverInfo :: delriverInfo}"></th:block>
                 <!-- delivery info area end -->
                 <div class="btn-area">
                     <ul>
