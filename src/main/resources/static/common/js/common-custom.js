@@ -290,3 +290,13 @@ function monthAndDaySetting(max){
     return month + '-' + day;
 }
 
+// 화폐 단위 표기 fn
+function payFormat($els){
+    $($els).each((idx, item) => {
+        let price = $(item).val();
+        console.log(item,'<-- item');
+        let priceForm = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        $(item).siblings('.order-pay').text(priceForm);
+    });
+
+}

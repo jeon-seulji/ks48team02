@@ -1,5 +1,7 @@
 package ksmart.ks48team02.user.dto.reward;
 
+import ksmart.ks48team02.user.dto.Customer;
+
 import java.util.List;
 
 public class RewardProject {
@@ -20,7 +22,6 @@ public class RewardProject {
     private String RegCompany;
     private String projectRegDate;
     private int searchCount;
-    private int deliveryPrice;
     private String projectJudgmentReason;
     private String getProjectJudgementDate;
     private String projectStartDate;
@@ -29,13 +30,6 @@ public class RewardProject {
 
     private List<RewardOption> rewardOptionList;
 
-    public List<RewardOption> getRewardOptionList() {
-        return rewardOptionList;
-    }
-
-    public void setRewardOptionList(List<RewardOption> rewardOptionList) {
-        this.rewardOptionList = rewardOptionList;
-    }
 
     @Override
     public String toString() {
@@ -56,7 +50,6 @@ public class RewardProject {
                 ", RegCompany='" + RegCompany + '\'' +
                 ", projectRegDate='" + projectRegDate + '\'' +
                 ", searchCount=" + searchCount +
-                ", deliveryPrice=" + deliveryPrice +
                 ", projectJudgmentReason='" + projectJudgmentReason + '\'' +
                 ", getProjectJudgementDate='" + getProjectJudgementDate + '\'' +
                 ", projectStartDate='" + projectStartDate + '\'' +
@@ -194,14 +187,6 @@ public class RewardProject {
         this.searchCount = searchCount;
     }
 
-    public int getDeliveryPrice() {
-        return deliveryPrice;
-    }
-
-    public void setDeliveryPrice(int deliveryPrice) {
-        this.deliveryPrice = deliveryPrice;
-    }
-
     public String getProjectJudgmentReason() {
         return projectJudgmentReason;
     }
@@ -240,5 +225,13 @@ public class RewardProject {
 
     public void setProjectCondition(int projectCondition) {
         this.projectCondition = projectCondition;
+    }
+
+    public List<RewardOption> getRewardOptionList() {
+        return rewardOptionList;
+    }
+
+    public void setRewardOptionList(List<RewardOption> rewardOptionList) {
+        this.rewardOptionList = rewardOptionList;
     }
 }

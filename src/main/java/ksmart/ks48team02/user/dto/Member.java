@@ -1,5 +1,7 @@
 package ksmart.ks48team02.user.dto;
 
+import ksmart.ks48team02.user.dto.reward.RewardCustomerRank;
+
 public class Member {
 
     private String memberId;
@@ -11,6 +13,9 @@ public class Member {
     private String memberContactInfo;
     private String unRegDate;
     private String unRegStatus;
+
+    private RewardCustomerRank rewardCustomerRank;
+    private Customer customer;
 
 
     @Override
@@ -25,8 +30,27 @@ public class Member {
                 ", memberContactInfo='" + memberContactInfo + '\'' +
                 ", unRegDate='" + unRegDate + '\'' +
                 ", unRegStatus='" + unRegStatus + '\'' +
+                ", rewardCustomerRank=" + rewardCustomerRank +
+                ", customer=" + customer +
                 '}';
     }
+
+    public RewardCustomerRank getRewardCustomerRank() {
+        return rewardCustomerRank;
+    }
+
+    public void setRewardCustomerRank(RewardCustomerRank rewardCustomerRank) {
+        this.rewardCustomerRank = rewardCustomerRank;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
 
     public String getMemberId() {
         return memberId;
