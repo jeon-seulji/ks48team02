@@ -457,9 +457,7 @@ pre {
   overflow-y: scroll; }
 
 .container {
-	
   width: 100%;
-  min-width: 1100px;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
@@ -467,18 +465,35 @@ pre {
   @media (min-width: 576px) {
     .container {
       max-width: 540px;
-      min-width: 500px;} }
+      } }
   @media (min-width: 768px) {
     .container {
       max-width: 720px;
-      min-width: 700px;} }
+      } }
   @media (min-width: 992px) {
     .container {
       max-width: 960px;
-      min-width: 900px;} }
+      } }
   @media (min-width: 1200px) {
     .container {
       max-width: 1140px; } }
+
+
+.navbar .container {
+  min-width: 1100px;
+}
+@media (min-width: 576px) {
+  .navbar .container {
+    min-width: 500px;} }
+@media (min-width: 768px) {
+  .navbar .container {
+    min-width: 700px;} }
+@media (min-width: 992px) {
+  .navbar .container {
+    min-width: 900px;} }
+@media (min-width: 1200px) {
+  .navbar .container {
+    max-width: 1140px; } }
 
 .container-fluid {
   width: 100%;
