@@ -2,6 +2,10 @@ package ksmart.ks48team02.user.controller.reward;
 
 
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.user.dto.Member;
+import ksmart.ks48team02.user.service.reward.RewardService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller("userRewardController")
 @RequestMapping("/user/reward")
 public class RewardController {
+
+    private static final Logger Log = LoggerFactory.getLogger(RewardController.class);
+    private final RewardService rewardService;
+
+    public RewardController (RewardService rewardService){
+        this.rewardService = rewardService;
+    }
 
     //리워드 메인 페이지
     @GetMapping(value = {"" , "/"})
@@ -52,8 +63,11 @@ public class RewardController {
     public String orderPage(Model model, HttpSession session) {
 
         String memberId = (String) session.getAttribute("SID");
+        Member orderMemberInfo = rewardService.getOrderMemberInfo(memberId);
 
+        Log.info("구매자 회원 정보: {}",orderMemberInfo);
 
+        model.addAttribute("orderMemberInfo", orderMemberInfo);
         return "user/reward/order/main";
     }
 

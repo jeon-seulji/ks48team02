@@ -99,6 +99,13 @@
     <!--  다음 주소찾기 api   -->
 
 
+    <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
+    <!--  네이버페이 api-->
+    <script type="text/javascript" src="https://pay.naver.com/customer/js/naverPayButton.js"></script>
+    <!-- 네이버페이 button -->
+
+
+
 
 </th:block>
 
@@ -106,8 +113,44 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
 
-    <script>
+    <script th:inline="javascript">
+
+
+        //등급 별 할인율
+        let orderMemberDiscount = Number([[${orderMemberInfo.rewardCustomerRank.discountRate}]]/100);
+        //등급 별 적립 포인트
+        let orderMemberSavePoint = Number([[${orderMemberInfo.rewardCustomerRank.pointSavingRate}]]/100);
+        //회원 보유 포인트
+        let havePoint = [[${orderMemberInfo.customer.customerPoint}]];
+
         $(function(){
+
+            //유효성 검사 validationCheck 함수
+            function validationCheck(data) {
+                let isValid =true;
+
+                //1.인수 값이 객체일 경우
+                if(typeof data =='object') {
+
+                    $.each(data, function(){
+                        let checkValue = $(this).val();
+                        if(checkValue === null || checkValue === '' || checkValue === 'undefined') {
+                            isValid = false;
+                            let eleId = $(this).attr('id');
+                            let cate = $(`label[for="${eleId}"]`).text();
+                            alert(`${cate} 필수 입력 항목입니다.`);
+                            $(this).focus();
+                            return isValid;
+                        }
+                    });
+                    //2.인수 값이 객체가 아닐 경우
+                }else{
+                    if(data === null || data === '' || data === 'undefined') {
+                        isValid = false;
+                    }
+                }
+                return isValid;
+            }
 
             // 다음 버튼 클릭시 페이지 이동, 선택한 옵션 정보 입력
             $('.nextBtn').click(function(){
@@ -116,9 +159,9 @@
                     alert('리워드를 선택해 주세요');
                     return;
                 }
+
                 $(this).parents('.info-contents-area').hide();
                 $(this).parents('.info-contents-area').next().show();
-
                 $('#selectedOption').html('');
 
                 let selectOption = $('#orderInfo').find('input[type="checkbox"]:checked').parents('.selectOption');
@@ -175,7 +218,7 @@
                             '                                    <div class="form-check float-right font-weight-bold float-right mr-1">\n' +
                             '                                        <input class="form-check-input" type="checkbox" value="" id="pointAllCheck">\n' +
                             '                                        <label class="form-check-label" for="pointAllCheck">\n' +
-                            '                                            모두 사용 (보유 포인트<span id="havePoint">0</span>P)\n' +
+                            '                                            모두 사용 (보유 포인트 <span id="havePoint" class="text-primary">0</span> P)\n' +
                             '                                        </label>\n' +
                             '                                        <br>\n' +
                             '                                        <input id="usePoint" type="number" class="float-right mr-2 h-75" value="0" style="width: 80px;">\n' +
@@ -196,71 +239,93 @@
 
 
                     }
-
                     $(addSelectedOption).find('.orderOptionName').text(optionName);
                     $(addSelectedOption).find('.orderOptionPrice').text(`${(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount).toLocaleString('ko-KR')} 원`);
                     $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
                     $('#selectedOption').append($(addSelectedOption));
                 });
+                //보유 포인트
+                $('#havePoint').text(`${havePoint.toLocaleString('ko-KR')}`);
 
                 // 최종 리워드 비용
-                $('#totalRewardPrice').text(`${totalRewardPrice.toLocaleString('ko-KR')}원`);
+                $('#totalRewardPrice').text(`${totalRewardPrice.toLocaleString('ko-KR')} 원`);
+
+                //등급 별 할인 금액
+                $('#memberRankDiscount').text(`${Number(totalRewardPrice * orderMemberDiscount).toLocaleString('ko-KR')} 원`);
+
+                //등급 별 적립 금액
+                $('#memberSavePoint').text(`${Number(totalRewardPrice * orderMemberSavePoint).toLocaleString('ko-KR')} 원`)
 
                 // 배송비에 따라 최종 결제 배송비, 결제비용
                 if(orderDeliverPrice == 0) {
                     $('.orderOptionDeliverPrice').text('무료 배송');
                     $('#totalOrderDeliverPrice').text('무료 배송');
                     $('#totalPayPriceHidden').val(totalRewardPrice);
-                    $('#totalPayPrice').text(`${totalRewardPrice.toLocaleString('ko-KR')}원`);
+                    $('#totalPayPrice').text(`${Number(totalRewardPrice*(1-orderMemberDiscount)).toLocaleString('ko-KR')} 원`);
                 } else {
-                    $('.orderOptionDeliverPrice').text(`${orderDeliverPrice.toLocaleString('ko-KR')}원`);
-                    $('#totalOrderDeliverPrice').text(`${orderDeliverPrice.toLocaleString('ko-KR')}원`);
+                    $('.orderOptionDeliverPrice').text(`${orderDeliverPrice.toLocaleString('ko-KR')} 원`);
+                    $('#totalOrderDeliverPrice').text(`${orderDeliverPrice.toLocaleString('ko-KR')} 원`);
                     $('#totalPayPriceHidden').val(totalRewardPrice + orderDeliverPrice)
-                    $('#totalPayPrice').text(`${(totalRewardPrice + orderDeliverPrice).toLocaleString('ko-KR')}원`)
+                    $('#totalPayPrice').text(`${Number((totalRewardPrice*(1-orderMemberDiscount) + orderDeliverPrice)).toLocaleString('ko-KR')} 원`)
                 }
             });
 
             //쿠폰 사용시 쿠폰 혜택 최종 결제금액에 적용
             $(document).on('change','.orderUseCoupon',function(){
                 let totalRewardPrice = Number($('#totalRewardPrice').text().replaceAll('원','').replaceAll(',',''));
-
                 let point = Number($('#usePoint').val());
                 let coupon = Number($(this).val());
                 let deliver = $('#totalOrderDeliverPrice').text();
+                let paymentPrice =0;
+
                 if(deliver =='무료 배송') {
                     deliver = 0;
                 } else {
                     deliver = Number(deliver.replaceAll('원','').replaceAll(',',''));
                 }
 
-                let paymentPrice =0;
-
-
+                //쿠폰 금액
                 if(coupon <= 0) {
-
                     paymentPrice =(totalRewardPrice - coupon - point  + deliver);
-                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
-                    $('#totalOrderCoupon').text(`${coupon.toLocaleString('ko-KR')}원`);
+                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')} 원`);
+                    $('#totalOrderCoupon').text(`${coupon.toLocaleString('ko-KR')} 원`);
 
                 } else if( coupon > 100) {
                     //일정 금액 할인
                     alert(`${coupon.toLocaleString('ko-KR')} 원 할인`)
-                    paymentPrice =(totalRewardPrice - coupon - point  + deliver);
-                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
-                    $('#totalOrderCoupon').text(`${coupon.toLocaleString('ko-KR')}원`);
+                    paymentPrice =(totalRewardPrice * (1-orderMemberDiscount) - coupon - point  + deliver);
+                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')} 원`);
+                    $('#totalOrderCoupon').text(`${coupon.toLocaleString('ko-KR')} 원`);
 
                 } else{
                     //퍼센트 할인
                     alert(`${coupon}% 할인`)
-                    paymentPrice = (totalRewardPrice*(1 - coupon/100) - point  + deliver);
-                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
-                    $('#totalOrderCoupon').text(`${(totalRewardPrice*coupon/100).toLocaleString('ko-KR')}원`)
+                    paymentPrice = (totalRewardPrice*(1 - (coupon/100 + orderMemberDiscount)) - point  + deliver);
+                    $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')} 원`);
+                    $('#totalOrderCoupon').text(`${(totalRewardPrice*coupon/100).toLocaleString('ko-KR')} 원`)
                 }
-
             });
 
 
-            //포인트 사용 시 최종 결제 금액에 사용한 포인트 금액 표시, 최종 결제 금액 이상 포인트는 사용 못하게.
+            //포인트 모두 사용 체크시, 포인트 금액 보유한 포인트 만큼 변동.
+            $(document).on('change','#pointAllCheck',function(){
+                let totalPayPrice = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
+
+                if($(this).prop('checked')) {
+                    if(havePoint > totalPayPrice) {
+                        $('#usePoint').val(totalPayPrice);
+                        $('#usePoint').change();
+                    } else{
+                        $('#usePoint').val(havePoint);
+                        $('#usePoint').change();
+                    }
+                } else {
+                    $('#usePoint').val(0);
+                    $('#usePoint').change();
+                }
+            });
+
+            //포인트 사용 시 최종 결제 금액에 사용한 포인트 금액 표시, 보유 포인트와 최종 결제 금액을 넘어가면 사용 못하게.
             $(document).on('change','#usePoint',function(){
 
                 let totalRewardPrice = Number($('#totalRewardPrice').text().replaceAll('원','').replaceAll(',',''));
@@ -276,19 +341,29 @@
 
                 let paymentPrice =0;
 
+                //가지고 있는 포인트 입력하면 가지고 있는 포인트 만큼으로 대체
+                if(point >= havePoint) {
+                    point = havePoint;
+                    $(this).val(havePoint);
+                    $('#pointAllCheck').prop('checked',true);
+                } else {
+                    $('#pointAllCheck').prop('checked',false);
+                }
+
+                //포인트 결제 금액보다 높으면 다시 입력하게.
                 if(point > totalPayPrice) {
-                    alert('포인트는 결제 금액을 넘길 수 없습니다')
+                    alert('포인트는 결제 금액을 넘을 수 없습니다')
                     $(this).val(0);
                     point = 0;
                 }
+                //쿠폰 할인 가격 계산.
                 if(coupon > 0 && coupon <= 100) {
-                    paymentPrice = (totalRewardPrice*(1 - coupon/100) - point  + deliver);
+                    paymentPrice = (totalRewardPrice*(1 - (coupon/100+orderMemberDiscount)) - point  + deliver);
                 } else {
-                    paymentPrice =(totalRewardPrice - coupon - point  + deliver);
+                    paymentPrice =(totalRewardPrice*(1-orderMemberDiscount) - coupon - point  + deliver);
                 }
                 $('#totalOrderPoint').text(`${point.toLocaleString('ko-KR')}원`);
                 $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
-
             });
 
 
@@ -331,7 +406,6 @@
             //옵션 선택될 시 기본값 1주고 수량 바꿀 수 있게, 선택 안될 시 값0으로 주고 수량 못바꾸게
             $('.selectOption input:checkbox').change(function(){
                 let optionAmount = $(this).parent().find('.optionAmount');
-
                 if($(this).prop('checked')) {
                     $(optionAmount).attr('readonly',false)
                     if($(optionAmount).val() < 1) {
@@ -346,13 +420,27 @@
             //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
             $('.paymentBtn').click(function(){
 
+                let validCheck = $('#paymentInfo').find('input[type="text"]').not('input:disabled');
+                let isValid = true;
+
+                //필수 약관 동의 체크
                 $('.essential').each(function(idx,item){
                     if(!$(item).prop('checked')) {
                         alert('필수 약관에 모두 동의해주세요');
                         $(item).focus();
-                        return false;
+                        isValid = false;
+                        return isValid;
                     }
                 });
+
+                //배송 정보 입력했는지 체크
+                if(isValid) {
+                    isValid = validationCheck(validCheck);
+                    if(isValid) {
+                        //결재 이벤트 실행
+                    }
+                }
+
             });
 
             //주소 찾기 클릭시 daum주소 api 호출
@@ -365,6 +453,30 @@
                 }).open();
             });
 
+            //기존 배송지 추가 체크시, 구매자 회원 배송지 입력
+            $('#memberAddr').change(function(){
+                let deliverMemberName = $('#deliverMemberName');
+                let deliverMemberMobile = $('#deliverMemberMobile');
+                let deliverMemberAddr = $('#deliverMemberAddr');
+                let deliverMemberAddrDetail = $('#deliverMemberAddrDetail');
+
+                let name = [[${orderMemberInfo.memberName}]];
+                let mobile = [[${orderMemberInfo.memberContactInfo}]];
+                let addr = [[${orderMemberInfo.customer.customerAddr}]];
+                let addrDetail = [[${orderMemberInfo.customer.customerAddrDetail}]];
+
+                if($(this).prop('checked')) {
+                    $(deliverMemberName).val(name);
+                    $(deliverMemberMobile).val(mobile);
+                    $(deliverMemberAddr).val(addr);
+                    $(deliverMemberAddrDetail).val(addrDetail);
+                } else {
+                    $(deliverMemberName).val('');
+                    $(deliverMemberMobile).val('');
+                    $(deliverMemberAddr).val('');
+                    $(deliverMemberAddrDetail).val('');
+                }
+            })
         });
 
         //사용 포인트 음수로 입력하지 못하게
@@ -722,6 +834,7 @@
                                         <button type="button" class="findAddrBtn btn btn-small btn-secondary" id="findAddrBtn">주소 찾기</button>
                                         <br>
                                         <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddr" value="" style="height: 35px" placeholder="주소를 입력해 주세요" readonly="readonly">
+                                        <label for="deliverMemberAddrDetail" hidden="hidden">상세 주소</label>
                                         <input type="text" class="w-100 mt-lg-1" id="deliverMemberAddrDetail" value="" style="height: 35px" placeholder="상세 주소를 입력해 주세요">
                                         <br>
                                         <label for="deliverRequest" class="font-weight-bold text-dark mt-lg-2">배송 요청사항</label>
@@ -735,6 +848,7 @@
                                         </select>
                                         <!--                                        <input type="text" class="w-100" id="deliverRequest" value="" style="height: 35px">-->
                                         <br>
+                                        <label for="elseDeliverRequest" hidden="hidden">기타 배송요청사항</label>
                                         <input type="text" class="w-100 mt-lg-2" id="elseDeliverRequest" value="" style="height: 35px" placeholder="기타" disabled>
                                         <br>
 
@@ -770,8 +884,8 @@
                                         <span id="totalOrderDeliverPrice" class=" font-weight-bold float-right mr-lg-2">무료 배송</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="ml-2 text-primary">적립 금액</span>
-                                        <span id="memberRankSave" class=" font-weight-bold float-right mr-lg-2 text-primary">0원</span>
+                                        <span class="ml-2 text-primary">적립 포인트</span>
+                                        <span id="memberSavePoint" class=" font-weight-bold float-right mr-lg-2 text-primary">0원</span>
                                         <div style="border: 2px solid #f3f4f5; margin: 10px; width: 100%"></div>
 
                                         <span class="ml-2 font-weight-bold" style="font-size: 20px">총 결제 금액</span>
@@ -779,7 +893,6 @@
 
                                     </div>
                                 </div>
-
                             </div>
 
 
@@ -791,7 +904,7 @@
                                 <h5>결제 수단</h5>
                                 <div class="ml-lg-3 mt-lg-4">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="naverPay">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="naverPay" checked="checked">
                                         <label class="form-check-label" for="naverPay">
                                             네이버페이
                                         </label>

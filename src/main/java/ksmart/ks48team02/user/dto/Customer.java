@@ -3,7 +3,7 @@ package ksmart.ks48team02.user.dto;
 public class Customer {
 
     private String customerCode;
-    private String memberId;
+    private String customerMemberId;
     private String rewardRankCode;
     private String donationRankCode;
     private String customerGender;
@@ -18,7 +18,7 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "customerCode='" + customerCode + '\'' +
-                ", memberId='" + memberId + '\'' +
+                ", memberId='" + customerMemberId + '\'' +
                 ", rewardRankCode='" + rewardRankCode + '\'' +
                 ", donationRankCode='" + donationRankCode + '\'' +
                 ", customerGender='" + customerGender + '\'' +
@@ -40,11 +40,11 @@ public class Customer {
     }
 
     public String getMemberId() {
-        return memberId;
+        return customerMemberId;
     }
 
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
+    public void setMemberId(String customerMemberId) {
+        this.customerMemberId = customerMemberId;
     }
 
     public String getRewardRankCode() {
