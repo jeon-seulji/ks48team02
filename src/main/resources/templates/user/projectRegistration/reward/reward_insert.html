@@ -114,8 +114,6 @@
                 $('#' + clickBunDataTab).show();
             });
 
-
-
             //다음 단계 버튼 클릭시 화면전환, 빈 값 있는지 유효성 검사.
             $(document).on('click', '.nextBtn', function(){
                 let validCheck = $(this).parents('.info-contents-area').find('input, select, #detailComent').not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]');
@@ -308,7 +306,6 @@
                 }
             });
 
-
             //리워드 옵션배송비 선택 시 배송비 입력할 수 있게
             $('#rewardDeliverSelect').change(function(){
                 let isDeliverPrice = $(this).val();
@@ -339,7 +336,6 @@
             let rewardContents = $(this).siblings('.rewardContents').val();
             let rewardLimitQuantity =  $(this).parent().prev().find('.rewardLimitQuantity').text();
             let rewardDeliverPrice = $(this).siblings('.rewardDeliverPrice').val();
-
 
             $('#rewardSubject').val(rewardSubject);
             $('#rewardPrice').val(Number(rewardPrice.replaceAll(',','').replaceAll('원','')));
