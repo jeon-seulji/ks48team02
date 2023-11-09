@@ -14,5 +14,7 @@ public interface PaymentsMapper {
     // 특정 리워드 결제 정보 목록 조회
     public RewardPayments getRewardPaymentsById(String orderCode);
 
+    // 특정 기부 결제 정보 목록 조회
+
 
 }
