@@ -33,12 +33,12 @@ public class AdminCouponService {
         return memberHaveCouponList;
     }
 
-    // 쿠폰 수정
-    public Coupon getCouponCodeById(String CouponCode){
-        Coupon couponCodeById = null;
-        couponCodeById = adminCouponMapper.getCouponCodeById(CouponCode);
-
-        return couponCodeById;
-    }
+//    // 쿠폰 수정
+//    public Coupon getCouponCodeById(String CouponCode){
+//        Coupon couponCodeById = null;
+//        couponCodeById = adminCouponMapper.getCouponCodeById(CouponCode);
+//
+//        return couponCodeById;
+//    }
     
 }

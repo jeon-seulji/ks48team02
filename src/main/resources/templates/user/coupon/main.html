@@ -137,6 +137,35 @@
                 </span>
             </strong>
         </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>쿠폰이름</th>
+                    <th>할인율</th>
+                    <th>등록 일자</th>
+                    <th>마감 일자</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${memberHaveCouponList == null}">
+                    <td colspan="4">등록된 쿠폰이 없습니다</td>
+                </tr>
+                <tr th:unless="${memberHaveCouponList == null}" th:each=" l : ${memberHaveCouponList}">
+                    <td th:text="${l.couponName}"></td>
+                    <th:block th:if="${l.couponDiscountAmount} >0">
+                        <td th:text="${l.couponDiscountAmount}"></td>
+                    </th:block>
+                    <th:block th:if="${l.couponDiscountRate} > 0">
+                        <td th:text="${l.couponDiscountRate}"></td>
+                    </th:block>
+                    <td th:text="${l.memberCoupon.couponRegDate}"></td>
+                    <td th:text="${l.memberCoupon.couponEndDate}"></td>
+                </tr>
+            </tbody>
+
+
+        </table>
         <div class="downloadArea">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>

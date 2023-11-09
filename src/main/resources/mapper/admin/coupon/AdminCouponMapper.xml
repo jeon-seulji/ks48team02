@@ -15,6 +15,15 @@
         <result property="numberCouponRemaining" column="number_coupons_remaining"></result>
         <result property="couponValidPeriod" column="coupon_valid_period"></result>
         <result property="couponTermsUse" column="coupon_terms_use"></result>
+
+        <association property="memberCoupon" javaType="MemberCoupon">
+            <id property="couponIssueCode" column="coupon_issue_code"></id>
+            <result property="couponMemberId" column="member_id"></result>
+            <result property="couponCode" column="coupon_code"></result>
+            <result property="couponRegDate" column="coupon_reg_dateTime"></result>
+            <result property="couponEndDate" column="coupon_end_date"></result>
+            <result property="couponUsed" column="coupon_used"></result>
+        </association>
     </resultMap>
 
 
