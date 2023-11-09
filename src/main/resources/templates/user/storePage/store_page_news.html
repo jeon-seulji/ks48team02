@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org/" lang="ko">
+<body>
+<div th:fragment="news" class="tab-pane fade show active" id="news" role="tabpanel" aria-labelledby="news-tab" style="padding: 20px;">
+    <!-- tab 내부 타이틀 영역 -->
+    <h5 style="font-weight: bold;">스토어 소식</h5>
+
+    <!--  tab 내부 본문 영역 -->
+    <div style="display : flex;flex-direction: column; padding: 30px; align-items: center;">
+
+        <div class="bodyContainer">
+            <!-- 스토어 소식 리스트 항목 -->
+            <div class="contentsContainer">
+                <div>
+                    <!-- 스토어 소식 내용 -->
+                    <div >
+                        <!-- 게시 날짜  -->
+                        <div>
+                            <p>1주일 전</p>
+                        </div>
+                        <!-- 이미지  -->
+                        <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+                            <img style="width: 250px; height: 250px;" src="https://contents.lotteon.com/itemimage/_v150640/LO/19/98/02/00/32/_1/99/80/20/03/3/LO1998020032_1998020033_1.jpg/dims/optimize/dims/resizemc/400x400"
+                                 alt="...">
+                        </div>
+                        <!-- 스토어 소식 text -->
+                        <div class="store-news" >
+                            <div >
+                                <strong>가성비 끝판왕 누젠 모래시계 가열식 가습기가 돌아왔다!</strong>
+                            </div>
+                            <div>
+                                <p>물을 끓여 발생하는 수증기로 가습하는 방식의 가습기입니다. 다른 방식의 가습기보다 살균력이 탁월하며 수증기가 공기 중에 잘 퍼져 가습 효과가 좋은 것이 특징입니다.
+                                👉 펀딩하러 가기: http://www.flocky.</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

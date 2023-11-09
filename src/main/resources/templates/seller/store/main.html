@@ -93,6 +93,19 @@
         align-items: center;
         color: darkgrey;
     }
+
+    table{
+        color: darkgrey;
+    }
+
+    /* 각 셀의 테두리 없앰 */
+    th, td {
+        border: none;
+        color: darkgrey;
+    }
+
+
+
 </style>
 </head>
 
@@ -125,17 +138,18 @@
                             </div>
                             <!--  대표자 이름 + 직원 수  -->
                             <div style="height: 50px; padding-top: 10px;">
-                                <ul>
-                                    <li class="store-member">
-                                        <div class="store-member">대표자명　</div>
-                                        <div id="representative">김철수</div>
-                                    </li>
-
-                                    <li class="store-member">
-                                        <div class="store-member">직원수　</div>
-                                        <div id="staff">5</div>
-                                    </li>
-                                </ul>
+                                    <table >
+                                        <tbody>
+                                        <tr>
+                                            <th style="color:darkgrey;">대표자명</th>
+                                            <td>김철수</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="color:darkgrey;">직원수</th>
+                                            <td>5</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                             </div>
 
                             <!-- 좋아요 수 /  총 펀딩 수 / 진행 중인 펀딩 / 심사 중인 펀딩 -->
@@ -169,11 +183,6 @@
                                 </a>
                             </div>
                         </div>
-
-
-
-
-
 
 
 
