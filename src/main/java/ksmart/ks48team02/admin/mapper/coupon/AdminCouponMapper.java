@@ -9,5 +9,5 @@ import java.util.List;
 public interface AdminCouponMapper {
     public List<Coupon> getCouponList();
 
-    Coupon getCouponCodeById(String couponCode);
+    public Coupon getCouponCodeById(String couponCode);
 }
