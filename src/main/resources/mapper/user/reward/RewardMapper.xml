@@ -7,7 +7,7 @@
     <!--   리워드 프로젝트 resultMap -->
     <resultMap id="RewardResultMap" type="RewardProject">
         <id property="rewardProjectCode" column="reward_project_code"/>
-        <result property="rewardCategoryCode" column="reward_category_code"/>
+        <result property="rewardCategoryCode" column="total_cagegory_code"/>
         <result property="projectJudgementReasonCode" column="project_judgement_reason_code"/>
         <result property="RegMemberId" column="member_id"/>
         <result property="adminMemberId" column="admin_member_id"/>

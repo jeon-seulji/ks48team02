@@ -1,6 +1,6 @@
 package ksmart.ks48team02.user.dto.order;
 
-public class Order {
+public class OrderTotal {
     private String orderCode;
     private String memberId;
     private String orderCategoryCode;
@@ -12,6 +12,14 @@ public class Order {
     private String orderApplicationDate;
     private String orderConfirmDate;
     private String orderCancellDate;
+
+
+
+
+
+
+
+
 
     @Override
     public String toString() {
@@ -117,4 +125,7 @@ public class Order {
     public void setOrderCancellDate(String orderCancellDate) {
         this.orderCancellDate = orderCancellDate;
     }
+
+
+
 }
