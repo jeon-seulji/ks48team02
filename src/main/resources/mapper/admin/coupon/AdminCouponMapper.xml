@@ -6,15 +6,15 @@
 
     <!--쿠폰 resultMap-->
     <resultMap id="CouponResultMap" type="Coupon">
-        <id property="couponCode" column="coupon_code"></id>
-        <result property="couponSerialNumber" column="coupon_serial_number"></result>
-        <result property="couponName" column="coupon_name"></result>
-        <result property="couponDiscountRate" column="coupon_discount_rate"></result>
-        <result property="couponDiscountAmount" column="coupon_discount_amount"></result>
-        <result property="couponStock" column="coupon_stock"></result>
-        <result property="numberCouponRemaining" column="number_coupons_remaining"></result>
-        <result property="couponValidPeriod" column="coupon_valid_period"></result>
-        <result property="couponTermsUse" column="coupon_terms_use"></result>
+        <id property="couponCode" column="coupon_code"/>
+        <result property="couponSerialNumber" column="coupon_serial_number"/>
+        <result property="couponName" column="coupon_name"/>
+        <result property="couponDiscountRate" column="coupon_discount_rate"/>
+        <result property="couponDiscountAmount" column="coupon_discount_amount"/>
+        <result property="couponStock" column="coupon_stock"/>
+        <result property="numberCouponRemaining" column="number_coupons_remaining"/>
+        <result property="couponValidPeriod" column="coupon_valid_period"/>
+        <result property="couponTermsUse" column="coupon_terms_use"/>
 
         <association property="memberCoupon" javaType="MemberCoupon">
             <id property="couponIssueCode" column="coupon_issue_code"></id>
@@ -67,4 +67,22 @@
             m.member_id = #{memberId} AND mc.coupon_end_date >= CURDATE() AND mc.coupon_used = 0;
     </select>
 
+<!--&lt;!&ndash;    특정쿠폰 조회&ndash;&gt;-->
+<!--    <select id="getCouponCodeById" parameterType="String" >-->
+<!--        /*  특정 쿠폰 조회*/-->
+<!--        select-->
+<!--        c.coupon_code as couponCode,-->
+<!--        c.coupon_serial_number as couponSerialNumber,-->
+<!--        c.coupon_name as couponName,-->
+<!--        c.coupon_discount_rate as couponDiscountRate,-->
+<!--        c.coupon_discount_amount as couponDiscountAmount,-->
+<!--        c.coupon_stock as couponStock,-->
+<!--        c.number_coupons_remaining as numberCouponRemaining,-->
+<!--        c.coupon_valid_period as couponValidPeriod,-->
+<!--        c.coupon_terms_use as couponTermsUse-->
+<!--        from-->
+<!--        coupon_details as c-->
+<!--        where-->
+<!--        c.coupon_code = #{couponCode};-->
+<!--    </select>-->
 </mapper>
