@@ -13,9 +13,16 @@ public class StorePageController {
         return "/user/storePage/main";
     }
 
+    @GetMapping(value = {"/main"})
+    public String mainPage(){
+        return "/user/storePage/store_page";
+    }
+
     @GetMapping(value = {"/ajax"})
     @ResponseBody
     public String storeePage(){
         return "tab1";
     }
+
+
 }
