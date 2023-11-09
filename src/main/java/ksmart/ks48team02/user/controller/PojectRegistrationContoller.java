@@ -2,6 +2,7 @@ package ksmart.ks48team02.user.controller;
 
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
 import ksmart.ks48team02.admin.mapper.TotalCategoryMapper;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
@@ -41,7 +42,12 @@ public class PojectRegistrationContoller {
 
     //프로젝트 등록 메인 페이지
     @GetMapping(value = {"" , "/"})
-    public String mainPage(Model model) {
+    public String mainPage(Model model, HttpSession session) {
+
+        String memberType = (String)session.getAttribute("STYPECODE");
+        String returnAddr = "user/account/login";
+
+
 
         return "user/projectRegistration/main";
     }
