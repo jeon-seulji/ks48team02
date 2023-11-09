@@ -182,18 +182,22 @@ public class InvestmentService {
         adminInvestmentMapper.addLawSatistify(adminLawSatistifyReason);
     }
 
-    // 자본시장법 범위충족기준 수정
-    public void modifyLawSatistify(AdminLawSatistifyReason adminLawSatistifyReason) {
-        adminInvestmentMapper.modifyLawSatistify(adminLawSatistifyReason);
-    }
-
     // 투자펀딩 심사요청 수정
     public void modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
         adminInvestmentMapper.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
     }
 
+    // 자본시장법 범위충족기준 수정
+    public void modifyLawSatistify(AdminLawSatistifyReason adminLawSatistifyReason) {
+        adminInvestmentMapper.modifyLawSatistify(adminLawSatistifyReason);
+    }
+
     // 부적합 업종 수정
     public void modifyIncongruitySectors(AdminIncongruitySectors adminIncongruitySectors) {
         adminInvestmentMapper.modifyIncongruitySectors(adminIncongruitySectors);
+    }
+
+    public void reomveInvestmentJudge(String investmentRequestJudgeCode) {
+        adminInvestmentMapper.removeInvestmentRequestJudge(investmentRequestJudgeCode);
     }
 }

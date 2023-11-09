@@ -22,7 +22,8 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
-    <div th:include="~{admin/judgement/investment/search/law_satistify_search :: searchFragment}"></div><br>
+    <div th:include="~{admin/judgement/investment/search/law_satistify_search :: searchFragment}"></div>
+    <br>
 
     <h4 class="admin-content-title">자본시장법 범위충족기준 목록</h4>
 
@@ -80,7 +81,9 @@
                     <input type="checkbox" name="selectList">
                 </td>
                 <td>
-                    <a class="detail-link" th:href="@{/admin/investment/view/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}" th:text="${l.lawSatistifyCode}"></a>
+                    <a class="detail-link"
+                       th:href="@{/admin/investment/view/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}"
+                       th:text="${l.lawSatistifyCode}"></a>
                 </td>
                 <td th:text="${l.lawSatistifyReason}"></td>
                 <td th:text="${l.memberId}"></td>
@@ -95,9 +98,7 @@
             </tbody>
         </table>
         <br>
-        <button type="button" class="submitBtn" th:onclick="|location.href='@{/admin/investment/insert/law-satistify}'|">
-            등록하기
-        </button>
+
 
         <div class="board-page-area">
             <div class="list-controller-inner">
@@ -121,5 +122,17 @@
         </div>
 
     </div>
+
+    <div class="btn-area">
+        <ul>
+            <li>
+                <button type="button" class="submitBtn"
+                        th:onclick="|location.href='@{/admin/investment/insert/law-satistify}'|">
+                    등록하기
+                </button>
+            </li>
+        </ul>
+    </div>
+
 </th:block>
 </html>

@@ -5,6 +5,15 @@
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
+    <style>
+        #settDeleteBtn {
+            background-color: red;
+        }
+
+        input {
+            width: 100%;
+        }
+    </style>
 </head>
 
 
@@ -18,83 +27,134 @@
 
 </th:block>
 
-
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
     <div th:object="${investmentRequestJudgeInfo}" class="admin-content-wrapper form-table">
-        <div class="project-info-title-area">
-            <div class="project-info-title">
-                <h5>프로젝트 코드</h5>
-                <p th:text="*{adminInvestment.investmentCode}" style="color: var(--maincolor);"></p>
+        <th:block th:if="*{adminInvestment.investmentCode == null}">
+            <div class="project-info-title-area">
+                <div class="project-info-title">
+                    <h5>프로젝트 코드</h5>
+                    <p style="color: var(--maincolor);">관련된 공고가 없습니다</p>
+                </div>
+                <div class="info-more-btn">
+                    <a class="more-btn" style="padding: 7px 10px 9px 19px;">
+                        <span>공고 상세 보기</span>
+                    </a>
+                </div>
             </div>
-            <div class="info-more-btn">
-                <a class="more-btn" style="padding: 7px 10px 9px 19px;">
-                    <span>공고 상세 보기</span>
-                </a>
+            <form id="projectInfoDetail" method="get">
+
+                <table class="settlement-log application-info-detail" style="border:none;">
+                    <tbody>
+                    <!-- contents -->
+                    <tr>
+                        <td>
+                            카테고리
+                        </td>
+                        <td colspan="4" rowspan="3">
+                            관련된 공고가 없습니다
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            프로젝트 제목
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            공고 마감일
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            상세
+                        </td>
+                    </tr>
+                    <tr class="sub-table-area sub-table sub-table-tr">
+                        <td>펀딩 목표 금액</td>
+                        <td>총 주문 완료 수</td>
+                        <td>주문 취소 수</td>
+                        <td>펀딩 달성 금액</td>
+                        <td>펀딩 달성률</td>
+                    </tr>
+                    <tr>
+                        <td style="background: #fff;" colspan="5">관련된 공고가 없습니다</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </th:block>
+        <th:block th:unless="*{adminInvestment.investmentCode == null}">
+            <div class="project-info-title-area">
+                <div class="project-info-title">
+                    <h5>프로젝트 코드</h5>
+                    <p th:text="*{adminInvestment.investmentCode}" style="color: var(--maincolor);"></p>
+                </div>
+                <div class="info-more-btn">
+                    <a class="more-btn" style="padding: 7px 10px 9px 19px;">
+                        <span>공고 상세 보기</span>
+                    </a>
+                </div>
             </div>
-        </div>
-        <form id="projectInfoDetail" method="get">
-            <table class="settlement-log application-info-detail" style="border:none;">
-                <tbody>
-                <!-- contents -->
-                <tr>
-                    <td>
-                        카테고리
-                    </td>
-                    <td colspan="4">
-                        투자
-                    </td>
+            <form id="projectInfoDetail" method="get">
 
-                </tr>
-                <tr>
-                    <td>
-                        프로젝트 제목
-                    </td>
-                    <td th:text="*{adminInvestment.investmentSubject}" colspan="4"></td>
+                <table class="settlement-log application-info-detail" style="border:none;">
+                    <tbody>
+                    <!-- contents -->
+                    <tr>
+                        <td>
+                            카테고리
+                        </td>
+                        <td colspan="4">
+                            투자
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            프로젝트 제목
+                        </td>
+                        <td th:text="*{adminInvestment.investmentSubject}" colspan="4"></td>
 
-                </tr>
-                <tr>
-                    <td>
-                        프로젝트 내용
-                    </td>
-                    <td th:text="*{adminInvestment.investmentContent}" colspan="4"></td>
-                </tr>
-                <tr>
-                    <td>
-                        공고 마감일
-                    </td>
-                    <td th:text="*{adminInvestment.investmentDeadline}" colspan="4"></td>
-                </tr>
-                <tr>
-                    <td colspan="5">
-                        상세
-                    </td>
-                </tr>
-                <tr class="sub-table-area sub-table sub-table-tr">
-                    <td>펀딩 목표 금액</td>
-                    <td>총 주문 완료 수</td>
-                    <td>주문 취소 수</td>
-                    <td>펀딩 달성 금액</td>
-                    <td>펀딩 달성률</td>
-                </tr>
-                <tr>
-                    <td style="background: #fff;"><span
-                            th:text="*{#numbers.formatInteger(adminInvestment.investmentAchievementMoney,3,'COMMA')}"></span>
-                        원
-                    </td>
-                    <td><span>1,000</span> 건</td>
-                    <td><span>42</span> 건</td>
-                    <td><span th:text="*{#numbers.formatInteger(adminInvestment.investmentAmount,3,'COMMA')}"></span> 원
-                    </td>
-                    <td><span th:text="*{adminInvestment.investAchievementPercent}"></span> %</td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
+                    </tr>
+                    <tr>
+                        <td>
+                            공고 마감일
+                        </td>
+                        <td th:text="*{adminInvestment.investmentDeadline}" colspan="4"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            상세
+                        </td>
+                    </tr>
+                    <tr class="sub-table-area sub-table sub-table-tr">
+                        <td>펀딩 목표 금액</td>
+                        <td>총 주문 완료 수</td>
+                        <td>주문 취소 수</td>
+                        <td>펀딩 달성 금액</td>
+                        <td>펀딩 달성률</td>
+                    </tr>
+                    <tr>
+                        <td style="background: #fff;"><span
+                                th:text="*{#numbers.formatInteger(adminInvestment.investmentAchievementMoney,3,'COMMA')}"></span>
+                            원
+                        </td>
+                        <td><span>1,000</span> 건</td>
+                        <td><span>42</span> 건</td>
+                        <td><span
+                                th:text="*{#numbers.formatInteger(adminInvestment.investmentAmount,3,'COMMA')}"></span>
+                            원
+                        </td>
+                        <td><span th:text="*{adminInvestment.investAchievementPercent}"></span> %</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </th:block>
     </div>
 
-    <form id="modifyInvestJudgeForm" th:action="@{/admin/investment/update/corporate-value}" method="post">
+    <form id="modifyInvestJudgeForm" th:action="@{/admin/investment/update/judge}" method="post">
 
         <div class="admin-wrapper" th:object="${investmentRequestJudgeInfo}">
 
@@ -104,6 +164,7 @@
                     <h5>심사 요청 코드</h5>
                     <p th:text="*{investmentRequestJudgeCode}" style="color: var(--maincolor);"></p>
                 </div>
+                <br>
                 <form id="projectInfoDetailBt" method="get">
                     <table class="settlement-log application-info-detail" style="border:none;">
                         <tbody>
@@ -121,7 +182,7 @@
                             <td>
                                 심사요청 제목
                             </td>
-                            <td colspan="5"><input type="text" id="investmentRequestSubject" class="form-control"
+                            <td colspan="5"><input type="text" id="investmentRequestSubject"
                                                    name="investmentRequestSubject"
                                                    th:value="*{investmentRequestSubject}"
                                                    placeholder="투자 심사요청 제목을 입력해주세요."></td>
@@ -160,7 +221,7 @@
                             <td>
                                 심사요청 내용
                             </td>
-                            <td colspan="5"><input type="text" class="form-control" id="investmentRequestContent"
+                            <td colspan="5"><input type="text" id="investmentRequestContent"
                                                    name="investmentRequestContent"
                                                    th:value="*{investmentRequestContent}"
                                                    placeholder="심사요청 내용을 입력해주세요."></td>
@@ -177,19 +238,20 @@
                             </td>
                         </tr>
                         <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
-                            <td style="height: 35px; width: 17%;">자본시장법 범위충족 코드</td>
+                            <td style="height: 35px; width: 17%;" colspan="2">자본시장법 범위충족 코드</td>
                             <td style="height: 35px; width: 17%;">자본시장법 범위충족 사유</td>
                             <td style="height: 35px;">부적합 업종 코드</td>
                             <td style="height: 35px;">업종 코드</td>
                             <td style="height: 35px;">업종</td>
-                            <td style="height: 35px;">기업가치 평가 코드</td>
+
                         </tr>
                         <tr>
-                            <td th:if="*{lawSatistifyCode == null}" style="background: #fff;">해당없음</td>
-                            <td th:unless="*{lawSatistifyCode == null}" th:text="*{lawSatistifyCode}"
+                            <input id="investmentRequestJudgeCode" name="investmentRequestJudgeCode" th:value="*{investmentRequestJudgeCode}" hidden="hidden">
+                            <td th:if="*{lawSatistifyCode == null}" colspan="2" style="background: #fff;">해당없음</td>
+                            <td th:unless="*{lawSatistifyCode == null}" th:text="*{lawSatistifyCode}" colspan="2"
                                 style="background: #fff;"></td>
                             <td>
-                                <select id="lawSatistifyReason" name="lawSatistifyCode">
+                                <select id="lawSatistifyCode" name="lawSatistifyCode">
                                     <option value="">===자본시장법 범위충족 사유를 선택해주세요===</option>
                                     <th:block th:unless="${lawSatistifyReasonList == null}"
                                               th:each="l : ${lawSatistifyReasonList}">
@@ -207,64 +269,81 @@
                                                 th:text="${l.incongruitySectorsBusiness}"
                                                 th:selected="${l.incongruitySectorsCode} == *{incongruitySectorsCode}"></option>
                                     </th:block>
+                                    <option value="">해당없음</option>
                                 </select>
                             </td>
                             <td th:unless="*{incongruitySectorsCode == null}" th:text="*{incongruitySectorsCode}"></td>
                             <td th:text="*{companyBusinessTypeCode}"></td>
                             <td th:text="*{cbtBusinessType}"></td>
-                            <td th:if="*{corporateValueEvaluationCode == null}">해당없음</td>
-                            <td><a th:unless="*{corporateValueEvaluationCode == null}" class="detail-link"
-                                   th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}"
-                                   th:text="*{corporateValueEvaluationCode}"></a></td>
                         </tr>
                         <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
+                            <td style="height: 35px;" colspan="2">기업가치 평가 코드</td>
                             <td style="height: 35px;">목표펀딩금액</td>
                             <td style="height: 35px;">영업이익</td>
                             <td style="height: 35px;">감가상각비</td>
                             <td style="height: 35px;">순차입금</td>
-                            <td style="height: 35px;">현재주식수</td>
-                            <td style="height: 35px;">발행예정주식수</td>
                         </tr>
                         <tr>
-                            <td style="background: #fff;"><span
-                                    th:text="*{#numbers.formatInteger(investmentAchievementMoney,3,'COMMA')}"></span> 원
+                            <td th:if="*{corporateValueEvaluationCode == null}" style="background: #fff;" colspan="2">
+                                해당없음
                             </td>
-                            <td><span th:text="*{#numbers.formatInteger(businessProfits,3,'COMMA')}"></span> 원</td>
-                            <td><span th:text="*{#numbers.formatInteger(depreciation,3,'COMMA')}"></span> 원</td>
-                            <td><span th:text="*{#numbers.formatInteger(netDebt,3,'COMMA')}"></span> 원</td>
-                            <td><span th:text="*{#numbers.formatInteger(stockNumber,3,'COMMA')}"></span> 주</td>
-                            <td><span th:text="*{#numbers.formatInteger(issueStockNumber,3,'COMMA')}"></span> 주</td>
+                            <td colspan="2" style="background: #fff;"
+                                th:unless="*{corporateValueEvaluationCode == null}">
+                                <a class="detail-link"
+                                   th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}"
+                                   th:text="*{corporateValueEvaluationCode}"></a></td>
+                            <td>
+                                <input type="number" id="InvestmentAchievementMoney" name="InvestmentAchievementMoney"
+                                       placeholder="목표펀딩금액을 입력해주세요" th:value="*{InvestmentAchievementMoney}">
+                            </td>
+                            <td>
+                                <input type="number" id="businessProfits" name="businessProfits"
+                                       placeholder="영업이익을 입력해주세요" th:value="*{businessProfits}">
+                            </td>
+                            <td>
+                                <input type="number" id="depreciation" name="depreciation"
+                                       placeholder="감가상각비를 입력해주세요" th:value="*{depreciation}">
+                            </td>
+                            <td>
+                                <input type="number" id="netDebt" name="netDebt"
+                                       placeholder="순차입금을 입력해주세요" th:value="*{netDebt}">
+                            </td>
                         </tr>
                         <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
-                            <td style="height: 35px;" colspan="2">심사완료일자</td>
-                            <td style="height: 35px;" colspan="2">심사자 아이디</td>
-                            <td style="height: 35px;" colspan="2">심사 결과</td>
+                            <td style="height: 35px;" colspan="2">현재주식수</td>
+                            <td style="height: 35px;" colspan="2">발행예정주식수</td>
+                            <td style="height: 35px;">심사완료일자</td>
+                            <td style="height: 35px;">심사자 아이디</td>
                         </tr>
                         <tr>
-                            <td colspan="2" th:text="*{investJudgeDate}" style="background: #fff;"></td>
-                            <td colspan="2" th:text="*{memberId}"></td>
-                            <td colspan="2" th:if="*{investJudgeResult == 0}">심사 대기</td>
-                            <td colspan="2" th:if="*{investJudgeResult == 1}">심사 승인</td>
-                            <td colspan="2" th:if="*{investJudgeResult == 2}">심사 반려</td>
+                            <td colspan="2" style="background: #fff;">
+                                <input type="number" id="stockNumber" name="stockNumber"
+                                       placeholder="현재주식수를 입력해주세요" th:value="*{stockNumber}">
+                            </td>
+                            <td colspan="2">
+                                <input type="number" id="issueStockNumber" name="issueStockNumber"
+                                       placeholder="발행예정 주식수를 입력해주세요" th:value="*{issueStockNumber}">
+                            </td>
+                            <td th:text="*{investJudgeDate}" style="background: #fff;"></td>
+                            <td th:text="*{memberId}"></td>
                         </tr>
                         <tr>
                             <td>
                                 심사 현황
                             </td>
-                            <td colspan="5" class="progress-radio-area">
+                            <td id="investJudgeResult" colspan="5" class="progress-radio-area">
                                 <ul>
                                     <li>
-                                        <input id="preProgress" type="radio" name="progressSeleced" value="preProgress"
-                                               checked>
+                                        <input id="preProgress" type="radio" name="investJudgeResult" value="0" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 0}">
                                         <label for="preProgress">심사 대기</label>
                                     </li>
                                     <li>
-                                        <input id="Progress" type="radio" name="progressSeleced" value="Progress">
+                                        <input id="Progress" type="radio" name="investJudgeResult" value="1" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 1}">
                                         <label for="Progress">심사 승인</label>
                                     </li>
                                     <li>
-                                        <input id="ProgressCompleted" type="radio" name="progressSeleced"
-                                               value="ProgressCompleted">
+                                        <input id="ProgressCompleted" type="radio" name="investJudgeResult" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 2}"
+                                               value="2">
                                         <label for="ProgressCompleted">심사 반려</label>
                                     </li>
                                 </ul>
@@ -280,15 +359,8 @@
                                 </button>
                             </li>
                             <li>
-                                <button id="settUpdateBtn" class="submitBtn" type="button"
-                                        th:onclick="|location.href='@{/admin/investment/update/judge(investmentRequestJudgeCode=*{investmentRequestJudgeCode})}'|">
-                                    수정
-                                </button>
-                            </li>
-                            <li>
-                                <button id="settDeleteBtn" class="submitBtn" type="button"
-                                        th:onclick="|location.href='@{/admin/investment/delete/judge(investmentRequestJudgeCode=*{investmentRequestJudgeCode})}'|">
-                                    삭제
+                                <button id="settUpdateBtn" class="submitBtn" type="submit">
+                                    확인
                                 </button>
                             </li>
                         </ul>

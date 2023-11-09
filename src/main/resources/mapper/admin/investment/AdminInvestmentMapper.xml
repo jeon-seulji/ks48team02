@@ -182,7 +182,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 2) AS standbyCnt,
+            i.invest_judge_result = 0) AS standbyCnt,
             (SELECT
             COUNT(i.invest_judge_result)
             FROM
@@ -190,7 +190,7 @@
             WHERE
             (i.invest_judge_result = 1
             OR
-            i.invest_judge_result = 0)
+            i.invest_judge_result = 2)
             AND
             DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
             ) AS todayProceedCnt,
@@ -199,7 +199,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 0) AS rejectCnt
+            i.invest_judge_result = 2) AS rejectCnt
         FROM
             investment_request_judge AS i
             INNER JOIN
@@ -237,7 +237,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 2) AS standbyCnt,
+            i.invest_judge_result = 0) AS standbyCnt,
             (SELECT
             COUNT(i.invest_judge_result)
             FROM
@@ -245,7 +245,7 @@
             WHERE
             (i.invest_judge_result = 1
             OR
-            i.invest_judge_result = 0)
+            i.invest_judge_result = 2)
             AND
             DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
             ) AS todayProceedCnt,
@@ -254,7 +254,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 0) AS rejectCnt
+            i.invest_judge_result = 2) AS rejectCnt
         FROM
             investment_request_judge AS i
             INNER JOIN
@@ -282,7 +282,6 @@
         SELECT
             inv.investment_code,
             inv.investment_subject,
-            inv.investment_content,
             inv.investment_achievement_money,
             inv.investment_amount,
             inv.invest_achievement_percent,
@@ -315,7 +314,7 @@
             i.invest_judge_result
         FROM
             investment_request_judge AS i
-            INNER JOIN
+            LEFT JOIN
             investment AS inv
             ON
             i.investment_request_judge_code = inv.investment_request_judge_code
@@ -359,7 +358,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 2) AS standbyCnt,
+            i.invest_judge_result = 0) AS standbyCnt,
             (SELECT
             COUNT(i.invest_judge_result)
             FROM
@@ -367,7 +366,7 @@
             WHERE
             (i.invest_judge_result = 1
             OR
-            i.invest_judge_result = 0)
+            i.invest_judge_result = 2)
             AND
             DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
             ) AS todayProceedCnt,
@@ -376,7 +375,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 0) AS rejectCnt
+            i.invest_judge_result = 2) AS rejectCnt
         FROM
             investment_request_judge AS i
             INNER JOIN
@@ -528,7 +527,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 2) AS standbyCnt,
+            i.invest_judge_result = 0) AS standbyCnt,
             (SELECT
             COUNT(i.invest_judge_result)
             FROM
@@ -536,7 +535,7 @@
             WHERE
             (i.invest_judge_result = 1
             OR
-            i.invest_judge_result = 0)
+            i.invest_judge_result = 2)
             AND
             DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
             ) AS todayProceedCnt,
@@ -545,7 +544,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 0) AS rejectCnt
+            i.invest_judge_result = 2) AS rejectCnt
         FROM
             investment_request_judge AS i
             LEFT JOIN
@@ -579,7 +578,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 2) AS standbyCnt,
+            i.invest_judge_result = 0) AS standbyCnt,
             (SELECT
             COUNT(i.invest_judge_result)
             FROM
@@ -587,7 +586,7 @@
             WHERE
             (i.invest_judge_result = 1
             OR
-            i.invest_judge_result = 0)
+            i.invest_judge_result = 2)
             AND
             DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
             ) AS todayProceedCnt,
@@ -596,7 +595,7 @@
             FROM
             investment_request_judge AS i
             WHERE
-            i.invest_judge_result = 0) AS rejectCnt
+            i.invest_judge_result = 2) AS rejectCnt
         FROM
             investment_request_judge AS i
             LEFT JOIN
@@ -686,6 +685,9 @@
             <if test="incongruitySectorsCode != null and incongruitySectorsCode != ''">
                 incongruity_sectors_code = #{incongruitySectorsCode},
             </if>
+            <if test="incongruitySectorsCode == null or incongruitySectorsCode == ''">
+                incongruity_sectors_code = null,
+            </if>
             <if test="companyBusinessTypeCode != null and companyBusinessTypeCode != ''">
                 company_business_type_code = #{companyBusinessTypeCode},
             </if>
@@ -710,11 +712,8 @@
             <if test="invBusinessType != null and invBusinessType != ''">
                 business_type = #{invBusinessType},
             </if>
-            <if test="investment_achievement_money != null and investment_achievement_money != ''">
-                investment_achievement_money = #{investment_achievement_money},
-            </if>
-            <if test="lawSatistifyReason != null and lawSatistifyReason != ''">
-                law_satistify_reason = #{lawSatistifyReason},
+            <if test="InvestmentAchievementMoney != null and InvestmentAchievementMoney != ''">
+                investment_achievement_money = #{InvestmentAchievementMoney},
             </if>
             <if test="businessProfits != null and businessProfits != ''">
                 business_profits = #{businessProfits},
@@ -739,7 +738,7 @@
             </if>
         </set>
         WHERE
-        law_satistify_code = #{lawSatistifyCode};
+            investment_request_judge_code = #{investmentRequestJudgeCode};
     </update>
 
     <!-- 자본시장 범위충족기준 수정 -->
@@ -785,5 +784,15 @@
         WHERE
             incongruity_sectors_code = #{incongruitySectorsCode};
     </update>
+
+    <!-- 투자펀딩 심사요청 삭제 -->
+    <delete id="removeInvestmentRequestJudge" parameterType="String">
+        /* 투자펀딩 심사요청 삭제 */
+        DELETE
+        FROM
+            investment_request_judge
+        WHERE
+            investment_request_judge_code = #{investmentRequestJudgeCode};
+    </delete>
 
 </mapper>
