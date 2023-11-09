@@ -1,7 +1,9 @@
 package ksmart.ks48team02.user.controller;
 
 import ksmart.ks48team02.user.dto.donation.DonationRegistration;
+import ksmart.ks48team02.user.dto.investment.InvestmentRegistration;
 import ksmart.ks48team02.user.service.donation.DonationService;
+import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PojectRegistrationContoller {
 
     private final DonationService donationService;
+    private final UserInvestmentService userInvestmentService;
 
-    public PojectRegistrationContoller(DonationService donationService){
+    public PojectRegistrationContoller(DonationService donationService, UserInvestmentService userInvestmentService){
         this.donationService = donationService;
+        this.userInvestmentService = userInvestmentService;
     }
 
     //프로젝트 등록 메인 페이지
@@ -32,7 +36,18 @@ public class PojectRegistrationContoller {
         return "user/projectRegistration/reward/reward_insert";
     }
     //투자 프로젝트 등록 페이지
+    @GetMapping(value = {"/investment/judge"})
+    public String investmentRegistrationPage(Model model) {
 
+        model.addAttribute("title", "투자펀딩 심사 요청, 공고 등록");
+
+        return "user/projectRegistration/investment/invest_judge_insert";
+    }
+    @PostMapping("/investment")
+    public String investmentRegistrationPage(InvestmentRegistration investmentRegistration){
+        userInvestmentService.addInvesetment(investmentRegistration);
+        return "redirect:/user/investment/main";
+    }
 
     @PostMapping("/donation")
     public String donationRegistrationPage(DonationRegistration donationRegistration){
