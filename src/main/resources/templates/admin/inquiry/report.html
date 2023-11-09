@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/admin/css/adminBoard.css}">
 
 <style>
+
     .reportCate{
         padding-bottom: 20px;
     }
@@ -99,7 +100,7 @@
     <form>
 
         <div class="section">
-            <div class="title"><h2>신고 목록</h2></div>
+            <div><h2>신고 목록</h2></div>
         </div>
         <div id="reportCateArea">
             <select id="reportCate">
@@ -136,7 +137,7 @@
                     <td>2023-10-26</td>
                     <td>id001</td>
                     <td>
-                        <a class="modify" onclick="popupOpen('/admin/inquiry/reportModify1')">답변</a>
+                        <a class="modify" onclick="popupOpen('/admin/inquiry/reportModify1', 720,720)">답변</a>
                         <a class="delete" th:href="@{#}">삭제</a>
                     </td>
                 </tr>

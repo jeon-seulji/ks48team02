@@ -15,10 +15,10 @@ public class InquiryController {
         return "admin/inquiry/main";
     }
     // 1:1 문의 관리 수정페이지
-    @GetMapping("/inquiryModify1")
-    public String inquiryModi1Page(){
+    @GetMapping("/inquiryModify")
+    public String inquiryModiPage(){
 
-        return "admin/inquiry/inquiryModify1";
+        return "admin/inquiry/inquiryModify";
     }
 
     // 신고 관리
@@ -29,9 +29,9 @@ public class InquiryController {
     }
 
     // 신고하기 관리 수정페이지
-    @GetMapping("/reportModify1")
-    public String reportModi1Page(){
+    @GetMapping("/reportModify")
+    public String reportModiPage(){
 
-        return "admin/inquiry/reportModify1";
+        return "admin/inquiry/reportModify";
     }
 }

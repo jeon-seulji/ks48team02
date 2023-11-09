@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.ks48team02.admin.mapper.coupon.AdminCouponMapper">
+
+    <resultMap id="CouponResultMap" type="Coupon">
+        <id property="couponCode" column="coupon_code"></id>
+        <result property="couponSerialNumber" column="coupon_serial_number"></result>
+        <result property="couponName" column="coupon_name"></result>
+        <result property="couponDiscountRate" column="coupon_discount_rate"></result>
+        <result property="couponDiscountAmount" column="coupon_discount_amount"></result>
+        <result property="couponStock" column="coupon_stock"></result>
+        <result property="numberCouponRemaining" column="number_coupons_remaining"></result>
+        <result property="couponValidPeriod" column="coupon_valid_period"></result>
+        <result property="couponTermsUse" column="coupon_terms_use"></result>
+    </resultMap>
+
+    <select id="getCouponList" resultType="Coupon">
+        select
+            c.coupon_code as couponCode,
+            c.coupon_serial_number as couponSerialNumber,
+            c.coupon_name as couponName,
+            c.coupon_discount_rate as couponDiscountRate,
+            c.coupon_discount_amount as couponDiscountAmount,
+            c.coupon_stock as couponStock,
+            c.number_coupons_remaining as numberCouponRemaining,
+            c.coupon_valid_period as couponValidPeriod,
+            c.coupon_terms_use as couponTermsUse
+        from
+            coupon_details as c
+    </select>
+
+</mapper>
