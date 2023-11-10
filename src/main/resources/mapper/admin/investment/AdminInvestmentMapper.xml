@@ -288,6 +288,7 @@
             inv.investment_deadline,
             i.investment_request_judge_code,
             i.law_satistify_code,
+            l.law_satistify_reason,
             i.incongruity_sectors_code,
             i.company_business_type_code,
             i.corporate_value_evaluation_code,
@@ -302,7 +303,6 @@
             i.business_type,
             i.investment_request_content,
             i.investment_achievement_money,
-            i.law_satistify_reason,
             i.business_profits,
             i.depreciation,
             i.net_debt,
@@ -326,6 +326,10 @@
             company_business_type AS c
             ON
             i.company_business_type_code = c.company_business_type_code
+            LEFT JOIN
+            law_satistify_reason AS l
+            ON
+            i.law_satistify_code = l.law_satistify_code
         WHERE
             i.investment_request_judge_code = #{investmentRequestJudgeCode};
     </select>
@@ -681,6 +685,9 @@
             </if>
             <if test="lawSatistifyCode != null and lawSatistifyCode != ''">
                 law_satistify_code = #{lawSatistifyCode},
+            </if>
+            <if test="lawSatistifyCode == null or lawSatistifyCode == ''">
+                law_satistify_code = null,
             </if>
             <if test="incongruitySectorsCode != null and incongruitySectorsCode != ''">
                 incongruity_sectors_code = #{incongruitySectorsCode},

@@ -273,21 +273,27 @@ public class InvestmentController {
     }
 
     @GetMapping("/update/corporate-value")
-    public String modifyCorporateValueEvaluation(Model model) {
+    public String modifyCorporateValueEvaluation(@RequestParam(name = "corporateValueEvaluationCode") String corporateValueEvaluationCode, Model model) {
+
+        AdminCorporateValueEvaluation corporateValueEvaluationInfo = investmentService.getCorporateValueEvaluationByCode(corporateValueEvaluationCode);
 
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 수정");
         model.addAttribute("contentsTitle","기업가치 평가 결과 수정");
+        model.addAttribute("corporateValueEvaluationInfo", corporateValueEvaluationInfo);
 
         return "admin/judgement/investment/update/corporate_value_evaluation_update";
     }
 
     @GetMapping("/delete/judge")
-    public String reomveInvestmentJudge(Model model) {
+    public String reomveInvestmentJudge(@RequestParam(value = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model) {
+
+        investmentService.reomveInvestmentJudge(investmentRequestJudgeCode);
 
         model.addAttribute("title", "관리자 : 투자펀딩 심사요청 삭제");
         model.addAttribute("contentsTitle","투자펀딩 심사요청 삭제");
+        model.addAttribute("investmentRequestJudgeCode", investmentRequestJudgeCode);
 
-        return "admin/judgement/investment/delete/invest_jduge_delete";
+        return "redirect:/admin/investment/search/judge";
     }
 
     @PostMapping("/delete/judge")
