@@ -43,7 +43,7 @@
                     </a>
                 </div>
             </div>
-            <form id="projectInfoDetail" method="get">
+            <form class="projectInfoDetail" method="get">
 
                 <table class="settlement-log application-info-detail" style="border:none;">
                     <tbody>
@@ -97,7 +97,7 @@
                     </a>
                 </div>
             </div>
-            <form id="projectInfoDetail" method="get">
+            <form class="projectInfoDetail" method="get">
 
                 <table class="settlement-log application-info-detail" style="border:none;">
                     <tbody>
@@ -258,6 +258,7 @@
                                         <option th:value="${l.lawSatistifyCode}" th:text="${l.lawSatistifyReason}"
                                                 th:selected="${l.lawSatistifyCode} == *{lawSatistifyCode}"></option>
                                     </th:block>
+                                    <option value="">해당없음</option>
                                 </select>
                             </td>
                             <td>
@@ -294,7 +295,7 @@
                                    th:text="*{corporateValueEvaluationCode}"></a></td>
                             <td>
                                 <input type="number" id="InvestmentAchievementMoney" name="InvestmentAchievementMoney"
-                                       placeholder="목표펀딩금액을 입력해주세요" th:value="*{InvestmentAchievementMoney}">
+                                       placeholder="목표펀딩금액을 입력해주세요" th:value="*{investmentAchievementMoney}">
                             </td>
                             <td>
                                 <input type="number" id="businessProfits" name="businessProfits"

@@ -20,7 +20,18 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-
+    <script>
+        $('#settDeleteBtn').click(function () {
+            let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
+            console.log(deleteConfirm);
+            if (deleteConfirm) {
+                window.location.href = `[[@{/admin/investment/delete/judge(investmentRequestJudgeCode=${investmentRequestJudgeInfo.investmentRequestJudgeCode})}]]` ;
+                alert('삭제되었습니다');
+            } else {
+                alert('취소되었습니다');
+            }
+        });
+    </script>
 </th:block>
 
 
@@ -41,7 +52,7 @@
                         </a>
                     </div>
                 </div>
-                <form id="projectInfoDetail" method="get">
+                <form class="projectInfoDetail" method="get">
 
                     <table class="settlement-log application-info-detail" style="border:none;">
                         <tbody>
@@ -95,7 +106,7 @@
                         </a>
                     </div>
                 </div>
-                <form id="projectInfoDetail" method="get">
+                <form class="projectInfoDetail" method="get">
 
                     <table class="settlement-log application-info-detail" style="border:none;">
                         <tbody>
@@ -236,7 +247,8 @@
                         <td th:if="*{lawSatistifyCode == null}" style="background: #fff;" colspan="2">해당없음</td>
                         <td th:unless="*{lawSatistifyCode == null}" th:text="*{lawSatistifyCode}"
                             style="background: #fff;" colspan="2"></td>
-                        <td th:text="*{lawSatistifyReason}"></td>
+                        <td th:if="*{lawSatistifyReason == null}">-</td>
+                        <td th:unless="*{lawSatistifyReason == null}" th:text="*{lawSatistifyReason}"></td>
                         <td th:if="*{incongruitySectorsCode == null}">해당없음</td>
                         <td th:unless="*{incongruitySectorsCode == null}" th:text="*{incongruitySectorsCode}"></td>
                         <td th:text="*{companyBusinessTypeCode}"></td>
@@ -323,7 +335,7 @@
                         </li>
                         <li>
                             <button id="settDeleteBtn" name="settDeleteBtn" class="submitBtn" type="button"
-                                    th:onclick="|location.href='@{/admin/investment/delete/judge(investmentRequestJudgeCode=*{investmentRequestJudgeCode})}'|">
+                                    th:onclick="return false">
                                 삭제
                             </button>
                         </li>

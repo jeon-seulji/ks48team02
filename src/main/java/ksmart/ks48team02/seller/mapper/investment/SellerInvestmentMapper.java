@@ -1,6 +1,6 @@
 package ksmart.ks48team02.seller.mapper.investment;
 
-import ksmart.ks48team02.seller.dto.investment.SellerLawSatistifyReason;
+import ksmart.ks48team02.seller.dto.SellerLawSatistifyReason;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
