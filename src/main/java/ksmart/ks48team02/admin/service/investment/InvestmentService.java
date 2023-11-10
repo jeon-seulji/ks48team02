@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ksmart.ks48team02.admin.mapper.investment.AdminInvestmentMapper;
-import ksmart.ks48team02.admin.dto.investment.AdminInvestmentRequestJudge;
-import ksmart.ks48team02.admin.dto.investment.AdminLawSatistifyReason;
-import ksmart.ks48team02.admin.dto.investment.AdminIncongruitySectors;
-import ksmart.ks48team02.admin.dto.investment.AdminCorporateValueEvaluation;
+import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
+import ksmart.ks48team02.admin.dto.AdminLawSatistifyReason;
+import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
+import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
 
 @Service("adminInvestmemtService")
 @Transactional
