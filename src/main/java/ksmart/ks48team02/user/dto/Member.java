@@ -2,7 +2,6 @@ package ksmart.ks48team02.user.dto;
 
 import ksmart.ks48team02.admin.dto.coupon.Coupon;
 import ksmart.ks48team02.admin.dto.coupon.MemberCoupon;
-import ksmart.ks48team02.user.dto.reward.RewardCustomerRank;
 
 import java.util.List;
 
