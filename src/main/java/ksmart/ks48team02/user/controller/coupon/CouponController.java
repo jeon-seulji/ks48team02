@@ -1,7 +1,7 @@
 package ksmart.ks48team02.user.controller.coupon;
 
 import jakarta.servlet.http.HttpSession;
-import ksmart.ks48team02.admin.dto.coupon.Coupon;
+import ksmart.ks48team02.admin.dto.Coupon;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

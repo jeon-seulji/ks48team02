@@ -1,4 +1,4 @@
-package ksmart.ks48team02.admin.dto.coupon;
+package ksmart.ks48team02.admin.dto;
 
 public class Coupon {
     private String couponCode;
