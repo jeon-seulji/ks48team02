@@ -1,13 +1,14 @@
-package ksmart.ks48team02.admin.dto.donation;
+package ksmart.ks48team02.admin.dto;
 
-public class Donation {
+public class DonationInfo {
     private String donationCode;
-    private String storeName;
+    private String storeCode;
     private String memberId;
-    private String donationCategoryCode;
     private String donationJudgementReasonCode;
     private String adminMemberId;
+    private String totalCategoryCode;
     private String donationSubject;
+    private String donationLike;
     private String donationContents;
     private String donationImage;
     private String donationRegDate;
@@ -23,14 +24,15 @@ public class Donation {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Donation{");
+        final StringBuilder sb = new StringBuilder("DonationRegistration{");
         sb.append("donationCode='").append(donationCode).append('\'');
-        sb.append(", storeName='").append(storeName).append('\'');
+        sb.append(", storeCode='").append(storeCode).append('\'');
         sb.append(", memberId='").append(memberId).append('\'');
-        sb.append(", donationCategoryCode='").append(donationCategoryCode).append('\'');
         sb.append(", donationJudgementReasonCode='").append(donationJudgementReasonCode).append('\'');
         sb.append(", adminMemberId='").append(adminMemberId).append('\'');
+        sb.append(", totalCategoryCode='").append(totalCategoryCode).append('\'');
         sb.append(", donationSubject='").append(donationSubject).append('\'');
+        sb.append(", donationLike='").append(donationLike).append('\'');
         sb.append(", donationContents='").append(donationContents).append('\'');
         sb.append(", donationImage='").append(donationImage).append('\'');
         sb.append(", donationRegDate='").append(donationRegDate).append('\'');
@@ -55,12 +57,12 @@ public class Donation {
         this.donationCode = donationCode;
     }
 
-    public String getStoreName() {
-        return storeName;
+    public String getStoreCode() {
+        return storeCode;
     }
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
     }
 
     public String getMemberId() {
@@ -69,14 +71,6 @@ public class Donation {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
-    }
-
-    public String getDonationCategoryCode() {
-        return donationCategoryCode;
-    }
-
-    public void setDonationCategoryCode(String donationCategoryCode) {
-        this.donationCategoryCode = donationCategoryCode;
     }
 
     public String getDonationJudgementReasonCode() {
@@ -95,12 +89,28 @@ public class Donation {
         this.adminMemberId = adminMemberId;
     }
 
+    public String getTotalCategoryCode() {
+        return totalCategoryCode;
+    }
+
+    public void setTotalCategoryCode(String totalCategoryCode) {
+        this.totalCategoryCode = totalCategoryCode;
+    }
+
     public String getDonationSubject() {
         return donationSubject;
     }
 
     public void setDonationSubject(String donationSubject) {
         this.donationSubject = donationSubject;
+    }
+
+    public String getDonationLike() {
+        return donationLike;
+    }
+
+    public void setDonationLike(String donationLike) {
+        this.donationLike = donationLike;
     }
 
     public String getDonationContents() {
