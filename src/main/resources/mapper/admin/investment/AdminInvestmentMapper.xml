@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.admin.mapper.investment.AdminInvestmentMapper">
 
+
     <resultMap type="AdminInvestment" id="adminInvestmentListMap">
         <id property="investmentCode" column="investment_code"/>
         <result property="memberId" column="member_id"/>
@@ -31,6 +32,7 @@
         <result property="contractFile" column="contract_file"/>
         <result property="investJudgeSituation" column="invest_judge_situation"/>
     </resultMap>
+
 
     <resultMap type="AdminInvestmentRequestJudge" id="adminInvestmentRequestJudgeListMap">
         <id property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
@@ -63,6 +65,7 @@
         <result property="rejectCnt" column="rejectCnt"/>
         <result property="cbtBusinessType" column="cbtBusinessType"/>
 
+
         <association property="adminInvestment" javaType="AdminInvestment">
             <id property="investmentCode" column="investment_code"/>
             <result property="memberId" column="member_id"/>
@@ -92,6 +95,7 @@
         </association>
     </resultMap>
 
+
     <resultMap type="AdminLawSatistifyReason" id="adminLawSatistifyReasonListMap">
         <id property="lawSatistifyCode" column="law_satistify_code"/>
         <result property="lawSatistifyReason" column="law_satistify_reason"/>
@@ -99,6 +103,7 @@
         <result property="lawSatistifyWhether" column="law_satistify_whether"/>
         <result property="codeRegDay" column="code_reg_day"/>
     </resultMap>
+
 
     <resultMap type="AdminIncongruitySectors" id="adminIncongruitySectorsListMap">
         <id property="incongruitySectorsCode" column="incongruity_sectors_code"/>
@@ -122,6 +127,7 @@
         <result property="stockPrice" column="stock_price"/>
         <result property="corpValueFulfill" column="corp_value_fulfill"/>
         <result property="corpValueEvaluateDay" column="corp_value_evaluate_day"/>
+
 
         <association property="adminInvestmentRequestJudge" javaType="AdminInvestmentRequestJudge">
             <id property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
@@ -653,6 +659,7 @@
         WHERE
             c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </select>
+
 
     <insert id="addLawSatistify" parameterType="AdminLawSatistifyReason">
         <selectKey keyProperty="lawSatistifyCode" resultType="String" order="BEFORE">

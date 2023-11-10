@@ -45,5 +45,14 @@
             WHERE
             DATE_FORMAT(i.investment_reg_date, '%Y-%m-%d') = CURDATE();
         </selectKey>
+        INSERT INTO investment
+        (investment_code, member_id, store_code, investment_request_judge_code, total_category_code, member_id_seller, investment_subject,
+        investment_image, investment_like, investment_amount, investment_achievement_money, invest_achievement_percent,
+        investment_company, search_count, invest_count, securities_classification, investment_display_date, investment_reg_date,
+        investment_deadline, investment_report, basic_fee, contract_fee_rate, contract_file, invest_judge_situation)
+        values
+        (#{investmentCode},'id001', 'sto004', #{investmentRequestJudgeCode}, #{totalCategoryCode}, 'id002', #{investmentSubject},
+        #{investmentImage}, '0', '0', '0', '0', #{investmentCompany}, '0', '0', #{securitiesClassification}, CURDATE(), #{investmentRegDate}, #{investmentDeadline},
+        #{investmentReport}, '3000000', 'null', #{contractFile}, #{investJudgeSituation});
     </insert>
 </mapper>
