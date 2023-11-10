@@ -1,4 +1,4 @@
-package ksmart.ks48team02.user.dto.reward;
+package ksmart.ks48team02.user.dto;
 
 public class RewardCustomerRank {
 
