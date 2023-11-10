@@ -231,7 +231,7 @@
 
             //summerNote
             $('#donationContents').summernote({
-                height: 300,                 // 에디터 높이
+                height: 500,                 // 에디터 높이
                 minHeight: null,             // 최소 높이
                 maxHeight: null,             // 최대 높이
                 focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
@@ -282,7 +282,46 @@
                 e.preventDefault();
             })
 
+            // 썸네일 이미지 저장 구현
+            $('#confirmBtn').click(function( ) {
+                if($('#thumbnailImage').val() == '' || typeof $('#thumbnailImage').val() == 'undefined' || $('#thumbnailImage').val() == null){
+                    alert('썸네일을 넣어주세요!');
+                    return;
+                }
 
+                $('#confirmBtn').css('display', 'none');
+                $('#confimMessage').css('display', 'block');
+                $('#thumbnailImage').css('display', 'none');
+                var formData = new FormData();	//FormData 객체 생성
+                var inputFile = $("input[type='file']"); //input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+                var files = inputFile[0].files;
+                //files : 선택한 모든 파일을 나열하는 FileList 객체입니다.
+                //multiple 특성을 지정하지 않닸다면 두 개 이상의 파일을 포함하지 않습니다.
+                for (var i = 0; i < files.length; i++) {
+                    console.log(files[i]);
+                    formData.append("file", files[i]);//키,값으로 append
+                }
+
+                //실제 업로드 부분
+                //upload ajax
+                $.ajax({
+                    url: '/user/projectRegistration/uploadSummernoteImageFile',	//경로
+                    processData: false,	//기본값은 true
+                    //ajax 통신을 통해 데이터를 전송할 때, 기본적으로 key와 value값을 Query String으로 변환해서 보냅니다.
+                    contentType: false,	// multipart/form-data타입을 사용하기위해 false 로 지정합니다.
+                    data: formData,
+                    type: 'POST',
+                    dataType:'json',
+                    success: function(result){
+                        console.log(result.fileName);
+                        $('#donationImage').val(result.fileName); // 이미지 이름 DB 에 저장
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){	//오류 메시지 판정
+                        console.log(textStatus);
+                    }
+
+                }); //$.ajax
+            });
 
         }); // end
     </script>
@@ -350,7 +389,7 @@
                             <br>
 
                             <div class="mb-3">
-                                <label for="thumbnailImage" class="form-label fw-bord text-dark">썸네일 이미지를 등록해주세요.</label>
+                                <label for="thumbnailImage" class="form-label fw-bord text-dark">썸네일 이미지를 등록해주세요</label>
                                 <!--                                <div class=" banner-content" style="background-color: #7D7D7D">썸네일 이미지</div>-->
                                 <br>
                                 <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
@@ -360,21 +399,18 @@
                                 <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
                                 <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
                             </div>
-
+                            <label for="donationImage">썸네일 확정을 해주세요</label>
+                            <input id="donationImage" name="donationImage" style="display: none">
+                            <div class="mb-3">
+                                <button id="confirmBtn" type="button" style="border-radius: 5px; background-color: #0b44d7; color: whitesmoke; padding: 5px">썸네일 확정</button>
+                            </div>
+                            <div id="confimMessage" style="background: #ddfffc; border-radius: 5px; padding: 10px; font-size: 12px; color: black; display: none">
+                                <p>
+                                    <b>썸네일이 확정 되었습니다!</b><br>
+                                </p>
+                            </div>
 
                             <br>
-                            <span  class="w-bord text-dark">
-                            <label for="searchTag" class="form-label">프로젝트 검색 키워드 를 입력해주세요.</label>
-                            <br>제목 외에도 키워드 검색 시 검색 결과에 프로젝트가 나타납니다.
-                            </span>
-
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" style="background-color: #235fd9">
-                                  <!-- 모달 진입 버튼 -->
-                                  <button id="modalOpenBtn" class="btn btn-primary">추가</button>
-                                </span>
-                                <input type="text" class="form-control font-weight-bold" id="searchTag" placeholder="검색 키워드를 입력해주세요.">
-                            </div>
 
                             <!-- 검색태그 추가 Modal-->
                             <div class="modal fade" id="modalSearchTag" tabindex="-1" role="dialog"
@@ -447,28 +483,12 @@
                 <div id="storyInfo" class="info-contents-area">
 
                     <h5 class="mb-2 fw-bord">프로젝트 소개 영상과 이미지를 등록해주세요</h5>
-                    <h6 class="mb-2">영상과 이미지를 함께 등록할 경우, 영상이 먼저 보여집니다.</h6>
+                    <h6 class="mb-2">영상과 이미지는 아래 작성란에 추가 해 주세요!</h6>
                     <br><br>
 
 
                     <div class="row g">
                         <div class="col-10">
-                            <div class="mb-3">
-                                <label for="detailImage" class="form-label fw-bord text-dark">상세 이미지를 등록해주세요.</label>
-                                <div class="banner-content" style="background-color: #7D7D7D">상세 이미지</div>
-                                <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
-                                <input class="form-control w-75" id="detailImage" type="file">
-                            </div>
-
-                            <label for="detailMovie" class="form-label fw-bord text-dark">동영상 주소를 적어주세요</label>
-                            <input type="text" class="form-control w-75" id="detailMovie" placeholder="동영상 주소를 적어주세요."
-                                   value="" required="">
-                            <br>
-
-
-
-
-
                             <div class="mb-3">
                                 <label for="donationContents" class="form-label">프로젝트 스토리를 적어주세요</label>
                                 <textarea id="donationContents" name="donationContents"></textarea>

@@ -57,5 +57,36 @@
             d.donation_condition = 0;
     </select>
 
+    <update id="judgementApprove" parameterType="String">
+        UPDATE
+            donation
+        SET
+            donation_condition = 1
+        WHERE
+            donation_code = #{donationCode};
+    </update>
+
+    <update id="judgementReject" parameterType="String">
+        UPDATE
+            donation
+        SET
+            admin_member_id = #{adminId},
+            donation_judgement_reason_code = #{judgeRejectReason},
+            donation_judgment_reason_detail = #{judgeRejectReasonDetail},
+            donation_judgement_date = NOW(),
+            donation_condition = 2
+        WHERE
+            donation_code = #{donationCode};
+    </update>
+
+    <select id="judgementReason" resultType="DonationJudgementReason">
+        SELECT
+            donation_judgement_reason_code AS donationJudgementReasonCode,
+            admin_member_id AS adminMemberId,
+            donation_judgement_reason AS donationJudgementReason,
+            judgement_reason_reg_date AS judgementReasonRegDate
+        FROM
+            donation_judgement_reason
+    </select>
 
 </mapper>

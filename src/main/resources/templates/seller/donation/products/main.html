@@ -51,23 +51,17 @@
             const $curGoalMoney = $(this).find('.current-goal-money');
 
             // "진행중"인 경우
-            if (judgeText === '진행중') {
+            if (judgeText === '3') {
                 // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
                 const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
                 const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
                 $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $judgeCon.text('진행중');
                 $modifyImpossible.remove();
-
-                // TODO 현재 목표 금액 (DB 에서 가져와서 구현하기!
-                $curGoalMoney.text('30,000,000');
-
-                // TODO DB구현되면 공고 시작일자 적용
-                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
-                $startProjectDate.text('2023-10-25');
             }
 
             // "심사완료"인 경우
-            if (judgeText === '심사승인') {
+            if (judgeText === '1') {
                 // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
                 const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
                 const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
@@ -78,75 +72,59 @@
                 const $startProjectDate = $(this).find('.table-data-center.start-project-date');
                 $startProjectDate.text('');
                 $startProjectDate.children();
-                const $startButton = $('<button style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>');
+                const $startButton = $('<button class="startBtn" style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>');
 
                 // 시작 버튼을 요소에 추가합니다.
                 $startProjectDate.append($startButton);
 
                 // 시작 버튼에 클릭 이벤트 리스너를 추가.
                 $startButton.click(function() {
-                    let currentDate = new Date();
-                    let day = currentDate.getDate();
-                    let month = (currentDate.getMonth() + 1);
-                    day = day < 10 ? '0' + day : day;
-                    month = month < 10 ? '0' + month : month;
-                    let formattedDate = currentDate.getFullYear() + '-' + month + '-' + day;
-                    $startProjectDate.text(formattedDate);
-                    // TODO 현재 목표 금액 (DB 에서 가져와서 구현하기!
-                    $curGoalMoney.text('127,000');
-
-                    $judgeCon.text('진행중');
                     $startButton.remove();
                 });
-
+                $judgeCon.text('심사완료');
             }
 
             // "심사반려"인 경우
-            if (judgeText === '심사반려') {
+            if (judgeText === '2') {
                 const $startProjectDate = $(this).find('.table-data-center.start-project-date');
                 $startProjectDate.text('-');
+                $judgeCon.text('심사반려');
             }
 
-            // "심사반려"인 경우
-            if (judgeText === '심사중') {
+            // "심사중"인 경우
+            if (judgeText === '0') {
                 const $startProjectDate = $(this).find('.table-data-center.start-project-date');
                 $startProjectDate.text('-');
+                $judgeCon.text('심사중');
             }
 
             // "프로젝트 성공"인 경우
-            if (judgeText === '성공') {
+            if (judgeText === '4') {
                 // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
                 const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
                 const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
                 $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
                 $modifyImpossible.remove();
-
-                // TODO 현재 목표 금액 (DB 에서 가져와서 구현하기!
-                $curGoalMoney.text('30,000,000');
-
-                // TODO 공고 시작일자 적용 임시 - 프로젝트 시작 시 값이 들어 있음 DB 구현되면 DB에서 가져오기
-                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
-                $startProjectDate.text('2023-10-26');
+                $judgeCon.text('성공');
             }
 
             // "프로젝트 실패"인 경우
-            if (judgeText === '실패') {
+            if (judgeText === '5') {
                 // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
                 const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
                 const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
                 $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
                 $modifyImpossible.remove();
-
-                // TODO 현재 목표 금액 (DB 에서 가져와서 구현하기!
-                $curGoalMoney.text('30,000,000');
-
-                // TODO 공고 시작일자 적용 임시 - 프로젝트 시작 시 값이 들어 있음 DB 구현되면 DB에서 가져오기
-                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
-                $startProjectDate.text('2023-10-28');
+                $judgeCon.text('실패');
             }
-
         });
 
+        $('button').click(function (){
+            if($(this).attr('class') == 'startBtn'){
+                let donationCode = $(this).parent('td').parent('tr').children('td:eq(0)').text();
+                window.location.href = `http://localhost:8088/seller/donation/products?donationCode=${donationCode}`;
+            }
+        });
 
         function isProject(judgeReason){
             if($(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').length == 0){
@@ -182,7 +160,7 @@
             } else if (selectedValue === '1') {
                 // "심사완료된 프로젝트"를 선택한 경우, "심사완료"인 행을 표시합니다.
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-                isProject("심사승인");
+                isProject("심사완료");
 
             } else if (selectedValue === '2') {
                 // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
@@ -216,10 +194,6 @@
 
         // 총 프로젝트 개수 띄우기 초기화
         $('.total-list').text($('table.settlement-log tbody tr').length -1);
-
-
-
-
 
     </script>
 </th:block>
@@ -278,545 +252,29 @@
                     <td colspan="11" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                 </tr>
                 <!-- contents -->
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사승인
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        성공
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사중
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        실패
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사중
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사승인
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사중
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사승인
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        성공
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사승인
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사중
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사승인
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사반려
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        심사반려
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
-                <tr>
-                    <td class="table-data-center">
-                        ORD20231022-000001
-                    </td>
-                    <td class="table-data-center-judge">
-                        진행중
-                    </td>
-                    <td>
-                        [프로젝트]프로젝트명 입니다요
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="current-goal-money">0</span> 원</div>
-                    </td>
-                    <td>
-                        <div style="float:left;"><span class="goal-money">150,000,000</span> 원</div>
-                    </td>
-                    <td class="table-data-center">
-                        2023-10-20
-                    </td>
-                    <td class="table-data-center">
-                        2023-11-20
-                    </td>
-                    <td class="table-data-center start-project-date">
-                        2023-10-25
-                    </td>
-                    <td class="table-data-center-modify">
-                        <a th:href="@{/seller/donation/products/modify}">수정</a>
-                    </td>
-                    <td class="table-data-center judgement-reason">
-                        -
-                    </td>
-                    <td class="table-data-center">
-                        id001
-                    </td>
-
-                </tr>
+                    <th:block th:each="l : ${donationList}">
+                        <tr>
+                            <td class="table-data-center" th:text="${l.donationCode}"></td>
+                            <td class="table-data-center-judge" th:text="${l.donationCondition}"></td>
+                            <td th:text="${l.donationSubject}"></td>
+                            <td>
+                                <div style="float:left;"><span class="current-goal-money" th:text="${l.donationAchievementMoney}"></span> 원</div>
+                            </td>
+                            <td>
+                                <div style="float:left;"><span class="goal-money" th:text="${l.donationGoalMoney}"></span> 원</div>
+                            </td>
+                            <td class="table-data-center" th:text="${l.donationRegDate}"></td>
+                            <td class="table-data-center" th:text="${l.donationEndDate}"></td>
+                            <td class="table-data-center start-project-date" th:text="${l.donationStartDate}"></td>
+                            <td class="table-data-center-modify">
+                                <a th:href="@{/seller/donation/products/modify}">수정</a>
+                            </td>
+                            <td class="table-data-center judgement-reason">
+                                -
+                            </td>
+                            <td class="table-data-center" th:text="${l.adminMemberId}"></td>
+                        </tr>
+                    </th:block>
                 </tbody>
             </table>
         </form>
