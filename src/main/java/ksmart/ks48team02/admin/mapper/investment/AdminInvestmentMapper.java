@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import ksmart.ks48team02.admin.dto.investment.AdminInvestmentRequestJudge;
-import ksmart.ks48team02.admin.dto.investment.AdminLawSatistifyReason;
-import ksmart.ks48team02.admin.dto.investment.AdminIncongruitySectors;
-import ksmart.ks48team02.admin.dto.investment.AdminCorporateValueEvaluation;
+import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
+import ksmart.ks48team02.admin.dto.AdminLawSatistifyReason;
+import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
+import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
 
 @Mapper
 public interface AdminInvestmentMapper {
