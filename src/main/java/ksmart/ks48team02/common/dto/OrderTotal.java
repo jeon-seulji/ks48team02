@@ -1,4 +1,4 @@
-package ksmart.ks48team02.common.dto.order;
+package ksmart.ks48team02.common.dto;
 
 public class OrderTotal {
     private String orderCode;

@@ -1,6 +1,6 @@
 package ksmart.ks48team02.user.controller;
 
-import ksmart.ks48team02.user.dto.main.OrderRank;
+import ksmart.ks48team02.user.dto.OrderRank;
 import ksmart.ks48team02.user.service.main.UserMainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller("userMainController")
 @RequestMapping("/user")
@@ -31,9 +30,9 @@ public class MainController {
 										   @RequestParam(name="rankCategory",
 													 required = false,
 													 defaultValue = "achievementPercent") String rankCategory){
-		System.out.println(rankCategory);
+//		System.out.println(rankCategory);
 		List<OrderRank> list = userMainService.getRankList(rankCategory);
-		System.out.println(list);
+//		System.out.println(list);
 		return list;
 	}
 	@GetMapping(value = {"" , "/"})

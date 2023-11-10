@@ -137,11 +137,10 @@ const projectPointColor = {
 
 // 진현
 // popup 형태 새로운 브라우저 open function
-function popupOpen(customUrl, width, height) {
-    console.log("a");
+function popupOpen(customUrl) {
     var url = customUrl;    //팝업창에 출력될 페이지 URL
-    var winWidth = width;
-    var winHeight = height;
+    var winWidth = 700;
+    var winHeight = 600;
 
     var popupX = (document.body.offsetWidth / 2) - (winWidth / 2);
     // 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
@@ -170,7 +169,6 @@ $('input[type="date"]').prop('min',nowDateFomat);
 $('select[name="deliveryMessage"]').on('change', function(){
     let selectedValue = $(this).val();
 
-    console.log(selectedValue, '<--');
     if(selectedValue == '5') {
         $('input[name="deliveryMessageDirect"]').attr('disabled', false).focus();
     } else {
@@ -203,7 +201,6 @@ function validationEmptyFn($els){
     $($els).each((idx, item) => {
         let value = $(item).val();
         let labelId = $(item).attr('id');
-        console.log(labelId, '<--?')
 
         if(value == null || value == '' || typeof value == 'undefined') {
             let labelText = $(`label[for=${labelId}]`).text();
@@ -288,21 +285,12 @@ function monthAndDaySetting(max){
     var day = String(date.getDate()).padStart(2, '0');
 
     return month + '-' + day;
-
-    // 글자 입력하면 글자수 올라가는 세팅
-    // // 상품명 count
-    function productNameCount(e){
-        var count = $(e).val().length;
-        $('.typing-length').text(count);
-    }
-
 }
 
 // 화폐 단위 표기 fn
 function payFormat($els){
     $($els).each((idx, item) => {
         let price = $(item).val();
-        console.log(item,'<-- item');
         let priceForm = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         $(item).siblings('.order-pay').text(priceForm);
     });
