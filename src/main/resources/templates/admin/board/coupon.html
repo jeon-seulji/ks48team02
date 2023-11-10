@@ -72,7 +72,7 @@
         <div class="section">
             <div class="title"><h2>쿠폰 목록</h2></div>
             <div class="addBtnArea">
-                <a th:href="@{/admin/board/couponAdd}" class="addBtn">쿠폰 등록</a>
+                <a th:href="@{/admin/board/couponCreate}" class="addBtn">쿠폰 등록</a>
             </div>
         </div>
 
@@ -114,7 +114,7 @@
                     <td th:text="${c.couponTermsUse}"></td>
                     <td>id001</td>
                     <td>
-                        <a th:href="@{/admin/board/couponAdd?(couponCode=${c.couponCode})}" class="modify">수정</a>
+                        <a th:href="@{/admin/board/couponAdd(couponCode=${c.couponCode})}" class="modify">수정</a>
                         <a th:href="@{#}" class="delete">삭제</a>
                     </td>
                 </tr>

@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
 import ksmart.ks48team02.user.dto.DonationRegistration;
-import ksmart.ks48team02.user.dto.investment.InvestmentRegistration;
+import ksmart.ks48team02.user.dto.InvestmentRegistration;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.apache.commons.io.FileUtils;

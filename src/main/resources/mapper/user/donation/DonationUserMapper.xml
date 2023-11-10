@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.user.mapper.donation.DonationUserMapper">
-
     <insert id="addDonation" parameterType="ksmart.ks48team02.user.dto.DonationRegistration">
         /* 기부 상품 등록*/
         <selectKey keyProperty="donationCode,storeCode" resultType="hashmap" order="BEFORE">
@@ -64,7 +63,7 @@
         WHERE
             d.donation_code = #{donationCode};
     </select>
-
+  
     <select id="getCateAndCompany" parameterType="String" resultType="CategoryAndCompany">
         SELECT
             s.store_name AS storeName,
@@ -118,4 +117,5 @@
         ON
             t.total_category_code = d.total_category_code
     </select>
+
 </mapper>

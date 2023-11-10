@@ -14,6 +14,9 @@ input{
     border: 1px solid #ccc;
     font-size: 12px;
 }
+input:disabled {
+    background: #f7f9fa !important;
+}
 input.elsFocus:focus {
     border: 1px solid var(--errorColor) !important;
 }
@@ -576,7 +579,7 @@ a {cursor: pointer;}
     border: 1px solid var(--borderColor);
 }
 .project-info-title-area ~ form .sub-table-area td {
-    padding: 0;
+    padding: 5px 0;
 }
 form .settlement-log tbody .sub-table-tr td {
     text-align: center !important;

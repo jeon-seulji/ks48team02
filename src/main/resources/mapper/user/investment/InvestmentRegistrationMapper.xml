@@ -31,7 +31,7 @@
         <result property="investJudgeSituation" column="invest_judge_situation"/>
     </resultMap>
 
-    <insert id="addInvestment" parameterType="ksmart.ks48team02.user.dto.investment.InvestmentRegistration">
+    <insert id="addInvestment" parameterType="ksmart.ks48team02.user.dto.InvestmentRegistration">
         /* 투자 프로젝트 등록 */
         <selectKey keyProperty="investmentCode" resultType="String" order="BEFORE">
             SELECT
