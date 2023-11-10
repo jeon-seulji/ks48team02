@@ -17,7 +17,7 @@ public class AdminInvestmentRequestJudge {
     private String cbtBusinessType;
     private String invBusinessType;
     private String investmentRequestContent;
-    private long investmentAchievementMoney;
+    private long InvestmentAchievementMoney;
     private String lawSatistifyReason;
     private long businessProfits;
     private long depreciation;
@@ -156,11 +156,11 @@ public class AdminInvestmentRequestJudge {
     }
 
     public long getInvestmentAchievementMoney() {
-        return investmentAchievementMoney;
+        return InvestmentAchievementMoney;
     }
 
-    public void setInvestmentAchievementMoney(long investmentAchievementMoney) {
-        this.investmentAchievementMoney = investmentAchievementMoney;
+    public void setInvestmentAchievementMoney(long InvestmentAchievementMoney) {
+        this.InvestmentAchievementMoney = InvestmentAchievementMoney;
     }
 
     public String getLawSatistifyReason() {
@@ -316,8 +316,8 @@ public class AdminInvestmentRequestJudge {
         builder.append(invBusinessType);
         builder.append(", investmentRequestContent=");
         builder.append(investmentRequestContent);
-        builder.append(", investmentAchievementMoney=");
-        builder.append(investmentAchievementMoney);
+        builder.append(", InvestmentAchievementMoney=");
+        builder.append(InvestmentAchievementMoney);
         builder.append(", lawSatistifyReason=");
         builder.append(lawSatistifyReason);
         builder.append(", businessProfits=");
@@ -351,4 +351,5 @@ public class AdminInvestmentRequestJudge {
         builder.append("]");
         return builder.toString();
     }
+
 }
