@@ -1,9 +1,11 @@
 package ksmart.ks48team02.admin.controller.judgement;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import ksmart.ks48team02.admin.dto.investment.*;
+import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
+import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
+import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
+import ksmart.ks48team02.admin.dto.AdminLawSatistifyReason;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package ksmart.ks48team02.seller.dto.investment;
+package ksmart.ks48team02.seller.dto;
 
 public class SellerLawSatistifyReason {
 

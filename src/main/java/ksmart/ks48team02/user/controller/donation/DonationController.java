@@ -1,6 +1,6 @@
 package ksmart.ks48team02.user.controller.donation;
 
-import ksmart.ks48team02.admin.dto.donation.DonationInfo;
+import ksmart.ks48team02.admin.dto.DonationInfo;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

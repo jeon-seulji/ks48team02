@@ -1,7 +1,7 @@
 package ksmart.ks48team02.user.service.donation;
 
-import ksmart.ks48team02.admin.dto.donation.DonationInfo;
-import ksmart.ks48team02.user.dto.donation.DonationRegistration;
+import ksmart.ks48team02.admin.dto.DonationInfo;
+import ksmart.ks48team02.user.dto.DonationRegistration;
 import ksmart.ks48team02.user.mapper.donation.DonationUserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
