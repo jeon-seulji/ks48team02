@@ -1,6 +1,6 @@
 package ksmart.ks48team02.user.mapper.investment;
 
-import ksmart.ks48team02.user.dto.investment.InvestmentRegistration;
+import ksmart.ks48team02.user.dto.InvestmentRegistration;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
