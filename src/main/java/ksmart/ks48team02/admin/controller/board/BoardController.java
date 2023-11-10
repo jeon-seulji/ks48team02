@@ -1,6 +1,6 @@
 package ksmart.ks48team02.admin.controller.board;
 
-import ksmart.ks48team02.admin.dto.coupon.Coupon;
+import ksmart.ks48team02.admin.dto.Coupon;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
