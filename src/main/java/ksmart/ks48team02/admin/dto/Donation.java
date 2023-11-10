@@ -1,4 +1,4 @@
-package ksmart.ks48team02.admin.dto.donation;
+package ksmart.ks48team02.admin.dto;
 
 public class Donation {
     private String donationCode;

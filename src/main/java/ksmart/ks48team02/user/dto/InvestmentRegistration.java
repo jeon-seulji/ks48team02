@@ -1,4 +1,4 @@
-package ksmart.ks48team02.user.dto.investment;
+package ksmart.ks48team02.user.dto;
 
 public class InvestmentRegistration {
     private String investmentCode;

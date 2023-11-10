@@ -1,9 +1,11 @@
 package ksmart.ks48team02.admin.controller.judgement;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import ksmart.ks48team02.admin.dto.investment.*;
+import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
+import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
+import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
+import ksmart.ks48team02.admin.dto.AdminLawSatistifyReason;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import ksmart.ks48team02.admin.service.investment.InvestmentService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller("judgementInvestmentController")
 @RequestMapping("/admin/investment")
@@ -31,7 +34,6 @@ public class InvestmentController {
 
         model.addAttribute("title", "투자 심사 관리");
         model.addAttribute("contentsTitle","투자 심사 관리");
-
 
         return "admin/judgement/investment/invest_judge_main";
     }
@@ -211,12 +213,26 @@ public class InvestmentController {
     }
 
     @GetMapping("/update/judge")
-    public String modifyInvestmentJudge(Model model){
+    public String modifyInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model){
+
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+        List<AdminLawSatistifyReason> lawSatistifyReasonList = investmentService.getLawSatistifyList();
+        List<AdminIncongruitySectors> incongruitySectorsList = investmentService.getIncogruitySectorsList();
 
         model.addAttribute("title", "관리자 : 투자펀딩 심사요청 수정");
         model.addAttribute("contentsTitle","투자펀딩 심사요청 수정");
+        model.addAttribute("investmentRequestJudgeInfo", investmentRequestJudgeInfo);
+        model.addAttribute("lawSatistifyReasonList", lawSatistifyReasonList);
+        model.addAttribute("incongruitySectorsList", incongruitySectorsList);
 
         return "admin/judgement/investment/update/invest_jduge_update";
+    }
+
+    @PostMapping("/update/judge")
+    public String modifyLawSatistify(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+
+        investmentService.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
+        return "redirect:/admin/investment/search/judge";
     }
 
     @GetMapping("/update/law-satistify")
@@ -258,24 +274,40 @@ public class InvestmentController {
     }
 
     @GetMapping("/update/corporate-value")
-    public String modifyCorporateValueEvaluation(Model model) {
+    public String modifyCorporateValueEvaluation(@RequestParam(name = "corporateValueEvaluationCode") String corporateValueEvaluationCode, Model model) {
+
+        AdminCorporateValueEvaluation corporateValueEvaluationInfo = investmentService.getCorporateValueEvaluationByCode(corporateValueEvaluationCode);
 
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 수정");
         model.addAttribute("contentsTitle","기업가치 평가 결과 수정");
+        model.addAttribute("corporateValueEvaluationInfo", corporateValueEvaluationInfo);
 
         return "admin/judgement/investment/update/corporate_value_evaluation_update";
     }
 
-    @GetMapping("delete/judge")
-    public String reomveInvestmentJudge(Model model) {
+    @GetMapping("/delete/judge")
+    public String reomveInvestmentJudge(@RequestParam(value = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model) {
+
+        investmentService.reomveInvestmentJudge(investmentRequestJudgeCode);
 
         model.addAttribute("title", "관리자 : 투자펀딩 심사요청 삭제");
         model.addAttribute("contentsTitle","투자펀딩 심사요청 삭제");
+        model.addAttribute("investmentRequestJudgeCode", investmentRequestJudgeCode);
 
-        return "admin/judgement/investment/delete/invest_jduge_delete";
+        return "redirect:/admin/investment/search/judge";
     }
 
-    @GetMapping("delete/law-satistify")
+    @PostMapping("/delete/judge")
+    public String reomveInvestmentJudge(@RequestParam(value = "investmentRequestJudgeCode") String investmentRequestJudgeCode, RedirectAttributes redirectAttributes) {
+
+        investmentService.reomveInvestmentJudge(investmentRequestJudgeCode);
+
+        redirectAttributes.addAttribute("investmentRequestJudgeCode", investmentRequestJudgeCode);
+
+        return "redirect:/admin/investment/search/judge";
+    }
+
+    @GetMapping("/delete/law-satistify")
     public String removeLawSatistify(Model model) {
 
         model.addAttribute("title", "관리자 : 자본시장법 범위충족기준 삭제");
@@ -284,7 +316,7 @@ public class InvestmentController {
         return "admin/judgement/investment/delete/law_satistify_delete";
     }
 
-    @GetMapping("delete/incongruity-sectors")
+    @GetMapping("/delete/incongruity-sectors")
     public String removeIncongruitySectors(Model model) {
 
         model.addAttribute("title", "관리자 : 부적합 업종 삭제");
@@ -293,7 +325,7 @@ public class InvestmentController {
         return "admin/judgement/investment/delete/incongruity_sectors_delete";
     }
 
-    @GetMapping("delete/corporate-value")
+    @GetMapping("/delete/corporate-value")
     public String removeCorporateValueEvaluation(Model model) {
 
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 삭제");

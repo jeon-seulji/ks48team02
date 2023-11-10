@@ -4,10 +4,9 @@ import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
-import ksmart.ks48team02.admin.mapper.TotalCategoryMapper;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
-import ksmart.ks48team02.user.dto.donation.DonationRegistration;
-import ksmart.ks48team02.user.dto.investment.InvestmentRegistration;
+import ksmart.ks48team02.user.dto.DonationRegistration;
+import ksmart.ks48team02.user.dto.InvestmentRegistration;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.apache.commons.io.FileUtils;
@@ -19,8 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,13 +100,11 @@ public class PojectRegistrationContoller {
         JsonObject jsonObject = new JsonObject();
 
         String fileRoot = "C:\\summernote_image\\";	//저장될 외부 파일 경로
+        // 우분투 파일 루트 file:////home/springboot/resource
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
-
         String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
-
         File targetFile = new File(fileRoot + savedFileName);
-
         try {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장

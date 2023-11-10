@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ksmart.ks48team02.admin.mapper.investment.AdminInvestmentMapper;
-import ksmart.ks48team02.admin.dto.investment.AdminInvestmentRequestJudge;
-import ksmart.ks48team02.admin.dto.investment.AdminLawSatistifyReason;
-import ksmart.ks48team02.admin.dto.investment.AdminIncongruitySectors;
-import ksmart.ks48team02.admin.dto.investment.AdminCorporateValueEvaluation;
+import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
+import ksmart.ks48team02.admin.dto.AdminLawSatistifyReason;
+import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
+import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
 
 @Service("adminInvestmemtService")
 @Transactional
@@ -182,6 +182,11 @@ public class InvestmentService {
         adminInvestmentMapper.addLawSatistify(adminLawSatistifyReason);
     }
 
+    // 투자펀딩 심사요청 수정
+    public void modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+        adminInvestmentMapper.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
+    }
+
     // 자본시장법 범위충족기준 수정
     public void modifyLawSatistify(AdminLawSatistifyReason adminLawSatistifyReason) {
         adminInvestmentMapper.modifyLawSatistify(adminLawSatistifyReason);
@@ -190,5 +195,9 @@ public class InvestmentService {
     // 부적합 업종 수정
     public void modifyIncongruitySectors(AdminIncongruitySectors adminIncongruitySectors) {
         adminInvestmentMapper.modifyIncongruitySectors(adminIncongruitySectors);
+    }
+
+    public void reomveInvestmentJudge(String investmentRequestJudgeCode) {
+        adminInvestmentMapper.removeInvestmentRequestJudge(investmentRequestJudgeCode);
     }
 }

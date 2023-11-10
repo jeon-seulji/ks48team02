@@ -3,7 +3,7 @@ package ksmart.ks48team02.user.controller.reward;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
-import ksmart.ks48team02.admin.dto.coupon.Coupon;
+import ksmart.ks48team02.admin.dto.Coupon;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
 import ksmart.ks48team02.user.dto.Member;
 import ksmart.ks48team02.user.service.reward.RewardService;

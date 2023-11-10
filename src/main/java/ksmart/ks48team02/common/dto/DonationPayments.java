@@ -1,31 +1,31 @@
-package ksmart.ks48team02.common.dto.payments;
+package ksmart.ks48team02.common.dto;
 
 public class DonationPayments {
-    private String donationOrderCode;
+    private String paymentCode;
     private String orderCode;
     private int donationGoods;
     private int donationPrice;
     private String donationName;
-    private String securityNumber;
+    private String donationSecurityNumber;
 
     @Override
     public String toString() {
         return "DonationPayments{" +
-                "donationOrderCode='" + donationOrderCode + '\'' +
+                "paymentCode='" + paymentCode + '\'' +
                 ", orderCode='" + orderCode + '\'' +
                 ", donationGoods=" + donationGoods +
                 ", donationPrice=" + donationPrice +
                 ", donationName='" + donationName + '\'' +
-                ", securityNumber='" + securityNumber + '\'' +
+                ", donationSecurityNumber='" + donationSecurityNumber + '\'' +
                 '}';
     }
 
-    public String getDonationOrderCode() {
-        return donationOrderCode;
+    public String getPaymentCode() {
+        return paymentCode;
     }
 
-    public void setDonationOrderCode(String donationOrderCode) {
-        this.donationOrderCode = donationOrderCode;
+    public void setPaymentCode(String paymentCode) {
+        this.paymentCode = paymentCode;
     }
 
     public String getOrderCode() {
@@ -60,11 +60,11 @@ public class DonationPayments {
         this.donationName = donationName;
     }
 
-    public String getSecurityNumber() {
-        return securityNumber;
+    public String getDonationSecurityNumber() {
+        return donationSecurityNumber;
     }
 
-    public void setSecurityNumber(String securityNumber) {
-        this.securityNumber = securityNumber;
+    public void setDonationSecurityNumber(String securityNumber) {
+        this.donationSecurityNumber = securityNumber;
     }
 }

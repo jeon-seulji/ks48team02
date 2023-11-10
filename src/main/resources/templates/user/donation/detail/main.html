@@ -60,7 +60,31 @@
         let thumbNailImageSrc = $('#thumbNailImage').attr('src');
         $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${donationInfo.donationImage}]]');
 
-        // TODO aside에 있는 값 수정하기
+        // 스토리에서 앞에 부분만 잘라서 공백포함 155글자만 가져옴 그뒤는 ... 으로 다자름
+        let storyBodyText = $('#storyBody').children('p:eq(0)').text();
+        $('#subContens').text(storyBodyText);
+        if (storyBodyText.length > 155) {
+            storyBodyText = storyBodyText.substring(0, 155) + '...';
+        }
+        // 가져온 텍스트를 subContens에 설정
+        $('#subContens').text(storyBodyText);
+
+        let currentDate = new Date();
+        // 비교 대상 날짜 설정
+        let targetDate = new Date($('#donationEndDate').val());
+        // 두 날짜 간의 차이 계산 (밀리초 단위)
+        let timeDifference = targetDate - currentDate;
+        // 차이를 일(day) 단위로 변환
+        let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        // 남은 일 수
+        $('#deadLine').text(daysRemaining + '일남음');
+
+        // 카테고리 이름 설정
+        $('#category').text('[[${cateAndCompany.categoryName}]]' + ' >');
+        // 회사 이름 설정
+        $('#company').text('[[${cateAndCompany.storeName}]]');
+        // 달성 금액 설정
+        $('#achievementMoney').text(`[[${donationInfo.donationAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
     </script>
 
 </th:block>
@@ -101,7 +125,7 @@
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
             <div class="col-lg-12 story-body">
-                <div th:utext="${donationInfo.donationContents}" style="color: black; white-space: pre-line"></div>
+                <div id="storyBody" th:utext="${donationInfo.donationContents}" style="color: black; white-space: pre-line"></div>
             </div>
         </div>
     </div>
