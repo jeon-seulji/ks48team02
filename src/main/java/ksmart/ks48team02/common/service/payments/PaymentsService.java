@@ -1,6 +1,8 @@
 package ksmart.ks48team02.common.service.payments;
 
-import ksmart.ks48team02.common.dto.payments.RewardPayments;
+import ksmart.ks48team02.common.dto.DonationPayments;
+import ksmart.ks48team02.common.dto.InvestPayments;
+import ksmart.ks48team02.common.dto.RewardPayments;
 import ksmart.ks48team02.common.mapper.payments.PaymentsMapper;
 import org.springframework.stereotype.Service;
 
@@ -28,4 +30,18 @@ public class PaymentsService {
         RewardPaymentsById = paymentsMapper.getRewardPaymentsById(orderCode);
         return RewardPaymentsById;
     }
+
+    // 특정 기부 결제 정보 조회
+    public DonationPayments getDonationPaymentsById(String orderCode){
+        DonationPayments donationPaymentsById = null;
+        donationPaymentsById = paymentsMapper.getDonationPaymentsById(orderCode);
+        return donationPaymentsById;
+    }
+
+    // 특정 투자 결제 정보 조회
+    public InvestPayments getInvestPaymentsById(String orderCode){
+        InvestPayments InvestPaymentsById = null;
+        InvestPaymentsById = paymentsMapper.getInvestPaymentsById(orderCode);
+        return InvestPaymentsById;
+    };
 }

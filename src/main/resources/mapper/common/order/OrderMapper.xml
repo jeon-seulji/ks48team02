@@ -4,23 +4,23 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.common.mapper.order.OrderMapper">
 
-<resultMap type="OrderTotal" id="orderMap">
-    <id property="orderCode" column="order_code"/>
-    <result property="memberId" column="member_id"/>
-    <result property="orderCategoryCode" column="order_category_code"/>
-    <result property="orderName" column="order_name"/>
-    <result property="orderFundingName" column="order_funding_name"/>
-    <result property="orderTotalPrice" column="order_total_price"/>
-    <result property="orderCategoryDetail" column="order_category_detail"/>
-    <result property="goodsCode" column="goods_code"/>
-    <result property="goodsPartition" column="goodsPartition"/>
-    <result property="orderApplicationDate" column="order_application_date"/>
-    <result property="orderConfirmDate" column="order_confirm_date"/>
-    <result property="orderCancellDate" column="order_cancell_date"/>
-</resultMap>
+    <resultMap type="OrderTotal" id="orderMap">
+        <id property="orderCode" column="order_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="orderCategoryCode" column="order_category_code"/>
+        <result property="orderName" column="order_name"/>
+        <result property="orderFundingName" column="order_funding_name"/>
+        <result property="orderTotalPrice" column="order_total_price"/>
+        <result property="orderCategoryDetail" column="order_category_detail"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="goodsPartition" column="goodsPartition"/>
+        <result property="orderApplicationDate" column="order_application_date"/>
+        <result property="orderConfirmDate" column="order_confirm_date"/>
+        <result property="orderCancellDate" column="order_cancell_date"/>
+    </resultMap>
 
     <!-- order list 조회 -->
-    <select id="getOrderList" resultMap="orderMap">
+    <select id="getOrderList" parameterType="String" resultMap="orderMap">
         SELECT
             ot.order_code,
             ot.member_id,
@@ -36,6 +36,51 @@
             ot.order_cancell_date
         FROM
             order_table AS ot
+        <choose>
+            <when test="orderby == 'order_d'">
+                ORDER BY ot.order_application_date DESC
+            </when>
+            <when test="orderby == 'order_a'">
+                ORDER BY ot.order_application_date ASC
+            </when>
+            <when test="orderby == 'order_name_d'">
+                ORDER BY ot.order_name ASC
+            </when>
+            <when test="orderby == 'order_name_a'">
+                ORDER BY ot.order_name DESC
+            </when>
+            <when test="orderby == 'projecting_o'">
+                WHERE ot.order_category_code IN ('ORDC_001','ORDC_002','ORDC_003')
+                ORDER BY ot.order_application_date DESC
+            </when>
+            <when test="orderby == 'projectFail_o'">
+                WHERE ot.order_category_code = 'ORDC_013'
+                ORDER BY ot.order_application_date DESC
+            </when>
+            <when test="orderby == 'deliveryWait_o'">
+                WHERE ot.order_category_code = 'ORDC_004'
+                ORDER BY ot.order_application_date ASC
+            </when>
+            <when test="orderby == 'deliveryCompleted_o'">
+                WHERE ot.order_category_code = 'ORDC_005'
+                ORDER BY ot.order_application_date ASC
+            </when>
+            <when test="orderby == 'swapping_o'">
+                WHERE ot.order_category_code IN ('ORDC_011','ORDC_012')
+                ORDER BY ot.order_application_date ASC
+            </when>
+            <when test="orderby == 'refunding_o'">
+                WHERE ot.order_category_code IN ('ORDC_009','ORDC_010')
+                ORDER BY ot.order_application_date ASC
+            </when>
+            <when test="orderby == 'orderCompleted'">
+                WHERE ot.order_category_code IN ('ORDC_006','ORDC_007','ORDC_008')
+                ORDER BY ot.order_application_date ASC
+            </when>
+            <otherwise>
+                ORDER BY ot.order_application_date DESC
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 특정 주문 조회 -->
