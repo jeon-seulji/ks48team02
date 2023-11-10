@@ -138,7 +138,6 @@ const projectPointColor = {
 // 진현
 // popup 형태 새로운 브라우저 open function
 function popupOpen(customUrl) {
-    console.log("a");
     var url = customUrl;    //팝업창에 출력될 페이지 URL
     var winWidth = 700;
     var winHeight = 600;
@@ -170,7 +169,6 @@ $('input[type="date"]').prop('min',nowDateFomat);
 $('select[name="deliveryMessage"]').on('change', function(){
     let selectedValue = $(this).val();
 
-    console.log(selectedValue, '<--');
     if(selectedValue == '5') {
         $('input[name="deliveryMessageDirect"]').attr('disabled', false).focus();
     } else {
@@ -203,7 +201,6 @@ function validationEmptyFn($els){
     $($els).each((idx, item) => {
         let value = $(item).val();
         let labelId = $(item).attr('id');
-        console.log(labelId, '<--?')
 
         if(value == null || value == '' || typeof value == 'undefined') {
             let labelText = $(`label[for=${labelId}]`).text();
@@ -294,7 +291,6 @@ function monthAndDaySetting(max){
 function payFormat($els){
     $($els).each((idx, item) => {
         let price = $(item).val();
-        console.log(item,'<-- item');
         let priceForm = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         $(item).siblings('.order-pay').text(priceForm);
     });

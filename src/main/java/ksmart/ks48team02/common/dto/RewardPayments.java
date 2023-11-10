@@ -1,4 +1,4 @@
-package ksmart.ks48team02.common.dto.payments;
+package ksmart.ks48team02.common.dto;
 
 public class RewardPayments {
     private String paymentCode;

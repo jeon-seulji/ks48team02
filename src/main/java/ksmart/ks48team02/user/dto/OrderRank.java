@@ -1,4 +1,4 @@
-package ksmart.ks48team02.user.dto.main;
+package ksmart.ks48team02.user.dto;
 
 public class OrderRank {
     private int rankCount;

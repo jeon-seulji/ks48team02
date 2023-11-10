@@ -1,17 +1,17 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
-import ksmart.ks48team02.common.dto.payments.RewardPayments;
+import ksmart.ks48team02.common.dto.DonationPayments;
+import ksmart.ks48team02.common.dto.InvestPayments;
+import ksmart.ks48team02.common.dto.RewardPayments;
 import ksmart.ks48team02.user.controller.MainController;
-import ksmart.ks48team02.common.dto.order.OrderTotal;
+import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.service.order.OrderService;
 import ksmart.ks48team02.common.service.payments.PaymentsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,19 +43,33 @@ public class OrderManagementController {
 
     // 주문 목록
     @GetMapping( "/list")
-    public String adminOrderList(Model model){
+    public String adminOrderList(Model model,
+                                 @RequestParam(name="orderby",
+                                 required = false,
+                                 defaultValue = "order_d") String orderby){
         model.addAttribute("title","관리자 : 주문 목록");
         model.addAttribute("contentsTitle","주문 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
 
         // 주문 목록 진열
-        List<OrderTotal> OrderList = orderService.getOrderList();
+        List<OrderTotal> OrderList = orderService.getOrderList(orderby);
         log.info("주문 목록 : {}", OrderList);
         model.addAttribute("OrderList", OrderList);
 
         return "admin/order/list";
     }
 
+    // 주문 목록 정렬 ajax
+    @PostMapping(value="/ajax/list")
+    @ResponseBody
+    public List<OrderTotal> getOrderListOrderBy(Model mode,
+                                                @RequestParam(name="orderby",
+                                                        required = false,
+                                                        defaultValue = "order_d") String orderby){
+        List<OrderTotal> list = orderService.getOrderList(orderby);
+        System.out.println(list);
+        return list;
+    }
     // 주문 상세
     @GetMapping( "/detail")
     public String adminOrderDetail(Model model,
@@ -81,6 +95,16 @@ public class OrderManagementController {
                 RewardPayments getRewardPaymentsById = paymentsService.getRewardPaymentsById(orderCode);
                 log.info("paymentsInfo {}", getRewardPaymentsById);
                 model.addAttribute("paymentsInfo", getRewardPaymentsById);
+                break;
+            case "don":
+                DonationPayments getDonationPaymentsById = paymentsService.getDonationPaymentsById(orderCode);
+                log.info("paymentsInfo {}", getDonationPaymentsById);
+                model.addAttribute("paymentsInfo", getDonationPaymentsById);
+                break;
+            case "inv":
+                InvestPayments getInvestPaymentsById = paymentsService.getInvestPaymentsById(orderCode);
+                log.info("paymentsInfo {}", getInvestPaymentsById);
+                model.addAttribute("paymentsInfo", getInvestPaymentsById);
                 break;
         }
 
