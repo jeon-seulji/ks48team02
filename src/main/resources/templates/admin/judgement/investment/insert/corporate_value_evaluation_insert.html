@@ -4,7 +4,7 @@
       layout:decorate="~{admin/layout/default}">
 
 <head>
-  <!--  사용자별 css file 추가 부분 -->
+    <!--  사용자별 css file 추가 부분 -->
 </head>
 
 
@@ -21,99 +21,109 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-  <form id="addCorporateValueForm" th:action="@{/admin/investment/insert/corporate-value}" method="post">
-    <div class="container admin-content-wrapper">
+    <form id="addCorporateValueForm" th:action="@{/admin/investment/insert/corporate-value}" method="post">
+        <div class="container admin-content-wrapper">
 
-      <div class="row g-5" style="justify-content: center;">
-        <div class="col-md-7 col-lg-8">
-          <div class="row g-3">
+            <div class="row g-5" style="justify-content: center;">
+                <div class="col-md-7 col-lg-8">
+                    <div class="row g-3">
 
-            <div class="my-2 col-12">
-              <label for="memberPw" class="form-label fw-bord text-dark">관리자 비밀번호</label>
-              <input type="password" class="form-control" id="memberPw" placeholder="관리자 비밀번호를 재입력해주세요.">
+                        <div class="my-2 col-12">
+                            <label for="memberPw" class="form-label fw-bord text-dark">관리자 비밀번호</label>
+                            <input type="password" class="form-control" id="memberPw" placeholder="관리자 비밀번호를 재입력해주세요.">
+                        </div>
+                        <br>
+                        <button type="button" class="submitBtn">
+                            확인
+                        </button>
+
+                        <hr class="my-4">
+
+                        <div class="my-2 col-12">
+                            <label for="operatingProfit" class="form-label fw-bord text-dark">영업이익</label>
+                            <input type="number" class="form-control" id="operatingProfit" name="operatingProfit"
+                                   placeholder="영업이익을 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="depreciation" class="form-label fw-bord text-dark">감가상각비</label>
+                            <input type="number" class="form-control" id="depreciation" name="depreciation"
+                                   placeholder="감가상각비를 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="ebitda" class="form-label fw-bord text-dark">EBITDA</label>
+                            <input type="number" class="form-control" id="ebitda" name="ebitda"
+                                   placeholder="EBITDA를 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="evEbitda" class="form-label fw-bord text-dark">EV/EBITDA</label>
+                            <input type="number" class="form-control" id="evEbitda" name="evEbitda"
+                                   placeholder="EV/EBITDA를 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="convertEv" class="form-label fw-bord text-dark">환산 EV</label>
+                            <input type="number" class="form-control" id="convertEv" name="convertEv"
+                                   placeholder="환산 EV를 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="netDebt" class="form-label fw-bord text-dark">순차입금</label>
+                            <input type="number" class="form-control" id="netDebt" name="netDebt"
+                                   placeholder="순차입금을 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="stockNumber" class="form-label fw-bord text-dark">발행된 주식수</label>
+                            <input type="number" class="form-control" id="stockNumber" name="stockNumber"
+                                   placeholder="발행된 주식수를 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <button type="button" class="submitBtn">기업가치 확인</button>
+
+                        <hr class="my-4">
+
+                        <div class="my-2 col-12">
+                            <label for="evaluatedCorpValue" class="form-label fw-bord text-dark">평가된 기업가치</label>
+                            <input type="number" class="form-control" id="evaluatedCorpValue" name="evaluatedCorpValue"
+                                   placeholder="평가된 기업가치를 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="stockPrice" class="form-label fw-bord text-dark">주당 가격</label>
+                            <input type="number" class="form-control" id="stockPrice" name="stockPrice"
+                                   placeholder="주당 가격을 입력해주세요." disabled="disabled">
+                        </div>
+                        <br>
+
+                        <div class="my-2 col-12">
+                            <label for="corpValueFulfill" class="form-label fw-bord text-dark">평가 결과</label>
+                            <select class="form-control" id="corpValueFulfill" name="corpValueFulfill"
+                                    disabled="disabled">
+                                <option value="">===평과결과를 선택해주세요===</option>
+                                <option value="1">통과</option>
+                                <option value="0">탈락</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <button class="my-5 w-100 btn btn-primary btn-lg" type="submit">등록하기</button>
+                </div>
             </div>
-            <br>
-            <button type="button" class="submitBtn">
-              확인
-            </button>
-
-            <hr class="my-4">
-
-            <div class="my-2 col-12">
-              <label for="operatingProfit" class="form-label fw-bord text-dark">영업이익</label>
-              <input type="number" class="form-control" id="operatingProfit" name="operatingProfit" placeholder="영업이익을 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <div class="my-2 col-12">
-              <label for="depreciation" class="form-label fw-bord text-dark">감가상각비</label>
-              <input type="number" class="form-control" id="depreciation" name="depreciation" placeholder="감가상각비를 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <div class="my-2 col-12">
-              <label for="ebitda" class="form-label fw-bord text-dark">EBITDA</label>
-              <input type="number" class="form-control" id="ebitda" name="ebitda" placeholder="EBITDA를 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <div class="my-2 col-12">
-              <label for="evEbitda" class="form-label fw-bord text-dark">EV/EBITDA</label>
-              <input type="number" class="form-control" id="evEbitda" name="evEbitda" placeholder="EV/EBITDA를 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <div class="my-2 col-12">
-              <label for="convertEv" class="form-label fw-bord text-dark">환산 EV</label>
-              <input type="number" class="form-control" id="convertEv" name="convertEv" placeholder="환산 EV를 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <div class="my-2 col-12">
-              <label for="netDebt" class="form-label fw-bord text-dark">순차입금</label>
-              <input type="number" class="form-control" id="netDebt" name="netDebt" placeholder="순차입금을 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <div class="my-2 col-12">
-              <label for="stockNumber" class="form-label fw-bord text-dark">발행된 주식수</label>
-              <input type="number" class="form-control" id="stockNumber" name="stockNumber" placeholder="발행된 주식수를 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <button type="button" class="submitBtn">기업가치 확인</button>
-
-            <hr class="my-4">
-
-            <div class="my-2 col-12">
-              <label for="evaluatedCorpValue" class="form-label fw-bord text-dark">평가된 기업가치</label>
-              <input type="number" class="form-control" id="evaluatedCorpValue" name="evaluatedCorpValue" placeholder="평가된 기업가치를 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <div class="my-2 col-12">
-              <label for="stockPrice" class="form-label fw-bord text-dark">주당 가격</label>
-              <input type="number" class="form-control" id="stockPrice" name="stockPrice" placeholder="주당 가격을 입력해주세요." disabled="disabled">
-            </div>
-            <br>
-
-            <div class="my-2 col-12">
-              <label for="corpValueFulfill" class="form-label fw-bord text-dark">평가 결과</label>
-              <select class="form-control" id="corpValueFulfill" name="corpValueFulfill" disabled="disabled">
-                <option value="">===평과결과를 선택해주세요===</option>
-                <option value="1">통과</option>
-                <option value="0">탈락</option>
-              </select>
-            </div>
-
-          </div>
-
-          <hr class="my-4">
-
-          <button class="my-5 w-100 btn btn-primary btn-lg" type="submit">등록하기</button>
         </div>
-      </div>
-    </div>
-  </form>
+    </form>
 </th:block>
 </html>

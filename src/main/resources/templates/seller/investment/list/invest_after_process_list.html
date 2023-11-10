@@ -22,7 +22,8 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
-    <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div><br>
+    <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div>
+    <br>
     <div class="admin-content-wrapper">
         <table>
             <thead>
@@ -53,7 +54,8 @@
             </tr>
             <tr th:unless="${afterProcessList == null}" th:each="l : ${afterProcessList}">
                 <td>
-                    <a th:href="@{/seller/investment/view/after-process(afterProcessCode=${l.afterProcessCode})}" th:text="${l.afterFundrevenueCode}"></a>
+                    <a th:href="@{/seller/investment/view/after-process(afterProcessCode=${l.afterProcessCode})}"
+                       th:text="${l.afterFundrevenueCode}"></a>
                 </td>
                 <td th:text="${l}"></td>
                 <td th:text="${l}"></td>
@@ -82,10 +84,12 @@
         </table>
         <br>
 
-        <button type="button" class="submitBtn" th:onclick="|location.href='@{/seller/investment/insert/after-process}'|">
+        <button type="button" class="submitBtn"
+                th:onclick="|location.href='@{/seller/investment/insert/after-process}'|">
             등록하기
         </button>
-        <button type="button" class="submitBtn" th:onclick="|location.href='@{/seller/investment/update/after-process}'|">
+        <button type="button" class="submitBtn"
+                th:onclick="|location.href='@{/seller/investment/update/after-process}'|">
             수정하기
         </button>
 
