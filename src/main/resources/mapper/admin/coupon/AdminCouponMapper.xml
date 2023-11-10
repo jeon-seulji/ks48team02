@@ -12,7 +12,7 @@
         <result property="couponDiscountRate" column="coupon_discount_rate"/>
         <result property="couponDiscountAmount" column="coupon_discount_amount"/>
         <result property="couponStock" column="coupon_stock"/>
-        <result property="numberCouponRemaining" column="number_coupons_remaining"/>
+        <result property="numberCouponsRemaining" column="number_coupons_remaining"/>
         <result property="couponValidPeriod" column="coupon_valid_period"/>
         <result property="couponTermsUse" column="coupon_terms_use"/>
 
@@ -67,22 +67,22 @@
             m.member_id = #{memberId} AND mc.coupon_end_date >= CURDATE() AND mc.coupon_used = 0;
     </select>
 
-<!--&lt;!&ndash;    특정쿠폰 조회&ndash;&gt;-->
-<!--    <select id="getCouponCodeById" parameterType="String" >-->
-<!--        /*  특정 쿠폰 조회*/-->
-<!--        select-->
-<!--        c.coupon_code as couponCode,-->
-<!--        c.coupon_serial_number as couponSerialNumber,-->
-<!--        c.coupon_name as couponName,-->
-<!--        c.coupon_discount_rate as couponDiscountRate,-->
-<!--        c.coupon_discount_amount as couponDiscountAmount,-->
-<!--        c.coupon_stock as couponStock,-->
-<!--        c.number_coupons_remaining as numberCouponRemaining,-->
-<!--        c.coupon_valid_period as couponValidPeriod,-->
-<!--        c.coupon_terms_use as couponTermsUse-->
-<!--        from-->
-<!--        coupon_details as c-->
-<!--        where-->
-<!--        c.coupon_code = #{couponCode};-->
-<!--    </select>-->
+    <!--쿠폰 정보 쿠폰 코드로 조회-->
+    <select id="getCouponCodeById" parameterType="String" resultMap="CouponResultMap" >
+        /*  특정 쿠폰 조회*/
+        select
+            c.coupon_code,
+            c.coupon_serial_number,
+            c.coupon_name,
+            c.coupon_discount_rate,
+            c.coupon_discount_amount,
+            c.coupon_stock,
+            c.number_coupons_remaining,
+            c.coupon_valid_period,
+            c.coupon_terms_use
+        from
+            coupon_details as c
+        where
+            c.coupon_code = #{couponCode};
+    </select>
 </mapper>

@@ -114,7 +114,7 @@
                     <td th:text="${c.couponTermsUse}"></td>
                     <td>id001</td>
                     <td>
-                        <a th:href="@{/admin/board/couponAdd?(couponCode=${c.couponCode})}" class="modify">수정</a>
+                        <a th:href="@{/admin/board/couponAdd(couponCode=${c.couponCode})}" class="modify">수정</a>
                         <a th:href="@{#}" class="delete">삭제</a>
                     </td>
                 </tr>
