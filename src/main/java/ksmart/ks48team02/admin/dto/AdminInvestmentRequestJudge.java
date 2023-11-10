@@ -1,4 +1,4 @@
-package ksmart.ks48team02.admin.dto.investment;
+package ksmart.ks48team02.admin.dto;
 
 public class AdminInvestmentRequestJudge {
 
