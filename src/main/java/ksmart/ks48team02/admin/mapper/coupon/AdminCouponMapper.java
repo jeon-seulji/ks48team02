@@ -1,7 +1,6 @@
 package ksmart.ks48team02.admin.mapper.coupon;
 
-import ksmart.ks48team02.admin.dto.coupon.Coupon;
-import ksmart.ks48team02.user.dto.Member;
+import ksmart.ks48team02.admin.dto.Coupon;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
