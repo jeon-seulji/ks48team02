@@ -6,10 +6,6 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <style>
-        #settDeleteBtn {
-            background-color: red;
-        }
-
         input {
             width: 100%;
         }
@@ -185,7 +181,7 @@
                             <td colspan="5"><input type="text" id="investmentRequestSubject"
                                                    name="investmentRequestSubject"
                                                    th:value="*{investmentRequestSubject}"
-                                                   placeholder="투자 심사요청 제목을 입력해주세요."></td>
+                                                   placeholder="투자 심사요청 제목을 입력해주세요"></td>
                         </tr>
                         <tr>
                             <td>
@@ -273,7 +269,6 @@
                                     <option value="">해당없음</option>
                                 </select>
                             </td>
-                            <td th:unless="*{incongruitySectorsCode == null}" th:text="*{incongruitySectorsCode}"></td>
                             <td th:text="*{companyBusinessTypeCode}"></td>
                             <td th:text="*{cbtBusinessType}"></td>
                         </tr>
