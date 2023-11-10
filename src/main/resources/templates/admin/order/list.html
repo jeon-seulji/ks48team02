@@ -6,7 +6,6 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <title th:text="${title}"></title>
-
 </head>
 
 
@@ -187,14 +186,13 @@
                         </th>
                         <th style="width:12%;">주문 관리코드</th>
                         <th style="width:10%;">주문 일시</th>
-                        <th style="width:5%;">주문자</th>
+                        <th style="width:6%;">분류</th>
                         <th style="width:20%;">주문 공고</th>
                         <th style="width:10%;">주문 상태</th>
-
+                        <th style="width:6%;">주문자명</th>
                         <th style="width:10%;">주문 금액</th>
                         <th style="width:10%;">주문 확정 일시</th>
                         <th style="width:10%;">주문 취소 일시</th>
-                        <th style="width:8%;">배송 코드</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -208,21 +206,25 @@
                                 <input type="checkbox" name="selectList">
                             </td>
                             <td class="table-data-center">
-                                <a th:text="${l.orderCode}" th:title="${l.orderCode}" class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode})}">주문 코드</a>
+                                <a th:text="${l.orderCode}" th:title="${l.orderCode}" class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}, goodsPartition=${l.goodsPartition})}">주문 코드</a>
                             </td>
                             <td th:text="${l.orderApplicationDate}" th:title="${l.orderApplicationDate}" class="table-data-center">
                                 주문일시
                             </td>
-                            <td th:text="${l.orderName}"  class="table-data-center">
-                                주문자명
+                            <td  class="table-data-center">
+                                <span th:if="${l.goodsPartition.equals('rwd')}">리워드</span>
+                                <span th:if="${l.goodsPartition.equals('don')}">기부</span>
+                                <span th:if="${l.goodsPartition.equals('inv')}">투자</span>
                             </td>
-                            <td>
-                                <span th:text="${l.orderFundingName}" th:title="${l.orderFundingName}"></span>
+                            <td th:text="${l.orderFundingName}" th:title="${l.orderFundingName}" class="table-data-center">
+                                주문공고
                             </td>
                             <td th:text="${l.orderCategoryDetail}" th:title="${l.orderCategoryDetail}">
                                 주문 상태
                             </td>
-
+                            <td th:text="${l.orderName}"  class="table-data-center">
+                                주문자명
+                            </td>
                             <td  class="table-data-center">
                                 <input type="hidden" name="orderPrice" th:value="${l.orderTotalPrice}">
                                 <span class="order-pay">0</span> 원
@@ -233,9 +235,6 @@
                             </td>
                             <td th:text="${(l.orderCancellDate != null)?l.orderCancellDate:'-'}" class="table-data-center">
                                 -
-                            </td>
-                            <td class="table-data-center">
-                                <a class="table-detail-btn" th:href="@{/admin/order/delivery/detail}">배송정보</a>
                             </td>
                         </tr>
 

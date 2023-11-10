@@ -65,23 +65,10 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
     <div class="admin-wrapper"> <!-- 수정 -->
-
-        <div class="order-total-info">
-            <div class="info-items">
-                <h5>총 주문 금액</h5>
-                <p class="order-total-price"><span class="price-data" data-value="68500">0</span>원</p>
-            </div>
-            <span class="sign">=</span>
-            <div class="info-items">
-                <h5>주문 금액</h5>
-                <p class="order-total-price"><span class="price-data" data-value="65000">0</span>원</p>
-            </div>
-            <span class="sign">+</span>
-            <div class="info-items">
-                <h5>배송비</h5>
-                <p class="order-total-price"><span class="price-data" data-value="3500">0</span>원</p>
-            </div>
-        </div>
+        <!-- order dashboard area -->
+        <th:block th:if="${orderPartition.equals('rwd')}" th:include="common/fragments/orderDashBoardFragments :: rewardOrderDashboard"></th:block>
+        <th:block th:if="${orderPartition.equals('don')}" th:include="common/fragments/orderDashBoardFragments :: donationOrderDashboard"></th:block>
+        <th:block th:if="${orderPartition.equals('inv')}" th:include="common/fragments/orderDashBoardFragments :: investOrderDashboard"></th:block>
 
         <!-- order info area start -->
         <div id="orderInfoArea" class="admin-content-wrapper form-table">
@@ -93,34 +80,30 @@
         <form id="paymentInfoDetailBt" method="get">
             <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
                 <!-- payments info area start -->
-                <th:block th:replace="~{common/fragments/orderPaymentsFragments :: orderPayments}"></th:block>
+                <th:block th:if="${orderPartition.equals('rwd')}" >
+                    <th:block th:replace="~{common/fragments/orderPaymentsFragments :: rewardPayments}"></th:block>
+                    <!-- delivery info area start -->
+                    <th:block th:if="${orderPartition.equals('rwd')}" th:include="~{common/fragments/deliverInfo :: delriverInfo}"></th:block>
+                    <!-- delivery info area end -->
+                </th:block>
+                <th:block th:if="${orderPartition.equals('don')}" th:include="~{common/fragments/orderPaymentsFragments :: donationPayments}"></th:block>
+                <th:block th:if="${orderPartition.equals('inv')}" th:include="~{common/fragments/orderPaymentsFragments :: investPayments}"></th:block>
                 <!-- payments info area end -->
-
-                <!-- 배송정보 영역 -->
-                <th:block th:replace="~{common/fragments/deliverInfo :: delriverInfo}"></th:block>
-
-                <div class="btn-area">
-                    <ul>
-                        <li>
-                            <button id="cancleBtn" class="submitBtn" type="button" onclick="confirmBtnFn(event.target)">취소</button>
-                        </li>
-                        <li>
-                            <button id="deliveryRemoveBtn" onclick="confirmBtnFn(event.target)" class="submitBtn" type="button" >수정</button>
-                        </li>
-                    </ul>
-                </div>
             </div>
 
         </form>
-        <div class="btn-area" style="justify-content: flex-end;">
-            <ul>
-                <li>
-                    <button id="orderBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로</button>
-                </li>
-            </ul>
-        </div>
     </div>
 
+    <div class="btn-area">
+        <ul>
+            <li>
+                <button id="removeBtn" class="submitBtn" type="button" onclick="confirmBtnFn(event.target)">수정</button>
+            </li>
+            <li>
+                <button id="clearBtn" class="submitBtn" type="button" onclick="confirmBtnFn(event.target)">주문취소</button>
+            </li>
+        </ul>
+    </div>
 </th:block>
 </body>
 </html>

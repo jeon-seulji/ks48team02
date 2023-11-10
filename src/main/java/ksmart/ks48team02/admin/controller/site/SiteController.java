@@ -15,7 +15,7 @@ public class SiteController {
         return "admin/site/category";
     }
 
-    // 카테고리 등록
+    // 카테고리 등록 수정
     @GetMapping("/categoryAdd")
     public String categoryAddPage(){
 

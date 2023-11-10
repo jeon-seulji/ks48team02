@@ -82,7 +82,7 @@
 					</li>
 				<!--<li><a th:unless="${session.SID == null}" th:href="@{/user/account/logout}">로그아웃</a></li>-->
 	        	</ul>
-	        	<div class="make-project-btn">
+	        	<div class="make-project-btn" th:unless="${session.STYPECODE == 'mem_type_05'}">
 	        		<a th:href="@{/user/projectRegistration}">프로젝트 만들기</a>
 	        	</div>
 	        </div>
