@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.controller.donation;
 
 import ksmart.ks48team02.admin.dto.donation.DonationInfo;
+import ksmart.ks48team02.user.dto.donation.CategoryAndCompany;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,8 @@ public class DonationController {
         model.addAttribute("donationCode", donationCode);
         DonationInfo donationInfo = donationService.getDonationInfo(donationCode);
         model.addAttribute("donationInfo", donationInfo);
+        CategoryAndCompany cateAndCompany = donationService.getCateAndCompany(donationCode);
+        model.addAttribute("cateAndCompany", cateAndCompany);
 
         return "user/donation/detail/main";
     }

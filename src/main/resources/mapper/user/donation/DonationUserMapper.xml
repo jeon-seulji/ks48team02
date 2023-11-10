@@ -65,4 +65,21 @@
             d.donation_code = #{donationCode};
     </select>
 
+    <select id="getCateAndCompany" parameterType="String" resultType="CategoryAndCompany">
+        SELECT
+            s.store_name AS storeName,
+            t.category_name AS categoryName
+        FROM
+            donation AS d
+        INNER JOIN
+            store AS s
+        ON
+            d.member_id = s.member_id
+            INNER JOIN
+            total_category AS t
+        ON
+            d.total_category_code = t.total_category_code
+        WHERE
+            d.donation_code = #{donationCode};
+    </select>
 </mapper>
