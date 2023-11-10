@@ -79,8 +79,12 @@
         // 남은 일 수
         $('#deadLine').text(daysRemaining + '일남음');
 
+        // 카테고리 이름 설정
         $('#category').text('[[${cateAndCompany.categoryName}]]' + ' >');
+        // 회사 이름 설정
         $('#company').text('[[${cateAndCompany.storeName}]]');
+        // 달성 금액 설정
+        $('#achievementMoney').text(`[[${donationInfo.donationAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
 
 
     </script>

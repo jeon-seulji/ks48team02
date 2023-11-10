@@ -1,13 +1,17 @@
 package ksmart.ks48team02.user.controller.donation;
 
-import ksmart.ks48team02.admin.dto.donation.DonationInfo;
-import ksmart.ks48team02.user.dto.donation.CategoryAndCompany;
+import ksmart.ks48team02.admin.dto.DonationInfo;
+import ksmart.ks48team02.user.dto.AllDonationInfo;
+import ksmart.ks48team02.user.dto.CategoryAndCompany;
+import ksmart.ks48team02.user.dto.DonationRegistration;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller("userDonationController")
 @RequestMapping("/user/donation")
@@ -18,7 +22,10 @@ public class DonationController {
     }
 
     @GetMapping(value = {"", "/"})
-    public String mainPage(){
+    public String mainPage(Model model){
+        List<AllDonationInfo> allDonationInfo = donationService.getAllDonationInfo();
+        model.addAttribute("allDonationInfo", allDonationInfo);
+
         return "user/donation/main";
     }
 

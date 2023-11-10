@@ -1,8 +1,6 @@
-package ksmart.ks48team02.user.dto.donation;
+package ksmart.ks48team02.admin.dto;
 
-import org.thymeleaf.spring6.processor.SpringObjectTagProcessor;
-
-public class DonationRegistration {
+public class DonationInfo {
     private String donationCode;
     private String storeCode;
     private String memberId;

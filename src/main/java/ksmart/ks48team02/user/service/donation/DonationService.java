@@ -1,11 +1,16 @@
 package ksmart.ks48team02.user.service.donation;
 
-import ksmart.ks48team02.admin.dto.donation.DonationInfo;
-import ksmart.ks48team02.user.dto.donation.CategoryAndCompany;
-import ksmart.ks48team02.user.dto.donation.DonationRegistration;
+import ksmart.ks48team02.admin.dto.DonationInfo;
+import ksmart.ks48team02.user.dto.AllDonationInfo;
+import ksmart.ks48team02.user.dto.CategoryAndCompany;
+import ksmart.ks48team02.user.dto.DonationRegistration;
 import ksmart.ks48team02.user.mapper.donation.DonationUserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -26,6 +31,11 @@ public class DonationService{
     public CategoryAndCompany getCateAndCompany(String donationCode){
         CategoryAndCompany cateAndCompany = donationUserMapper.getCateAndCompany(donationCode);
         return cateAndCompany;
+    }
+
+    public List<AllDonationInfo> getAllDonationInfo(){
+        List<AllDonationInfo> allDonationInfo = donationUserMapper.getAllDonationInfo();
+        return allDonationInfo;
     }
 
 }

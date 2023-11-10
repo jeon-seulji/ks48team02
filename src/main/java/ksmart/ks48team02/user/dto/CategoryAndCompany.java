@@ -1,4 +1,4 @@
-package ksmart.ks48team02.user.dto.donation;
+package ksmart.ks48team02.user.dto;
 
 public class CategoryAndCompany {
     private String categoryName;

@@ -1,4 +1,4 @@
-package ksmart.ks48team02.seller.dto.donation;
+package ksmart.ks48team02.seller.dto;
 
 import lombok.Data;
 
