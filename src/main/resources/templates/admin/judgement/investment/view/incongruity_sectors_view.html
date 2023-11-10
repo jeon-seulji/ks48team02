@@ -6,7 +6,7 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <style>
-        #settDeleteBtn{
+        #settDeleteBtn {
             background-color: red;
         }
     </style>
@@ -39,10 +39,10 @@
                 <table class="settlement-log application-info-detail" style="border:none;">
                     <tbody>
                     <!-- contents -->
-                        <td>
-                            부적합 업종
-                        </td>
-                        <td th:text="*{incongruitySectorsBusiness}" colspan="5"></td>
+                    <td>
+                        부적합 업종
+                    </td>
+                    <td th:text="*{incongruitySectorsBusiness}" colspan="5"></td>
                     </tr>
                     <tr>
                         <td>
@@ -62,13 +62,20 @@
                 <div class="btn-area">
                     <ul>
                         <li>
-                            <button id="settBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로</button>
+                            <button id="settBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로
+                            </button>
                         </li>
                         <li>
-                            <button id="settUpdateBtn" class="submitBtn" type="button" th:onclick="|location.href='@{/admin/investment/update/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}'|">수정</button>
+                            <button id="settUpdateBtn" class="submitBtn" type="button"
+                                    th:onclick="|location.href='@{/admin/investment/update/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}'|">
+                                수정
+                            </button>
                         </li>
                         <li>
-                            <button id="settDeleteBtn" class="submitBtn" type="button" th:onclick="|location.href='@{/admin/investment/delete/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}'|">삭제</button>
+                            <button id="settDeleteBtn" class="submitBtn" type="button"
+                                    th:onclick="|location.href='@{/admin/investment/delete/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}'|">
+                                삭제
+                            </button>
                         </li>
                     </ul>
                 </div>

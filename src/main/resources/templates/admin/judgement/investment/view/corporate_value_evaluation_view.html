@@ -6,7 +6,7 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <style>
-        #settDeleteBtn{
+        #settDeleteBtn {
             background-color: red;
         }
     </style>
@@ -20,7 +20,11 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-
+    <script>
+        $('#settDeleteBtn').click(function (){
+           let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
+        });
+    </script>
 </th:block>
 
 
@@ -33,7 +37,9 @@
             <div class="project-info-title-area">
                 <div class="project-info-title">
                     <h5>투자 심사요청 코드</h5>
-                    <p th:text="*{adminInvestmentRequestJudge.investmentRequestJudgeCode}" style="color: var(--maincolor);"></p>
+                    <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=*{adminInvestmentRequestJudge.investmentRequestJudgeCode})}"
+                       th:text="*{adminInvestmentRequestJudge.investmentRequestJudgeCode}"
+                       style="color: var(--maincolor);"></a>
                 </div>
                 <div class="info-more-btn">
                     <a class="more-btn" style="padding: 7px 10px 9px 19px;">
@@ -51,53 +57,59 @@
                             카테고리
                         </td>
                         <td colspan="4">
-                            카테고리 내용
+                            투자
                         </td>
 
                     </tr>
                     <tr>
                         <td>
-                            프로젝트 제목
+                            심사요청 제목
                         </td>
-                        <td colspan="4">
-                            [글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!
-                        </td>
+                        <td th:text="*{adminInvestmentRequestJudge.investmentRequestSubject}" colspan="4"></td>
 
                     </tr>
                     <tr>
                         <td>
-                            프로젝트 내용
+                            심사요청 내용
                         </td>
-                        <td colspan="4">
-                            휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                        </td>
+                        <td th:text="*{adminInvestmentRequestJudge.investmentRequestContent}" colspan="4"></td>
                     </tr>
                     <tr>
                         <td>
-                            공고 마감일
+                            심사 요청일
                         </td>
-                        <td colspan="4">
-                            2023-10-23
-                        </td>
+                        <td th:text="*{adminInvestmentRequestJudge.investmentRequestDate}" colspan="4"></td>
                     </tr>
                     <tr>
                         <td colspan="5">
                             상세
                         </td>
                     </tr>
-                    <tr class="sub-table-area sub-table sub-table-tr">
-                        <td>펀딩 목표 금액</td>
-                        <td>총 주문 완료 수</td>
-                        <td>주문 취소 수</td>
-                        <td>펀딩 달성 금액</td>
-                        <td>펀딩 달성률</td>
+                    <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
+                        <td style="height: 35px;">목표펀딩금액</td>
+                        <td style="height: 35px;">영업이익</td>
+                        <td style="height: 35px;">감가상각비</td>
+                        <td style="height: 35px;">순차입금</td>
+                        <td style="height: 35px;">발행예정주식수</td>
                     </tr>
                     <tr>
-                        <td style="background: #fff;"><span>500,000</span> 원</td>
-                        <td><span>34502</span> 건</td>
-                        <td><span>42</span> 건</td>
-                        <td><span>314,000,000</span> 원</td>
-                        <td><span>628</span> %</td>
+                        <td style="background: #fff;"><span
+                                th:text="*{#numbers.formatInteger(adminInvestmentRequestJudge.InvestmentAchievementMoney,3,'COMMA')}"></span>
+                            원
+                        </td>
+                        <td><span th:text="*{#numbers.formatInteger(operatingProfit,3,'COMMA')}"></span> 원</td>
+                        <td><span
+                                th:text="*{#numbers.formatInteger(adminInvestmentRequestJudge.depreciation,3,'COMMA')}"></span>
+                            원
+                        </td>
+                        <td><span
+                                th:text="*{#numbers.formatInteger(adminInvestmentRequestJudge.netDebt,3,'COMMA')}"></span>
+                            원
+                        </td>
+                        <td><span
+                                th:text="*{#numbers.formatInteger(adminInvestmentRequestJudge.issueStockNumber,3,'COMMA')}"></span>
+                            주
+                        </td>
                     </tr>
 
                     </tbody>
@@ -153,12 +165,14 @@
                         <td style="height: 35px;">순차입금</td>
                     </tr>
                     <tr>
-                        <td th:text="*{operatingProfit}" style="background: #fff;"></td>
-                        <td th:text="*{depreciation}"></td>
-                        <td th:text="*{ebitda}"></td>
+                        <td style="background: #fff;"><span
+                                th:text="*{#numbers.formatInteger(operatingProfit,3,'COMMA')}"></span> 원
+                        </td>
+                        <td><span th:text="*{#numbers.formatInteger(depreciation,3,'COMMA')}"></span> 원</td>
+                        <td><span th:text="*{#numbers.formatInteger(ebitda,3,'COMMA')}"></span> 원</td>
                         <td th:text="*{evEbitda}"></td>
-                        <td th:text="*{convertEv}"></td>
-                        <td th:text="*{netDebt}"></td>
+                        <td><span th:text="*{#numbers.formatInteger(convertEv,3,'COMMA')}"></span> 원</td>
+                        <td><span th:text="*{#numbers.formatInteger(netDebt,3,'COMMA')}"></span> 원</td>
 
                     </tr>
                     <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
@@ -169,9 +183,11 @@
                         <td style="height: 35px;">기업가치 평가일</td>
                     </tr>
                     <tr>
-                        <td style="background: #fff;" colspan="2"><span th:text="*{evaluatedCorpValue}"></span> 원</td>
-                        <td><span th:text="*{stockNumber}"></span> 주</td>
-                        <td><span th:text="*{stockPrice}"></span> 원</td>
+                        <td style="background: #fff;" colspan="2"><span
+                                th:text="*{#numbers.formatInteger(evaluatedCorpValue,3,'COMMA')}"></span> 원
+                        </td>
+                        <td><span th:text="*{#numbers.formatInteger(stockNumber,3,'COMMA')}"></span> 주</td>
+                        <td><span th:text="*{#numbers.formatInteger(stockPrice,3,'COMMA')}"></span> 원</td>
                         <td th:if="*{corpValueFulfill == 0}">심사 반려</td>
                         <td th:if="*{corpValueFulfill == 1}">심사 승인</td>
                         <td th:if="*{corpValueFulfill == 2}">심사 대기</td>
@@ -184,7 +200,8 @@
                         <td colspan="5" class="progress-radio-area">
                             <ul>
                                 <li>
-                                    <input id="preProgress" type="radio" name="progressSeleced" value="preProgress" checked>
+                                    <input id="preProgress" type="radio" name="progressSeleced" value="preProgress"
+                                           checked>
                                     <label for="preProgress">심사 대기</label>
                                 </li>
                                 <li>
@@ -192,7 +209,8 @@
                                     <label for="Progress">심사 승인</label>
                                 </li>
                                 <li>
-                                    <input id="ProgressCompleted" type="radio" name="progressSeleced" value="ProgressCompleted">
+                                    <input id="ProgressCompleted" type="radio" name="progressSeleced"
+                                           value="ProgressCompleted">
                                     <label for="ProgressCompleted">심사 반려</label>
                                 </li>
                             </ul>
@@ -204,13 +222,20 @@
                 <div class="btn-area">
                     <ul>
                         <li>
-                            <button id="settBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로</button>
+                            <button id="settBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로
+                            </button>
                         </li>
                         <li>
-                            <button id="settUpdateBtn" class="submitBtn" type="button" th:onclick="|location.href='@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}'|">수정</button>
+                            <button id="settUpdateBtn" class="submitBtn" type="button"
+                                    th:onclick="|location.href='@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}'|">
+                                수정
+                            </button>
                         </li>
                         <li>
-                            <button id="settDeleteBtn" class="submitBtn" type="button" th:onclick="|location.href='@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}'|">삭제</button>
+                            <button id="settDeleteBtn" class="submitBtn" type="button"
+                                    th:onclick="|location.href='@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}'|">
+                                삭제
+                            </button>
                         </li>
                     </ul>
                 </div>

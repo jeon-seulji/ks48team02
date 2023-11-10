@@ -2,11 +2,13 @@ package ksmart.ks48team02.user.controller;
 
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
-import ksmart.ks48team02.admin.mapper.TotalCategoryMapper;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
 import ksmart.ks48team02.user.dto.donation.DonationRegistration;
+import ksmart.ks48team02.user.dto.InvestmentRegistration;
 import ksmart.ks48team02.user.service.donation.DonationService;
+import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,16 +26,25 @@ import java.util.UUID;
 public class PojectRegistrationContoller {
 
     private final DonationService donationService;
+
+    private final UserInvestmentService userInvestmentService;
+
     private final TotalCategoryService totalCategoryService;
 
-    public PojectRegistrationContoller(DonationService donationService, TotalCategoryService totalCategoryService){
+    public PojectRegistrationContoller(DonationService donationService, TotalCategoryService totalCategoryService, UserInvestmentService userInvestmentService){
         this.donationService = donationService;
         this.totalCategoryService = totalCategoryService;
+        this.userInvestmentService = userInvestmentService;
     }
 
     //프로젝트 등록 메인 페이지
     @GetMapping(value = {"" , "/"})
-    public String mainPage(Model model) {
+    public String mainPage(Model model, HttpSession session) {
+
+        String memberType = (String)session.getAttribute("STYPECODE");
+        String returnAddr = "user/account/login";
+
+
 
         return "user/projectRegistration/main";
     }
@@ -52,7 +61,18 @@ public class PojectRegistrationContoller {
         return "user/projectRegistration/reward/reward_insert";
     }
     //투자 프로젝트 등록 페이지
+    @GetMapping(value = {"/investment/judge"})
+    public String investmentRegistrationPage(Model model) {
 
+        model.addAttribute("title", "투자펀딩 심사 요청, 공고 등록");
+
+        return "user/projectRegistration/investment/invest_judge_insert";
+    }
+    @PostMapping("/investment")
+    public String investmentRegistrationPage(InvestmentRegistration investmentRegistration){
+        userInvestmentService.addInvesetment(investmentRegistration);
+        return "redirect:/user/investment/main";
+    }
 
     // 기부 프로젝트 완료 포스트맵핑으로 받기
     @PostMapping("/donation")
@@ -91,6 +111,7 @@ public class PojectRegistrationContoller {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
             jsonObject.addProperty("url", "/summernoteImage/"+savedFileName);
+            jsonObject.addProperty("fileName", savedFileName);
             jsonObject.addProperty("responseCode", "success");
 
         } catch (IOException e) {

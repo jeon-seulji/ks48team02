@@ -1,12 +1,20 @@
 package ksmart.ks48team02.user.controller.donation;
 
+import ksmart.ks48team02.admin.dto.donation.DonationInfo;
+import ksmart.ks48team02.user.service.donation.DonationService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller("userDonationController")
 @RequestMapping("/user/donation")
 public class DonationController {
+    private final DonationService donationService;
+    public DonationController(DonationService donationService){
+        this.donationService = donationService;
+    }
 
     @GetMapping(value = {"", "/"})
     public String mainPage(){
@@ -14,7 +22,12 @@ public class DonationController {
     }
 
     @GetMapping("/detail")
-    public String detailMainPage(){
+    public String detailMainPage(@RequestParam(name = "donationCode") String donationCode,
+                                 Model model){
+        model.addAttribute("donationCode", donationCode);
+        DonationInfo donationInfo = donationService.getDonationInfo(donationCode);
+        model.addAttribute("donationInfo", donationInfo);
+
         return "user/donation/detail/main";
     }
 

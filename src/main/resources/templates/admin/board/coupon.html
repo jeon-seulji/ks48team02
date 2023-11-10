@@ -82,6 +82,7 @@
                 <tr>
                     <th><input type="checkbox" id="allCheck"></th>
                     <th>쿠폰 코드</th>
+                    <th>쿠폰 고유 번호</th>
                     <th>쿠폰 이름</th>
                     <th>쿠폰 할인율</th>
                     <th>쿠폰 할인 금액</th>
@@ -94,8 +95,28 @@
                 </tr>
                 </thead>
                 <tbody class="center">
-                <tr>
+<!--                <tr th:if="${couponList == null}">-->
+<!--                    <td colspan="12">쿠폰의 목록이 없습니다.</td>-->
+<!--                </tr>-->
+                <th>
 
+                </th>
+                <tr th:unless="${couponList == null}" th:each="c : ${couponList}">
+                    <td><input type="checkbox" name="admin_board"></td>
+                    <td th:text="${c.couponCode}"></td>
+                    <td th:text="${c.couponSerialNumber}"></td>
+                    <td th:text="${c.couponName}"></td>
+                    <td th:text="${c.couponDiscountRate}"></td>
+                    <td th:text="${c.couponDiscountAmount}"></td>
+                    <td th:text="${c.couponStock}"></td>
+                    <td th:text="${c.numberCouponsRemaining}"></td>
+                    <td th:text="${c.couponValidPeriod}"></td>
+                    <td th:text="${c.couponTermsUse}"></td>
+                    <td>id001</td>
+                    <td>
+                        <a th:href="@{/admin/board/couponAdd(couponCode=${c.couponCode})}" class="modify">수정</a>
+                        <a th:href="@{#}" class="delete">삭제</a>
+                    </td>
                 </tr>
 
                 </tbody>

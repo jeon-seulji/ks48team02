@@ -1,6 +1,6 @@
 @charset "UTF-8";
 form{
-    flex-basis: 500px;
+    flex-basis: 400px;
     background-color: #FFFFFF;
     padding: 30px 25px 25px 30px;
     border-radius: 16px;
@@ -8,7 +8,4 @@ form{
 }
 caption{
     display: none;
-}
-.couponAdd{
-    text-align: center;
 }

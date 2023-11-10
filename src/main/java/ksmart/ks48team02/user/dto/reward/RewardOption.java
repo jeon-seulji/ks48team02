@@ -8,6 +8,17 @@ public class RewardOption {
     private int optionPrice;
     private int optionLimitQuantity;
     private String optionName;
+    private String optionDeliveryPrice;
+
+
+
+    public String getOptionDeliveryPrice() {
+        return optionDeliveryPrice;
+    }
+
+    public void setOptionDeliveryPrice(String optionDeliveryPrice) {
+        this.optionDeliveryPrice = optionDeliveryPrice;
+    }
 
     @Override
     public String toString() {
@@ -18,6 +29,7 @@ public class RewardOption {
                 ", optionPrice=" + optionPrice +
                 ", optionLimitQuantity=" + optionLimitQuantity +
                 ", optionName='" + optionName + '\'' +
+                ", optionDeliveryPrice='" + optionDeliveryPrice + '\'' +
                 '}';
     }
 
