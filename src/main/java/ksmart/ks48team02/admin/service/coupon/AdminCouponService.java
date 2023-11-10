@@ -1,7 +1,7 @@
 package ksmart.ks48team02.admin.service.coupon;
 
 
-import ksmart.ks48team02.admin.dto.coupon.Coupon;
+import ksmart.ks48team02.admin.dto.Coupon;
 import ksmart.ks48team02.admin.mapper.coupon.AdminCouponMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
