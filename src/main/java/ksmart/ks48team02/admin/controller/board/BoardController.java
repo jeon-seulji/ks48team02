@@ -75,7 +75,7 @@ public class BoardController {
         return "admin/board/coupon";
     }
 
-     //쿠폰 등록& 수정
+     //쿠폰 수정
     @GetMapping("/couponAdd")
     public String couponAddPage(@RequestParam(name = "couponCode", required = false) String couponCode,
                                 Model model){
@@ -86,5 +86,12 @@ public class BoardController {
         log.info("특정쿠폰 정보조회: {}", couponAdd);
         model.addAttribute("couponAdd", couponAdd);
         return "admin/board/couponAdd";
+    }
+
+    // 쿠폰 등록
+    @GetMapping("/couponCreate")
+    public String couponCreate(){
+
+        return "admin/board/couponCreate";
     }
 }
