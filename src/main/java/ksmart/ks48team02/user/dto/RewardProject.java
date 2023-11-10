@@ -1,7 +1,7 @@
 package ksmart.ks48team02.user.dto;
 
-import ksmart.ks48team02.user.dto.RewardOption;
 
+import ksmart.ks48team02.user.dto.RewardOption;
 import java.util.List;
 
 public class RewardProject {

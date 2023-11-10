@@ -3,6 +3,7 @@ package ksmart.ks48team02.seller.controller.donation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.seller.dto.DonationList;
+import ksmart.ks48team02.admin.dto.Donation;
 import ksmart.ks48team02.seller.service.donation.SellerDonationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

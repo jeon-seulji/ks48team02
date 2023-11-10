@@ -100,13 +100,11 @@ public class PojectRegistrationContoller {
         JsonObject jsonObject = new JsonObject();
 
         String fileRoot = "C:\\summernote_image\\";	//저장될 외부 파일 경로
+        // 우분투 파일 루트 file:////home/springboot/resource
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
-
         String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
-
         File targetFile = new File(fileRoot + savedFileName);
-
         try {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
