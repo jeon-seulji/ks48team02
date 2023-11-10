@@ -400,18 +400,18 @@
                         <div class="col-8">
                             <label for="projectCategory" class="form-label fw-bord text-dark">카테고리를 선택해 주세요</label>
                             <br>
-                            <select id="projectCategory" name="projectCategory">
+                            <select id="projectCategory" name="rewardCategoryCode">
                                 <option value="">==선택==</option>
                                 <option th:if="${categoryList != null}" th:each="l : ${categoryList}" th:text="${l.categoryName}" th:value="${l.totalCategoryCode}"></option>
                             </select>
                             <br><br>
 
                             <label for="projectSubject" class="form-label fw-bord text-dark">프로젝트의 제목을 적어주세요</label>
-                            <input type="text" class="form-control" id="projectSubject" placeholder="제목을 입력해 주세요.">
+                            <input name="projectSubject" type="text" class="form-control" id="projectSubject" placeholder="제목을 입력해 주세요.">
                             <br>
 
                             <label for="projectGoalMoney" class="form-label fw-bord text-dark">목표 금액을 적어주세요</label>
-                            <input type="number" class="form-control" id="projectGoalMoney" placeholder="목표 금액을 입력해주세요.">
+                            <input name="projectGoalMoney" type="number" class="form-control" id="projectGoalMoney" placeholder="목표 금액을 입력해주세요.">
                             <br>
 
                             <div class="mb-3">
@@ -420,7 +420,7 @@
                                 <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
                                     <img src="" class="img-thumbnail" alt="썸네일이미지" style="height: 200px; width: 350px; display: none;">
                                 </div>
-                                <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
+                                <input name="projectThumbnailImage" class="form-control" id="thumbnailImage" type="file" accept="image/*">
                             </div>
 
                             <br>

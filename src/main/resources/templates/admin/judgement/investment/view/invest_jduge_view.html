@@ -247,7 +247,7 @@
                         <td th:if="*{lawSatistifyCode == null}" style="background: #fff;" colspan="2">해당없음</td>
                         <td th:unless="*{lawSatistifyCode == null}" th:text="*{lawSatistifyCode}"
                             style="background: #fff;" colspan="2"></td>
-                        <td th:if="*{lawSatistifyReason == null}">-</td>
+                        <td th:if="*{lawSatistifyReason == null}">해당없음</td>
                         <td th:unless="*{lawSatistifyReason == null}" th:text="*{lawSatistifyReason}"></td>
                         <td th:if="*{incongruitySectorsCode == null}">해당없음</td>
                         <td th:unless="*{incongruitySectorsCode == null}" th:text="*{incongruitySectorsCode}"></td>

@@ -1,6 +1,4 @@
-package ksmart.ks48team02.user.dto.reward;
-
-import ksmart.ks48team02.user.dto.Customer;
+package ksmart.ks48team02.user.dto;
 
 import java.util.List;
 
