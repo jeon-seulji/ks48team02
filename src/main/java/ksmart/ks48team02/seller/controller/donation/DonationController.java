@@ -1,18 +1,41 @@
 package ksmart.ks48team02.seller.controller.donation;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.seller.dto.DonationList;
+import ksmart.ks48team02.admin.dto.Donation;
+import ksmart.ks48team02.seller.service.donation.SellerDonationService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller("sellerDonationController")
 @RequestMapping("/seller/donation")
+@AllArgsConstructor
 public class DonationController {
+    SellerDonationService sellerDonationService;
 
     @GetMapping("/products")
-    public String mainPage(Model model){
+    public String mainPage(Model model,
+                           HttpServletRequest request,
+                           @RequestParam(name = "donationCode", required = false) String donationCode){
+        HttpSession session = request.getSession();
         model.addAttribute("title","판매자 : 기부 프로젝트 목록");
         model.addAttribute("contentsTitle","기부 프로젝트 목록");
+        String memberId = (String) session.getAttribute("SID");
+        List<DonationList> donationList = sellerDonationService.getDonationProjectList(memberId);
+        model.addAttribute("donationList", donationList);
+
+        if(donationCode != null){
+            sellerDonationService.startProject(donationCode);
+            return "redirect:/seller/donation/products";
+        }
+
         return "seller/donation/products/main";
     }
 

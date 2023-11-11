@@ -1,6 +1,7 @@
 package ksmart.ks48team02.admin.service.donation;
 
-import ksmart.ks48team02.admin.dto.donation.Donation;
+import ksmart.ks48team02.admin.dto.Donation;
+import ksmart.ks48team02.admin.dto.DonationJudgementReason;
 import ksmart.ks48team02.admin.mapper.donation.AdminDonationMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,5 +22,18 @@ public class AdminDonationService {
         List<Donation> donationList = adminDonationMapper.getDonationList();
         return donationList;
     }
+
+    public void judgementApprove(String donationCode){
+        adminDonationMapper.judgementApprove(donationCode);
+    }
+
+    public void judgementReject(String donationCode, String judgeRejectReason, String judgeRejectReasonDetail ,String adminId){
+        adminDonationMapper.judgementReject(donationCode, judgeRejectReason, judgeRejectReasonDetail, adminId);
+    }
+    public List<DonationJudgementReason> judgementReason(){
+        return adminDonationMapper.judgementReason();
+    }
+
+
 
 }

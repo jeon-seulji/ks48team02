@@ -54,3 +54,95 @@ $('#rankReload').on('click', function(){
     $('.tab-menu-btn li:first-child').addClass('active');
 });
 
+
+// admin orderList ajax
+function adminOrderListAjax(param, callback){
+    const request = $.ajax({
+        url: '/admin/order/ajax/list',
+        method : 'POST',
+        data : {"orderby" : param},
+        dataType: 'json'
+    })
+    request.done(function(list){
+        callback(list);
+    });
+    request.fail(function(err){
+        console.log(err);
+    })
+}
+
+$('select[name="orderby"]').on('change',function(){
+    $('#allSelectBtn').prop('checked', false);
+    let value = $(this).val();
+    $('.select-list-count').text('0');
+    adminOrderListAjax(value, function(list) {
+        $('#orderListForm tbody').remove();
+        $('#orderListForm table').append('<tbody></tbody>');
+        if (list.length == 0) {
+            $('#orderListForm tbody').append(`<tr>
+                                                 <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                                              </tr>`);
+        }
+        $(list).each((idx, l) => {
+            $('#orderListForm tbody').append(`<tr></tr>`)
+                                     .append(
+                                         `<td class="table-data-center">
+                                            <input type="checkbox" name="selectList">
+                                         </td>`
+                                     )
+                                     .append(
+                                         `<td class="table-data-center">
+                                            <a title="${l.orderCode}" class="detail-link" href="/admin/order/detail?orderCode=${l.orderCode}&goodsPartition=${l.goodsPartition}">${l.orderCode}</a>
+                                         </td>`
+                                     )
+                                     .append(
+                                         `<td title="${l.orderApplicationDate}" class="table-data-center">
+                                            ${l.orderApplicationDate}
+                                         </td>`
+                                     )
+                                    .append(
+                                        `<td class="table-data-center">
+                                            <span>${l.goodsPartition === 'rwd' ? '리워드' : (l.goodsPartition === 'don' ? '기부' : '투자')}</span>
+                                        </td>`
+                                    )
+                                    .append(
+                                        `<td title="${l.orderFundingName}" class="table-data-center">
+                                            ${l.orderFundingName}
+                                        </td>`
+                                    )
+                                    .append(
+                                        `<td title="${l.orderCategoryDetail}">
+                                            ${l.orderCategoryDetail}
+                                        </td>`
+                                    )
+                                    .append(
+                                        `<td class="table-data-center">
+                                            ${l.orderName}
+                                        </td>`
+                                    )
+                                    .append(
+                                        `<td  class="table-data-center">
+                                                    <input type="hidden" name="orderPrice" value="${l.orderTotalPrice}">
+                                                    <span class="order-pay">0</span> 원
+                                        </td>`
+                                    )
+                                    .append(
+                                        `<td class="table-data-center">
+                                            ${l.orderConfirmDate == null? '-':l.orderConfirmDate}
+                                        </td>`
+                                    )
+                                    .append(
+                                        `<td class="table-data-center">
+                                            ${l.orderCancellDate == null? '-':l.orderCancellDate}
+                                        </td>`
+                                    )
+
+        });
+
+
+        let priceEls = $('input[name="orderPrice"]');
+        payFormat(priceEls);
+
+
+    });
+});

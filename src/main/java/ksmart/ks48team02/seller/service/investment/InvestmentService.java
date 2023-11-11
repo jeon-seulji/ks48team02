@@ -3,7 +3,7 @@ package ksmart.ks48team02.seller.service.investment;
 import ksmart.ks48team02.seller.mapper.investment.SellerInvestmentMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ksmart.ks48team02.seller.dto.investment.SellerLawSatistifyReason;
+import ksmart.ks48team02.seller.dto.SellerLawSatistifyReason;
 import java.util.List;
 
 @Service("sellerInvestmemtService")

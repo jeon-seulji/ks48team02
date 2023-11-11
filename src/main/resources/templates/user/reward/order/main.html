@@ -19,6 +19,9 @@
             transition: 0.1s;
             color: #0b44d7;
         }
+
+        #payment-button{ width:100%; padding:15px; background-color:#3065AC; color:white; border-radius:3px; font-size:16px; border:none; margin-top:10px}
+        .title {margin: 0 0 4px; font-size: 24px; font-weight: 600;color: #4e5968;}
     </style>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
@@ -37,11 +40,8 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!--  다음 주소찾기 api   -->
 
-
-    <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
-    <!--  네이버페이 api-->
-    <script type="text/javascript" src="https://pay.naver.com/customer/js/naverPayButton.js"></script>
-    <!-- 네이버페이 button -->
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
+    <!--   토스페이-->
 
 
 
@@ -53,14 +53,19 @@
 <th:block layout:fragment="customJsCode">
 
     <script th:inline="javascript">
-
-
+        //토스페이에 담을 주문 상품 정보
+        const products =[];
         //등급 별 할인율
         let orderMemberDiscount = Number([[${orderMemberInfo.rewardCustomerRank.discountRate}]]/100);
         //등급 별 적립 포인트
         let orderMemberSavePoint = Number([[${orderMemberInfo.rewardCustomerRank.pointSavingRate}]]/100);
         //회원 보유 포인트
         let havePoint = [[${orderMemberInfo.customer.customerPoint}]];
+        //주문자 회원 정보
+        let name = [[${orderMemberInfo.memberName}]];
+        let mobile = [[${orderMemberInfo.memberContactInfo}]];
+        let addr = [[${orderMemberInfo.customer.customerAddr}]];
+        let addrDetail = [[${orderMemberInfo.customer.customerAddrDetail}]];
 
         $(function(){
 
@@ -94,6 +99,9 @@
             // 다음 버튼 클릭시 페이지 이동, 선택한 옵션 정보 입력
             $('.nextBtn').click(function(){
 
+                //토스페이에 받을 제품 배열 초기화,
+                products.length = 0;
+
                 if($('#orderInfo').find('input[type="checkbox"]:checked').length < 1) {
                     alert('리워드를 선택해 주세요');
                     return;
@@ -112,9 +120,20 @@
                 $(selectOption).each(function(idx,item){
 
                     let optionName = $(item).find('.optionName').text();
-                    let optionPrice = $(item).find('.optionPrice').text();
+                    let optionContents = $(item).find('.optionContents').text();
+                    let optionPrice = Number($(item).find('.optionPrice').text().replaceAll(',','').replaceAll('원',''));
                     let optionAmount = $(item).find('.optionAmount').val();
                     let optionDeliverPrice = $(item).find('.optionDeliverPrice').text();
+
+                    //토스페이에 담을 옵션 정보 객체.
+                    const product ={};
+                    product.name = optionName;
+                    product.unitAmount = optionPrice;
+                    product.quantity = optionAmount;
+                    product.currency = 'KRW';
+                    product.description = optionContents;
+                    products.push(product);
+
 
                     //배송비가 무료배송이면 합산 x 아니면 가장 높은 배송비 할당.
                     if(optionDeliverPrice != '무료 배송') {
@@ -124,7 +143,7 @@
                         }
                     }
                     //선택된 옵션 순회하면서 옵션 금액을 리워드 금액에 합산
-                    totalRewardPrice += (Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount);
+                    totalRewardPrice += (optionPrice * optionAmount);
 
                     // 선택한 옵션태그 담을 변수
                     let addSelectedOption;
@@ -139,7 +158,7 @@
 
 
                     $(addSelectedOption).find('.orderOptionName').text(optionName);
-                    $(addSelectedOption).find('.orderOptionPrice').text(`${(Number(optionPrice.replaceAll('원','').replaceAll(',','')) * optionAmount).toLocaleString('ko-KR')} 원`);
+                    $(addSelectedOption).find('.orderOptionPrice').text(`${(optionPrice * optionAmount).toLocaleString('ko-KR')} 원`);
                     $(addSelectedOption).find('.orderOptionAmount').text(optionAmount);
                     $('#selectedOption').prepend($(addSelectedOption));
                 });
@@ -359,11 +378,6 @@
                 let deliverMemberAddr = $('#deliverMemberAddr');
                 let deliverMemberAddrDetail = $('#deliverMemberAddrDetail');
 
-                let name = [[${orderMemberInfo.memberName}]];
-                let mobile = [[${orderMemberInfo.memberContactInfo}]];
-                let addr = [[${orderMemberInfo.customer.customerAddr}]];
-                let addrDetail = [[${orderMemberInfo.customer.customerAddrDetail}]];
-
                 if($(this).prop('checked')) {
                     $(deliverMemberName).val(name);
                     $(deliverMemberMobile).val(mobile);
@@ -375,7 +389,103 @@
                     $(deliverMemberAddr).val('');
                     $(deliverMemberAddrDetail).val('');
                 }
-            })
+
+            });
+
+            const clientKey = "test_ck_DpexMgkW36RWA44MXDDN3GbR5ozO"
+            const customerKey = "Rx0ztqnD-WCYUjhdczHyy" // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
+            // let amount = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
+
+
+            //const coupon = document.getElementById("coupon-box")
+            const button = document.getElementById("payment-button")
+            // ------  결제위젯 초기화 ------
+            // 비회원 결제에는 customerKey 대신 ANONYMOUS를 사용하세요.
+            const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
+            // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
+            // ------  결제 UI 렌더링 ------
+            // 결제 UI를 렌더링할 위치를 지정합니다. `#payment-method`와 같은 CSS 선택자와 결제 금액 객체를 추가하세요.
+            // DOM이 생성된 이후에 렌더링 메서드를 호출하세요.
+            // https://docs.tosspayments.com/reference/widget-sdk#renderpaymentmethods선택자-결제-금액-옵션
+            const paymentMethodWidget = paymentWidget.renderPaymentMethods(
+                "#payment-method",
+                { value: Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''))},
+                // 렌더링하고 싶은 결제 UI의 variantKey
+                // 결제 수단 및 스타일이 다른 멀티 UI를 직접 만들고 싶다면 계약이 필요해요.
+                // https://docs.tosspayments.com/guides/payment-widget/admin#멀티-결제-ui
+                { variantKey: "DEFAULT" }
+            );
+
+            // ------  이용약관 UI 렌더링 ------
+            // 이용약관 UI를 렌더링할 위치를 지정합니다. `#agreement`와 같은 CSS 선택자를 추가하세요.
+            // https://docs.tosspayments.com/reference/widget-sdk#renderagreement선택자-옵션
+            paymentWidget.renderAgreement(
+                '#agreement',
+                { variantKey: "AGREEMENT" } // 기본 이용약관 UI 렌더링
+            );
+            // ------ 금액 업데이트 ------
+            // 새로운 결제 금액을 넣어주세요.
+            // https://docs.tosspayments.com/reference/widget-sdk#updateamount결제-금액
+
+
+            // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
+            // 더 많은 결제 정보 파라미터는 결제위젯 SDK에서 확인하세요.
+            // https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
+            button.addEventListener("click", function () {
+
+                const paymentMethodsWidget = paymentWidget.renderPaymentMethods(); // 결제창
+                const selectedPaymentMethod = paymentMethodsWidget.getSelectedPaymentMethod(); // 결제 정보
+                paymentMethodsWidget.updateAmount(Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',','')));
+
+
+
+                console.log(products);
+
+                console.log(selectedPaymentMethod);
+                const paymentObj = {
+                    orderId: "Rx0ztqnD-WCYUjhdczHyy",
+                    orderName: "토스 티셔츠 외 2건",
+                    customerEmail: [[${orderMemberInfo.memberEmail}]],
+                    customerName: [[${orderMemberInfo.memberName}]],
+                    mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
+                    products:products
+                }
+                paymentWidget.requestPayment({
+                    orderId: "Rx0ztqnD-WCYUjhdcziyz",
+                    orderName: "토스 티셔츠 외 2건",
+                    successUrl: `${window.location.origin}/user/reward/payment`,
+                    failUrl: `${window.location.origin}/fail`,
+                    customerEmail: [[${orderMemberInfo.memberEmail}]],
+                    customerName: [[${orderMemberInfo.memberName}]],
+                    mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
+                    products:products
+                })
+                /*
+                paymentWidget.requestPayment(paymentObj)
+                             .then(function(data){
+                                 console.log(data);
+                                 console.log(paymentObj);
+                                 //결제 완료 후 처리
+
+                                 for(const key in paymentObj){
+                                     const ele = $('<input />', { 'type': 'hidden', 'name': key, 'value': paymentObj[key]});
+                                     $('form').append(ele);
+                                 }
+                                $('form').submit();
+                             })
+                             .catch(function(err){
+                                 // 에러 처리: 에러 목록을 확인하세요
+                                 // https://docs.tosspayments.com/reference/error-codes#failurl로-전달되는-에러
+                                 if (error.code === 'USER_CANCEL') {
+                                    // 결제 고객이 결제창을 닫았을 때 에러 처리
+                                 } else if (error.code === 'INVALID_CARD_COMPANY') {
+                                    // 유효하지 않은 카드 코드에 대한 에러 처리
+                                 }
+                             });
+
+                 */
+            });
+
         });
 
         //사용 포인트 음수로 입력하지 못하게
@@ -857,6 +967,14 @@
                                             신용카드
                                         </label>
                                     </div>
+
+                                    <!-- 결제 방법 영역-->
+                                    <div class="title">결제 방법</div>
+                                    <div id="payment-method"></div>
+                                    <div id="agreement"></div>
+                                    <button id="payment-button" type="button">결제하기</button>
+
+
                                 </div>
                             </div>
 
