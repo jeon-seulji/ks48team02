@@ -1,19 +1,34 @@
 package ksmart.ks48team02.user.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.user.dto.InvestmentInfo;
+import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller("userInvestmentController")
 @RequestMapping("/user/investment")
 public class InvestmentController {
 
+    private final UserInvestmentService userInvestmentService;
+
+    public InvestmentController(UserInvestmentService userInvestmentService) {
+        this.userInvestmentService = userInvestmentService;
+    }
+
+
     @GetMapping(value = {"", "/"})
     public String getMainPage(Model model) {
 
+        List<InvestmentInfo> investmentInfo = userInvestmentService.getInvestmentInfo();
+        model.addAttribute("investmentInfo", investmentInfo);
+
         model.addAttribute("title", "투자 메인 페이지");
+
 
         return "user/investment/main";
     }

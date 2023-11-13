@@ -123,6 +123,14 @@
 
 
         });
+
+
+        // 달성 금액 설정
+        $('.investment-item-span-second').each(function (){
+            $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+        });
+
+
     </script>
 
 </th:block>
@@ -151,158 +159,36 @@
                             <option>채권</option>
                         </select>
                         <ul class="d-flex" style="margin-top: 5px">
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">추천순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">마감임박순</li>
+                            <li id="recommendationOrder" class="ml-3" onclick="sortItemClickedStyle(this)">추천순</li>
+                            <li id="latestOrder" class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
+                            <li id="popularityOrder" class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>
+                            <li id="recruitmentAmountOrder" class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
+                            <li id="deadlineOrder" class="ml-3" onclick="sortItemClickedStyle(this)">마감임박순</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="container stretch">
+                <div class="container stretch" style="width: 100%; height: 100%">
                     <div class="row">
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                                <img class="investment-item-third-child-image" src="https://ohmycompany.imgix.net/uploads/invest/main/MAIN_202308250201186818d6.jpg?lossless=1&h=450">
+                        <div class="col investment-item-box col-lg-4" th:if="${investmentInfo != null}" th:each="l : ${investmentInfo}"
+                             th:onclick="|location.href='@{/user/investment/detail/main(investmentCode=${l.investmentCode})}'|">
+                            <div class="investment-item-first-child">
+                                <img class="investment-item-third-child-image" th:src="${l.investmentImage}">
                             </div>
                             <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
+                                <span class="investment-item-span-first" th:value="${l.investAchievementPercent}">[[${l.investAchievementPercent}]]%</span>
+                                <input class="investment-item-goalMoney" th:value="${l.investmentAmount}" hidden="hidden"/>
+                                <span class="investment-item-span-second" th:text="${l.investmentAmount}"></span>
+                                <span class="investment-item-span-third" th:value="${l.investmentDeadlineCnt}">[[${l.investmentDeadlineCnt}]]일 남음</span>
                             </div>
                             <div class="investment-item-third-child project-title">
-                                <a title="마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼, 커핑커피" th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼, 커핑커피</a>
+                                <a th:text="${l.investmentSubject}" th:href="@{/user/investment/detail/main}"></a>
                             </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
+                            <div class="investment-item-fourth-child" th:text="${l.investmentCompany}"></div>
                         </div>
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                                    </div>
-                            <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="investment-item-third-child project-title">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
-                            </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
-                        </div>
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                            </div>
-                            <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="investment-item-third-child project-title">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
-                            </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
-                        </div>
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                            </div>
-                            <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="investment-item-third-child project-title">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
-                            </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
-                        </div>
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                            </div>
-                            <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="investment-item-third-child project-title">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
-                            </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
-                        </div>
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                            </div>
-                            <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="investment-item-third-child project-title">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
-                            </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
-                        </div>
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                            </div>
-                            <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="investment-item-third-child project-title">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
-                            </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
-                        </div>
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                            </div>
-                            <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="investment-item-third-child project-title">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
-                            </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
-                        </div>
-                        <div class="col investment-item-box">
-                            <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                            </div>
-                            <div class="investment-item-second-child">
-                                <span class="investment-item-span-first">103% 달성</span>
-                                <span class="investment-item-span-second">1,033,580,000원</span>
-                                <span class="investment-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="investment-item-third-child project-title">
-                                <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼</a>
-                            </div>
-                            <div class="investment-item-fourth-child">
-                                플라이강원(주)
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
