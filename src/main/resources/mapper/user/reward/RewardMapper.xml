@@ -22,20 +22,21 @@
         <result property="RegCompany" column="reg_company"/>
         <result property="projectRegDate" column="project_reg_date"/>
         <result property="searchCount" column="search_count"/>
-        <result property="deliveryPrice" column="delivery_price"/>
         <result property="projectJudgmentReason" column="project_judgment_reason_detail"/>
-        <result property="getProjectJudgementDate" column="project_judgment_date"/>
+        <result property="projectJudgementDate" column="project_judgment_date"/>
         <result property="projectStartDate" column="project_start_date"/>
         <result property="projectEndDate" column="project_end_date"/>
         <result property="projectCondition" column="project_condition"/>
 
         <collection property="rewardOptionList" javaType="list" ofType="RewardOption">
             <id property="rewardOptionCode" column="reward_option_code"/>
-            <result property="optionContents" column="reward_project_code"/>
-            <result property="rewardProjectCode" column="option_contentss"/>
+            <result property="rewardProjectCode" column="reward_project_code"/>
+            <result property="optionContents" column="option_contents"/>
             <result property="optionPrice" column="option_price"/>
-            <result property="optionLimitQuantity" column="option_limit quantity"/>
+            <result property="optionLimitQuantity" column="option_limit_quantity"/>
             <result property="optionName" column="option_name"/>
+            <result property="optionDeliveryPrice" column="option_delivery_price"/>
+            <result property="optionEstimatedDeliveryDate" column="option_estimated_delivery_date"/>
         </collection>
     </resultMap>
 

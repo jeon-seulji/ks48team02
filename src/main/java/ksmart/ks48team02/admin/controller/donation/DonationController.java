@@ -2,7 +2,6 @@ package ksmart.ks48team02.admin.controller.donation;
 
 import ksmart.ks48team02.admin.dto.Donation;
 import ksmart.ks48team02.admin.dto.DonationJudgementReason;
-import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.service.donation.AdminDonationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

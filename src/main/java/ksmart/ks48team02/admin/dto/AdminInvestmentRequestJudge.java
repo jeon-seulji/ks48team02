@@ -1,5 +1,7 @@
 package ksmart.ks48team02.admin.dto;
 
+import ksmart.ks48team02.admin.dto.AdminInvestment;
+
 public class AdminInvestmentRequestJudge {
 
     private String investmentRequestJudgeCode;
