@@ -10,11 +10,11 @@
     <div style="display : flex;flex-direction: column; padding: 30px; align-items: center;">
 
         <div class="bodyContainer">
-            <!-- 스토어 소식 리스트 항목 -->
+            <!-- 스토어 새소식 리스트 항목 -->
             <div class="contentsContainer">
                 <div>
-                    <!-- 스토어 소식 내용 -->
-                    <div >
+                    <!-- 스토어 새소식 -->
+                    <div class="store-news" th:if="${storeNewsList != null}" th:each="list : ${storeNewsList}">
                         <!-- 게시 날짜  -->
                         <div>
                             <p>1주일 전</p>
@@ -23,19 +23,21 @@
                         <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
                             <img style="width: 250px; height: 250px;" src="https://contents.lotteon.com/itemimage/_v150640/LO/19/98/02/00/32/_1/99/80/20/03/3/LO1998020032_1998020033_1.jpg/dims/optimize/dims/resizemc/400x400"
                                  alt="...">
-                        </div>
-                        <!-- 스토어 소식 text -->
-                        <div class="store-news" >
-                            <div >
-                                <strong>가성비 끝판왕 누젠 모래시계 가열식 가습기가 돌아왔다!</strong>
-                            </div>
+                        </div >
+                        <!-- 스토어 새소식 text -->
+                        <div>
                             <div>
-                                <p>물을 끓여 발생하는 수증기로 가습하는 방식의 가습기입니다. 다른 방식의 가습기보다 살균력이 탁월하며 수증기가 공기 중에 잘 퍼져 가습 효과가 좋은 것이 특징입니다.
-                                👉 펀딩하러 가기: http://www.flocky.</p>
+                                <strong th:text="${list.title}"></strong>
+                            </div>
+                            <div >
+                                <p th:text="${list.contents}"></p>
                             </div>
                         </div>
-
-
+                    </div>
+                    <div class="store-news" th:if="${storeNewsList == null}">
+                        <div style="display: flex; justify-content: center; align-items: center; margin-top: 40px; margin-bottom: 10px; ">
+                            <h5 style="color: dimgrey;">새소식이 없습니다.</h5>
+                        </div>
                     </div>
                 </div>
             </div>
