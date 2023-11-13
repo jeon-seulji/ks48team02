@@ -1,5 +1,6 @@
 package ksmart.ks48team02.user.controller.investment;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,9 +51,17 @@ public class InvestmentController {
     }
 
     @GetMapping("/order")
-    public String orderPage(Model model) {
+    public String orderPage(Model model, HttpSession session) {
 
         model.addAttribute("title", "투자 주문 페이지");
+
+        String memberId = (String) session.getAttribute("SID");
+
+        if(memberId == null) {
+            return "user/account/login";
+        }
+
+
 
         return "user/investment/order/main";
     }
