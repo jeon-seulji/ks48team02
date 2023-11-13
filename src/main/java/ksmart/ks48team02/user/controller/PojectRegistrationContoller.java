@@ -72,18 +72,22 @@ public class PojectRegistrationContoller {
     }
 
     //리워드 프로젝트 등록 진행.
-
     @PostMapping(value= "/reward")
     @ResponseBody
     public String rewardRegistrationPage(@RequestBody RewardProject parameters) throws JsonProcessingException {
 
-
-
-        System.out.println(parameters);
         rewardService.addRewardProject(parameters);
 
-        return "redirect:/user/reward";
+        return "redirect:/user/projectRegistration/reward/success";
     }
+
+    //리워드 프로젝트 등록 완료 페이지
+    @GetMapping("/reward/success")
+    public String rewardProjectSuccessPage(){
+
+        return "user/projectRegistration/reward/reward_insert_success";
+    }
+
 
     //투자 프로젝트 심사 요청 페이지
     @GetMapping(value = {"/investment/judge"})

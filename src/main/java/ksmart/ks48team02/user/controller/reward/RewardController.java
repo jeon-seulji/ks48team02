@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.Coupon;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
+import ksmart.ks48team02.user.controller.PojectRegistrationContoller;
 import ksmart.ks48team02.user.dto.Member;
+import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.reward.RewardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,7 @@ import java.util.Map;
 @RequestMapping("/user/reward")
 public class RewardController {
 
+    private static final Logger log = LoggerFactory.getLogger(PojectRegistrationContoller.class);
     private static final Logger Log = LoggerFactory.getLogger(RewardController.class);
     private final RewardService rewardService;
     private final AdminCouponService adminCouponService;
@@ -40,13 +43,19 @@ public class RewardController {
     //리워드 메인 페이지
     @GetMapping(value = {"" , "/"})
     public String mainPage(Model model) {
-
+        List<RewardProject> rewardProjectList = rewardService.rewardProjectList();
+        model.addAttribute("rewardProjectList",rewardProjectList);
         return "user/reward/main";
     }
 
     //리워드 상세 페이지
     @GetMapping("/detail")
-    public String detailPage(Model model) {
+    public String detailPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+
+        model.addAttribute("rewardProject",rewardProject);
+        log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
 
         return "user/reward/detail/main";
     }
@@ -75,7 +84,8 @@ public class RewardController {
 
     //리워드 주문 페이지
     @GetMapping("/order")
-    public String orderPage(Model model, HttpSession session) {
+    public String orderPage(Model model, HttpSession session, @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                            @RequestParam(name = "rewardOptionCode", required = false) String rewardOptionCode) {
 
 
         String memberId = (String) session.getAttribute("SID");

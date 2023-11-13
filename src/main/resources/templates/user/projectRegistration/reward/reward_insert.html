@@ -154,22 +154,6 @@
                 autoclose: true
             });
 
-            //프로젝트 시작 일자 선택하면 프로젝트 마감 일자 시작일자 이전 날짜는 선택 못하게.
-            // $('#projectStartDate').change(function () {
-            //     let projectEndDate = $('#projectEndDate');
-            //     let startDate = new Date($(this).val());
-            //     let endDate = new Date($(projectEndDate).val());
-            //
-            //     $(projectEndDate).prop('disabled', startDate == null);
-            //     projectEndDate.datepicker('setStartDate', startDate);
-            //
-            //     if (startDate >= endDate) {
-            //         $(projectEndDate).val('');
-            //     }
-            // });
-
-
-
             //summerNote
             $('#projectContents').summernote({
                 height: 700,                 // 에디터 높이
@@ -399,8 +383,8 @@
                             $.each($(item).find('input, textarea'),(idx,item)=>{
 
                                 let key = $(item).attr('name');
-
                                 let value = $(item).val();
+
                                 if(key == 'optionPrice') {
                                     value= Number($(item).val().replaceAll('원','').replaceAll(',',''));
                                 }
@@ -422,7 +406,6 @@
                         };
 
                         $(validCheck).each((idx,item)=>{
-                            console.log(item);
                             let key = $(item).attr('name');
                             let value = $(item).val();
                             paramReward[key] = value;
@@ -436,13 +419,12 @@
                             data: JSON.stringify(paramReward),
                             dataType: 'json',
                             success: function(){
-                                console.log('ss');
+                                console.log('등록 성공')
+                                window.location.replace('/user/projectRegistration/reward/success');
                             },
                             error: function(err){
                             }
                         });
-
-                         //$('#projectRegistrationForm').submit();
                     }
                 }
             });

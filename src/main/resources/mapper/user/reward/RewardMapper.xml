@@ -27,6 +27,10 @@
         <result property="projectStartDate" column="project_start_date"/>
         <result property="projectEndDate" column="project_end_date"/>
         <result property="projectCondition" column="project_condition"/>
+        <result property="storeImage" column="store_image"/>
+        <result property="storeLike" column="like_count"/>
+        <result property="storeMobile" column="contact_info"/>
+        <result property="categoryName" column="category_name"/>
 
         <collection property="rewardOptionList" javaType="list" ofType="RewardOption">
             <id property="rewardOptionCode" column="reward_option_code"/>
@@ -51,6 +55,7 @@
         <result property="memberContactInfo" column="contact_info"/>
         <result property="unRegDate" column="unreg_date"/>
         <result property="unRegStatus" column="unreg_status"/>
+
 
         <association property="customer" javaType="Customer">
             <id property="customerCode" column="customer_code"/>
@@ -107,37 +112,35 @@
         WHERE
             m.member_id = #{memberId};
     </select>
-
-    <insert id="addRewardProject" parameterType="ksmart.ks48team02.user.dto.RewardProject">
+    <!--리워드 프로젝트 등록-->
+    <insert id="addRewardProject" parameterType="RewardProject">
         <selectKey keyProperty="rewardProjectCode,storeCode,regCompany" resultType="hashmap" order="BEFORE">
             SELECT
-            (
-            CASE
-            WHEN COUNT(r.project_reg_date) = 0     THEN CONCAT('rwd_', CURDATE()+0, '_0001')
-            WHEN COUNT(r.project_reg_date) > 9999  THEN CONCAT('rwd', CURDATE()+0, '_', COUNT(r.project_reg_date)+1)
-            ELSE CONCAT('rwd_', CURDATE()+0, '_', LPAD(COUNT(r.project_reg_date)+1, 4, '0'))
-            END
-            ) AS rewardProjectCode,
-            (
-            SELECT
-            s.store_code
+                (
+                CASE
+                WHEN
+                    COUNT(r.project_reg_date) = 0     THEN CONCAT('rwd_', CURDATE()+0, '_0001')
+                WHEN
+                    COUNT(r.project_reg_date) > 9999  THEN CONCAT('rwd', CURDATE()+0, '_', COUNT(r.project_reg_date)+1)
+                ELSE
+                    CONCAT('rwd_', CURDATE()+0, '_', LPAD(COUNT(r.project_reg_date)+1, 4, '0'))
+                END ) AS rewardProjectCode,
+                (SELECT
+                    s.store_code
+                FROM
+                    store AS s
+                WHERE
+                    s.member_id = 'id003') AS storeCode,
+                (SELECT
+                    s.store_name
+                FROM
+                    store AS s
+                WHERE
+                    s.member_id = 'id003') AS regCompany
             FROM
-            store AS s
+                reward_project AS r
             WHERE
-            s.member_id = 'id003'
-            ) AS storeCode,
-            (
-            SELECT
-            s.store_name
-            FROM
-            store AS s
-            WHERE
-            s.member_id = 'id003'
-            ) AS regCompany
-            FROM
-            reward_project AS r
-            WHERE
-            DATE_FORMAT(r.project_reg_date, '%Y-%m-%d') = CURDATE();
+                DATE_FORMAT(r.project_reg_date, '%Y-%m-%d') = CURDATE();
         </selectKey>
         INSERT INTO reward_project
             (reward_project_code, store_code, reg_company, member_id, project_judgement_reason_code, admin_member_id, total_cagegory_code, project_subject, reward_like,
@@ -149,14 +152,92 @@
 
     </insert>
 
-    <insert id="rewardOptionAdd" parameterType="ksmart.ks48team02.user.dto.RewardOption">
+    <!--리워드 옵션 등록-->
+    <insert id="rewardOptionAdd" parameterType="RewardOption">
 
         INSERT INTO reward_option
             (reward_option_code, reward_project_code, option_contents, option_price, option_limit_quantity, option_name, option_delivery_price, option_estimated_delivery_date)
         VALUES
-            (#{sf_new_option_cd()},#{rewardProjectCode},#{optionContents},#{optionPrice},#{optionLimitQuantity},#{optionName},#{optionDeliveryPrice},#{optionEstimatedDeliveryDate})
+            (sf_new_option_cd(), #{rewardProjectCode},#{optionContents},#{optionPrice},#{optionLimitQuantity},#{optionName},#{optionDeliveryPrice},#{optionEstimatedDeliveryDate})
     </insert>
 
+
+    <!--리워드프로젝트 전체 조회-->
+    <select id="rewardProjectList" resultMap="RewardResultMap">
+        SELECT
+            r.reward_project_code,
+            r.total_cagegory_code,
+            r.project_judgement_reason_code,
+            r.member_id,
+            r.admin_member_id,
+            r.store_code,
+            r.project_subject,
+            r.project_contents,
+            r.reward_like,
+            r.project_thumbnail_image,
+            r.project_achievement_money,
+            r.project_goal_money,
+            r.project_achievement_percent,
+            r.reg_company,
+            r.project_reg_date,
+            r.search_count,
+            r.project_judgment_reason_detail,
+            r.project_judgment_date,
+            r.project_start_date,
+            r.project_end_date,
+            r.project_condition
+        FROM
+            reward_project AS r
+    </select>
+
+    <!--리워드 상세 페이지-->
+    <select id ="rewardProjectDetail" resultMap="RewardResultMap" parameterType="String">
+        SELECT
+            r.reward_project_code,
+            r.project_subject,
+            r.project_contents,
+            r.reward_like,
+            r.project_thumbnail_image,
+            r.project_achievement_money,
+            r.project_goal_money,
+            r.project_achievement_percent,
+            r.reg_company,
+            r.project_reg_date,
+            r.project_start_date,
+            r.project_end_date,
+            r.project_condition,
+            o.reward_option_code,
+            o.option_contents,
+            o.option_price,
+            o.option_limit_quantity,
+            o.option_name,
+            o.option_delivery_price,
+            o.option_estimated_delivery_date,
+            s.store_image,
+            s.like_count,
+            m.contact_info,
+            t.category_name
+        FROM
+            reward_project AS r
+        INNER JOIN
+            reward_option AS o
+        ON
+            r.reward_project_code = o.reward_project_code
+        INNER JOIN
+            store AS s
+        ON
+            r.store_code = s.store_code
+        INNER JOIN
+            total_category AS t
+        On
+            r.total_cagegory_code = t.total_category_code
+        INNER JOIN
+            member AS m
+        ON
+            s.member_id = m.member_id
+        WHERE
+            r.reward_project_code = #{rewardProjectCode};
+    </select>
 
 
 </mapper>
