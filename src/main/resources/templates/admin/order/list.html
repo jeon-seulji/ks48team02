@@ -245,13 +245,11 @@
             <!-- list pager -->
             <div class="board-page-area">
                 <div class="list-controller-inner">
-                    <ul>
-                        <li class="link-active"><a th:href="@{#}">1</a></li>
-                        <li><a th:href="@{#}">2</a></li>
-                        <li><a th:href="@{#}">3</a></li>
-                        <li><a th:href="@{#}">4</a></li>
-                        <li><a th:href="@{#}">5</a></li>
-                        <li><a th:href="@{#}">6</a></li>
+                    <ul class="order-list-pager">
+                        <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
+                            <li th:unless="${num != currentPage}" class="link-active"><a th:data-value="${num}">[[${num}]]</a></li>
+                            <li th:if="${num != currentPage}"><a th:data-value="${num}">[[${num}]]</a></li>
+                        </th:block>
                     </ul>
                     <div class="list-btn-area">
                         <button class="prev-transfer">

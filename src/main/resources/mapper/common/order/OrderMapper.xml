@@ -20,7 +20,7 @@
     </resultMap>
 
     <!-- order list 조회 -->
-    <select id="getOrderList" parameterType="String" resultMap="orderMap">
+    <select id="getOrderList" parameterType="map" resultMap="orderMap">
         SELECT
             ot.order_code,
             ot.member_id,
@@ -81,6 +81,21 @@
                 ORDER BY ot.order_application_date DESC
             </otherwise>
         </choose>
+
+        <if test="startRowNum > -1">
+            LIMIT  #{startRowNum}, #{rowPerPage};
+        </if>
+
+    </select>
+
+
+    <!-- 전체 주문 행 갯수 -->
+    <select id="getOrderCnt" resultType="int">
+        /* 전체 주문 행 조회 */
+        SELECT
+            COUNT(1)
+        FROM
+            order_table;
     </select>
 
     <!-- 특정 주문 조회 -->
