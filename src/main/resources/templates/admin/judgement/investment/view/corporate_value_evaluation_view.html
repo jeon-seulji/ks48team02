@@ -39,7 +39,7 @@
                     <h5>투자 심사요청 코드</h5>
                     <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=*{adminInvestmentRequestJudge.investmentRequestJudgeCode})}"
                        th:text="*{adminInvestmentRequestJudge.investmentRequestJudgeCode}"
-                       style="color: var(--maincolor);"></a>
+                       class="detail-link" style="color: var(--maincolor);"></a>
                 </div>
                 <div class="info-more-btn">
                     <a class="more-btn" style="padding: 7px 10px 9px 19px;">
@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <form id="projectInfoDetail" method="get">
+            <form class="projectInfoDetail" method="get">
                 <table class="settlement-log application-info-detail" style="border:none;">
                     <tbody>
                     <!-- contents -->
@@ -124,7 +124,8 @@
                 <h5>기업가치 평가 코드</h5>
                 <p th:text="*{corporateValueEvaluationCode}" style="color: var(--maincolor);"></p>
             </div>
-            <form id="projectInfoDetailBt" method="get">
+            <br>
+            <form class="projectInfoDetailBt" method="get">
                 <table class="settlement-log application-info-detail" style="border:none;">
                     <tbody>
                     <!-- contents -->
@@ -200,17 +201,21 @@
                         <td colspan="5" class="progress-radio-area">
                             <ul>
                                 <li>
-                                    <input id="preProgress" type="radio" name="progressSeleced" value="preProgress"
-                                           checked>
+                                    <input id="preProgress" type="radio" name="progressSeleced"
+                                           th:checked="${corporateValueEvaluationInfo.corpValueFulfill == 0}" value="0"
+                                           onclick="return false;">
                                     <label for="preProgress">심사 대기</label>
                                 </li>
                                 <li>
-                                    <input id="Progress" type="radio" name="progressSeleced" value="Progress">
+                                    <input id="Progress" type="radio" name="progressSeleced"
+                                           th:checked="${corporateValueEvaluationInfo.corpValueFulfill == 1}" value="1"
+                                           onclick="return false;">
                                     <label for="Progress">심사 승인</label>
                                 </li>
                                 <li>
                                     <input id="ProgressCompleted" type="radio" name="progressSeleced"
-                                           value="ProgressCompleted">
+                                           th:checked="${corporateValueEvaluationInfo.corpValueFulfill == 2}" value="2"
+                                           onclick="return false;">
                                     <label for="ProgressCompleted">심사 반려</label>
                                 </li>
                             </ul>

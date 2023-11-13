@@ -63,9 +63,9 @@
                     <option value="noBank">무통장입금</option>
                 </select>
             </td>
-            <td><input id="depositAccount" type="text" name="depositAccount" th:value="${paymentsInfo.depositAccount}"></td>
+            <td><input id="depositAccount" type="text" style="width:150px;"  name="depositAccount" th:value="${paymentsInfo.depositAccount}"></td>
             <td><input type="text" name="depositName" style="width:100px;" th:value="${paymentsInfo.depositName}"></td>
-            <td><input id="refundAccount" type="text" name="refundAccount" th:value="${paymentsInfo.refundAccount}"></td>
+            <td><input id="refundAccount" type="text" style="width:150px;" name="refundAccount" th:value="${paymentsInfo.refundAccount}"></td>
             <td><span th:text="${paymentsInfo.depositPrice}"></span> 원</td>
             <td><span th:text="${paymentsInfo.paymentDeadlineDate}"></span></td>
             <td><span th:text="${paymentsInfo.paymentCompletedDate}"></span></td>
@@ -78,7 +78,7 @@
 
     <div class="project-info-title" style="margin: 0 0 20px;">
         <h5>결제 코드</h5>
-        <p style="color: var(--maincolor);">IWP_20230922_00001</p>
+        <p style="color: var(--maincolor);" th:text="${paymentsInfo.paymentCode}"></p>
     </div>
 
     <table class="settlement-log application-info-detail" style="border:none;">
@@ -87,22 +87,31 @@
             <td>
                 주문자명
             </td>
-            <td colspan="6">
-                신형만
+            <td colspan="6" >
+                <input name="donationName" th:value="${paymentsInfo.donationName}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                주민등록번호
+            </td>
+            <td style="height: 35px; background: #fff;" colspan="6" >
+                <input type="text" th:value="${paymentsInfo.donationSecurityNumber}" name="donationSecurityNumber">
             </td>
         </tr>
         <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
             <td rowspan="2" class="title-td" style="height: 35px;">주문 상세</td>
             <td class="title-td" style="height: 35px; width: 20%">사용 기부 재화</td>
-            <td colspan="4" class="title-td" style="height: 35px;">총 금액</td>
+            <td class="title-td" style="height: 35px;">총 금액</td>
         </tr>
         <!-- option contents -->
         <tr class="option-info-tr">
             <td style="height: 35px; background: #fff;">
-                <input type="number" min="1" max="9999" value="500">
+                <span th:text="${paymentsInfo.donationGoods}"><span>개
             </td>
-            <td colspan="4" style="height: 35px; "><span>350,000</span>원</td>
+            <td style="height: 35px; "><span th:text="${paymentsInfo.donationPrice}">0</span>원</td>
         </tr>
+
         </tr>
     </table>
 </th:block>
@@ -111,7 +120,7 @@
 
     <div class="project-info-title" style="margin: 0 0 20px;">
         <h5>결제 코드</h5>
-        <p style="color: var(--maincolor);">IWP_20230922_00001</p>
+        <p style="color: var(--maincolor);" th:text="${paymentsInfo.paymentCode}"></p>
     </div>
 
     <table class="settlement-log application-info-detail" style="border:none;">
@@ -120,7 +129,7 @@
             <td>
                 주문자명
             </td>
-            <td colspan="6">
+            <td colspan="6" th:text="${OrderInfoById.orderName}">
                 신형만
             </td>
         </tr>
@@ -132,11 +141,11 @@
         </tr>
         <!-- option contents -->
         <tr class="option-info-tr">
-            <td style="height: 35px; background: #fff; "><span>35,500</span>원</td>
+            <td style="height: 35px; background: #fff; "><span th:text="${paymentsInfo.buyStockPrice}">35,500</span>원</td>
             <td style="height: 35px; ">
-                <input type="number" min="1" max="9999" value="500">
+                <span th:text="${paymentsInfo.buyStockCount}">35,500</span>
             </td>
-            <td colspan="4" style="height: 35px; "><span>17,500,000</span>원</td>
+            <td colspan="4" style="height: 35px; "><span th:text="${paymentsInfo.orderPrice}">17,500,000</span>원</td>
         </tr>
         <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
             <td style="height: 35px; width: 17%;">입금 은행명</td>
@@ -144,12 +153,12 @@
             <td style="height: 35px;">입금 기한</td>
             <td style="height: 35px;">환불 은행명</td>
             <td style="height: 35px;">환불 계좌번호</td>
-            <td style="height: 35px;">결제기한</td>
+            <td style="height: 35px;">결제일자</td>
             <td style="height: 35px;">결제상태</td>
         </tr>
         <tr>
             <td style="background: #fff;">
-                <select id="paymentsBank" type="text" name="paymentsBank">
+                <select id="investorsBankName" type="text" name="investorsBankName">
                     <option value="kb">국민</option>
                     <option value="ibk" selected>기업</option>
                     <option value="lh">농협</option>
@@ -162,10 +171,10 @@
                     <option value="noBank">무통장입금</option>
                 </select>
             </td>
-            <td><input id="orderBankNumber" type="text" name="orderBankNumber" value="50342-13-6453432"></td>
-            <td>2023-11-02 23:59:59</td>
+            <td><input id="investorsAccount" type="text" name="investorsAccount" th:value="${paymentsInfo.investorsAccount}"></td>
+            <td th:text="${paymentsInfo.subscriptionPaymentDate}"></td>
             <td>
-                <select id="paymentsBank" type="text" name="paymentsBank">
+                <select id="depositBankName" type="text" name="depositBankName">
                     <option value="kb">국민</option>
                     <option value="ibk" selected>기업</option>
                     <option value="lh">농협</option>
@@ -178,9 +187,9 @@
                     <option value="noBank">무통장입금</option>
                 </select>
             </td>
-            <td><input id="refundBankNumber" type="text" name="refundBankNumber" value="50342-13-6453432"></td>
-            <td>2023-10-05 23:59</td>
-            <td>결제완료</td>
+            <td><input id="depositAccount" type="text" name="depositAccount" th:value="${paymentsInfo.depositAccount}"></td>
+            <td th:text="${paymentsInfo.paymentDeadlineDate}"></td>
+            <td th:text="${paymentsInfo.subscriptionState}"></td>
         </tr>
 
     </table>

@@ -170,7 +170,6 @@ $('input[type="date"]').prop('min',nowDateFomat);
 $('select[name="deliveryMessage"]').on('change', function(){
     let selectedValue = $(this).val();
 
-    console.log(selectedValue, '<--');
     if(selectedValue == '5') {
         $('input[name="deliveryMessageDirect"]').attr('disabled', false).focus();
     } else {
@@ -203,7 +202,6 @@ function validationEmptyFn($els){
     $($els).each((idx, item) => {
         let value = $(item).val();
         let labelId = $(item).attr('id');
-        console.log(labelId, '<--?')
 
         if(value == null || value == '' || typeof value == 'undefined') {
             let labelText = $(`label[for=${labelId}]`).text();
@@ -302,7 +300,6 @@ function monthAndDaySetting(max){
 function payFormat($els){
     $($els).each((idx, item) => {
         let price = $(item).val();
-        console.log(item,'<-- item');
         let priceForm = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         $(item).siblings('.order-pay').text(priceForm);
     });

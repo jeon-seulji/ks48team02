@@ -12,6 +12,7 @@
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
     <script th:src="@{/admin/js/settlement/settlementJs.js}"></script>
+    <script th:src="@{/common/js/ajaxJs.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
@@ -47,7 +48,9 @@
         const priceEls = $('input[name="orderPrice"]');
         payFormat(priceEls);
 
+
     </script>
+
 </th:block>
 
 
@@ -156,18 +159,16 @@
                         <option value="order_d">주문일 역순</option>
                         <option value="order_a">주문일 순</option>
                         <option>-----------------</option>
-                        <option value="order_name_d">주문자 역순</option>
+                        <option value="order_name_d">주문자 순</option>
                         <option value="order_name_a">주문자 역순</option>
                         <option>-----------------</option>
                         <option value="projecting_o">프로젝트 공고중</option>
                         <option value="projectFail_o">프로젝트 실패</option>
                         <option value="deliveryWait_o">배송대기중</option>
-                        <option value="delivery_o">배송중</option>
                         <option value="deliveryCompleted_o">배송완료</option>
                         <option value="swapping_o">교환 신청</option>
                         <option value="refunding_o">환불 신청</option>
                         <option value="orderCompleted">주문확정</option>
-                        <option value="refund_o">환불</option>
                     </select>
                     <select name="count-select">
                         <option value="15">15개씩 보기</option>

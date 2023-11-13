@@ -4,13 +4,15 @@ import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
-import ksmart.ks48team02.admin.mapper.TotalCategoryMapper;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
-import ksmart.ks48team02.user.dto.donation.DonationRegistration;
-import ksmart.ks48team02.user.dto.investment.InvestmentRegistration;
+import ksmart.ks48team02.user.dto.DonationRegistration;
+import ksmart.ks48team02.user.dto.InvestmentRegistration;
+import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +28,7 @@ import java.util.UUID;
 @RequestMapping("/user/projectRegistration")
 public class PojectRegistrationContoller {
 
+    private static final Logger log = LoggerFactory.getLogger(PojectRegistrationContoller.class);
     private final DonationService donationService;
 
     private final UserInvestmentService userInvestmentService;
@@ -63,6 +64,14 @@ public class PojectRegistrationContoller {
 
         return "user/projectRegistration/reward/reward_insert";
     }
+    //리워드 프로젝트 등록 진행.
+    @PostMapping("/reward")
+    public String rewardRegistrationPage(RewardProject rewardProject){
+        log.info("리워드 프로젝트 등록 rewardProject: {}", rewardProject);
+
+        return "redirect:/user/reward";
+    }
+
     //투자 프로젝트 등록 페이지
     @GetMapping(value = {"/investment/judge"})
     public String investmentRegistrationPage(Model model) {
@@ -103,13 +112,11 @@ public class PojectRegistrationContoller {
         JsonObject jsonObject = new JsonObject();
 
         String fileRoot = "C:\\summernote_image\\";	//저장될 외부 파일 경로
+        // 우분투 파일 루트 file:////home/springboot/resource
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
-
         String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
-
         File targetFile = new File(fileRoot + savedFileName);
-
         try {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장

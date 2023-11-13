@@ -1,7 +1,7 @@
 package ksmart.ks48team02.seller.service.donation;
 
-import ksmart.ks48team02.admin.dto.donation.Donation;
-import ksmart.ks48team02.seller.dto.donation.DonationList;
+import ksmart.ks48team02.admin.dto.Donation;
+import ksmart.ks48team02.seller.dto.DonationList;
 import ksmart.ks48team02.seller.mapper.donation.SellerDonationMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

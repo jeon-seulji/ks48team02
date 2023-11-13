@@ -39,13 +39,13 @@
         .donation-item-box{
             width: 350px;
             height: 300px;
+            cursor: pointer;
         }
         .donation-item-first-child{
             background: grey;
             width: 350px;
             height: 200px;
             border-radius: 5px;
-            cursor: pointer;
         }
         .donation-item-first-child img{
             width: 100%;
@@ -147,6 +147,31 @@
             const categoryItemWrap = document.querySelector("#category-wrap li:first-child");
             categoryItemWrap.classList.add("selected");
         });
+
+        $('.donation-item-span-third').each(function (){
+            let currentDate = new Date();
+            // 비교 대상 날짜 설정
+            let targetDate = new Date($(this).text());
+            // 두 날짜 간의 차이 계산 (밀리초 단위)
+            let timeDifference = targetDate - currentDate;
+            // 차이를 일(day) 단위로 변환
+            let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            // 남은 일 수
+            $(this).text(daysRemaining + "일 남음");
+        });
+
+        $('.donation-item-span-first').each(function (){
+            let goalMoney = parseInt($(this).next().val());
+            let achievementMoney = parseInt($(this).next().next().text());
+
+            let percent = (achievementMoney / goalMoney) * 100;
+            $(this).text(parseInt(percent) + '%');
+        });
+
+        // 달성 금액 설정
+        $('.donation-item-span-second').each(function (){
+            $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+        });
     </script>
 
 </th:block>
@@ -236,141 +261,21 @@
 
                 <div class="container" style="width: 100%; height: 100%">
                     <div class="row">
-                        <div class="col donation-item-box">
-                            <div class="donation-item-first-child" th:onclick="|location.href='@{/user/donation/detail}'|">
-                                <img class="donation-item-third-child-image" src="https://50plus.or.kr/upload/im/2018/09/17473716-08b5-4c55-8709-380ededad91c.png">
-                            </div>
-                            <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">34% 달성</span>
-                                <span class="donation-item-span-second">480,200원</span>
-                                <span class="donation-item-span-third">11일 남음</span>
-                            </div>
-                            <div class="donation-item-third-child">
-                                <a th:href="@{/user/donation/detail}">시설 퇴소를 앞둔, 음악으로 세상에 서고 싶은 사랑이</a>
-                            </div>
-                            <div class="donation-item-fourth-child">
-                                파주시문산종합사회복지관
-                            </div>
-                        </div>
-                        <div class="col donation-item-box">
+                        <div class="col donation-item-box col-lg-4" th:if="${allDonationInfo != null}" th:each="l : ${allDonationInfo}"
+                            th:onclick="|location.href='@{/user/donation/detail(donationCode=${l.donationCode})}'|">
                             <div class="donation-item-first-child">
+                                <img class="donation-item-third-child-image" th:src="|@{/summernoteImage/}${l.donationImage}|">
                             </div>
                             <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">2% 달성</span>
-                                <span class="donation-item-span-second">130,800원</span>
-                                <span class="donation-item-span-third">11일 남음</span>
+                                <span class="donation-item-span-first"></span>
+                                <input class="donatio-item-goalMoney" th:value="${l.donationGoalMoney}" hidden="hidden"/>
+                                <span class="donation-item-span-second" th:text="${l.donationAchievementMoney}"></span>
+                                <span class="donation-item-span-third" th:text="${l.donationEndDate}"></span>
                             </div>
                             <div class="donation-item-third-child">
-                                어르신께 행복을 전하는 주민나눔 단체 해피CELL
+                                <p th:text="${l.donationSubject}"></p>
                             </div>
-                            <div class="donation-item-fourth-child">
-                                월곡종합사회복지관
-                            </div>
-                        </div>
-                        <div class="col donation-item-box">
-                            <div class="donation-item-first-child">
-                            </div>
-                            <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">18% 달성</span>
-                                <span class="donation-item-span-second">1,798,700원</span>
-                                <span class="donation-item-span-third">14일 남음</span>
-                            </div>
-                            <div class="donation-item-third-child">
-                                연이은 강진, 고통 속에 놓인 아프가니스탄을 도와주세요..
-                            </div>
-                            <div class="donation-item-fourth-child">
-                                유엔난민기구
-                            </div>
-                        </div>
-                        <div class="col donation-item-box">
-                            <div class="donation-item-first-child">
-                            </div>
-                            <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">44% 달성</span>
-                                <span class="donation-item-span-second">8,885,200원</span>
-                                <span class="donation-item-span-third">7일 남음</span>
-                            </div>
-                            <div class="donation-item-third-child">
-                                오늘도 귀 잘 들리신다는 거짓말
-                            </div>
-                            <div class="donation-item-fourth-child">
-                                사랑의달팽이
-                            </div>
-                        </div>
-                        <div class="col donation-item-box">
-                            <div class="donation-item-first-child">
-                            </div>
-                            <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">43% 달성</span>
-                                <span class="donation-item-span-second">4,099,900원</span>
-                                <span class="donation-item-span-third">5일 남음</span>
-                            </div>
-                            <div class="donation-item-third-child">
-                                엄마가 얻어온 작고 낡은 옷
-                            </div>
-                            <div class="donation-item-fourth-child">
-                                전주장애인종합복지관
-                            </div>
-                        </div>
-                        <div class="col donation-item-box">
-                            <div class="donation-item-first-child">
-                            </div>
-                            <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">17% 달성</span>
-                                <span class="donation-item-span-second">1,739,500원</span>
-                                <span class="donation-item-span-third">8일 남음</span>
-                            </div>
-                            <div class="donation-item-third-child">
-                                은서의 장애를 보듬어 주는 친구들
-                            </div>
-                            <div class="donation-item-fourth-child">
-                                엔젤스헤이븐
-                            </div>
-                        </div>
-                        <div class="col donation-item-box">
-                            <div class="donation-item-first-child">
-                            </div>
-                            <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">12% 달성</span>
-                                <span class="donation-item-span-second">1,083,500원</span>
-                                <span class="donation-item-span-third">3일 남음</span>
-                            </div>
-                            <div class="donation-item-third-child">
-                                뇌전증으로 가족과의 추억도 잊어버리는 지윤이
-                            </div>
-                            <div class="donation-item-fourth-child">
-                                사회연대은행
-                            </div>
-                        </div>
-                        <div class="col donation-item-box">
-                            <div class="donation-item-first-child">
-                            </div>
-                            <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">23% 달성</span>
-                                <span class="donation-item-span-second">2,309,900원</span>
-                                <span class="donation-item-span-third">16일 남음</span>
-                            </div>
-                            <div class="donation-item-third-child">
-                                따뜻환 점심 한 끼 치매 독거어르신들 위해 선물해주세요..
-                            </div>
-                            <div class="donation-item-fourth-child">
-                                굿하트 금천재가노인지원센터
-                            </div>
-                        </div>
-                        <div class="col donation-item-box">
-                            <div class="donation-item-first-child">
-                            </div>
-                            <div class="donation-item-second-child">
-                                <span class="donation-item-span-first">36% 달성</span>
-                                <span class="donation-item-span-second">3,597,600원</span>
-                                <span class="donation-item-span-third">1일 남음</span>
-                            </div>
-                            <div class="donation-item-third-child">
-                                MBN 소나무 인공호흡기에 의존해 사는 딸
-                            </div>
-                            <div class="donation-item-fourth-child">
-                                사회복지공동모금회
-                            </div>
+                            <div class="donation-item-fourth-child" th:text="${l.storeName}"></div>
                         </div>
 
                     </div>

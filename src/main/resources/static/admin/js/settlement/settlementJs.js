@@ -10,7 +10,7 @@ function checkedCount($checkedInput){
 const $formInInput = $('.settlement-log input[type="checkbox"]');
 $('.total-list').text($formInInput.length - 1);
 
-$formInInput.on('click', function() {
+$(document).on('click', '.settlement-log input[type="checkbox"]',function() {
     const $checkedInput = $('.settlement-log input:checked').not('#allSelectBtn');
 
     // count add text
@@ -20,7 +20,7 @@ $formInInput.on('click', function() {
     let checkedValidation = false;
 
     if($checkedInput.length == $formInInput.length - 1) checkedValidation = true;
-2
+
     $('#allSelectBtn').prop('checked', checkedValidation);
 
 });
