@@ -25,10 +25,19 @@ public class AccountController {
 
     // 회원 가입 페이지
     @GetMapping(value={"","/"})
-    public String mainPage(){
+    public String joinPage() {
 
         return "user/account/main";
     }
+
+    @PostMapping()
+
+
+
+
+
+
+
 
     //로그인 페이지
     @GetMapping("/login")
