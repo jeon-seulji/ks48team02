@@ -64,6 +64,9 @@ public interface AdminInvestmentMapper {
     // 부적합 업종 수정
     public int modifyIncongruitySectors(AdminIncongruitySectors adminIncongruitySectors);
 
+    // 기업가치 평가 수정
+    public int modifyCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation);
+
     // 투자펀딩 심사요청 삭제
     public int removeInvestmentRequestJudge(String investmentRequestJudgeCode);
 }

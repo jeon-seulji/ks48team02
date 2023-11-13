@@ -197,6 +197,11 @@ public class InvestmentService {
         adminInvestmentMapper.modifyIncongruitySectors(adminIncongruitySectors);
     }
 
+    // 기업가치 평가 수정
+    public void modifyCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation) {
+        adminInvestmentMapper.modifyCorporateValueEvaluation(adminCorporateValueEvaluation);
+    }
+
     public void reomveInvestmentJudge(String investmentRequestJudgeCode) {
         adminInvestmentMapper.removeInvestmentRequestJudge(investmentRequestJudgeCode);
     }

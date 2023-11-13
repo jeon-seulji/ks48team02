@@ -14,7 +14,28 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
+    <script>
+        function getSelectedRows() {
+            var selectedValues = [];
 
+            // 체크된 체크박스 찾기
+            $('#corporateValueTable tbody tr').each(function() {
+                var checkbox = $(this).find('.checkbox');
+                if (checkbox.prop('checked')) {
+                    // 체크된 행에서 <a> 태그의 값 가져오기
+                    var linkValue = $(this).find('.valueLink').data('value');
+                    selectedValues.push(linkValue);
+                }
+            });
+
+            // 선택된 값 확인
+            if (selectedValues.length > 0) {
+                alert('선택된 행의 <a> 태그 값: ' + selectedValues.join(', '));
+            } else {
+                alert('선택된 행이 없습니다.');
+            }
+        }
+    </script>
 </th:block>
 
 
@@ -82,7 +103,7 @@
             </div>
         </div>
 
-        <table class="settlement-log">
+        <table id="corporateValueTable" class="settlement-log">
             <thead>
             <tr>
                 <th>
@@ -114,7 +135,7 @@
                     <input type="checkbox" name="selectList">
                 </td>
                 <td>
-                    <a class="detail-link"
+                    <a class="valueLink detail-link"
                        th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.adminInvestmentRequestJudge.investmentRequestJudgeCode})}"
                        th:text="${l.adminInvestmentRequestJudge.investmentRequestJudgeCode}"></a>
                 </td>

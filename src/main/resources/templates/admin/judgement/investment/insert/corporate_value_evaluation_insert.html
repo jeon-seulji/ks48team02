@@ -10,118 +10,277 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-
+    <script th:src="@{/user/js/jquery.min.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
+    <script>
+        $(function () {
+            // 입력 값이 변경될 때마다 계산 실행
+            $('.corp-value-calc').on('input', function () {
+                let operatingProfit = parseFloat($('#operatingProfit').val()) || 0;
+                let depreciation = parseFloat($('#depreciation').val()) || 0;
+                let evEbitda = parseFloat($('#evEbitda').val()) || 0;
+                let netDebt = parseFloat($('#netDebt').val()) || 0;
+                let stockNumber = parseFloat($('#stockNumber').val()) || 1;
 
+                // 수식 계산
+                let ebitaCalculate = (operatingProfit + depreciation)
+                let convertEvCalculate = ((operatingProfit + depreciation) * evEbitda)
+                let corpCalculate = ((operatingProfit + depreciation) * evEbitda - netDebt)
+                let stockPriceCalculate = (((operatingProfit + depreciation) * evEbitda - netDebt) / stockNumber)
+                let ebitaCalculateResult = (operatingProfit + depreciation).toLocaleString('ko-kr') + ' 원';
+                let convertEvCalculateResult = ((operatingProfit + depreciation) * evEbitda).toLocaleString('ko-kr') + ' 원';
+                let corpCalculateResult = ((operatingProfit + depreciation) * evEbitda - netDebt).toLocaleString('ko-kr') + ' 원';
+                let stockPriceCalculateResult = (((operatingProfit + depreciation) * evEbitda - netDebt) / stockNumber).toLocaleString('ko-kr') + ' 원';
+
+                // 계산 결과를 화면에 표시
+                $('#ebitdaCalculate').text(ebitaCalculateResult);
+                $('#convertEvCalculate').text(convertEvCalculateResult);
+                $('#evaluatedCorpCalculate').text(corpCalculateResult);
+                $('#stockPriceCalculate').text(stockPriceCalculateResult);
+
+                // 계산 결과를 input에 반영
+                $('#ebitda').val(ebitaCalculate);
+                $('#convertEv').val(convertEvCalculate);
+                $('#evaluatedCorpValue').val(corpCalculate);
+                $('#stockPrice').val(stockPriceCalculate);
+            });
+        })
+    </script>
 </th:block>
 
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <form id="addCorporateValueForm" th:action="@{/admin/investment/insert/corporate-value}" method="post">
-        <div class="container admin-content-wrapper">
 
-            <div class="row g-5" style="justify-content: center;">
-                <div class="col-md-7 col-lg-8">
-                    <div class="row g-3">
+    <div th:object="${investmentRequestJudgeInfo}" class="admin-content-wrapper form-table">
+        <div class="project-info-title-area">
+            <div class="project-info-title">
+                <h5>투자 심사요청 코드</h5>
+                <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=*{investmentRequestJudgeCode})}"
+                   th:text="*{investmentRequestJudgeCode}"
+                   class="detail-link" style="color: var(--maincolor);"></a>
+            </div>
+            <div class="info-more-btn">
+                <a class="more-btn" style="padding: 7px 10px 9px 19px;">
+                    <span>요청 상세 보기</span>
+                </a>
+            </div>
+        </div>
 
-                        <div class="my-2 col-12">
-                            <label for="memberPw" class="form-label fw-bord text-dark">관리자 비밀번호</label>
-                            <input type="password" class="form-control" id="memberPw" placeholder="관리자 비밀번호를 재입력해주세요.">
-                        </div>
-                        <br>
-                        <button type="button" class="submitBtn">
-                            확인
-                        </button>
+        <form class="projectInfoDetail" method="get">
+            <table class="settlement-log application-info-detail" style="border:none;">
+                <tbody>
+                <!-- contents -->
+                <tr>
+                    <td>
+                        카테고리
+                    </td>
+                    <td colspan="4">
+                        투자
+                    </td>
 
-                        <hr class="my-4">
+                </tr>
+                <tr>
+                    <td>
+                        심사요청 제목
+                    </td>
+                    <td th:text="*{investmentRequestSubject}" colspan="4"></td>
 
-                        <div class="my-2 col-12">
-                            <label for="operatingProfit" class="form-label fw-bord text-dark">영업이익</label>
-                            <input type="number" class="form-control" id="operatingProfit" name="operatingProfit"
-                                   placeholder="영업이익을 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
+                </tr>
+                <tr>
+                    <td>
+                        심사요청 내용
+                    </td>
+                    <td th:text="*{investmentRequestContent}" colspan="4"></td>
+                </tr>
+                <tr>
+                    <td>
+                        심사 요청일
+                    </td>
+                    <td th:text="*{investmentRequestDate}" colspan="4"></td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        상세
+                    </td>
+                </tr>
+                <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
+                    <td style="height: 35px;">목표펀딩금액</td>
+                    <td style="height: 35px;">영업이익</td>
+                    <td style="height: 35px;">감가상각비</td>
+                    <td style="height: 35px;">순차입금</td>
+                    <td style="height: 35px;">발행예정주식수</td>
+                </tr>
+                <tr>
+                    <td style="background: #fff;"><span
+                            th:text="*{#numbers.formatInteger(investmentAchievementMoney,3,'COMMA')}"></span>
+                        원
+                    </td>
+                    <td><span th:text="*{#numbers.formatInteger(businessProfits,3,'COMMA')}"></span> 원</td>
+                    <td><span
+                            th:text="*{#numbers.formatInteger(depreciation,3,'COMMA')}"></span>
+                        원
+                    </td>
+                    <td><span
+                            th:text="*{#numbers.formatInteger(netDebt,3,'COMMA')}"></span>
+                        원
+                    </td>
+                    <td><span
+                            th:text="*{#numbers.formatInteger(issueStockNumber,3,'COMMA')}"></span>
+                        주
+                    </td>
+                </tr>
 
-                        <div class="my-2 col-12">
-                            <label for="depreciation" class="form-label fw-bord text-dark">감가상각비</label>
-                            <input type="number" class="form-control" id="depreciation" name="depreciation"
-                                   placeholder="감가상각비를 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
+                </tbody>
+            </table>
+        </form>
 
-                        <div class="my-2 col-12">
-                            <label for="ebitda" class="form-label fw-bord text-dark">EBITDA</label>
-                            <input type="number" class="form-control" id="ebitda" name="ebitda"
-                                   placeholder="EBITDA를 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
+    </div>
 
-                        <div class="my-2 col-12">
-                            <label for="evEbitda" class="form-label fw-bord text-dark">EV/EBITDA</label>
-                            <input type="number" class="form-control" id="evEbitda" name="evEbitda"
-                                   placeholder="EV/EBITDA를 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
+    <form id="modifyCorporateValueForm" th:action="@{/admin/investment/update/corporate-value}" method="post">
 
-                        <div class="my-2 col-12">
-                            <label for="convertEv" class="form-label fw-bord text-dark">환산 EV</label>
-                            <input type="number" class="form-control" id="convertEv" name="convertEv"
-                                   placeholder="환산 EV를 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
+        <div class="admin-wrapper" th:object="${investmentRequestJudgeInfo}">
 
-                        <div class="my-2 col-12">
-                            <label for="netDebt" class="form-label fw-bord text-dark">순차입금</label>
-                            <input type="number" class="form-control" id="netDebt" name="netDebt"
-                                   placeholder="순차입금을 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
-
-                        <div class="my-2 col-12">
-                            <label for="stockNumber" class="form-label fw-bord text-dark">발행된 주식수</label>
-                            <input type="number" class="form-control" id="stockNumber" name="stockNumber"
-                                   placeholder="발행된 주식수를 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
-
-                        <button type="button" class="submitBtn">기업가치 확인</button>
-
-                        <hr class="my-4">
-
-                        <div class="my-2 col-12">
-                            <label for="evaluatedCorpValue" class="form-label fw-bord text-dark">평가된 기업가치</label>
-                            <input type="number" class="form-control" id="evaluatedCorpValue" name="evaluatedCorpValue"
-                                   placeholder="평가된 기업가치를 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
-
-                        <div class="my-2 col-12">
-                            <label for="stockPrice" class="form-label fw-bord text-dark">주당 가격</label>
-                            <input type="number" class="form-control" id="stockPrice" name="stockPrice"
-                                   placeholder="주당 가격을 입력해주세요." disabled="disabled">
-                        </div>
-                        <br>
-
-                        <div class="my-2 col-12">
-                            <label for="corpValueFulfill" class="form-label fw-bord text-dark">평가 결과</label>
-                            <select class="form-control" id="corpValueFulfill" name="corpValueFulfill"
-                                    disabled="disabled">
-                                <option value="">===평과결과를 선택해주세요===</option>
-                                <option value="1">통과</option>
-                                <option value="0">탈락</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <hr class="my-4">
-
-                    <button class="my-5 w-100 btn btn-primary btn-lg" type="submit">등록하기</button>
+            <!-- contents -->
+            <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
+                <div class="project-info-title">
+                    <h5>기업가치 평가 코드</h5>
+                    <p th:text="*{corporateValueEvaluationCode}" style="color: var(--maincolor);"></p>
+                    <input type="text" id="corporateValueEvaluationCode" name="corporateValueEvaluationCode"
+                           th:value="*{corporateValueEvaluationCode}" hidden="hidden" readonly="readonly">
+                    <input type="text" name="ebitda" id="ebitda"
+                           class="corp-value-result" placeholder="EBITA를 입력해주세요" readonly="readonly" hidden="hidden">
+                    <input type="text" name="convertEv" id="convertEv"
+                           class="corp-value-result" placeholder="환산 EV를 입력해주세요" readonly="readonly" hidden="hidden">
+                    <input type="text" name="evaluatedCorpValue" id="evaluatedCorpValue"
+                           class="corp-value-result" placeholder="평가된 기업가치를 입력해주세요" readonly="readonly" hidden="hidden">
+                    <input type="text" name="stockPrice" id="stockPrice"
+                           class="corp-value-result" placeholder="주당 가격을 입력해주세요" readonly="readonly" hidden="hidden">
                 </div>
+                <br>
+                <form class="projectInfoDetailBt" method="get">
+                    <table class="settlement-log application-info-detail" style="border:none;">
+                        <tbody>
+                        <!-- contents -->
+                        <tr>
+                            <td>
+                                프로젝트 분류
+                            </td>
+                            <td colspan="5">
+                                투자
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                심사요청 제목
+                            </td>
+                            <td th:text="*{investmentRequestSubject}" colspan="5"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                심사요청한 아이디
+                            </td>
+                            <td th:text="*{memberIdSeller}" colspan="5"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                심사한 아이디
+                            </td>
+                            <td th:text="*{memberId}" colspan="5"></td>
+                        </tr>
+
+                        <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
+                            <td style="height: 35px; width: 17%;">영업이익</td>
+                            <td style="height: 35px; width: 17%;">감가상각비</td>
+                            <td style="height: 35px;">EBITA</td>
+                            <td style="height: 35px;">업종 평균 EV/EBITA</td>
+                            <td style="height: 35px;" colspan="2">환산 EV</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #fff;">
+                                <input type="number" name="operatingProfit" id="operatingProfit" class="corp-value-calc"
+                                       placeholder="영업이익을 입력해주세요">
+                            </td>
+                            <td>
+                                <input type="number" name="depreciation" id="depreciation" class="corp-value-calc"
+                                       th:value="*{depreciation}"
+                                       placeholder="감가상각비를 입력해주세요">
+                            </td>
+                            <td id="ebitdaCalculate" class="corp-result"></td>
+                            <td>
+                                <input type="number" name="evEbitda" id="evEbitda" class="corp-value-calc"
+                                       placeholder="EV/EBITA를 입력해주세요">
+                            </td>
+                            <td colspan="2" id="convertEvCalculate" class="corp-result"></td>
+                        </tr>
+                        <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
+                            <td style="height: 35px;">순차입금</td>
+                            <td style="height: 35px;">현재 발행주식</td>
+                            <td style="height: 35px;" colspan="2">평가된 기업가치</td>
+                            <td style="height: 35px;">주당가격</td>
+                            <td style="height: 35px;">기업가치 평가일</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #fff;">
+                                <input type="number" name="netDebt" id="netDebt" class="corp-value-calc"
+                                       th:value="*{netDebt}"
+                                       placeholder="순차입금을 입력해주세요">
+                            </td>
+                            <td>
+                                <input type="number" name="stockNumber" id="stockNumber" class="corp-value-calc"
+                                       th:value="*{stockNumber}"
+                                       placeholder="현재 발행주식을 입력해주세요">
+                            </td>
+                            <td colspan="2" id="evaluatedCorpCalculate" class="corp-result"></td>
+
+                            <td id="stockPriceCalculate" class="corp-result"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                심사 현황
+                            </td>
+                            <td id="corpValueFulfill" colspan="5" class="progress-radio-area">
+                                <ul>
+                                    <li>
+                                        <input id="preProgress" type="radio" name="corpValueFulfill"
+                                               value="0">
+                                        <label for="preProgress">심사 대기</label>
+                                    </li>
+                                    <li>
+                                        <input id="Progress" type="radio" name="corpValueFulfill"
+                                               value="1">
+                                        <label for="Progress">심사 승인</label>
+                                    </li>
+                                    <li>
+                                        <input id="ProgressCompleted" type="radio" name="corpValueFulfill"
+                                               value="2">
+                                        <label for="ProgressCompleted">심사 반려</label>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="btn-area">
+                        <ul>
+                            <li>
+                                <button id="settBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로
+                                </button>
+                            </li>
+                            <li>
+                                <button id="settUpdateBtn" class="submitBtn" type="submit">
+                                    확인
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
             </div>
         </div>
     </form>
