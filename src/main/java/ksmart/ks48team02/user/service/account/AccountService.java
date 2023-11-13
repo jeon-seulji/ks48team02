@@ -16,23 +16,15 @@ public class AccountService {
         this.accountMapper = accountMapper;
     }
 
-    /**
-     * 회원가입
-     * @param member (회원정보)
-     * @return
-     */
+    // 회원가입
     public void addMember(Member member) {
         accountMapper.addMember(member);
     }
 
-    /**
-     * 아이디 중복체크
-     * @param memberId (회원아이디)
-     * @return 중복: true, 중복x: false (boolean)
-     */
+    // 아이디 중복체크
     public boolean idCheck(String memberId) {
-        boolean isDuplicate = accountMapper.idCheck(memberId);
-        return isDuplicate;
+        boolean duplicationStatus = accountMapper.idCheck(memberId);
+        return duplicationStatus;
     }
 
 

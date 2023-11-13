@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.controller.account;
 
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.user.dto.Member;
 import ksmart.ks48team02.user.service.member.UserMemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,21 +22,6 @@ public class AccountController {
     public AccountController (UserMemberService userMemberService) {
         this.userMemberService = userMemberService;
     }
-
-
-    // 회원 가입 페이지
-    @GetMapping(value={"","/"})
-    public String joinPage() {
-
-        return "user/account/main";
-    }
-
-    @PostMapping()
-
-
-
-
-
 
 
 
