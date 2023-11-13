@@ -45,6 +45,22 @@ public class RewardService {
     }
 
 
+    //리워드프로젝트 전체 조회.
+    public List<RewardProject> rewardProjectList (){
+        List<RewardProject> projectList = rewardMapper.rewardProjectList();
+
+        return projectList;
+    }
+
+    //리워드 프로젝트 상세 페이지
+     public RewardProject rewardProjectDetail(String rewardProjectCode){
+
+        RewardProject rewardProject =rewardMapper.rewardProjectDetail(rewardProjectCode);
+
+        return rewardProject;
+     }
+
+
 
 
 }

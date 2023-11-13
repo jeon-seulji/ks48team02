@@ -19,7 +19,14 @@ public interface RewardMapper {
     //프로젝트 등록
     public int addRewardProject (RewardProject rewardProject);
 
+    //리워드 옵션 등록
     public int rewardOptionAdd (RewardOption rewardOption);
+
+    //리워드프로젝트 전체 조회.
+    public List<RewardProject> rewardProjectList();
+
+    //리워드 프로젝트 상세 페이지
+    public RewardProject rewardProjectDetail(String rewardProjectCode);
 
 
 

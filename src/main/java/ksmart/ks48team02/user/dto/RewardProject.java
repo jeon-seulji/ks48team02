@@ -30,6 +30,10 @@ public class RewardProject {
     private String projectStartDate;
     private String projectEndDate;
     private int projectCondition;
+    private String storeImage;
+    private int storeLike;
+    private String storeMobile;
+    private String categoryName;
 
     private List<RewardOption> rewardOptionList;
 
