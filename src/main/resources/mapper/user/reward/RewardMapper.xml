@@ -9,7 +9,7 @@
         <id property="rewardProjectCode" column="reward_project_code"/>
         <result property="rewardCategoryCode" column="total_cagegory_code"/>
         <result property="projectJudgementReasonCode" column="project_judgement_reason_code"/>
-        <result property="RegMemberId" column="member_id"/>
+        <result property="regMemberId" column="member_id"/>
         <result property="adminMemberId" column="admin_member_id"/>
         <result property="storeCode" column="store_code"/>
         <result property="projectSubject" column="project_subject"/>
@@ -19,7 +19,7 @@
         <result property="projectAchievementMoney" column="project_achievement_money"/>
         <result property="projectGoalMoney" column="project_goal_money"/>
         <result property="projectAchievementPercent" column="project_achievement_percent"/>
-        <result property="RegCompany" column="reg_company"/>
+        <result property="regCompany" column="reg_company"/>
         <result property="projectRegDate" column="project_reg_date"/>
         <result property="searchCount" column="search_count"/>
         <result property="projectJudgmentReason" column="project_judgment_reason_detail"/>
@@ -107,5 +107,56 @@
         WHERE
             m.member_id = #{memberId};
     </select>
+
+    <insert id="addRewardProject" parameterType="ksmart.ks48team02.user.dto.RewardProject">
+        <selectKey keyProperty="rewardProjectCode,storeCode,regCompany" resultType="hashmap" order="BEFORE">
+            SELECT
+            (
+            CASE
+            WHEN COUNT(r.project_reg_date) = 0     THEN CONCAT('rwd_', CURDATE()+0, '_0001')
+            WHEN COUNT(r.project_reg_date) > 9999  THEN CONCAT('rwd', CURDATE()+0, '_', COUNT(r.project_reg_date)+1)
+            ELSE CONCAT('rwd_', CURDATE()+0, '_', LPAD(COUNT(r.project_reg_date)+1, 4, '0'))
+            END
+            ) AS rewardProjectCode,
+            (
+            SELECT
+            s.store_code
+            FROM
+            store AS s
+            WHERE
+            s.member_id = 'id003'
+            ) AS storeCode,
+            (
+            SELECT
+            s.store_name
+            FROM
+            store AS s
+            WHERE
+            s.member_id = 'id003'
+            ) AS regCompany
+            FROM
+            reward_project AS r
+            WHERE
+            DATE_FORMAT(r.project_reg_date, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+        INSERT INTO reward_project
+            (reward_project_code, store_code, reg_company, member_id, project_judgement_reason_code, admin_member_id, total_cagegory_code, project_subject, reward_like,
+            project_contents, project_thumbnail_image, project_reg_date, project_start_date, project_end_date, project_achievement_money,
+            project_goal_money, project_achievement_percent, project_judgment_reason_detail, project_judgment_date, search_count, project_condition)
+        VALUES
+            (#{rewardProjectCode}, #{storeCode}, #{regCompany}, #{regMemberId}, NULL, NULL, #{rewardCategoryCode}, #{projectSubject}, 0, #{projectContents},
+            #{projectThumbnailImage}, NOW(), NULL, #{projectEndDate}, 0, #{projectGoalMoney}, 0, NULL, NULL, 0, 0);
+
+    </insert>
+
+    <insert id="rewardOptionAdd" parameterType="ksmart.ks48team02.user.dto.RewardOption">
+
+        INSERT INTO reward_option
+            (reward_option_code, reward_project_code, option_contents, option_price, option_limit_quantity, option_name, option_delivery_price, option_estimated_delivery_date)
+        VALUES
+            (#{sf_new_option_cd()},#{rewardProjectCode},#{optionContents},#{optionPrice},#{optionLimitQuantity},#{optionName},#{optionDeliveryPrice},#{optionEstimatedDeliveryDate})
+    </insert>
+
+
 
 </mapper>

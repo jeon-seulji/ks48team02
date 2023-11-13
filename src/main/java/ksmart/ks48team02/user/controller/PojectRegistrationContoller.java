@@ -1,5 +1,8 @@
 package ksmart.ks48team02.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +13,7 @@ import ksmart.ks48team02.user.dto.InvestmentInfo;
 import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
+import ksmart.ks48team02.user.service.reward.RewardService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user/projectRegistration")
@@ -35,10 +38,13 @@ public class PojectRegistrationContoller {
 
     private final TotalCategoryService totalCategoryService;
 
-    public PojectRegistrationContoller(DonationService donationService, TotalCategoryService totalCategoryService, UserInvestmentService userInvestmentService){
+    private final RewardService rewardService;
+
+    public PojectRegistrationContoller(DonationService donationService, TotalCategoryService totalCategoryService, UserInvestmentService userInvestmentService, RewardService rewardService){
         this.donationService = donationService;
         this.totalCategoryService = totalCategoryService;
         this.userInvestmentService = userInvestmentService;
+        this.rewardService = rewardService;
     }
 
     //프로젝트 등록 메인 페이지
@@ -66,9 +72,15 @@ public class PojectRegistrationContoller {
     }
 
     //리워드 프로젝트 등록 진행.
-    @PostMapping("/reward")
-    public String rewardRegistrationPage(RewardProject rewardProject){
-        log.info("리워드 프로젝트 등록 rewardProject: {}", rewardProject);
+
+    @PostMapping(value= "/reward")
+    @ResponseBody
+    public String rewardRegistrationPage(@RequestBody RewardProject parameters) throws JsonProcessingException {
+
+
+
+        System.out.println(parameters);
+        rewardService.addRewardProject(parameters);
 
         return "redirect:/user/reward";
     }

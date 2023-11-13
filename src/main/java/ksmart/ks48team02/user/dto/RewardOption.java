@@ -12,7 +12,7 @@ public class RewardOption {
     private int optionPrice;
     private int optionLimitQuantity;
     private String optionName;
-    private String optionDeliveryPrice;
+    private int optionDeliveryPrice;
     private String optionEstimatedDeliveryDate;
 
 
