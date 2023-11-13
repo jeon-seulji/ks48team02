@@ -1,6 +1,6 @@
 package ksmart.ks48team02.seller.mapper.donation;
 
-import ksmart.ks48team02.seller.dto.donation.DonationList;
+import ksmart.ks48team02.seller.dto.DonationList;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
