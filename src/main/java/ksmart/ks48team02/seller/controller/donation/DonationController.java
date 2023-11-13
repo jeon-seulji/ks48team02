@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,21 +22,24 @@ import java.util.List;
 public class DonationController {
     SellerDonationService sellerDonationService;
 
+    @PostMapping("/products/startProject")
+    public String startProject(@RequestParam String donationCode){
+        if(donationCode != null){
+            sellerDonationService.startProject(donationCode);
+            return "redirect:/seller/donation/products";
+        }
+        return "redirect:/seller/donation/products";
+    }
+
     @GetMapping("/products")
     public String mainPage(Model model,
-                           HttpServletRequest request,
-                           @RequestParam(name = "donationCode", required = false) String donationCode){
+                           HttpServletRequest request){
         HttpSession session = request.getSession();
         model.addAttribute("title","판매자 : 기부 프로젝트 목록");
         model.addAttribute("contentsTitle","기부 프로젝트 목록");
         String memberId = (String) session.getAttribute("SID");
         List<DonationList> donationList = sellerDonationService.getDonationProjectList(memberId);
         model.addAttribute("donationList", donationList);
-
-        if(donationCode != null){
-            sellerDonationService.startProject(donationCode);
-            return "redirect:/seller/donation/products";
-        }
 
         return "seller/donation/products/main";
     }

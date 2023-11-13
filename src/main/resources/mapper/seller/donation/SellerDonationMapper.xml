@@ -27,7 +27,7 @@
             donation_start_date = NOW(),
             donation_condition = 3
         WHERE
-            donation_code = 'don_20231109_0001';
+            donation_code = #{donationCode};
     </update>
 
 </mapper>

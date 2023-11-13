@@ -51,6 +51,45 @@
             },
         });
     </script>
+
+    <script>
+        // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 기부코드
+        let donationCode = '[[${donationCode}]]';
+        // 썸네일 이미지 경로 지정
+        let thumbNailImageSrc = $('#thumbNailImage').attr('src');
+        $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${donationInfo.donationImage}]]');
+
+        // 스토리에서 앞에 부분만 잘라서 공백포함 155글자만 가져옴 그뒤는 ... 으로 다자름
+        let storyBodyText = $('#storyBody').text();
+        $('#subContens').text(storyBodyText);
+        if (storyBodyText.length > 155) {
+            storyBodyText = storyBodyText.substring(0, 155) + '...';
+        }
+        // 가져온 텍스트를 subContens에 설정
+        $('#subContens').text(storyBodyText);
+
+        let currentDate = new Date();
+        // 비교 대상 날짜 설정
+        let targetDate = new Date($('#donationEndDate').val());
+        // 두 날짜 간의 차이 계산 (밀리초 단위)
+        let timeDifference = targetDate - currentDate;
+        // 차이를 일(day) 단위로 변환
+        let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        // 남은 일 수
+        $('#deadLine').text(daysRemaining + '일남음');
+
+        // 카테고리 이름 설정
+        $('#category').text('[[${cateAndCompany.categoryName}]]' + ' >');
+        // 회사 이름 설정
+        $('#company').text('[[${cateAndCompany.storeName}]]');
+        // 달성 금액 설정
+        $('#achievementMoney').text(`[[${donationInfo.donationAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+        // 현재 달성 퍼센트
+        let goalMoney = parseInt([[${donationInfo.donationGoalMoney}]]);
+        let achievementMoney = parseInt([[${donationInfo.donationAchievementMoney}]]);
+        let percent = (achievementMoney / goalMoney) * 100;
+        $('#achievementPercent').text(parseInt(percent) + '%');
+    </script>
 </th:block>
 
 
@@ -164,6 +203,8 @@
         </div>
     </div>
 
+    <!-- 부가설명을 위한 데이터 -->
+    <div hidden="hidden" id="storyBody" th:utext="${donationInfo.donationContents}" style="color: black; white-space: pre-line"></div>
 </th:block>
 
 </html>

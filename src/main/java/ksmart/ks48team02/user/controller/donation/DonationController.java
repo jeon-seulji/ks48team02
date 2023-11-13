@@ -41,12 +41,24 @@ public class DonationController {
     }
 
     @GetMapping("/detail/condition")
-    public String detailConditionPage(){
+    public String detailConditionPage(Model model,
+                                      @RequestParam(name = "donationCode") String donationCode){
+        model.addAttribute("donationCode", donationCode);
+        DonationInfo donationInfo = donationService.getDonationInfo(donationCode);
+        model.addAttribute("donationInfo", donationInfo);
+        CategoryAndCompany cateAndCompany = donationService.getCateAndCompany(donationCode);
+        model.addAttribute("cateAndCompany", cateAndCompany);
         return "user/donation/detail/condition";
     }
 
     @GetMapping("/detail/comment")
-    public String detailCommentPage(){
+    public String detailCommentPage(Model model,
+                                    @RequestParam(name = "donationCode") String donationCode){
+        model.addAttribute("donationCode", donationCode);
+        DonationInfo donationInfo = donationService.getDonationInfo(donationCode);
+        model.addAttribute("donationInfo", donationInfo);
+        CategoryAndCompany cateAndCompany = donationService.getCateAndCompany(donationCode);
+        model.addAttribute("cateAndCompany", cateAndCompany);
         return "user/donation/detail/comment";
     }
 
@@ -66,7 +78,14 @@ public class DonationController {
     }
 
     @GetMapping("/detail/news")
-    public String newsPage(){
+    public String newsPage(Model model,
+            @RequestParam(name = "donationCode") String donationCode){
+        model.addAttribute("donationCode", donationCode);
+        DonationInfo donationInfo = donationService.getDonationInfo(donationCode);
+        model.addAttribute("donationInfo", donationInfo);
+        CategoryAndCompany cateAndCompany = donationService.getCateAndCompany(donationCode);
+        model.addAttribute("cateAndCompany", cateAndCompany);
+
         return "user/donation/detail/news/main";
     }
 

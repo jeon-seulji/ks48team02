@@ -11,7 +11,7 @@ public interface AdminDonationMapper {
 
     public List<Donation> getDonationList();
 
-    public void judgementApprove(String donationCode);
+    public void judgementApprove(String donationCode,String adminId);
     public void judgementReject(String donationCode , String judgeRejectReason, String judgeRejectReasonDetail, String adminId);
     public List<DonationJudgementReason> judgementReason();
 }
