@@ -7,9 +7,12 @@ import ksmart.ks48team02.admin.dto.TotalCategory;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
 import ksmart.ks48team02.user.dto.DonationRegistration;
 import ksmart.ks48team02.user.dto.InvestmentRegistration;
+import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,7 @@ import java.util.UUID;
 @RequestMapping("/user/projectRegistration")
 public class PojectRegistrationContoller {
 
+    private static final Logger log = LoggerFactory.getLogger(PojectRegistrationContoller.class);
     private final DonationService donationService;
 
     private final UserInvestmentService userInvestmentService;
@@ -60,6 +64,15 @@ public class PojectRegistrationContoller {
 
         return "user/projectRegistration/reward/reward_insert";
     }
+
+    //리워드 프로젝트 등록 진행.
+    @PostMapping("/reward")
+    public String rewardRegistrationPage(RewardProject rewardProject){
+        log.info("리워드 프로젝트 등록 rewardProject: {}", rewardProject);
+
+        return "redirect:/user/reward";
+    }
+
     //투자 프로젝트 심사 요청 페이지
     @GetMapping(value = {"/investment/judge"})
     public String investmentJudgePage(Model model) {
