@@ -60,13 +60,21 @@ public class PojectRegistrationContoller {
 
         return "user/projectRegistration/reward/reward_insert";
     }
-    //투자 프로젝트 등록 페이지
+    //투자 프로젝트 심사 요청 페이지
     @GetMapping(value = {"/investment/judge"})
-    public String investmentRegistrationPage(Model model) {
+    public String investmentJudgePage(Model model) {
 
-        model.addAttribute("title", "투자펀딩 심사 요청, 공고 등록");
+        model.addAttribute("title", "투자펀딩 심사 요청 페이지");
 
         return "user/projectRegistration/investment/invest_judge_insert";
+    }
+    //투자 프로젝트 공고 등록 페이지
+    @GetMapping(value = {"/investment/insert"})
+    public String investmentRegistrationPage(Model model) {
+
+        model.addAttribute("title", "투자펀딩 공고 등록 페이지");
+
+        return "user/projectRegistration/investment/invest_insert";
     }
     @PostMapping("/investment")
     public String investmentRegistrationPage(InvestmentRegistration investmentRegistration){
