@@ -21,7 +21,7 @@
             t.project_patition,
             t.category_name,
             t.category_comment,
-            t.reward_category_usage_status,
+            t.category_usage_status,
             t.category_reg_date
         FROM
             total_category AS t

@@ -409,7 +409,7 @@
             // https://docs.tosspayments.com/reference/widget-sdk#renderpaymentmethods선택자-결제-금액-옵션
             const paymentMethodWidget = paymentWidget.renderPaymentMethods(
                 "#payment-method",
-                { value: Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''))},
+                { value:0},
                 // 렌더링하고 싶은 결제 UI의 variantKey
                 // 결제 수단 및 스타일이 다른 멀티 UI를 직접 만들고 싶다면 계약이 필요해요.
                 // https://docs.tosspayments.com/guides/payment-widget/admin#멀티-결제-ui
@@ -437,18 +437,16 @@
                 const selectedPaymentMethod = paymentMethodsWidget.getSelectedPaymentMethod(); // 결제 정보
                 paymentMethodsWidget.updateAmount(Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',','')));
 
-
-
                 console.log(products);
-
                 console.log(selectedPaymentMethod);
+
                 const paymentObj = {
                     orderId: "Rx0ztqnD-WCYUjhdczHyy",
                     orderName: "토스 티셔츠 외 2건",
                     customerEmail: [[${orderMemberInfo.memberEmail}]],
                     customerName: [[${orderMemberInfo.memberName}]],
                     mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
-                    products:products
+                    products: products
                 }
                 paymentWidget.requestPayment({
                     orderId: "Rx0ztqnD-WCYUjhdcziyz",
@@ -458,7 +456,7 @@
                     customerEmail: [[${orderMemberInfo.memberEmail}]],
                     customerName: [[${orderMemberInfo.memberName}]],
                     mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
-                    products:products
+                    products: products
                 })
                 /*
                 paymentWidget.requestPayment(paymentObj)
