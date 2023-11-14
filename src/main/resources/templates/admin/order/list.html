@@ -57,7 +57,13 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
     <div class="admin-content-wrapper form-table">
-        <form id="amYearChartForm" method="get">
+        <form id="searchForm" name="searchForm">
+            <input type="hidden" name="dateSettStartDate">
+            <input type="hidden" name="dateSettEndDate">
+            <input type="hidden" name="orderCategoryCode">
+            <input type="hidden" name="searchKey">
+            <input type="hidden" name="searchValue">
+        </form>
             <table class="partition-select">
                 <tbody>
                     <tr>
@@ -65,55 +71,51 @@
                             기간
                         </td>
                         <td>
-                            <input type="date" name="amDateSettStartDate" value="">
+                            <input type="date" name="amDateSettStartDate">
                             <span> - </span>
-                            <input type="date" name="amDateSettEndDate" value="">
+                            <input type="date" name="amDateSettEndDate">
                         </td>
                     </tr>
                     <tr>
                         <td>
                             주문 상태
                         </td>
-                        <td class="order-category-select">
+                        <td class="order-category-select" style="height: auto !important;">
+
                             <ul>
                                 <li>
-                                    <input id="projecting" type="checkbox" name="">
+                                    <input id="projecting" type="checkbox" name="projecting">
                                     <label for="projecting">프로젝트 공고중</label>
                                 </li>
                                 <li>
-                                    <input id="projectCompleted" type="checkbox" name="">
+                                    <input id="projectCompleted" type="checkbox" name="projectCompleted">
                                     <label for="projectCompleted">프로젝트 성공</label>
                                 </li>
                                 <li>
-                                    <input id="projectFail" type="checkbox" name="">
+                                    <input id="projectFail" type="checkbox" name="projectFail">
                                     <label for="projectFail">프로젝트 실패</label>
                                 </li>
                                 <li>
-                                    <input id="orderCompleted" type="checkbox" name="">
-                                    <label for="orderCompleted">주문 확정</label>
-                                </li>
-                                <li>
-                                    <input id="refunting" type="checkbox" name="">
+                                    <input id="refunting" type="checkbox" name="refunting">
                                     <label for="refunting">환불 처리중</label>
                                 </li>
                                 <li>
-                                    <input id="refundCompleted" type="checkbox" name="">
+                                    <input id="refundCompleted" type="checkbox" name="refundCompleted">
                                     <label for="refundCompleted">환불 완료</label>
                                 </li>
                                 <li>
-                                    <input id="swapping" type="checkbox" name="">
+                                    <input id="swapping" type="checkbox" name="swapping">
                                     <label for="swapping">교환 처리중</label>
                                 </li>
                                 <li>
-                                    <input id="swappingCompleted" type="checkbox" name="">
+                                    <input id="swappingCompleted" type="checkbox" name="swappingCompleted">
                                     <label for="swappingCompleted">교환 완료</label>
                                 </li>
                                 <li>
-                                    <input id="orderCancle" type="checkbox" name="">
+                                    <input id="orderCancle" type="checkbox" name="orderCancle">
                                     <label for="orderCancle">주문 취소</label>
                                 </li>
                             </ul>
-
                         </td>
                     </tr>
                     <tr>
@@ -121,22 +123,22 @@
                             검색 키워드
                         </td>
                         <td class="order-category-select">
-                            <select name="searchKey">
+                            <select name="userSearchKey">
                                 <option value="total">전체</option>
                                 <option value="orderCode">주문코드</option>
                                 <option value="orderName">주문자명</option>
                                 <option value="orderId">주문아이디</option>
                                 <option value="projectName">공고명</option>
+                                <option value="projectPartition">분류</option>
                             </select>
-                            <input type="search" name="searchValue">
+                            <input type="text" style="padding: 6px 10px; width: 250px;" name="userSearchable">
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="btn-area">
-                <button type="button" class="submitBtn">검색</button>
+                <button type="button" class="orderSearchBtn submitBtn">검색</button>
             </div>
-        </form>
     </div>
     <div class="title-wrap">
         <h4 class="admin-content-title">주문 목록</h4>
@@ -159,8 +161,8 @@
                         <option value="order_d">주문일 역순</option>
                         <option value="order_a">주문일 순</option>
                         <option>-----------------</option>
-                        <option value="order_name_d">주문자 순</option>
-                        <option value="order_name_a">주문자 역순</option>
+                        <option value="order_name_a">주문자 순</option>
+                        <option value="order_name_d">주문자 역순</option>
                         <option>-----------------</option>
                         <option value="projecting_o">프로젝트 공고중</option>
                         <option value="projectFail_o">프로젝트 실패</option>
@@ -226,11 +228,10 @@
                             <td th:text="${l.orderName}"  class="table-data-center">
                                 주문자명
                             </td>
-                            <td  class="table-data-center">
+                            <td class="table-data-center">
                                 <input type="hidden" name="orderPrice" th:value="${l.orderTotalPrice}">
                                 <span class="order-pay">0</span> 원
                             </td>
-
                             <td th:text="${(l.orderConfirmDate != null)?l.orderConfirmDate:'-'}" class="table-data-center">
                                 -
                             </td>
@@ -245,21 +246,30 @@
             <!-- list pager -->
             <div class="board-page-area">
                 <div class="list-controller-inner">
-                    <ul>
-                        <li class="link-active"><a th:href="@{#}">1</a></li>
-                        <li><a th:href="@{#}">2</a></li>
-                        <li><a th:href="@{#}">3</a></li>
-                        <li><a th:href="@{#}">4</a></li>
-                        <li><a th:href="@{#}">5</a></li>
-                        <li><a th:href="@{#}">6</a></li>
+                    <ul class="order-list-pager">
+                        <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
+                            <li th:unless="${num != currentPage}" class="link-active currentPage"><a th:data-value="${num}">[[${num}]]</a></li>
+                            <li th:if="${num != currentPage}"><a th:data-value="${num}">[[${num}]]</a></li>
+                        </th:block>
                     </ul>
                     <div class="list-btn-area">
-                        <button class="prev-transfer">
-                            <span>prev</span>
-                        </button>
-                        <button class="next-transfer">
-                            <span>next</span>
-                        </button>
+                        <th:block th:if="${startPageNum == currentPage}">
+                            <button class="prev-transfer no-action">
+                                <span>prev</span>
+                            </button>
+                            <button class="next-transfer">
+                                <span>next</span>
+                            </button>
+                        </th:block>
+                        <th:block th:if="${lastPage == currentPage}">
+                            <button class="prev-transfer">
+                                <span>prev</span>
+                            </button>
+                            <button class="next-transfer no-action">
+                                <span>next</span>
+                            </button>
+                        </th:block>
+
                     </div>
                 </div>
 
@@ -269,5 +279,4 @@
     </div>
 
 </th:block>
-</body>
 </html>

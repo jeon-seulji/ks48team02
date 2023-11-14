@@ -6,13 +6,14 @@ function checkedCount($checkedInput){
     $('.select-list-count').text($checkedInput.length);
 }
 
+
 // list count controller
-const $formInInput = $('.settlement-log input[type="checkbox"]');
+let $formInInput = $('.settlement-log input[type="checkbox"]');
 $('.total-list').text($formInInput.length - 1);
 
 $(document).on('click', '.settlement-log input[type="checkbox"]',function() {
     const $checkedInput = $('.settlement-log input:checked').not('#allSelectBtn');
-
+    $formInInput = $('.settlement-log input[type="checkbox"]');
     // count add text
     checkedCount($checkedInput);
 

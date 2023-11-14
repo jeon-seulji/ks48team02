@@ -1,10 +1,6 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
-import ksmart.ks48team02.common.dto.DonationPayments;
-import ksmart.ks48team02.common.dto.InvestPayments;
-import ksmart.ks48team02.common.dto.RewardPayments;
-import ksmart.ks48team02.user.controller.MainController;
-import ksmart.ks48team02.common.dto.OrderTotal;
+import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.service.order.OrderService;
 import ksmart.ks48team02.common.service.payments.PaymentsService;
 import org.slf4j.Logger;
@@ -14,13 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller("adminOrderManagement")
 @RequestMapping("/admin/order")
 public class OrderManagementController {
 
     // 로그 추가
-    private static final Logger log = LoggerFactory.getLogger(MainController.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderManagementController.class);
 
     private final OrderService orderService;
     private final PaymentsService paymentsService;
@@ -30,6 +27,18 @@ public class OrderManagementController {
 
         this.orderService = orderService;
         this.paymentsService = paymentsService;
+    }
+
+    // 주문 검색 ajax
+    @PostMapping(value="/ajax/search")
+    @ResponseBody
+    public List<OrderTotal> adminOrderSearchAjax(Model model,
+                                                 @ModelAttribute SearchSelectDto searchForm){
+        log.info("searchForm : {}", searchForm);
+        List<OrderTotal> list = orderService.adminOrderSearchAjax(searchForm);
+        log.info("검색 결과 목록 : {}", list);
+
+        return list;
     }
 
     // 주문 대시보드
@@ -46,15 +55,28 @@ public class OrderManagementController {
     public String adminOrderList(Model model,
                                  @RequestParam(name="orderby",
                                  required = false,
-                                 defaultValue = "order_d") String orderby){
+                                 defaultValue = "order_d") String orderby,
+                                 @RequestParam(name="currentPage",
+                                         required = false,
+                                         defaultValue = "1") int currentPage,
+                                 @RequestParam(name="rowperPage",
+                                         required = false,
+                                         defaultValue = "15") int rowPerPage
+                                ){
+        // default param setting
         model.addAttribute("title","관리자 : 주문 목록");
         model.addAttribute("contentsTitle","주문 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
+        model.addAttribute("actionValue","/list");
 
         // 주문 목록 진열
-        List<OrderTotal> OrderList = orderService.getOrderList(orderby);
-        log.info("주문 목록 : {}", OrderList);
-        model.addAttribute("OrderList", OrderList);
+        Map<String, Object> resultMap = orderService.getOrderList(orderby, currentPage, rowPerPage);
+        log.info("주문 목록 : {}", resultMap.get("orderList"));
+        model.addAttribute("OrderList",resultMap.get("orderList"));
+        model.addAttribute("lastPage",resultMap.get("lastPage"));
+        model.addAttribute("startPageNum",resultMap.get("startPageNum"));
+        model.addAttribute("endPageNum",resultMap.get("endPageNum"));
+        model.addAttribute("currentPage",resultMap.get("currentPage"));
 
         return "admin/order/list";
     }
@@ -62,12 +84,21 @@ public class OrderManagementController {
     // 주문 목록 정렬 ajax
     @PostMapping(value="/ajax/list")
     @ResponseBody
-    public List<OrderTotal> getOrderListOrderBy(Model mode,
+    public Map<String, Object> getOrderListOrderBy(Model model,
                                                 @RequestParam(name="orderby",
                                                         required = false,
-                                                        defaultValue = "order_d") String orderby){
-        List<OrderTotal> list = orderService.getOrderList(orderby);
-        System.out.println(list);
+                                                        defaultValue = "order_d") String orderby,
+                                                @RequestParam(name="currentPage",
+//                                                        required = false,
+                                                        defaultValue = "1") int currentPage,
+                                                @RequestParam(name="rowPerPage",
+//                                                        required = false,
+                                                        defaultValue = "15") int rowPerPage){
+        log.info("currentPage {}", currentPage);
+        log.info("rowPerPage {}", rowPerPage);
+        Map<String, Object> list = orderService.getOrderList(orderby, currentPage, rowPerPage);
+        log.info("ajax list {}", list);
+
         return list;
     }
     // 주문 상세
@@ -133,6 +164,7 @@ public class OrderManagementController {
         return "admin/order/deliveryDetailInfo";
     }
 
+
     // 교환 환불 신청 관리
     @GetMapping( "/refundSwapping")
     public String adminOrderRefundSwapping(Model model){
@@ -152,3 +184,4 @@ public class OrderManagementController {
     }
 
 }
+

@@ -14,6 +14,7 @@ public class OrderTotal {
     private String orderConfirmDate;
     private String orderCancellDate;
 
+
     @Override
     public String toString() {
         return "OrderTotal{" +
@@ -126,7 +127,5 @@ public class OrderTotal {
     public void setOrderCancellDate(String orderCancellDate) {
         this.orderCancellDate = orderCancellDate;
     }
-
-
 
 }
