@@ -91,7 +91,7 @@
             color: var(--maincolor);
         }
 
-        .join-form{
+        #join-form{
             margin:0 20px 20px 10px;
 
         }
@@ -185,17 +185,19 @@
             <!-- 회원 유형 선택 -->
             <ul class="user-type-menu">
                 <li class="user-type normal">
-                    <input type="radio" class="btn-check btn btn-primary" name="memberTypeCode" value="mem_type_02" id="customer-user"
+                    <input type="radio" class="btn-check btn btn-primary" name="memberType" value="mem_type_02" id="customer-user"
                            autocomplete="off" checked style="padding: 10px 30px;">
                     <label class="btn btn-outline-primary btn-lg" for="customer-user">구매자 회원</label>
                 </li>
 
                 <li class="user-type seller">
-                    <input type="radio" class="btn-check btn btn-primary" name="memberTypeCode" value="mem_type_005" id="seller-user"  autocomplete="off" >
+                    <input type="radio" class="btn-check btn btn-primary" name="memberType" value="mem_type_05" id="seller-user"  autocomplete="off" >
                     <label class="btn btn-outline-primary btn-lg" for="seller-user">판매자 회원</label>
                 </li>
             </ul>
-            <form class="join-form" th:action="@{/user/account}" method="post">
+            <!--  회원가입 폼  -->
+            <form id="join-form" th:action="@{/user/account/join}" method="post">
+                <input type="hidden" name="memberTypeCode" id="memberTypeCode" value="mem_type_02">
                 <div class="mb-3" id="id-check">
                     <label for="memberId" class="form-label">ID</label>
                     <div style="display: flex; gap:10px;">
@@ -216,14 +218,19 @@
                     <div class="form-text" style="color:red; font-size:13px;">비밀번호가 일치하지 않습니다 </div>
                 </div>
                 <div class="mb-3">
+                    <label for="memberName" class="form-label">이름</label>
+                    <input type="text" name="memberName" class="form-control" id="memberName">
+                </div>
+                <div class="mb-3">
                     <label for="memberEmail" class="form-label">e-mail</label>
-                    <input type="text" name="memberEmail" class="form-control"  aria-describedby="emailHelp" id="memberEmail">
+                    <input type="text" name="memberEmail" class="form-control" id="memberEmail">
                 </div>
                 <div class="mb-3">
                     <label for="memberContactInfo" class="form-label">휴대폰 번호</label>
-                    <input type="text" name="memberContactInfo" class="form-control"  aria-describedby="emailHelp" id="memberContactInfo"
+                    <input type="text" name="memberContactInfo" class="form-control" id="memberContactInfo"
                            placeholder="휴대폰 번호 입력('-' 제외)">
                 </div>
+            </form>
 
                 <!-- 약관 동의 전체체크 박스  -->
                 <div class="mb-3 form-check">
@@ -646,13 +653,11 @@ Fax: 02)0000-0000
                         </div>
                     </div>
                 </div>
-            </form>
+
             <div class="d-grid gap-2" >
                 <button type="submit" class="btn btn-primary btn-lg" id="join-button">회원가입</button>
-
             </div>
         </div>
-
 
     </div>
 </th:block>
@@ -685,85 +690,39 @@ Fax: 02)0000-0000
         });
 
         /* ------------------- 회원가입 ---------------------- */
-        $(function() {
+        const $joinBtn = document.getElementById('join-button');
+        const $formEles = document.querySelectorAll('#join-form input');
 
-            /* 유효성 검사 */
-            function validationCheck(data) {
-                let validationStatus = true;
-                /* 입력 데이터가 오브젝트일 경우 */
-                if (typeof data == 'object') {
+        // 라디오 버튼의 선택을 감지하고 hidden 필드를 업데이트
+        const radioButtons = document.querySelectorAll('input[name="memberType"]');
+        const hiddenField = document.getElementById('memberTypeCode');
 
-                    $.each(data, function () {
-                        console.log(data);
-                        let checkValue = $(this).val();
-                        if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
-                            validationStatus = false;
-                            let eleId = $(this).attr('id');
-                            let cate = $(`label[for="${eleId}"]`).text();
-                            alert(`${cate} 필수 입력 항목입니다.`);
-                            $(this).focus();
-                            return validationStatus;
-
-                        }
-                    });
-
-                    /* 입력 데이터가 오브젝트 아닐 경우 */
-                } else {
-                    if (data == null || data == '' || typeof data == 'undefined') {
-                        validationStatus = false;
-                    }
-                }
-
-                return validationStatus;
-            }
-
-            /* 회원가입 버튼 클릭 이벤트 */
-            $('#join-button').click(function(){
-                const inputEles = $('#join-form input');
-                console.log(typeof inputEles);
-
-                let validationStatus = validationCheck(inputEles); // 유효성 검사 후 boolean값을 validStatus 변수에 할당
-
-                console.log(validationStatus);
-                if(validationStatus) $('#join-form').submit();
+        radioButtons.forEach(function (radioButton) {
+            radioButton.addEventListener('change', function () {
+                hiddenField.value = radioButton.value;
+                console.log(radioButton.value);
             });
-
-
-            /* 중복확인 버튼 클릭 이벤트 */
-            $('#duplicationBtn').click(function(){
-                let memberId = $('#memberId').val();
-
-                if(!validationCheck(memberId)){
-                    alert('회원아이디를 입력해주세요');
-                    $('#memberId').focus();
-                    return;
-                }
-
-                /* 회원가입 처리 */
-                const request = $.ajax({
-                    url : '/user/account/idCheck',
-                    method : 'POST',
-                    data : {'memberId': memberId},
-                    dataType : 'json'
-                });
-
-                request.done(function(data){
-                    let isDuplicate = data;
-                    if(isDuplicate){
-                        alert('회원가입을 할 수 없는 아이디입니다.');
-                        $('#memberId').val('');
-                    }
-                    $('#join-form input').not('#memberId').prop('disabled', isDuplicate);
-                    $('#join-form button').not('#duplicationBtn').prop('disabled', isDuplicate);
-                })
-
-                request.fail(function(jqXHR, textStatus){
-                    console.log(`Request failed: ${textStatus}`);
-                });
-
-            });
-
         });
+
+        // 회원가입 버튼 클릭 이벤트리스너 등록
+        $joinBtn.addEventListener('click', function(){
+
+           let isValid = true;
+            // 1. 모든 input이 다 작성되었는지, 유효한 값인지 검사
+            $formEles.forEach((input) => {
+                if(input.value.trim() === '' || typeof input === 'undefined'){
+                    isValid = false;
+                }
+            })
+
+            if(isValid){
+                document.getElementById('join-form').submit();
+
+            }else{
+                alert('유효한 값을 입력해 주세요');
+            }
+            // 2. input에 담긴 값들이 유효한지
+        })
     </script>
 
 </th:block>

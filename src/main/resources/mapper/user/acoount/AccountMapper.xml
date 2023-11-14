@@ -15,7 +15,6 @@
         <result property="memberRegDate" 	    column="member_reg_date"/>
         <result property="memberEmail" 		    column="member_email"/>
         <result property="memberContactInfo" 	column="contact_info"/>
-
     </resultMap>
 
     <!-- 회원가입 -->

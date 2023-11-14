@@ -15,7 +15,7 @@ public class MemberAccountController {
     private final AccountService accountService;
 
     public MemberAccountController(AccountService accountService){
-         this.accountService = accountService;
+        this.accountService = accountService;
     }
 
     // 회원가입 메인 페이지
@@ -30,7 +30,7 @@ public class MemberAccountController {
     public String joinMember(Member member){
         accountService.addMember(member);
 
-        return "redirect:/user/account/main";
+        return "redirect:/user/account/join";
     }
 
     // 아이디 중복체크
@@ -40,5 +40,6 @@ public class MemberAccountController {
 
         return duplicationStatus;
     }
+
 
 }
