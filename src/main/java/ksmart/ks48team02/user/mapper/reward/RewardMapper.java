@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.mapper.reward;
 
 
+import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.user.dto.Member;
 import ksmart.ks48team02.user.dto.RewardOption;
 import ksmart.ks48team02.user.dto.RewardProject;
@@ -28,6 +29,8 @@ public interface RewardMapper {
     //리워드 프로젝트 상세 페이지
     public RewardProject rewardProjectDetail(String rewardProjectCode);
 
+    //주문번호, 주문상세번호, 결제번호 생성.
+    public OrderTotal getOrderAndPaymentCode();
 
 
 
