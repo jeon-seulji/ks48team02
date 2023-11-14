@@ -5,8 +5,7 @@ import ksmart.ks48team02.user.dto.InvestmentInfo;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +31,13 @@ public class InvestmentController {
 
         return "user/investment/main";
     }
+
+    @PostMapping("/ajax/sortedList")
+    @ResponseBody
+    public List<InvestmentInfo> getSortedList(@RequestParam(name = "orderBy") String orderBy) {
+        return userInvestmentService.getSortedList(orderBy);
+    }
+
 
     @GetMapping("/detail/main")
     public String getDetailMainPage(Model model) {
