@@ -182,6 +182,15 @@ public class InvestmentService {
         adminInvestmentMapper.addLawSatistify(adminLawSatistifyReason);
     }
 
+    // 기업가치 평가결과 등록
+    public void addCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation) {
+        adminInvestmentMapper.addCorporateValueEvaluation(adminCorporateValueEvaluation);
+    }
+
+    public void modifyInvestmentRequestCorpValueKey(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+        adminInvestmentMapper.modifyInvestmentRequestCorpValueKey(adminInvestmentRequestJudge);
+    }
+
     // 투자펀딩 심사요청 수정
     public void modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
         adminInvestmentMapper.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
