@@ -14,6 +14,7 @@ public class RewardOption {
     private String optionName;
     private int optionDeliveryPrice;
     private String optionEstimatedDeliveryDate;
+    private String orderCode;
 
 
 }

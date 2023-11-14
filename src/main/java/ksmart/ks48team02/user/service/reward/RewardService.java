@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.service.reward;
 
 
+import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.user.dto.Member;
 import ksmart.ks48team02.user.dto.RewardOption;
 import ksmart.ks48team02.user.dto.RewardProject;
@@ -59,6 +60,15 @@ public class RewardService {
 
         return rewardProject;
      }
+
+     //주문번호, 주문상세번호, 결제번호 생성
+    public OrderTotal getOrderAndPaymentCode(){
+        OrderTotal orderAndPaymentCode = rewardMapper.getOrderAndPaymentCode();
+
+        return orderAndPaymentCode;
+    }
+
+
 
 
 

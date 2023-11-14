@@ -47,6 +47,7 @@
     <!--회원별 보유 쿠폰 조회-->
     <select id="MemberHaveCouponById" resultMap="CouponResultMap" parameterType="String">
         SELECT
+            c.coupon_code,
             c.coupon_name,
             c.coupon_discount_rate,
             c.coupon_discount_amount,

@@ -84,6 +84,7 @@
     <select id="getOrderMemberInfo" parameterType="String" resultMap="memberResultMap">
 
         SELECT
+            m.member_id,
             m.member_name,
             m.member_email,
             m.contact_info,
@@ -238,6 +239,127 @@
         WHERE
             r.reward_project_code = #{rewardProjectCode};
     </select>
+
+    <!--주문번호, 주문 상세번호, 결제번호 생성-->
+    <select id="getOrderAndPaymentCode" resultType="OrderTotal">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(o.order_code) = 0  THEN CONCAT('ORD_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                    ELSE
+                        CONCAT('ORD_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(o.order_code,'_',-1)AS UNSIGNED )+1))
+                END) AS orderCode,
+                (SELECT
+                    (CASE
+                        WHEN
+                            COUNT(r.rd_order_detail_code) = 0  THEN CONCAT('ROD_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                        ELSE
+                            CONCAT('ROD_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(r.rd_order_detail_code,'_',-1)AS UNSIGNED )+1))
+                    END)
+                FROM
+                reward_order_detail as r) AS rewardOrderDetailCode,
+                (SELECT
+                    (CASE
+                        WHEN
+                            COUNT(p.reward_payment_code) = 0  THEN CONCAT('RWP_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                        ELSE
+                            CONCAT('RWP_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(p.reward_payment_code,'_',-1)AS UNSIGNED )+1))
+                    END)
+                FROM
+                reward_payment as p) AS rewardPaymentCode
+            FROM
+            order_table AS o;
+    </select>
+
+<!-- 통합 주문 테이블 인서트   -->
+    <insert id="orderTableInsert" parameterType="PaymentResult">
+        INSERT INTO order_table
+        (order_code, member_id, order_category_code, order_name, order_funding_name, order_total_price, order_category_detail, goods_code, order_application_date, order_confirm_date, order_cancell_date)
+        VALUES
+        (#{orderCode}, #{orderMemberId}, 'ORDC_001', #{orderMemberName}, #{rewardProjectSubject}, #{totalPayPrice}, '주문 확정', #{rewardProjectcode}, CURDATE(), CURDATE(), null)
+    </insert>
+
+<!--리워드 주문 상세 테이블 인서트-->
+    <insert id="rewardOrderDetailInsert" parameterType="PaymentResult">
+        <selectKey keyProperty="rewardOrderDetailCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(r.rd_order_detailcode) = 0  THEN CONCAT('ROD_', DATE_FORMAT(NOW(), '%Y%m%d'),'_', '1')
+                    ELSE
+                        CONCAT('ROD_', DATEFORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(r.rd_order_detailcode,'',-1)AS UNSIGNED )+1))
+                END) AS rewardOrderDetailCode
+                FROM
+            reward_order_detail as r;
+        </selectKey>
+        INSERT INTO reward_order_detail
+        (rd_order_detail_code, reward_option_code, order_code, order_option_amount, option_option_price, option_total_price)
+        VALUES
+        (#{rewardOrderDetailCode}, #{rewardOptionCode}, #{orderCode}, #{quantity}, #{optionPrice}, #{optionPrice*quantity})
+    </insert>
+
+    <!--리워드 결제 테이블 인서트-->
+    <insert id="rewardPaymentsInsert" parameterType="PaymentResult">
+        <selectKey keyProperty="useReserveCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(r.use_reserve_code) = 0  THEN CONCAT('USRC_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                    ELSE
+                        CONCAT('ROD_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(r.use_reserve_code,'_',-1)AS UNSIGNED )+1))
+                END) AS useReserveCode
+            FROM
+            reward_payment as r;
+        </selectKey>
+        INSERT INTO reward_payment
+        (reward_payment_code, order_code, member_id, reward_refund_code, switching_code, order_price, delivery_price, order_total_price, use_reserve_price, use_reserve_code, discount_rank_price, discount_coupon_price, payment_scheduled_price, payment_method, deposit_name, deposit_account, refund_account, deposit_price, payment_state, payment_deadline_date, payment_completed_date)
+        VALUES
+        (#{paymentCode}, #{orderCode}, #{orderMemberId}, null, null, #{orderPrice}, #{deliveryPrice}, #{totalPayPrice}, #{usePoiont}, #{useReserveCode}, #{memberRankDiscount}, #{couponDiscountPrice}, #{totalPayPrice}, #{paymentMethod}, null, null, null, 0, '결제 완료', null, CURDATE())
+    </insert>
+
+    <!--포인트 적립 내역 인서트-->
+    <insert id="usePointLogInsert" parameterType="PaymentResult">
+
+        <selectKey keyProperty="pointLogCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(p.point_log_code) = 0  THEN CONCAT('PL_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                    ELSE
+                        CONCAT('PL_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(p.point_log_code,'_',-1)AS UNSIGNED )+1))
+                END) AS pointLogCode
+            FROM
+            point_log as p;
+        </selectKey>
+        INSERT INTO point_log
+        (point_log_code, member_id, change_amount, change_category, change_detetime, point_log_group_code)
+        VALUES
+        (#{pointLogCode}, #{orderMemberId}, #{usePoiont}, '적립', CURDATE(), #{useReserveCode})
+    </insert>
+
+    <!--포인트 사용 내역 인서트-->
+    <insert id="savePointLogInsert" parameterType="PaymentResult">
+
+        <selectKey keyProperty="pointLogCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(p.point_log_code) = 0  THEN CONCAT('PL_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                    ELSE
+                        CONCAT('PL_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(p.point_log_code,'_',-1)AS UNSIGNED )+1))
+                END) AS pointLogCode
+            FROM
+            point_log as p;
+        </selectKey>
+        INSERT INTO point_log
+        (point_log_code, member_id, change_amount, change_category, change_detetime, point_log_group_code)
+        VALUES
+        (#{pointLogCode}, #{orderMemberId}, #{usePoiont}, '사용', CURDATE(), #{useReserveCode})
+    </insert>
+
+
+
+
 
 
 </mapper>

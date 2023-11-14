@@ -8,7 +8,7 @@
     <div class="container" style="position: sticky; top: 100px; scroll-behavior: smooth;">
         <div>
             <span style="display: inline-block;">
-                <a id="category" th:href="@{#}" style="text-decoration: none; color: grey">아동.청소년 ></a>
+                <a id="category" th:href="@{#}" style="text-decoration: none; color: grey" th:text="|${rewardProject.categoryName} >|"></a>
             </span>
             <span style="display: inline-block;">
                 <div style="background: lightgrey; padding: 2px; border-radius: 10px">
@@ -30,13 +30,13 @@
             <div>
                 <span style="font-size: 20px; color: #235FD9; font-weight: bold">337</span>
                 <span style="color: #235FD9">명 참여</span>
-                <span id="deadLine" style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">11일남음</span>
+                <span id="deadLine" style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;"></span>
                 <input id="projectEndDate" th:value="${rewardProject.projectEndDate}" hidden="hidden">
             </div>
             <div>
                 <span id="achievementMoney" style="font-size: 20px; color: black; font-weight: bold;">480,200</span>
                 <span style="color: black">원 달성</span>
-                <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">34% 달성</span>
+                <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" th:text="|${rewardProject.projectAchievementPercent}% 달성|"></span>
             </div>
         </div>
         <div style="border: 0.3px solid #f3f4f5; margin: 10px; width: 100%"></div>
