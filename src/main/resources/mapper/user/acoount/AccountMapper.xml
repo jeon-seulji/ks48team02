@@ -30,11 +30,11 @@
     <select id="idCheck" parameterType="String" resultType="boolean">
         /* 회원아이디 중복체크 */
         SELECT
-            count(m.member_id)
+        count(m.member_id)
         FROM
-            member AS m
+        member AS m
         WHERE
-            m.member_id = #{memberId};
+        m.member_id = #{memberId};
     </select>
 
 

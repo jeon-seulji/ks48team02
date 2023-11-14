@@ -2,6 +2,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org/" lang="ko">
 <body>
+
 <div th:fragment="news" class="tab-pane fade show active" id="news" role="tabpanel" aria-labelledby="news-tab" style="padding: 20px;">
     <!-- tab 내부 타이틀 영역 -->
     <h5 style="font-weight: bold;">스토어 소식</h5>
@@ -29,6 +30,7 @@
                                 <th:block th:with="currentDaysAgo = ${daysAgoMap[l]}">
                                     <span th:text="${currentDaysAgo}"></span>
                                     <pre th:utext="'currentDaysAgo: ' + ${currentDaysAgo}" />
+
                                     <span th:if="${currentDaysAgo == 0}" th:text="오늘">오늘</span>
                                     <span th:if="${currentDaysAgo == 1}" th:text="어제">어제</span>
                                     <span th:if="${currentDaysAgo > 1}" th:text="${currentDaysAgo + '일 전'}"></span>
