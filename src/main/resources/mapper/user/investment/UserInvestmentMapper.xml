@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ksmart.ks48team02.user.mapper.investment.InvestmentRegistrationMapper">
+<mapper namespace="ksmart.ks48team02.user.mapper.investment.UserInvestmentMapper">
 
-    <resultMap id="InvestmentRegistrationResultMap" type="InvestmentRegistration">
+    <resultMap id="InvestmentInfoResultMap" type="InvestmentInfo">
         <id property="investmentCode" column="investment_code"/>
         <result property="memberId" column="member_id"/>
         <result property="storeCode" column="store_code"/>
@@ -29,9 +29,10 @@
         <result property="contractFeeRate" column="contract_fee_rate"/>
         <result property="contractFile" column="contract_file"/>
         <result property="investJudgeSituation" column="invest_judge_situation"/>
+        <result property="investmentDeadlineCnt" column="investmentDeadlineCnt"/>
     </resultMap>
 
-    <insert id="addInvestment" parameterType="ksmart.ks48team02.user.dto.InvestmentRegistration">
+    <insert id="addInvestment" parameterType="InvestmentInfo">
         /* 투자 프로젝트 등록 */
         <selectKey keyProperty="investmentCode" resultType="String" order="BEFORE">
             SELECT
@@ -55,4 +56,53 @@
         #{investmentImage}, '0', '0', '0', '0', #{investmentCompany}, '0', '0', #{securitiesClassification}, CURDATE(), #{investmentRegDate}, #{investmentDeadline},
         #{investmentReport}, '3000000', 'null', #{contractFile}, '0');
     </insert>
+
+    <select id="getInvestmentInfo" parameterType="String" resultMap="InvestmentInfoResultMap">
+        SELECT
+        investment_code,
+        invest_achievement_percent,
+        investment_subject,
+        investment_amount,
+        DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+        investment_image,
+        investment_company
+        FROM
+        investment
+    </select>
+
+    <select id="getSortedList" parameterType="String" resultMap="InvestmentInfoResultMap">
+        SELECT
+            investment_code,
+            invest_achievement_percent,
+            investment_subject,
+            investment_amount,
+            DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+            investment_image,
+            investment_company
+        FROM
+            investment
+        <choose>
+            <when test='orderBy == "recommendation"'>
+                ORDER BY invest_achievement_percent DESC
+            </when>
+            <when test='orderBy == "latest"'>
+                ORDER BY investment_reg_date DESC
+            </when>
+            <when test='orderBy == "popularity"'>
+                ORDER BY investment_like DESC
+            </when>
+            <when test='orderBy == "recruitmentAmount"'>
+                ORDER BY investment_amount DESC
+            </when>
+            <when test='orderBy == "deadline"'>
+                ORDER BY investmentDeadlineCnt ASC
+            </when>
+            <otherwise>
+                ORDER BY invest_achievement_percent DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+
 </mapper>

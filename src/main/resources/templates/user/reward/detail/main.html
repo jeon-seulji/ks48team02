@@ -56,6 +56,41 @@
             },
         });
     </script>
+    <script type="text/javascript">
+        // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 기부코드
+        let donationCode = '[[${rewardProject.rewardProjectCode}]]';
+        // 썸네일 이미지 경로 지정
+        let thumbNailImageSrc = $('#thumbNailImage').attr('src');
+        $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${rewardProject.projectThumbnailImage}]]');
+
+        // 스토리에서 앞에 부분만 잘라서 공백포함 155글자만 가져옴 그뒤는 ... 으로 다자름
+        let storyBodyText = $('#storyBody').children('p:eq(0)').text();
+        $('#subContens').text(storyBodyText);
+        if (storyBodyText.length > 155) {
+            storyBodyText = storyBodyText.substring(0, 155) + '...';
+        }
+        // 가져온 텍스트를 subContens에 설정
+        $('#subContens').text(storyBodyText);
+
+        let currentDate = new Date();
+        // 비교 대상 날짜 설정
+        let targetDate = new Date($('#projectEndDate').val());
+        // 두 날짜 간의 차이 계산 (밀리초 단위)
+        let timeDifference = targetDate - currentDate;
+        // 차이를 일(day) 단위로 변환
+        let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        // 남은 일 수
+        $('#deadLine').text(daysRemaining + '일남음');
+
+        // 카테고리 이름 설정
+        $('#category').text(`${[[${rewardProject.categoryName}]]} +  >`);
+        // 회사 이름 설정
+        $('#company').text('[[${rewardProject.regCompany}]]');
+        // 달성 금액 설정
+        $('#achievementMoney').text(`[[${rewardProject.projectAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+    </script>
+
+
 
 </th:block>
 
@@ -68,9 +103,9 @@
             <div class="col-lg-12">
                 <div class="swiper mySwiper" style="height: 400px; border-radius: 10px;">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="https://research.beautifulfund.org/wp-content/uploads/blog20180202.jpg"></div>
-                        <div class="swiper-slide"><img src="https://blog.kakaocdn.net/dn/c0TOG2/btrUghNoLsU/gFai2GO6KaTWDVOcacChY0/img.jpg"></div>
-                        <div class="swiper-slide"><img src="https://cdn.bizwatch.co.kr/news/photo/2016/12/21/cafcbe1c3165dfa20e04789fab44a7db164525.jpg"></div>
+                        <div class="swiper-slide">
+                            <img id="thumbNailImage"/>
+                        </div>
                     </div>
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
@@ -85,8 +120,9 @@
             <div class="col-lg-12" style="height: 20px"></div>
             <div class="col-lg-12 story-banner-box" style="background: #f9fafb; border-radius: 5px; padding: 10px">
                 <div>
-                    <p style="color: black">기부 하신 Flover는 7일 이내에 환불이 가능합니다.</p>
-                    <p style="color: black">기부 하실때 충전한 금액은 환불이 안됩니다.</p>
+                    <p style="color: black">펀딩을 통해 출시되었거나 기존에 출시된 제품,서비스,콘텐츠를</p>
+                    <p style="color: black">특별구성,단독유통,한정판 등으로 혜택을 제공해요.</p>
+                    <p style="color: black">프로젝트 종료 전까지 언제든 결제 취소가 가능해요.</p>
                 </div>
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
@@ -94,24 +130,8 @@
                 <p style="color: black; font-weight: bold; font-size: 20px">기부 프로젝트 스토리</p>
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
-
-            <div class="col-lg-12 story-body" >
-
-사랑이는 이제 곧 시설에서 퇴소해야 합니다.
-사랑이는 첫돌이 되기 전, 보육원에 맡겨졌습니다. 엄마가 미성년자일 때 임신을 하게 되었고, 남자친구와는 헤어지게 되어 홀로 사랑이를 낳았다고 합니다. 아이를 혼자 키울 수 없던 엄마는 사랑이를 보육원에 맡겼고 지금껏 사랑이는 엄마, 아빠가 누구인지조차 알지 못합니다. 그래도 사랑이에게는 함께 하는 보육원 가족들이 있었기에 든든했고, 이름처럼 사랑 많고 밝은 에너지를 가졌습니다. 그런 사랑이가 내년이면 스무 살이 되어 이제 곧 울타리가 되어주었던 시설에서 퇴소해야 합니다. 엔터테이너가 꿈인 사랑이는 좀 더 전문적으로 음악을 배우고 싶은 계획이지만 현실상 대학 진학 준비와 퇴소 후 혼자 지낼 집 마련만으로도 넉넉지 않은 현실에 음악 활동을 어떻게 이어가야 할지 막막함이 큽니다.
-사랑이에게는 방음부스 마련이 절실합니다.
-초등학교 때부터 엔터테이너의 꿈을 키워온 사랑이는 힘든 순간도 많았지만 그럴 때마다 음악으로 위로받았고, 포기가 아닌 음악으로 다시 힘을 낼 수 있었습니다.
-“내가 만든 음악을 통해 사람들에게 위로와 희망을 주고 싶어요.” 사랑이에게 음악은 미래이고 전부이기에 이전에도 그래왔듯 오늘도 꿈을 위해 걷고 있습니다. 작년에 한 음악 경연방송에 지원해 탈락하긴 했지만 1차 예선까지 진출했고, 현재 음원 사이트에 타이틀 곡을 발매하기도 하는 등 열악한 환경이지만 불평 대신 노력을 쉬지 않습니다.
-오랜 꿈을 이루는데 한 발짝 가까이 가기 위해 그동안 많은 고민을 했고, 매번 연습실을 빌릴 수 있는 여건이 못 되기에 사랑이에게는 독립 후 지내게 될 작은 공간 내에 방음부스 설치가 필요합니다. 방음부스가 마련된다면 이웃에 끼칠 소음에 덜 신경 쓸 수 있고, 시간과 장소의 구애 없이 자유롭게 음악 활동에 전념할 수 있습니다.
-“꿈을 꾸고 포기하지 않고 노력하다 보면 꼭 기회가 올 거라 믿어요.”
-자신과 비슷한 환경의 친구들에게 희망이 되고 싶다는 사랑이.
-사랑이는 지금 자립 후 음악 활동에 전념하기 위한 환경 마련이 절실합니다. 누군가는 가족의 응원과 지원으로 마련할 수 있는 일이지만 사랑이에게는 결코 쉽지 않은 일이기에...홀로 걷게 될 사회에서의 첫걸음이 조금은 덜 막막하고 덜 외롭도록, 사랑이가 꿈을 이루어갈 여정을 함께 응원하고 도와주세요.
-모여진 후원금은 사랑이의 음악활동을 위한 방음부스 구입과 설치비용에 사용될 예정입니다.
-
-본 모금함은 파주시 ‘나눔으로 싹이트는, 드림씨앗’ 사업과 함께 진행됩니다.
-드림씨앗 사업은 비예산으로 운영되는 파주시 자체 모금사업으로 온라인 모금, 전용계좌 지정기부, 기부릴레이 등의 방식으로 진행되며, 기부된 금액 전액 해당 대상가구에 전달됩니다.
-
-                <img src="https://50plus.or.kr/upload/im/2018/09/17473716-08b5-4c55-8709-380ededad91c.png">
+            <div class="col-lg-12 story-body">
+                <div id="storyBody" th:utext="${rewardProject.projectContents}" style="color: black; white-space: pre-line"></div>
             </div>
         </div>
     </div>

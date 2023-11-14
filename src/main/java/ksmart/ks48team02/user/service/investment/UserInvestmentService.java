@@ -1,20 +1,32 @@
 package ksmart.ks48team02.user.service.investment;
 
-import ksmart.ks48team02.user.dto.InvestmentRegistration;
-import ksmart.ks48team02.user.mapper.investment.InvestmentRegistrationMapper;
+import ksmart.ks48team02.user.dto.InvestmentInfo;
+import ksmart.ks48team02.user.mapper.investment.UserInvestmentMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
 public class UserInvestmentService {
 
-    private final InvestmentRegistrationMapper investmentRegistrationMapper;
-    public UserInvestmentService(InvestmentRegistrationMapper investmentRegistrationMapper) {
-        this.investmentRegistrationMapper = investmentRegistrationMapper;
+    private final UserInvestmentMapper userInvestmentMapper;
+    public UserInvestmentService(UserInvestmentMapper userInvestmentMapper) {
+        this.userInvestmentMapper = userInvestmentMapper;
     }
 
-    public void addInvesetment(InvestmentRegistration investmentRegistration){
-        investmentRegistrationMapper.addInvestment(investmentRegistration);
+    public List<InvestmentInfo> getInvestmentInfo(){
+        List<InvestmentInfo> investmentInfo = userInvestmentMapper.getInvestmentInfo();
+        return investmentInfo;
     }
+
+
+    public List<InvestmentInfo> getSortedList(String orderBy) {
+        return userInvestmentMapper.getSortedList(orderBy);
+    }
+
+
+
+
 }
