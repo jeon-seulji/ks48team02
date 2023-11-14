@@ -5,7 +5,9 @@ import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.seller.dto.DonationList;
 import ksmart.ks48team02.admin.dto.Donation;
 import jakarta.websocket.Session;
+import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.seller.service.donation.SellerDonationService;
+import ksmart.ks48team02.user.dto.AllDonationInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -91,23 +93,59 @@ public class DonationController {
     }
 
     @GetMapping("/news")
-    public String newsManagementPage(Model model){
+    public String newsManagementPage(Model model,
+                                     HttpSession session){
+        String memberId = (String)session.getAttribute("SID");
         model.addAttribute("title","판매자 : 새소식 관리");
         model.addAttribute("contentsTitle","새소식 관리");
+        List<AllDonationInfo> allDonationInfo = sellerDonationService.getAllDonationInfo(memberId); // 현재 로그인한 유저 정보로 데이터 가져옴
+        model.addAttribute("allDonationInfo", allDonationInfo);
+        List<NewsList> newsList = sellerDonationService.getNews();
+        model.addAttribute("newsList", newsList);
+
         return "seller/donation/news/main";
     }
 
+    @PostMapping("/news/add")
+    public String newsAddPage(@RequestParam(name = "detailSubject") String detailSubject,
+                              @RequestParam(name = "detailComent") String detailContent,
+                              @RequestParam(name = "donationCode") String donationCode){
+        sellerDonationService.addNews(detailSubject, detailContent, donationCode);
+
+        return "redirect:/seller/donation/news";
+    }
+
     @GetMapping("/news/add")
-    public String newsAddPage(){
+    public String newsAddPage(@RequestParam(name = "donationCode") String donationCode, Model model){
+        model.addAttribute("donationCode", donationCode);
         return "seller/donation/news/add";
     }
 
     @GetMapping("/news/modify")
-    public String newsModifyPage(){
+    public String newsModifyPage(Model model,
+                                 @RequestParam(name = "newsCode") String newsCode){
+            // newsCode로 select 해서 정보들 가져와서 수정 페이지로 넘기기
+        List<NewsList> newsList = sellerDonationService.getNews();
+        model.addAttribute("newsCode", newsCode);
+        model.addAttribute("newsList",newsList);
+
         return "seller/donation/news/modify";
     }
+    @PostMapping("/news/modify/update")
+    public String newsModifyUpdate(@RequestParam(name = "detailSubject") String detailSubject,
+                                   @RequestParam(name = "detailComent") String detailContent,
+                                   @RequestParam(name = "newsCode") String newsCode){
+        sellerDonationService.updateNews(detailSubject, detailContent, newsCode);
 
+        return "redirect:/seller/donation/news";
+    }
 
+    @GetMapping("/news/delete")
+    public String newsDelete(@RequestParam(name = "delNewsCode") String newsCode){
+        sellerDonationService.deleteNews(newsCode);
+
+        return "redirect:/seller/donation/news";
+    }
 
 
 }

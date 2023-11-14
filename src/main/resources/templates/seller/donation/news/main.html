@@ -40,14 +40,14 @@
         .donation-item-box{
             width: 350px;
             height: 350px;
-            margin: 10px;
+            margin: 20px;
+            cursor: pointer;
         }
         .donation-item-first-child{
             background: grey;
             width: 350px;
             height: 200px;
             border-radius: 5px;
-            cursor: pointer;
         }
         .donation-item-first-child img{
             width: 100%;
@@ -142,6 +142,9 @@
             animation-name: keybtn-language;
             animation-duration: .2s;
         }
+        .item-hover{
+            cursor: pointer;
+        }
     </style>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
@@ -178,6 +181,58 @@
 
             element.classList.add("selected");
         }
+
+        $('.donation-item-span-third').each(function (){
+            let currentDate = new Date();
+            // 비교 대상 날짜 설정
+            let targetDate = new Date($(this).text());
+            // 두 날짜 간의 차이 계산 (밀리초 단위)
+            let timeDifference = targetDate - currentDate;
+            // 차이를 일(day) 단위로 변환
+            let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            // 남은 일 수
+            $(this).text(daysRemaining + "일 남음");
+        });
+
+        $('.donation-item-span-first').each(function (){
+            let goalMoney = parseInt($(this).next().val());
+            let achievementMoney = parseInt($(this).next().next().text());
+
+            let percent = (achievementMoney / goalMoney) * 100;
+            $(this).text(parseInt(percent) + '%');
+        });
+
+        // 달성 금액 설정
+        $('.donation-item-span-second').each(function (){
+            $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+        });
+
+        $('.news-modify-btn').click(function (){
+            let $newsCode = $(this).parent('div').prev().children('option:selected').val();
+            if ($newsCode == 0){
+                alert('새소식을 선택 해주세요!');
+                return false;
+            }
+            $('#newsCode').val($newsCode);
+            $('#newsModifyForm').submit();
+        });
+
+        $('.news-del-btn').click(function (){
+            let $newsCode = $(this).parent('div').prev().children('option:selected').val();
+            if ($newsCode == 0){
+                alert('새소식을 선택 해주세요!');
+                return false;
+            }
+            if (confirm('정말 삭제 하시겠습니까?')){
+                $('#delNewsCode').val($newsCode);
+                $('#newsDeleteForm').submit();
+            }else{
+                return false;
+            }
+
+        });
+
+
     </script>
 </th:block>
 
@@ -186,85 +241,40 @@
 <th:block layout:fragment="customContents">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child" th:onclick="|location.href='@{/user/donation/detail}'|">
-                    <img class="donation-item-third-child-image" src="https://50plus.or.kr/upload/im/2018/09/17473716-08b5-4c55-8709-380ededad91c.png">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">34% 달성</span>
-                    <span class="donation-item-span-second">480,200원</span>
-                    <span class="donation-item-span-third">11일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    <a th:href="@{/user/donation/detail}">시설 퇴소를 앞둔, 음악으로 세상에 서고 싶은 사랑이</a>
-                </div>
-                <div class="donation-item-fourth-child">
-                    파주시문산종합사회복지관
-                </div>
-                <select style="width: 100%; margin-top: 10px; margin-bottom: 10px">
-                    <option>수정, 삭제 할 새소식을 선택 해 주세요!</option>
-                    <option>사랑이의 사진을 찍어봤어요~</option>
-                    <option>사랑이의 사진을 찍어봤어요2~</option>
-                    <option>사랑이의 사진을 찍어봤어요3~</option>
-                </select>
-                <div class="">
-                    <button class="news-add-btn" th:onclick="|location.href='@{/seller/donation/news/add}'|">새소식 등록</button>
-                    <button class="news-modify-btn" th:onclick="|location.href='@{/seller/donation/news/modify}'|">새소식 수정</button>
-                    <button class="news-del-btn">새소식 삭제</button>
-                </div>
-            </div>
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">2% 달성</span>
-                    <span class="donation-item-span-second">130,800원</span>
-                    <span class="donation-item-span-third">11일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    어르신께 행복을 전하는 주민나눔 단체 해피CELL
-                </div>
-                <div class="donation-item-fourth-child">
-                    월곡종합사회복지관
+            <div class="donation-item-box col-lg-4" th:if="${l.donationCondition == 3}" th:each="l : ${allDonationInfo}">
+                <div class="item-hover" th:onclick="|location.href='@{/user/donation/detail(donationCode=${l.donationCode})}'|">
+                    <div class="donation-item-first-child">
+                        <img class="donation-item-third-child-image" th:src="|@{/summernoteImage/}${l.donationImage}|">
+                    </div>
+                    <div class="donation-item-second-child">
+                        <span class="donation-item-span-first"></span>
+                        <input class="donatio-item-goalMoney" th:value="${l.donationGoalMoney}" hidden="hidden"/>
+                        <span class="donation-item-span-second" th:text="${l.donationAchievementMoney}"></span>
+                        <span class="donation-item-span-third" th:text="${l.donationEndDate}"></span>
+                    </div>
+                    <div class="donation-item-third-child">
+                        <p th:text="${l.donationSubject}"></p>
+                    </div>
+                    <div class="donation-item-fourth-child" th:text="${l.storeName}"></div>
                 </div>
                 <select style="width: 100%; margin-top: 10px; margin-bottom: 10px">
-                    <option>수정, 삭제 할 새소식을 선택 해 주세요!</option>
-                    <option>사랑이의 사진을 찍어봤어요~</option>
-                    <option>사랑이의 사진을 찍어봤어요2~</option>
-                    <option>사랑이의 사진을 찍어봤어요3~</option>
+                    <option value="0">수정, 삭제 할 새소식을 선택 해 주세요!</option>
+                    <option th:if="${l.donationCode == n.projectCode}" th:each="n : ${newsList}" th:text="${n.newsSubject}" th:value="${n.newsCode}"></option>
                 </select>
                 <div class="">
-                    <button class="news-add-btn">새소식 등록</button>
-                    <button class="news-modify-btn">새소식 수정</button>
-                    <button class="news-del-btn">새소식 삭제</button>
+                    <button class="news-add-btn" th:onclick="|location.href='@{/seller/donation/news/add(donationCode=${l.donationCode})}'|">새소식 등록</button>
+                    <button class="news-modify-btn" type="button">새소식 수정</button>
+                    <button class="news-del-btn" type="button">새소식 삭제</button>
                 </div>
             </div>
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">18% 달성</span>
-                    <span class="donation-item-span-second">1,798,700원</span>
-                    <span class="donation-item-span-third">14일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    연이은 강진, 고통 속에 놓인 아프가니스탄을 도와주세요..
-                </div>
-                <div class="donation-item-fourth-child">
-                    유엔난민기구
-                </div>
-                <select style="width: 100%; margin-top: 10px; margin-bottom: 10px">
-                    <option>수정, 삭제 할 새소식을 선택 해 주세요!</option>
-                    <option>사랑이의 사진을 찍어봤어요~</option>
-                    <option>사랑이의 사진을 찍어봤어요2~</option>
-                    <option>사랑이의 사진을 찍어봤어요3~</option>
-                </select>
-                <div class="">
-                    <button class="news-add-btn">새소식 등록</button>
-                    <button class="news-modify-btn">새소식 수정</button>
-                    <button class="news-del-btn">새소식 삭제</button>
-                </div>
-            </div>
+
+            <form id="newsModifyForm" th:action="@{/seller/donation/news/modify}" method="get">
+                <input id="newsCode" name="newsCode">
+            </form>
+
+            <form id="newsDeleteForm" th:action="@{/seller/donation/news/delete}" method="get">
+                <input id="delNewsCode" name="delNewsCode">
+            </form>
 
         </div>
     </div>

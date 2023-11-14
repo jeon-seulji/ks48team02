@@ -349,6 +349,21 @@
                 }); //$.ajax
             });
 
+            $('.submitBtn').click(function (){
+               const $submitBtn = $(this).submit();
+               if ($('#donationContents').summernote('isEmpty')){
+                   alert('프로젝트 스토리를 작성해 주세요!');
+                   return false;
+               }else{
+                   if(confirm('프로젝트를 등록하시겠습니까??')){
+                       $submitBtn.submit();
+                   }else{
+                       return false;
+                   }
+               }
+
+            });
+
         }); // end
     </script>
 
@@ -400,7 +415,7 @@
                         <div class="col-8">
                             <label for="totalCategoryCode" class="form-label fw-bord text-dark">카테고리를 선택해 주세요</label>
                             <br>
-                            <select id="totalCategoryCode" name="totalCategoryCode">
+                            <select id="totalCategoryCode" name="totalCategoryCode" class="">
                                 <option value="">==선택==</option>
                                 <option th:if="${categoryList != null}" th:each="l : ${categoryList}" th:text="${l.categoryName}" th:value="${l.totalCategoryCode}"></option>
                             </select>

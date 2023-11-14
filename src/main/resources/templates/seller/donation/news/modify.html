@@ -10,7 +10,7 @@
     <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
     <link rel="stylesheet" th:href="@{/user/css/main_style.css}" />
 
-
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
@@ -33,7 +33,7 @@
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
-
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script src=" https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/locales/bootstrap-datepicker.ko.min.js"></script>
 
 
@@ -129,48 +129,6 @@
                 todayHighlight: true
             })
 
-
-            //리워드 추가 버튼 클릭 시 슬라이더 폼 추가
-            $('#rewardAddBtn').click(function(){
-
-                let rewardSubject = $('#rewardSubject').val();
-                let rewardPrice = $('#rewardPrice').val();
-                let rewardComent = $('#rewardComent').val();
-                let rewardDelever = $('#date-picker-delever').val();
-
-                let card = $(' <div class="swiper-slide">\n' +
-                    '                    <div class="card border-primary mb-4 shadow-sm">\n' +
-                    '                      <div class="card-header ">\n' +
-                    '                        <h5 class="rewardSebjectH my-0 fw-normal"></h5>\n' +
-                    '                      </div>\n' +
-                    '                      <div class="card-body">\n' +
-                    '                        <p class="text-dark">리워드 금액</p>\n' +
-                    '                        <input class="rewardPriceInput form-control-sm" type="text" readonly value="">\n' +
-                    '                        <p class="text-dark">예상 배송일</p>\n' +
-                    '                        <input class="rewardDeleverInput form-control-sm" type="text" readonly value="">\n' +
-                    '                        <br><br>\n' +
-                    '                        <button type="button" class="modifyBtn w-70 btn btn-sm btn-primary">수정</button>\n' +
-                    '                        <button type="button" class="delBtn w-70 btn btn-sm btn-danger">삭제</button>\n' +
-                    '                      </div>\n' +
-                    '                    </div>\n' +
-                    '                  </div>')
-
-
-                $(card).find('.rewardSebjectH').text(rewardSubject);
-                $(card).find('.rewardPriceInput').val(`${Number(rewardPrice.replaceAll(',','')).toLocaleString('ko-KR')}원`);
-                $(card).find('.rewardDeleverInput').val(rewardDelever);
-                $('.swiper-wrapper').append($(card));
-
-                swiper();
-
-
-                $('#rewardPrice').val('');
-                $('#rewardSubject').val('');
-                $('#rewardComent').val('');
-                $('#date-picker-delever').val('');
-
-            });
-
             //초기화 버튼 클릭 시 추가된 슬라이더 폼 모두 삭제
             $('#rewardInitializeBtn').click(function(){
                 $('.swiper-slide').remove();
@@ -225,16 +183,109 @@
             swiper();
         })
 
+        //summerNote TextArea 안에있는 이미지 저장위한 코드
+        $('#detailComent').summernote({
+            height: 500,                 // 에디터 높이
+            minHeight: null,             // 최소 높이
+            maxHeight: null,             // 최대 높이
+            focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",					// 한글 설정
+            placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
+            callbacks: {	//여기 부분이 이미지를 첨부하는 부분
+                onImageUpload : function(files) {
+                    uploadSummernoteImageFile(files[0],this);
+                },
+                onMediaDelete: function ($target, editor, $editable) {
+                    if (confirm('이미지를 삭제 하시겠습니까?')) {
+                        var deletedImageUrl = $target
+                            .attr('src')
+                            .split('/')
+                            .pop()
 
-        $('#submitBtn').click(function(){
-            console.log($('.needs-validation').val());
+                        // ajax 함수 호출
+                        deleteSummernoteImageFile(deletedImageUrl)
+                    }
+                },
+                onPaste: function (e) {
+                    var clipboardData = e.originalEvent.clipboardData;
+                    if (clipboardData && clipboardData.items && clipboardData.items.length) {
+                        var item = clipboardData.items[0];
+                        if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                            e.preventDefault();
+                        }
+                    }
+                }
+            }
+        });
+        /**
+         * 이미지 파일 업로드
+         */
+        let imagesName = [];
+        function uploadSummernoteImageFile(file, editor) {
+            data = new FormData();
+            data.append("file", file);
+            $.ajax({
+                data : data,
+                type : "POST",
+                url : "/user/projectRegistration/uploadSummernoteImageFile",
+                contentType : false,
+                processData : false,
+                success : function(data) {
+                    //항상 업로드된 파일의 url이 있어야 한다.
+                    $(editor).summernote('insertImage', data.url);
+                    imagesName.push(data.filename);
+                }
+            });
+        }
+
+        /**
+         * 이미지 삭제
+         */
+        function deleteSummernoteImageFile(imageName) {
+            data = new FormData()
+            data.append('file', imageName)
+            $.ajax({
+                data: data,
+                type: 'POST',
+                url: 'deleteSummernoteImageFile',
+                contentType: false,
+                enctype: 'multipart/form-data',
+                processData: false,
+            })
+        }
+
+        // summernote 드래그 & 드랍 구현
+        $("div.note-editable").on('drop',function(e){
+            for(i=0; i< e.originalEvent.dataTransfer.files.length; i++){
+                uploadSummernoteImageFile(e.originalEvent.dataTransfer.files[i],$("#donationContents")[0]);
+            }
+            e.preventDefault();
         })
 
+        $('.cancelBtn').click(function (){
+            if(confirm('정말 취소 하시겠습니까?')){
+                window.history.go(-1);
+            }else{
+                return false;
+            }
+        });
 
+        $('#submitBtn').click(function (){
+            if($('#detailSubject').val() == '' || $('#detailSubject').val() == null || typeof $('#detailSubject').val() == 'undefined'){
+                alert('새소식 제목을 입력해 주세요');
+                return false;
+            }
+            if($('#detailComent').summernote('isEmpty')){
+                alert('새소식 내용을 입력해 주세요');
+                return false;
+            }
+            if(confirm('정말 새소식을 작성하시겠습니까?')){
+                $('#addNewsForm').submit();
+            }else{
+                return false;
+            }
 
-
-
-
+        });
 
 
     </script>
@@ -262,7 +313,7 @@
                 </h4>
                 <ul class="list-group mb-3">
                     <li data-tab="storyInfo" class="active list-group-item d-flex justify-content-between lh-sm">
-                        <h6 class="my-0">1.새소식 수정</h6>
+                        <h6 class="my-0">1.새소식 등록</h6>
                     </li>
                 </ul>
             </div>
@@ -271,39 +322,29 @@
 
             <div id="storyInfo" class="info-contents-area col-lg-10" style="display: block;">
 
-                <h5 class="mb-2 fw-bord">기부 프로젝트 수정할 새소식과 이미지를 등록해주세요</h5>
-                <h6 class="mb-2">영상과 이미지를 함께 등록할 경우, 영상이 먼저 보여집니다.</h6>
+                <h5 class="mb-2 fw-bord">수정 할 새소식을 등록해 주세요!</h5>
                 <br><br>
 
-                <form class="needs-validation" novalidate="">
+                <form id="addNewsForm" th:action="@{/seller/donation/news/modify/update}" method="post">
                     <div class="row g">
-
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="conditionImage" class="form-label fw-bord text-dark">새소식에 들어갈 이미지를 등록해주세요.</label>
-                                <div class="banner-content" style="width: 80%">새소식 이미지</div>
-                                <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
-                                <input class="form-control" id="conditionImage" type="file">
-                            </div>
-                        </div>
-
-                        <div class="col-10">
-                            <label for="detailMovie" class="form-label fw-bord text-dark">동영상 주소를 적어주세요</label>
-                            <input type="text" class="form-control" id="detailMovie" placeholder="동영상 주소를 적어주세요." value="" required="" style="width: 100%">
-                            <br>
-                        </div>
-
                         <div class="col-10">
                             <div class="mb-3">
-                                <label for="detailComent" class="form-label" style="width: 100%">기부 프로젝트 새소식을 적어주세요</label>
-                                <textarea class="form-control" id="detailComent" rows="20" style="width: 100%"></textarea>
+                                <label for="detailSubject" class="form-label" style="width: 100%">새소식 제목을 적어주세요</label>
+                                <input class="form-control" id="detailSubject" name="detailSubject" rows="20" style="width: 100%"
+                                       th:if="${l.newsCode == newsCode}" th:each="l : ${newsList}" th:value="${l.newsSubject}"></input>
                             </div>
                         </div>
-
+                        <div class="col-10">
+                            <div class="mb-3">
+                                <label for="detailComent" class="form-label">기부 프로젝트 새소식을 적어주세요</label>
+                                <textarea id="detailComent" name="detailComent" th:if="${nl.newsCode == newsCode}" th:each="nl : ${newsList}" th:utext="${nl.newsContent}"></textarea>
+                            </div>
+                        </div>
+                        <input name="newsCode" hidden="hidden" th:value="${newsCode}">
                         <div class="col-8">
                             <br><br>
-                            <button class="submitBtn w-80 btn btn-primary btn-lg" type="button">제출하기</button>
-                            <button class="cancelBtn w-80 btn btn-primary btn-lg" type="button">취소하기</button>
+                            <button id="submitBtn" class="w-80 btn btn-primary btn-lg" type="button">제출하기</button>
+                            <button class="cancelBtn w-80 btn btn-primary btn-lg" type="button" style="background-color: whitesmoke; color: black; margin-left: 10px">취소하기</button>
                         </div>
                     </div>
 
@@ -314,7 +355,6 @@
 
 
             <hr class="my-4">
-            </form>
         </div>
     </div>
     </div>
