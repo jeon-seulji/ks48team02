@@ -44,10 +44,10 @@
                 ORDER BY ot.order_application_date ASC
             </when>
             <when test="orderby == 'order_name_d'">
-                ORDER BY ot.order_name ASC
+                ORDER BY ot.order_name DESC
             </when>
             <when test="orderby == 'order_name_a'">
-                ORDER BY ot.order_name DESC
+                ORDER BY ot.order_name ASC
             </when>
             <when test="orderby == 'projecting_o'">
                 WHERE ot.order_category_code IN ('ORDC_001','ORDC_002','ORDC_003')
@@ -89,13 +89,46 @@
     </select>
 
 
+    <!-- 체크 포인트 : category code dto 적용한 로직으로 수정 -->
     <!-- 전체 주문 행 갯수 -->
-    <select id="getOrderCnt" resultType="int">
+    <select id="getOrderCnt" resultType="int" parameterType="String">
         /* 전체 주문 행 조회 */
         SELECT
             COUNT(1)
         FROM
-            order_table;
+            order_table
+        <where>
+            <if test="orderby == 'projecting_o'">
+                order_category_code IN ('ORDC_001','ORDC_002','ORDC_003')
+
+            </if>
+            <if test="orderby == 'projectFail_o'">
+                order_category_code = 'ORDC_013'
+
+            </if>
+            <if test="orderby == 'deliveryWait_o'">
+                order_category_code = 'ORDC_004'
+
+            </if>
+            <if test="orderby == 'deliveryCompleted_o'">
+                order_category_code = 'ORDC_005'
+
+            </if>
+            <if test="orderby == 'swapping_o'">
+                order_category_code IN ('ORDC_011','ORDC_012')
+
+            </if>
+            <if test="orderby == 'refunding_o'">
+                order_category_code IN ('ORDC_009','ORDC_010')
+
+            </if>
+            <if test="orderby == 'orderCompleted'">
+                order_category_code IN ('ORDC_006','ORDC_007','ORDC_008')
+
+            </if>
+
+        </where>
+
     </select>
 
     <!-- 특정 주문 조회 -->
@@ -119,4 +152,35 @@
             ot.order_code = #{orderCode};
     </select>
 
+    <!-- 검색조건에 따른 주문 목록 조회 -->
+    <select id="adminOrderSearchAjax" parameterType="SearchSelectDto" resultMap="orderMap">
+        /* 검색조건에 따른 주문 목록 조회 */
+        SELECT
+            ot.order_code,
+            ot.member_id,
+            ot.order_category_code,
+            ot.order_name,
+            ot.order_funding_name,
+            ot.order_total_price,
+            ot.order_category_detail,
+            ot.goods_code,
+            ot.order_application_date,
+            ot.order_confirm_date,
+            ot.order_cancell_date
+        FROM
+        order_table AS ot
+        <where>
+            <if test="dateSettStartDate != null and dateSettStartDate != ''">
+                DATE_FORMAT(ot.order_application_date, '%Y-%m-%d') >= #{searchForm.amDateSettStartDate}
+                AND
+            </if>
+            <if test="dateSettEndDate != null and dateSettEndDate != ''">
+                #{searchForm.amDateSettEndDate} >= DATE_FORMAT(ot.order_application_date, '%Y-%m-%d')
+                AND
+            </if>
+            <if test="searchKey != null and searchKey != ''">
+                ${searchForm.searchKey} LIKE CONCAT('%', #{searchForm.searchValue}, '%');
+            </if>
+        </where>
+    </select>
 </mapper>

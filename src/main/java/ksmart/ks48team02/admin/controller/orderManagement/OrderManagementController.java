@@ -1,10 +1,6 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
-import ksmart.ks48team02.common.dto.DonationPayments;
-import ksmart.ks48team02.common.dto.InvestPayments;
-import ksmart.ks48team02.common.dto.RewardPayments;
-import ksmart.ks48team02.user.controller.MainController;
-import ksmart.ks48team02.common.dto.OrderTotal;
+import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.service.order.OrderService;
 import ksmart.ks48team02.common.service.payments.PaymentsService;
 import org.slf4j.Logger;
@@ -33,6 +29,18 @@ public class OrderManagementController {
         this.paymentsService = paymentsService;
     }
 
+    // 주문 검색 ajax
+    @PostMapping(value="/ajax/search")
+    @ResponseBody
+    public List<OrderTotal> adminOrderSearchAjax(Model model,
+                                                 @ModelAttribute SearchSelectDto searchForm){
+        log.info("searchForm : {}", searchForm);
+        List<OrderTotal> list = orderService.adminOrderSearchAjax(searchForm);
+        log.info("검색 결과 목록 : {}", list);
+
+        return list;
+    }
+
     // 주문 대시보드
     @GetMapping(value = {"","/"})
     public String adminOrderDashBoard(Model model){
@@ -53,11 +61,13 @@ public class OrderManagementController {
                                          defaultValue = "1") int currentPage,
                                  @RequestParam(name="rowperPage",
                                          required = false,
-                                         defaultValue = "15") int rowPerPage){
+                                         defaultValue = "15") int rowPerPage
+                                ){
         // default param setting
         model.addAttribute("title","관리자 : 주문 목록");
         model.addAttribute("contentsTitle","주문 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
+        model.addAttribute("actionValue","/list");
 
         // 주문 목록 진열
         Map<String, Object> resultMap = orderService.getOrderList(orderby, currentPage, rowPerPage);
