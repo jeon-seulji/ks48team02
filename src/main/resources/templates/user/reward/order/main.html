@@ -131,9 +131,10 @@
                     const product ={};
                     product.optionName = optionName;
                     product.optionPrice = optionPrice;
-                    product.quantity = optionAmount;
+                    product.orderQuantity = Number(optionAmount);
                     product.rewardOptionCode = rewardOptionCode;
                     product.rewardProjectCode = [[${rewardOrderInfo.rewardProjectCode}]];
+                    product.pricePerOption = Number(optionPrice) * Number(optionAmount);
                     products.push(product);
 
                     //옵션들 배송비 중 가장 높은 배송비 추출.
@@ -432,23 +433,30 @@
 
                         console.log(products);
                         console.log(selectedPaymentMethod);
-                        let paymentMethod= selectedPaymentMethod.easyPay.provider;
+                        let paymentMethod= selectedPaymentMethod.method;
+                        console.log(paymentMethod);
+                        if(paymentMethod == '간편결제') {
+                            paymentMethod = selectedPaymentMethod.easyPay.provider;
+                            console.log(paymentMethod);
+                        }
 
                         const paymentObj = {
-                            orderId: [[${orderAndPaymentCode.orderCode}]],
+                            orderId: crypto.randomUUID(),
                             orderName: [[${rewardOrderInfo.projectSubject}]],
+                            amount: $('#totalPayPrice').data('price'),
                             // successUrl: `${window.location.origin}/user/reward/payment`,
                             // failUrl: `${window.location.origin}/fail`,
                             customerEmail: [[${orderMemberInfo.memberEmail}]],
                             customerName: [[${orderMemberInfo.memberName}]],
-                            mobilePhone: [[${orderMemberInfo.memberContactInfo}]]
+                            mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
                         };
 
                         const paymentParam={
-                            usePoiont : $('#totalOrderPoint').data('price'),
+                            usePoint : Number($('#usePoint').val()),
                             deliveryPrice : $('#totalOrderDeliverPrice').data('price'),
-                            useCouponCode : $('.orderUseCoupon option:selected').attr('id'),
-                            couponDiscountPrice : $('#totalOrderCoupon').data('price'),
+                            useCouponCode : $('.orderUseCoupon option:selected').attr('id') ?? null,
+                            couponIssueCode: $('.orderUseCoupon option:selected').attr('class') ?? null,
+                            couponDiscountPrice : $('#totalOrderCoupon').data('price') ?? null,
                             memberRankDiscount :$('#memberRankDiscount').data('price'),
                             memberSavePoint :$('#memberSavePoint').data('price'),
                             orderPrice :$('#totalRewardPrice').data('price'),
@@ -460,6 +468,7 @@
                             paymentMethod : paymentMethod,
                             rewardOptionList : products
                         };
+                        console.log(paymentObj);
                         console.log(paymentParam);
 
                         paymentWidget.requestPayment(paymentObj)
@@ -467,9 +476,6 @@
                                 paymentParam.paymentKey = response.paymentKey;
                                 paymentParam.orderId = response.orderId;
                                 paymentParam.amount = response.amount;
-                                paymentParam.orderCode = [[${orderAndPaymentCode.orderCode}]];
-                                paymentParam.paymentCode = [[${orderAndPaymentCode.rewardPaymentCode}]];
-                                paymentParam.rewardOrderDetailCode = [[${orderAndPaymentCode.rewardOrderDetailCode}]];
 
                                 const request =$.ajax({
                                     type: "POST",
@@ -664,8 +670,8 @@
                                             <option value="0">보유 쿠폰이 없습니다.</option>
                                          </th:block>
                                          <th:block th:unless="${memberHaveCouponList == null}" th:each="l : ${memberHaveCouponList}">
-                                            <option th:if="${l.couponDiscountRate > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountRate}" th:id="${l.couponCode}"></option>
-                                            <option th:if="${l.couponDiscountAmount > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountAmount}" th:id="${l.couponCode}"></option>
+                                            <option th:if="${l.couponDiscountRate > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountRate}" th:id="${l.couponCode}" th:class="${l.memberCoupon.couponIssueCode}"></option>
+                                            <option th:if="${l.couponDiscountAmount > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountAmount}" th:id="${l.couponCode}" th:class="${l.memberCoupon.couponIssueCode}"></option>
                                           </th:block>
                                 </select>
                             </span>

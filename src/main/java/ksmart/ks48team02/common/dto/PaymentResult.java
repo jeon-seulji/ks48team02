@@ -13,7 +13,7 @@ public class PaymentResult {
     private String orderCode;
     private String paymentCode;
     private String rewardOrderDetailCode;
-    private int usePoiont;
+    private int usePoint;
     private int deliveryPrice;
     private String useCouponCode;
     private int couponDiscountPrice;
@@ -26,6 +26,10 @@ public class PaymentResult {
     private String orderMemberName;
     private String orderMemberId;
     private String paymentMethod;
+    private String useReserveCode;
+    private String couponIssueCode;
+    private String couponUseLogCode;
+    private String pointLogCode;
 
     private List<RewardOption> rewardOptionList;
 }

@@ -51,6 +51,7 @@
             c.coupon_name,
             c.coupon_discount_rate,
             c.coupon_discount_amount,
+            mc.coupon_issue_code,
             mc.coupon_reg_dateTime,
             mc.coupon_end_date,
             mc.coupon_used
