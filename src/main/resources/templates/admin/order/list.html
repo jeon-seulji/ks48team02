@@ -17,6 +17,28 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script type="text/javascript">
+
+        jQuery.fn.serializeObject = function() {
+            var obj = null;
+            try {
+                if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+                    var arr = this.serializeArray();
+                    if (arr) {
+                        obj = {};
+                        jQuery.each(arr, function() {
+                            obj[this.name] = this.value;
+                        });
+                    }//if ( arr ) {
+                }
+            } catch (e) {
+                alert(e.message);
+            } finally {
+            }
+
+            return obj;
+        };
+
+
         // 기간 선택 min value setting
         $('input[name="amDateSettStartDate"]').on('change', function(){
             let startDate = $(this).val();
@@ -51,21 +73,24 @@
         /* ajax */
 
         // admin orderList ajax
-        function adminOrderListAjax(orderby, currentPage, rowPerPage, callback){
+        function adminOrderListAjax(queryString, callback){
+
             const request = $.ajax({
                 url: '/admin/order/ajax/list',
                 method : 'POST',
-                data : {"orderby" : orderby, "currentPage" : currentPage, "rowPerPage" : rowPerPage},
+                contentType : 'application/json',
+                data : JSON.stringify(queryString),
                 dataType: 'json'
-            })
+            });
             request.done(function(list){
-                // console.log(list, '<--');
+                console.log(list, '<--');
                 callback(list);
             });
             request.fail(function(err){
                 console.log(err);
             });
         }
+
         // order data setting
         function setOrderData(list){
             // add ajax contents
@@ -76,6 +101,7 @@
                                              <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                                           </tr>`);
             }
+            // contents append
             $(list).each((idx, l) => {
                 $('#orderListForm tbody').append(`<tr></tr>`)
                     .append(
@@ -177,18 +203,25 @@
             let currentPage = 1;
             let rowPerPage = $('select[name="count-select"]').val();
 
+            const queryString = searchObject();
+            queryString.orderbyValue = orderbyValue;
+            queryString.currentPage = currentPage;
+            queryString.rowPerPage = rowPerPage;
 
-            // ajax 호출
-            adminOrderListAjax(orderbyValue, currentPage, rowPerPage, function(list) {
-                // list count
-                $('.total-list').text(list.orderList.length);
-                setOrderData(list.orderList);
-
-                // pager setting
-                const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
-                setPagerData(pageNumArr, list.currentPage, list);
-
-            });
+            console.log(queryString);
+            //ajax 호출
+            // adminOrderListAjax(queryString, function(list) {
+            //     console.log(list);
+            //     /*
+            //     // list count
+            //     $('.total-list').text(list.orderList.length);
+            //     setOrderData(list.orderList);
+            //
+            //     // pager setting
+            //     const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
+            //     setPagerData(pageNumArr, list.currentPage, list);
+            //     */
+            // });
         });
 
         // 페이징 ajax
@@ -196,8 +229,15 @@
             let pageNumber = $(e.target).attr('data-value');
             let orderbyValue = $('select[name="orderby"]').val();
             let rowPerPage = $('select[name="count-select"]').val();
+
+            const queryString = searchObject();
+            queryString.orderbyValue = orderbyValue;
+            queryString.currentPage = pageNumber;
+            queryString.rowPerPage = rowPerPage;
+            console.log(queryString, '<-- queryString');
+
             // ajax 호출
-            adminOrderListAjax(orderbyValue, pageNumber, rowPerPage, function(list){
+            adminOrderListAjax(queryString, function(list){
                 // list count
                 $('.total-list').text(list.orderList.length);
                 setOrderData(list.orderList);
@@ -238,14 +278,21 @@
             const numberArr = $.map($orderListLi, function(element, idx){
                 return $(element).find('a').text();
             });
+            const queryString = searchObject();
+
+            queryString.orderbyValue = orderbyValue;
+            queryString.rowPerPage = rowPerPage;
+
 
             if($(e.target).parent().hasClass('prev-transfer')){
                 currentPage--;
             } else if($(e.target).parent().hasClass('next-transfer')){
                 currentPage++;
             }
+            queryString.currentPage = currentPage;
+            console.log(queryString, '<-- queryString');
 
-            adminOrderListAjax(orderbyValue, currentPage, rowPerPage, function(list) {
+            adminOrderListAjax(queryString, function(list) {
                 // list count
                 $('.total-list').text(list.orderList.length);
                 setOrderData(list.orderList);
@@ -263,7 +310,7 @@
             const request = $.ajax({
                 url: '/admin/order/ajax/search',
                 method : 'POST',
-                data : queryString,
+                data : JSON.stringify(queryString),
                 contentType: 'application/json',
                 dataType: 'json'
             })
@@ -276,32 +323,75 @@
             });
         }
 
-        $('.orderSearchBtn').on('click', function(){
-            console.log('aa');
+        function searchObject(){
             const $inputEls = $('.order-category-select input:checked');
-            console.log($inputEls);
+            // console.log($inputEls);
             const arr = [];
             $($inputEls).each((idx, item) => {
                 let checkBoxValue = $(item).attr('name');
                 arr.push(checkBoxValue);
+                // switch(checkBoxValue){
+                //     case 'reward':
+                //         arr.push('ORDC_001', 'ORDC_002', 'ORDC_003');
+                //         break;
+                //     case 'projectCompleted':
+                //         arr.push('ORDC_004', 'ORDC_005');
+                //         break;
+                //     case 'projectFail':
+                //         arr.push('ORDC_013');
+                //         break;
+                //     case 'refunding':
+                //         arr.push('ORDC_009');
+                //         break;
+                //     case 'refundCompleted':
+                //         arr.push('ORDC_010');
+                //         break;
+                //     case 'swapping':
+                //         arr.push('ORDC_011');
+                //         break;
+                //     case 'swappingCompleted':
+                //         arr.push('ORDC_006','ORDC_007','ORDC_008');
+                //         break;
+                //     case 'orderCompleted':
+                //         arr.push('ORDC_012');
+                //         break;
+                //     case 'orderCancle':
+                //         arr.push('ORDC_014',);
+                //         break;
+                // }
             });
             console.log(arr, '<--arr');
 
-            let userSettStartDate = $('input[name="userSettStartDate"]').val();
-            let userSettEndDate = $('input[name="userSettEndDate"]').val();
+
+            let amDateSettStartDate = $('input[name="amDateSettStartDate"]').val();
+            let amDateSettEndDate = $('input[name="amDateSettEndDate"]').val();
             let userSearchKey = $('select[name="userSearchKey"]').val();
             let userSearchable = $('select[name="userSearchable"]').val();
 
-            $('input[name="amDateSettStartDate"]').val(userSettStartDate);
-            $('input[name="amDateSettEndDate"]').val(userSettEndDate);
-            $('input[name="orderCategoryCode"]').val(arr);
+            $('input[name="dateSettStartDate"]').val(amDateSettStartDate);
+            $('input[name="dateSettEndDate"]').val(amDateSettEndDate);
             $('input[name="searchKey"]').val(userSearchKey);
             $('input[name="searchValue"]').val(userSearchable);
 
-            let queryString = $('#searchForm').serialize();
-            console.log(queryString, '<-- queryString');
+            let queryString = $('#searchForm').serializeObject();
+            queryString.projectPartition = arr;
+
+            return queryString;
+        }
+
+        $('.orderSearchBtn').on('click', function(){
+            let queryString = searchObject();
+            // console.log(queryString, '<-- queryString');
+
             orderSearchAjax(queryString, function(list){
+
                 console.log(list, '<--list');
+                // data setting
+                setOrderData(list);
+
+                // pager setting
+                const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
+                setPagerData(pageNumArr, list.currentPage, list);
             });
         });
     </script>
@@ -315,85 +405,63 @@
         <form id="searchForm" name="searchForm">
             <input type="hidden" name="dateSettStartDate">
             <input type="hidden" name="dateSettEndDate">
-            <input type="hidden" name="orderCategoryCode">
             <input type="hidden" name="searchKey">
             <input type="hidden" name="searchValue">
         </form>
-            <table class="partition-select">
-                <tbody>
-                    <tr>
-                        <td>
-                            기간
-                        </td>
-                        <td>
-                            <input type="date" name="amDateSettStartDate">
-                            <span> - </span>
-                            <input type="date" name="amDateSettEndDate">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            주문 상태
-                        </td>
-                        <td class="order-category-select" style="height: auto !important;">
-
-                            <ul>
-                                <li>
-                                    <input id="projecting" type="checkbox" name="projecting">
-                                    <label for="projecting">프로젝트 공고중</label>
-                                </li>
-                                <li>
-                                    <input id="projectCompleted" type="checkbox" name="projectCompleted">
-                                    <label for="projectCompleted">프로젝트 성공</label>
-                                </li>
-                                <li>
-                                    <input id="projectFail" type="checkbox" name="projectFail">
-                                    <label for="projectFail">프로젝트 실패</label>
-                                </li>
-                                <li>
-                                    <input id="refunting" type="checkbox" name="refunting">
-                                    <label for="refunting">환불 처리중</label>
-                                </li>
-                                <li>
-                                    <input id="refundCompleted" type="checkbox" name="refundCompleted">
-                                    <label for="refundCompleted">환불 완료</label>
-                                </li>
-                                <li>
-                                    <input id="swapping" type="checkbox" name="swapping">
-                                    <label for="swapping">교환 처리중</label>
-                                </li>
-                                <li>
-                                    <input id="swappingCompleted" type="checkbox" name="swappingCompleted">
-                                    <label for="swappingCompleted">교환 완료</label>
-                                </li>
-                                <li>
-                                    <input id="orderCancle" type="checkbox" name="orderCancle">
-                                    <label for="orderCancle">주문 취소</label>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            검색 키워드
-                        </td>
-                        <td class="order-category-select">
-                            <select name="userSearchKey">
-                                <option value="total">전체</option>
-                                <option value="orderCode">주문코드</option>
-                                <option value="orderName">주문자명</option>
-                                <option value="orderId">주문아이디</option>
-                                <option value="projectName">공고명</option>
-                                <option value="projectPartition">분류</option>
-                            </select>
-                            <input type="text" style="padding: 6px 10px; width: 250px;" name="userSearchable">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="btn-area">
-                <button type="button" class="orderSearchBtn submitBtn">검색</button>
-            </div>
+        <table class="partition-select">
+            <tbody>
+                <tr>
+                    <td>
+                        기간
+                    </td>
+                    <td>
+                        <input type="date" name="amDateSettStartDate">
+                        <span> - </span>
+                        <input type="date" name="amDateSettEndDate">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        분류
+                    </td>
+                    <td class="order-category-select" style="height: auto !important;">
+                        <ul>
+                            <li>
+                                <input id="rwd" type="checkbox" name="rwd">
+                                <label for="rwd">리워드</label>
+                            </li>
+                            <li>
+                                <input id="don" type="checkbox" name="don">
+                                <label for="don">기부</label>
+                            </li>
+                            <li>
+                                <input id="inv" type="checkbox" name="inv">
+                                <label for="inv">투자</label>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        검색 키워드
+                    </td>
+                    <td class="order-category-select">
+                        <select name="userSearchKey">
+                            <option value="total">전체</option>
+                            <option value="orderCode">주문코드</option>
+                            <option value="orderName">주문자명</option>
+                            <option value="orderId">주문아이디</option>
+                            <option value="projectName">공고명</option>
+                            <option value="projectPartition">분류</option>
+                        </select>
+                        <input type="text" style="padding: 6px 10px; width: 250px;" name="userSearchable">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="btn-area">
+            <button type="button" class="orderSearchBtn submitBtn">검색</button>
+        </div>
     </div>
     <div class="title-wrap">
         <h4 class="admin-content-title">주문 목록</h4>

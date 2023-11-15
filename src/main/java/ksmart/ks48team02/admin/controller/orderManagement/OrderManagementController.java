@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,10 +33,10 @@ public class OrderManagementController {
     // 주문 검색 ajax
     @PostMapping(value="/ajax/search")
     @ResponseBody
-    public List<OrderTotal> adminOrderSearchAjax(Model model,
-                                                 @ModelAttribute SearchSelectDto searchForm){
+    public Map<String, Object> adminOrderSearchAjax(Model model,
+                                                 @RequestBody Map<String, Object> searchForm){
         log.info("searchForm : {}", searchForm);
-        List<OrderTotal> list = orderService.adminOrderSearchAjax(searchForm);
+        Map<String, Object> list = orderService.getOrderList(searchForm);
         log.info("검색 결과 목록 : {}", list);
 
         return list;
@@ -52,25 +53,27 @@ public class OrderManagementController {
 
     // 주문 목록
     @GetMapping( "/list")
-    public String adminOrderList(Model model,
-                                 @RequestParam(name="orderby",
-                                 required = false,
-                                 defaultValue = "order_d") String orderby,
-                                 @RequestParam(name="currentPage",
-                                         required = false,
-                                         defaultValue = "1") int currentPage,
-                                 @RequestParam(name="rowperPage",
-                                         required = false,
-                                         defaultValue = "15") int rowPerPage
-                                ){
+    public String adminOrderList(Model model){
         // default param setting
         model.addAttribute("title","관리자 : 주문 목록");
         model.addAttribute("contentsTitle","주문 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
         model.addAttribute("actionValue","/list");
 
+        String orderby = "orderby";
+        int currentPage = 1;
+        int rowPerPage = 15;
+
+        Map<String, Object> paramMap = null;
+        paramMap = new HashMap<String, Object>();
+
+        paramMap.put("orderby", orderby);
+        paramMap.put("currentPage", currentPage);
+        paramMap.put("rowPerPage", rowPerPage);
+
+        log.info("paramMap : {}", paramMap);
         // 주문 목록 진열
-        Map<String, Object> resultMap = orderService.getOrderList(orderby, currentPage, rowPerPage);
+        Map<String, Object> resultMap = orderService.getOrderList(paramMap);
         log.info("주문 목록 : {}", resultMap.get("orderList"));
         model.addAttribute("OrderList",resultMap.get("orderList"));
         model.addAttribute("lastPage",resultMap.get("lastPage"));
@@ -85,18 +88,19 @@ public class OrderManagementController {
     @PostMapping(value="/ajax/list")
     @ResponseBody
     public Map<String, Object> getOrderListOrderBy(Model model,
-                                                @RequestParam(name="orderby",
-                                                        required = false,
-                                                        defaultValue = "order_d") String orderby,
-                                                @RequestParam(name="currentPage",
+                                                    @RequestBody Map<String, Object> paramMap){
+//                                                @RequestParam(name="orderby",
 //                                                        required = false,
-                                                        defaultValue = "1") int currentPage,
-                                                @RequestParam(name="rowPerPage",
-//                                                        required = false,
-                                                        defaultValue = "15") int rowPerPage){
-        log.info("currentPage {}", currentPage);
-        log.info("rowPerPage {}", rowPerPage);
-        Map<String, Object> list = orderService.getOrderList(orderby, currentPage, rowPerPage);
+//                                                        defaultValue = "order_d") String orderby,
+//                                                @RequestParam(name="currentPage",
+////                                                        required = false,
+//                                                        defaultValue = "1") int currentPage,
+//                                                @RequestParam(name="rowPerPage",
+////                                                        required = false,
+//                                                        defaultValue = "15") int rowPerPage){
+        log.info("currentPage {}", paramMap.get("currentPage"));
+        log.info("rowPerPage {}", paramMap.get("rowPerPage"));
+        Map<String, Object> list = orderService.getOrderList(paramMap);
         log.info("ajax list {}", list);
 
         return list;
