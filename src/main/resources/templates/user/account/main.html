@@ -213,7 +213,7 @@
                     </div>
                     <div id="id-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
-                <div id="emailHelp" class="form-text"></div>
+
                 <div class="mb-3">
                     <label for="memberPw" class="form-label">비밀번호</label>
                     <input type="password" name="memberPw" class="form-control pw-check"  aria-describedby="emailHelp" id="memberPw" placeholder="8자 이상의 비밀번호 입력 (영문, 숫자, 특수문자 혼합)">
@@ -227,10 +227,12 @@
                 <div class="mb-3">
                     <label for="memberName" class="form-label">이름</label>
                     <input type="text" name="memberName" class="form-control" id="memberName">
+                    <div id="name-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
                 <div class="mb-3">
                     <label for="memberEmail" class="form-label">e-mail</label>
                     <input type="text" name="memberEmail" class="form-control" id="memberEmail">
+                    <div id="email-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
                 <div class="mb-3">
                     <label for="memberContactInfo" class="form-label">휴대폰 번호</label>
@@ -803,7 +805,7 @@ Fax: 02)0000-0000
                 return;
             }
             let isValid = true;
-            // 1. 모든 input이 다 작성되었는지, 유효한 값인지 검사
+            // 1. 모든 input이 다 작성되었는지 검사
             $formEles.forEach((input) => {
                 if(input.value.trim() === '' || typeof input === 'undefined'){
                     isValid = false;
@@ -811,8 +813,17 @@ Fax: 02)0000-0000
             })
 
             if(isValid){
-                    // 2. 모든 체크박스가 체크되었는지 확인
-                    $allAgree.checked ? document.getElementById('join-form').submit() : alert('필수 항목을 체크해 주세요');
+                    // 2. 모든 input이 올바른 값인지 검사 (빨간 경고 있으면 회원가입 안 되게)
+                    const $formEles = document.querySelectorAll('.form-text');
+                    let haveRed = 0;
+                    $formEles.forEach((ele)=>{
+                        if(ele.textContent.length>1) haveRed += 1;
+                    })
+                    if(haveRed === 0){
+                        // 3. 모든 체크박스가 체크되었는지 확인
+                        $allAgree.checked ? document.getElementById('join-form').submit() : alert('필수 항목을 체크해 주세요');
+                    }else alert('필수 입력 항목을 모두 올바르게 입력해 주세요');
+
             } else {
                 alert('필수 입력 항목을 모두 입력해 주세요');
             }
