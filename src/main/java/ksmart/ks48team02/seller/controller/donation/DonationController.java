@@ -11,12 +11,9 @@ import ksmart.ks48team02.user.dto.AllDonationInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @Controller("sellerDonationController")
 @RequestMapping("/seller/donation")
@@ -64,19 +61,44 @@ public class DonationController {
     }
 
     @GetMapping("/condition")
-    public String conditionMainPage(Model model){
+    public String conditionMainPage(Model model,
+                                    HttpSession session){
         model.addAttribute("title","판매자 : 기부 진행현황 관리");
         model.addAttribute("contentsTitle","기부 진행현황 관리");
+        String memberId = (String)session.getAttribute("SID");
+        List<AllDonationInfo> allDonationInfo = sellerDonationService.getAllDonationInfo(memberId); // 현재 로그인한 유저 정보로 데이터 가져옴
+        model.addAttribute("allDonationInfo", allDonationInfo);
+
         return "seller/donation/condition/main";
     }
 
+    @PostMapping("/condition/add")
+    public String conditionAddPage(@RequestParam(name = "detailComent") String detailContent,
+                                   @RequestParam(name = "donationCode") String donationCode){
+        sellerDonationService.addCondition(detailContent, donationCode);
+
+        return "redirect:/seller/donation/condition";
+    }
     @GetMapping("/condition/add")
-    public String conditionAddPage(){
+    public String conditionAddPage(@RequestParam(name = "donationCode") String donationCode, Model model){
+        model.addAttribute("donationCode", donationCode);
         return "seller/donation/condition/add";
+    }
+    @PostMapping("/condition/modify/update")
+    public String conditionModifyUpdate(@RequestParam(name = "detailComent") String detailComent,
+                                        @RequestParam(name = "donationCode") String donationCode){
+        sellerDonationService.updateCondition(detailComent, donationCode);
+
+        return "redirect:/seller/donation/condition";
     }
 
     @GetMapping("/condition/modify")
-    public String conditionModifyPage(){
+    public String conditionModifyPage(Model model,
+                                      @RequestParam(name = "donationCode") String donationCode){
+        String Contents = sellerDonationService.modifyCondition(donationCode);
+        model.addAttribute("Contents", Contents);
+        model.addAttribute("donationCode", donationCode);
+
         return "seller/donation/condition/modify";
     }
 
@@ -95,9 +117,9 @@ public class DonationController {
     @GetMapping("/news")
     public String newsManagementPage(Model model,
                                      HttpSession session){
-        String memberId = (String)session.getAttribute("SID");
         model.addAttribute("title","판매자 : 새소식 관리");
         model.addAttribute("contentsTitle","새소식 관리");
+        String memberId = (String)session.getAttribute("SID");
         List<AllDonationInfo> allDonationInfo = sellerDonationService.getAllDonationInfo(memberId); // 현재 로그인한 유저 정보로 데이터 가져옴
         model.addAttribute("allDonationInfo", allDonationInfo);
         List<NewsList> newsList = sellerDonationService.getNews();
@@ -145,6 +167,12 @@ public class DonationController {
         sellerDonationService.deleteNews(newsCode);
 
         return "redirect:/seller/donation/news";
+    }
+
+    @PostMapping("/condition/isProject")
+    @ResponseBody
+    public int conditionCheck(@RequestBody String donationCode){
+        return sellerDonationService.isCondition(donationCode);
     }
 
 

@@ -16,4 +16,8 @@ public interface SellerDonationMapper {
     public List<NewsList> getNews();
     public void updateNews(String detailSubject, String detailComent, String newsCode);
     public void deleteNews(String newsCode);
+    public void addCondition(String detailComent, String donationCode);
+    public String modifyCondition(String donationCode);
+    public void updateCondition(String detailComent, String donationCode);
+    public int isCondition(String donationCode);
 }

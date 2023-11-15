@@ -122,4 +122,52 @@
             news_code = #{newsCode};
     </delete>
 
+    <insert id="addCondition" parameterType="String">
+        <selectKey keyProperty="conditionCode" resultType="String" order="BEFORE">
+            SELECT
+            (
+            CASE
+            WHEN COUNT(condition_datetime) = 0     THEN CONCAT('con_', CURDATE()+0, '_0001')
+            WHEN COUNT(condition_datetime) > 9999  THEN CONCAT('con_', CURDATE()+0, '_', COUNT(condition_datetime)+1)
+            ELSE CONCAT('con_', CURDATE()+0, '_', LPAD(COUNT(condition_datetime)+1, 4, '0'))
+            END
+            ) AS conditionCode
+            FROM
+                `condition`
+            WHERE
+                DATE_FORMAT(condition_datetime, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+        INSERT INTO `condition`
+        (condition_code, project_code, condition_content, condition_datetime, condition_modify_datetime, condition_delete_datetime , condition_display)
+        VALUES
+        (#{conditionCode}, #{donationCode}, #{detailComent}, NOW(), NULL, NULL, 1);
+    </insert>
+
+    <select id="modifyCondition" parameterType="String">
+        SELECT
+            condition_content
+        FROM
+            `condition`
+        WHERE
+            project_code = #{donationCode};
+    </select>
+
+    <update id="updateCondition" parameterType="String">
+        UPDATE
+            `condition`
+        SET
+            condition_content = #{detailComent},
+            condition_modify_datetime = NOW()
+        WHERE
+            project_code = #{donationCode};
+    </update>
+
+    <select id="isCondition" parameterType="String">
+        SELECT
+            COUNT(condition_code)
+        FROM
+            `condition`
+        WHERE
+            project_code = #{donationCode};
+    </select>
 </mapper>

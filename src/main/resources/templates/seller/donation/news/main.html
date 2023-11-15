@@ -41,7 +41,6 @@
             width: 350px;
             height: 350px;
             margin: 20px;
-            cursor: pointer;
         }
         .donation-item-first-child{
             background: grey;
@@ -268,11 +267,11 @@
                 </div>
             </div>
 
-            <form id="newsModifyForm" th:action="@{/seller/donation/news/modify}" method="get">
+            <form id="newsModifyForm" th:action="@{/seller/donation/news/modify}" method="get" hidden="hidden">
                 <input id="newsCode" name="newsCode">
             </form>
 
-            <form id="newsDeleteForm" th:action="@{/seller/donation/news/delete}" method="get">
+            <form id="newsDeleteForm" th:action="@{/seller/donation/news/delete}" method="get" hidden="hidden">
                 <input id="delNewsCode" name="delNewsCode">
             </form>
 

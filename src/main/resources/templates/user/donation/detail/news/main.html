@@ -99,105 +99,26 @@
         <div class="row">
             <div class="col-lg-12" style="margin-top: 30px; margin-bottom: -10px;">
                 <h5 style="display: inline-block; font-weight: bold; font-size: 15px">새소식</h5>
-                <h5 style="display: inline-block; color: #235FD9; font-weight: bold; font-size: 15px">6</h5>
+                <h5 id="newsCount" style="display: inline-block; color: #235FD9; font-weight: bold; font-size: 15px" th:text="${newsList.size()}"></h5>
             </div>
-
             <div class="col-lg-12" style="border: 2px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
-            <div class="col-lg-12 donation-new-box" th:onclick="|location.href='@{/user/donation/detail/news/newsDetail}'|">
+            <div class="col-lg-12 donation-new-box" th:onclick="|location.href='@{/user/donation/detail/news/newsDetail(newCode=${l.newsCode},donationCode=${donationCode})}'|"
+                 th:each="l : ${newsList}">
                 <div>
                     <span style="color: black; font-weight: bold; font-size: 11px">공지사항</span>
                     <span style="font-size: 11px; margin-left: 3px; margin-right: 3px"></span>
                     <span style="font-size: 11px"></span>
                 </div>
                 <div>
-                    <p style="font-size: 15px; color: black">사랑이의 사진을 찍어봤어요~</p>
+                    <p style="font-size: 15px; color: black" th:text="${l.newsSubject}"></p>
                 </div>
                 <div>
-                    <span class="newsDate" style="font-size: 10px">
-                        2023. 10. 27
-                    </span>
-                    <span style="font-size: 10px">댓글</span><span style="font-size: 10px">6</span>
+                    <span class="newsDate" style="font-size: 10px" th:text="${l.newsDatetime}"></span>
                 </div>
+                <div class="col-lg-12" style="border: 1px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
             </div>
 
-            <div class="col-lg-12" style="border: 1px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
-
-            <div class="col-lg-12 donation-new-box">
-                <div>
-                    <span style="color: black; font-weight: bold; font-size: 11px">공지사항</span>
-                    <span style="font-size: 11px; margin-left: 3px; margin-right: 3px"></span>
-                    <span style="font-size: 11px"></span>
-                </div>
-                <div>
-                    <p style="font-size: 15px; color: black">사랑이의 사진을 찍어봤어요~</p>
-                </div>
-                <div>
-                    <span class="newsDate" style="font-size: 10px">
-                        2023. 10. 27
-                    </span>
-                    <span style="font-size: 10px">댓글</span><span style="font-size: 10px">6</span>
-                </div>
-            </div>
-
-            <div class="col-lg-12" style="border: 1px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
-
-            <div class="col-lg-12 donation-new-box">
-                <div>
-                    <span style="color: black; font-weight: bold; font-size: 11px">공지사항</span>
-                    <span style="font-size: 11px; margin-left: 3px; margin-right: 3px"></span>
-                    <span style="font-size: 11px"></span>
-                </div>
-                <div>
-                    <p style="font-size: 15px; color: black">사랑이의 사진을 찍어봤어요~</p>
-                </div>
-                <div>
-                    <span class="newsDate" style="font-size: 10px">
-                        2023. 10. 27
-                    </span>
-                    <span style="font-size: 10px">댓글</span><span style="font-size: 10px">6</span>
-                </div>
-            </div>
-
-            <div class="col-lg-12" style="border: 1px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
-
-            <div class="col-lg-12 donation-new-box">
-                <div>
-                    <span style="color: black; font-weight: bold; font-size: 11px">공지사항</span>
-                    <span style="font-size: 11px; margin-left: 3px; margin-right: 3px"></span>
-                    <span style="font-size: 11px"></span>
-                </div>
-                <div>
-                    <p style="font-size: 15px; color: black">사랑이의 사진을 찍어봤어요~</p>
-                </div>
-                <div>
-                    <span class="newsDate" style="font-size: 10px">
-                        2023. 10. 27
-                    </span>
-                    <span style="font-size: 10px">댓글</span><span style="font-size: 10px">6</span>
-                </div>
-            </div>
-
-            <div class="col-lg-12" style="border: 1px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
-
-            <div class="col-lg-12 donation-new-box">
-                <div>
-                    <span style="color: black; font-weight: bold; font-size: 11px">공지사항</span>
-                    <span style="font-size: 11px; margin-left: 3px; margin-right: 3px"></span>
-                    <span style="font-size: 11px"></span>
-                </div>
-                <div>
-                    <p style="font-size: 15px; color: black">사랑이의 사진을 찍어봤어요~</p>
-                </div>
-                <div>
-                    <span class="newsDate" style="font-size: 10px">
-                        2023. 10. 27
-                    </span>
-                    <span style="font-size: 10px">댓글</span><span style="font-size: 10px">6</span>
-                </div>
-            </div>
-
-            <div class="col-lg-12" style="border: 1px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
 
         </div>

@@ -55,4 +55,20 @@ public class SellerDonationService {
         sellerDonationMapper.deleteNews(newsCode);
     }
 
+    public void addCondition(String detailComent, String donationCode){
+        sellerDonationMapper.addCondition(detailComent, donationCode);
+    }
+
+    public String modifyCondition(String donationCode){
+        return sellerDonationMapper.modifyCondition(donationCode);
+    }
+
+    public void updateCondition(String detailComent, String donationCode){
+        sellerDonationMapper.updateCondition(detailComent, donationCode);
+    }
+
+    public int isCondition(String donationCode){
+        return sellerDonationMapper.isCondition(donationCode);
+    }
+
 }
