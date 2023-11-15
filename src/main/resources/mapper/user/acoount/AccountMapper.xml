@@ -37,7 +37,28 @@
         m.member_id = #{memberId};
     </select>
 
+    <!-- 회원 비밀번호 일치 확인   -->
+    <select id="pwCheck" parameterType="Member" resultType="boolean">
+        /* 회원 비밀번호 일치 확인 */
+        SELECT
+            COUNT(member_id)
+        FROM
+            member
+        WHERE
+            member_id = #{loginId} AND member_pw = #{memberPw};
+    </select>
 
+    <!-- 회원 탈퇴 : unreg_status를 active로 변경-->
+    <select id="inactivateMember" parameterType="String">
+        UPDATE
+            member
+        SET
+            unreg_status = 'active'
+        WHERE
+            member_id = #{memberId};
+    </select>
+
+    <!--    -->
 </mapper>
 
 

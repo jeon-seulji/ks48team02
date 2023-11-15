@@ -66,14 +66,6 @@ public class AccountController {
     }
 
 
-
-    @GetMapping("/drop")
-    public String dropPage(){
-
-        return "user/account/drop";
-    }
-
-
 }
 
 

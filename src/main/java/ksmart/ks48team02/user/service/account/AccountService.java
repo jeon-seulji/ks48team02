@@ -27,5 +27,14 @@ public class AccountService {
         return duplicationStatus;
     }
 
+    // 비밀번호 일치 확인
+    public boolean pwCheck(String loginId, String memberPw){
+        boolean comparePwResult = accountMapper.pwCheck(loginId, memberPw);
+        return comparePwResult;
+    }
+
+    public void inactivateMember(String loginId){
+        accountMapper.inactivateMember(loginId);
+    }
 
 }

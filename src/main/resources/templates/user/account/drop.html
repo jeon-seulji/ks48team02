@@ -23,9 +23,13 @@
 
         #dropContainer {
             background-color: white;
-            width: 600px;
+            width: 500px;
             margin:30px;
             margin-top:80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .login-logo .top-left-conts {
@@ -118,6 +122,11 @@
             border: 1px solid var(--maincolor);
             color: #fff;
         }
+
+        .submitBtn_black:disabled{
+            background:lightgrey;
+            border: 1px solid lightgrey;
+        }
     </style>
 </head>
 
@@ -172,16 +181,17 @@
                     <div class="mb-3">
                         <label for="checkPassword" class="form-label">비밀번호 확인</label>
                         <input type="password" class="form-control" id="checkPassword" >
-                        <div class="form-text" style="color:red; font-size:13px;">비밀번호를 입력해 주세요. </div>
+                        <div id="pw-alert" class="form-text" style="color:red; font-size:13px;"></div>
 
                         <!-- 모달 트리거 버튼   -->
                         <button
                                 type="button"
+                                id="drop-btn"
                                 class="submitBtn_black"
                                 data-toggle="modal"
                                 data-target="#exampleModal"
                                 data-what="hello"
-                                style="margin-left:470px">탈퇴하기</button>
+                                style="margin-left:470px" disabled>탈퇴하기</button>
                     </div>
 
                     <!-- 모달팝업 -->
@@ -198,21 +208,59 @@
                                 <div class="modal-footer" >
 
                                     <button type="button" class="submitBtn_white" data-dismiss="modal">취소</button>
-                                    <form action="" method=""><button type="button" class="submitBtn_black">확인</button></form>
+
+                                    <form th:action="@{/user/account/inactivate}" method="POST">
+                                        <input type="hidden" id="loginId" value="${loginId}" />
+                                        <button type="submit" class="submitBtn_black" >확인</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
                 </div>
 
             </div>
+
+        </div>
+        <!--   end dropContainer   -->
+
+    </div>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
+        /* 비밀번호 입력란 focusout 이벤트리스너 설정 (비밀번호 일지 확인 검사 : ajax) */
+        const $loginId = document.getElementById('loginId');
+        const $inputPw = document.getElementById('checkPassword'); // 비밀번호 확인 입력란
+
+        const $pwAlert = document.getElementById('pw-alert');
+
+        $inputPw.addEventListener('input',()=>{
+            $.ajax({
+                url : '/user/account/pwCheck',
+                method : 'POST',
+                data : {'memberPw' : $inputPw.value },
+                dataType : 'json'
+            })
+                .done(function (response){
+                    if(response) { // 비밀번호 일치시 버튼 비활성화 풀기
+                        document.getElementById('drop-btn').disabled = false;
+                        $pwAlert.textContent ='';
+                    }else{
+                        $pwAlert.textContent = '비밀번호가 일치하지 않습니다';
+                    }
+                })
+
+                .fail(function (jqXHR, textStatus){
+                    alert('통신 중 오류가 발생하였습니다');
+                    console.log(`Request failed: ${textStatus}`);
+                })
+        })
+
+
+        /* 모달에서 확인 클릭 이벤트리스너 설정 */
 
     </script>
 
