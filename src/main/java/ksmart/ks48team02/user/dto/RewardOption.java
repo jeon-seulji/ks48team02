@@ -7,6 +7,7 @@ import lombok.Data;
 public class RewardOption {
 
     private String rewardOptionCode;
+    private String rewardOrderDetailCode;
     private String rewardProjectCode;
     private String optionContents;
     private int optionPrice;
@@ -15,6 +16,7 @@ public class RewardOption {
     private int optionDeliveryPrice;
     private String optionEstimatedDeliveryDate;
     private String orderCode;
-
+    private int orderQuantity;
+    private int pricePerOption;
 
 }

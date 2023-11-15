@@ -2,6 +2,7 @@ package ksmart.ks48team02.user.service.reward;
 
 
 import ksmart.ks48team02.common.dto.OrderTotal;
+import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.dto.Member;
 import ksmart.ks48team02.user.dto.RewardOption;
 import ksmart.ks48team02.user.dto.RewardProject;
@@ -68,9 +69,44 @@ public class RewardService {
         return orderAndPaymentCode;
     }
 
+    //주문 진행
+    public void rewardProjectPay(PaymentResult paymentResult){
+        String orderCode = paymentResult.getOrderCode();
+        List<RewardOption> rewardOptionList = paymentResult.getRewardOptionList();
 
+        //통합 주문 테이블 인서트
+        rewardMapper.orderTableInsert(paymentResult);
+        System.out.println("통합주문테이블 등록 완료");
 
+        //리워드 주문 상세 테이블 인서트
+        rewardOptionList.forEach(option ->{
+            option.setOrderCode(orderCode);
+            rewardMapper.rewardOrderDetailInsert(option);
+        });
 
+        System.out.println("주문상세테이블 등록 완료");
+        //결제 테이블 인서트
+        rewardMapper.rewardPaymentsInsert(paymentResult);
+        System.out.println("결제테이블 등록 완료");
 
+        if( paymentResult.getUsePoint() > 0) {
+            //포인트 사용 내역 인서트
+            rewardMapper.usePointLogInsert(paymentResult);
+            //포인트 사용 시 포인트 차감.
+            rewardMapper.customerUsePoint(paymentResult);
+            System.out.println("포인트사용 로그 등록 완료");
+        }
 
+        if(paymentResult.getUseCouponCode() != null) {
+
+            // 쿠폰 사용 내역 인서트
+            rewardMapper.useCouponLogInsert(paymentResult);
+            System.out.println("쿠폰등록 완료");
+
+            //쿠폰 사용 시 보유 쿠폰 사용했음으로 업데이트.
+            rewardMapper.usedCouponUpdate(paymentResult);
+            System.out.println("쿠폰사용 로그 등록 완료");
+        }
+
+    }
 }

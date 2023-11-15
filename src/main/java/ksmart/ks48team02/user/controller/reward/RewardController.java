@@ -93,7 +93,7 @@ public class RewardController {
             return "user/account/login";
         }
 
-        OrderTotal orderAndPaymentCode = rewardService.getOrderAndPaymentCode();
+
         RewardProject rewardOrderInfo = rewardService.rewardProjectDetail(rewardProjectCode);
         Member orderMemberInfo = rewardService.getOrderMemberInfo(memberId);
         List<Coupon> memberHaveCouponList = adminCouponService.MemberHaveCouponById(memberId);
@@ -101,8 +101,7 @@ public class RewardController {
         model.addAttribute("rewardOrderInfo", rewardOrderInfo);
         model.addAttribute("rewardOptionCode", rewardOptionCode);
         model.addAttribute("orderMemberInfo", orderMemberInfo);
-        model.addAttribute("memberHaveCouponList",memberHaveCouponList);
-        model.addAttribute("orderAndPaymentCode", orderAndPaymentCode);
+        model.addAttribute("memberHaveCouponList", memberHaveCouponList);
 
         return "user/reward/order/main";
     }
@@ -131,7 +130,14 @@ public class RewardController {
         Map<String, String> map = mapper.readValue(response.body(), Map.class);
 
         // service 작업 진행.
+        OrderTotal orderAndPaymentCode = rewardService.getOrderAndPaymentCode();
+        String orderCode = orderAndPaymentCode.getOrderCode();
+        String paymentCode = orderAndPaymentCode.getRewardPaymentCode();
 
+        paymentResult.setOrderCode(orderCode);
+        paymentResult.setPaymentCode(paymentCode);
+
+        rewardService.rewardProjectPay(paymentResult);
 
         // service insert 작업 후
 
