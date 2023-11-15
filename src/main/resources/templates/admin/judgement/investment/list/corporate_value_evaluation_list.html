@@ -15,24 +15,19 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        function getSelectedRows() {
-            var selectedValues = [];
+        function toggleInput() {
+            let selectElement = document.getElementById('searchKey');
+            let searchInput = document.getElementById('inputSearchValue');
+            let searchSelect = document.getElementById('selectSearchValue');
 
-            // 체크된 체크박스 찾기
-            $('#corporateValueTable tbody tr').each(function () {
-                var checkbox = $(this).find('.checkbox');
-                if (checkbox.prop('checked')) {
-                    // 체크된 행에서 <a> 태그의 값 가져오기
-                    var linkValue = $(this).find('.valueLink').data('value');
-                    selectedValues.push(linkValue);
-                }
-            });
-
-            // 선택된 값 확인
-            if (selectedValues.length > 0) {
-                alert('선택된 행의 <a> 태그 값: ' + selectedValues.join(', '));
+            if (selectElement.value === 'corpValueFulfill') {
+                searchInput.classList.add('hidden');
+                searchSelect.classList.remove('hidden');
+                searchInput.value = '';
             } else {
-                alert('선택된 행이 없습니다.');
+                searchInput.classList.remove('hidden');
+                searchSelect.classList.add('hidden');
+                searchSelect.value = '';
             }
         }
     </script>
@@ -89,11 +84,11 @@
                         <option value="regist_d">평가일 순</option>
                         <option value="regist_a">평가일 역순</option>
                         <option>-----------------</option>
+                        <option value="project_name_d">평가 코드순</option>
+                        <option value="project_name_a">평가 코드 역순</option>
+                        <option>-----------------</option>
                         <option value="project_name_d">심사요청 제목순</option>
                         <option value="project_name_a">심사요청 제목역순</option>
-                        <option>-----------------</option>
-                        <option value="appli_progress_p">심사 통과</option>
-                        <option value="appli_progress_i">심사 반려</option>
                     </select>
                     <select name="count-select">
                         <option value="15">15개씩 보기</option>
@@ -156,7 +151,7 @@
                         th:text="${#numbers.formatInteger(l.stockPrice,3,'COMMA')} + ' 원'"></td>
                     <td th:if="${l.stockPrice == 0}">심사 대기중</td>
                     <td th:if="${l.corpValueFulfill == 0}">심사 대기</td>
-                    <td th:if="${l.corpValueFulfill == 1}">심사 통과</td>
+                    <td th:if="${l.corpValueFulfill == 1}">심사 승인</td>
                     <td th:if="${l.corpValueFulfill == 2}">심사 반려</td>
                     <td th:if="${l.corpValueEvaluateDay == null}">심사 대기중</td>
                     <td th:unless="${l.corpValueEvaluateDay == null}" th:text="${l.corpValueEvaluateDay}"></td>

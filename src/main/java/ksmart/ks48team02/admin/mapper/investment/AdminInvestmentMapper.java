@@ -16,7 +16,7 @@ public interface AdminInvestmentMapper {
     public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList();
 
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate);
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue);
 
     // 코드에 따른 특정 투자펀딩 심사요청 조회
     public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String investmentRequestJudgeCode);
@@ -46,8 +46,7 @@ public interface AdminInvestmentMapper {
     public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList();
 
     // 검색조건에 따른 기업가치 평과결가 목록 조회
-
-    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate);
+    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue);
 
     // 특정 기업가치 평가결과 조회
     public AdminCorporateValueEvaluation getCorporateValueEvaluationByCode(String corporateValueEvaluationCode);

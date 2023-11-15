@@ -60,8 +60,6 @@
             let selectedValue = $(this).val();
             let inputData = $investmentRequestJudgeCode.value;
 
-            let requestURI = '/admin/investment/check/' + inputData;
-
             // Ajax 호출
             $.ajax({
                 type: "GET",
@@ -272,7 +270,7 @@
                         </tr>
                         <tr>
                             <td>
-                                심사 현황
+                                심사 결과
                             </td>
                             <td id="corpValueFulfill" colspan="5" class="progress-radio-area">
                                 <ul>
