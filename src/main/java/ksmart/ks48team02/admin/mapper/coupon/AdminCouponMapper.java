@@ -8,6 +8,9 @@ import java.util.List;
 @Mapper
 public interface AdminCouponMapper {
 
+    // 쿠폰 등록
+    public List<Coupon> getCouponCreate();
+
     //전체 쿠폰 조회
     public List<Coupon> getCouponList();
 
