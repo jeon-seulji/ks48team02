@@ -672,14 +672,14 @@
             /* 기업가치 평가코드 자동증가 */
             SELECT
                 (CASE
-                WHEN COUNT(c.corp_value_evaluate_day) = 0 THEN CONCAT('cor_val_', CURDATE()+0, '_0001')
-                WHEN COUNT(c.corp_value_evaluate_day) > 9999 THEN CONCAT('cor_val_', CURDATE()+0, '_', COUNT(c.corp_value_evaluate_day)+1)
-                ELSE CONCAT('cor_val_', CURDATE()+0, '_', LPAD(COUNT(c.corp_value_evaluate_day)+1, 4, '0'))
+                WHEN COUNT(c.corporate_value_evaluation_code) = 0 THEN CONCAT('cor_val_', CURDATE()+0, '_0001')
+                WHEN COUNT(c.corporate_value_evaluation_code) > 9999 THEN CONCAT('cor_val_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1)
+                ELSE CONCAT('cor_val_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
                 END) AS corporateValueEvaluationCode
             FROM
                 corporate_value_evaluation AS c
             WHERE
-                DATE_FORMAT(c.corp_value_evaluate_day, '%Y-%m-%d') = CURDATE();
+                SUBSTRING_INDEX(SUBSTRING_INDEX(c.corporate_value_evaluation_code, '_', 3), '_', -1) = CURDATE()+0;
         </selectKey>
         /* 기업가치 평가결과 등록 */
         INSERT INTO corporate_value_evaluation
@@ -712,14 +712,14 @@
             /* 자본시장법 범위충족코드 자동증가 */
             SELECT
                 (CASE
-                WHEN COUNT(l.code_reg_day) = 0 THEN CONCAT('law_stf_', CURDATE()+0, '_0001')
-                WHEN COUNT(l.code_reg_day) > 9999 THEN CONCAT('law_stf_', CURDATE()+0, '_', COUNT(l.code_reg_day)+1)
-                ELSE CONCAT('law_stf_', CURDATE()+0, '_', LPAD(COUNT(l.code_reg_day)+1, 4, '0'))
+                WHEN COUNT(l.law_satistify_code) = 0 THEN CONCAT('law_stf_', CURDATE()+0, '_0001')
+                WHEN COUNT(l.law_satistify_code) > 9999 THEN CONCAT('law_stf_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1)
+                ELSE CONCAT('law_stf_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
                 END) AS lawSatistifyCode
             FROM
                 law_satistify_reason AS l
             WHERE
-                DATE_FORMAT(l.code_reg_day, '%Y-%m-%d') = CURDATE();
+                SUBSTRING_INDEX(SUBSTRING_INDEX(l.law_satistify_code, '_', 3), '_', -1) = CURDATE()+0;
         </selectKey>
         /* 자본시장법 범위충족기준 등록 */
         INSERT INTO law_satistify_reason
