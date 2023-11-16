@@ -8,12 +8,9 @@ import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
 import ksmart.ks48team02.admin.dto.AdminLawSatistifyReason;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import ksmart.ks48team02.admin.service.investment.InvestmentService;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller("judgementInvestmentController")
@@ -43,12 +40,13 @@ public class InvestmentController {
                                         ,@RequestParam(name = "searchKey", required = false) String searchKey
                                         ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                         ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate) {
+                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                        ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue) {
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
 
         if(searchKey != null) {
-            investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+            investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
         }else {
             investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList();
         }
@@ -110,11 +108,12 @@ public class InvestmentController {
                                                  ,@RequestParam(name = "searchKey", required = false) String searchKey
                                                  ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue
                                                  ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                                 ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate){
+                                                 ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                                 ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue) {
 
         List<AdminCorporateValueEvaluation> corporateValueEvaluationList = null;
         if(searchKey != null) {
-            corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+            corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
         }else {
             corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList();
         }
@@ -166,7 +165,7 @@ public class InvestmentController {
     }
 
     @GetMapping("/view/corporate-value")
-    public String getCorporateValueEvaluation(@RequestParam(name = "corporateValueEvaluationCode")String corporateValueEvaluationCode, Model model){
+    public String getCorporateValueEvaluation(@RequestParam(name = "corporateValueEvaluationCode") String corporateValueEvaluationCode, Model model){
 
         AdminCorporateValueEvaluation corporateValueEvaluationInfo = investmentService.getCorporateValueEvaluationByCode(corporateValueEvaluationCode);
 
@@ -206,10 +205,21 @@ public class InvestmentController {
     @GetMapping("/insert/corporate-value")
     public String addCorporateValueEvaluation(Model model){
 
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList();
+
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 등록");
         model.addAttribute("contentsTitle","기업가치 평가 결과 등록");
+        model.addAttribute("investmentRequestJudgeList",investmentRequestJudgeList);
 
         return "admin/judgement/investment/insert/corporate_value_evaluation_insert";
+    }
+
+    @PostMapping("/insert/corporate-value")
+    public String addCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation, AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+
+        investmentService.addCorporateValueEvaluation(adminCorporateValueEvaluation);
+        investmentService.modifyInvestmentRequestCorpValueKey(adminInvestmentRequestJudge);
+        return "redirect:/admin/investment/search/corporate-value";
     }
 
     @GetMapping("/update/judge")
@@ -229,7 +239,7 @@ public class InvestmentController {
     }
 
     @PostMapping("/update/judge")
-    public String modifyLawSatistify(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+    public String modifyInvestmentJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
 
         investmentService.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
         return "redirect:/admin/investment/search/judge";
@@ -285,6 +295,13 @@ public class InvestmentController {
         return "admin/judgement/investment/update/corporate_value_evaluation_update";
     }
 
+    @PostMapping("/update/corporate-value")
+    public String modifyCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation) {
+
+        investmentService.modifyCorporateValueEvaluation(adminCorporateValueEvaluation);
+        return "redirect:/admin/investment/search/corporate-value";
+    }
+
     @GetMapping("/delete/judge")
     public String reomveInvestmentJudge(@RequestParam(value = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model) {
 
@@ -332,6 +349,14 @@ public class InvestmentController {
         model.addAttribute("contentsTitle","기업가치 평가 결과 삭제");
 
         return "admin/judgement/investment/delete/corporate_value_evaluation_delete";
+    }
+
+    @GetMapping("/check/{investmentRequestJudgeCode}")
+    @ResponseBody
+    public AdminInvestmentRequestJudge getInvestmentRequestJudgeDetail(@PathVariable(value = "investmentRequestJudgeCode", required = false) String investmentRequestJudgeCode) {
+
+        AdminInvestmentRequestJudge investmentRequestJudgeDetail = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+        return investmentRequestJudgeDetail;
     }
 
 }

@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.user.mapper.investment.UserInvestmentMapper">
 
-    <resultMap id="InvestmentRegistrationResultMap" type="InvestmentInfo">
+    <resultMap id="InvestmentInfoResultMap" type="InvestmentInfo">
         <id property="investmentCode" column="investment_code"/>
         <result property="memberId" column="member_id"/>
         <result property="storeCode" column="store_code"/>
@@ -57,15 +57,52 @@
         #{investmentReport}, '3000000', 'null', #{contractFile}, '0');
     </insert>
 
-    <select id="getInvestmentInfo" parameterType="String" resultMap="InvestmentRegistrationResultMap">
+    <select id="getInvestmentInfo" parameterType="String" resultMap="InvestmentInfoResultMap">
         SELECT
         investment_code,
         invest_achievement_percent,
         investment_subject,
         investment_amount,
         DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+        investment_image,
         investment_company
         FROM
         investment
     </select>
+
+    <select id="getSortedList" parameterType="String" resultMap="InvestmentInfoResultMap">
+        SELECT
+            investment_code,
+            invest_achievement_percent,
+            investment_subject,
+            investment_amount,
+            DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+            investment_image,
+            investment_company
+        FROM
+            investment
+        <choose>
+            <when test='orderBy == "recommendation"'>
+                ORDER BY invest_achievement_percent DESC
+            </when>
+            <when test='orderBy == "latest"'>
+                ORDER BY investment_reg_date DESC
+            </when>
+            <when test='orderBy == "popularity"'>
+                ORDER BY investment_like DESC
+            </when>
+            <when test='orderBy == "recruitmentAmount"'>
+                ORDER BY investment_amount DESC
+            </when>
+            <when test='orderBy == "deadline"'>
+                ORDER BY investmentDeadlineCnt ASC
+            </when>
+            <otherwise>
+                ORDER BY invest_achievement_percent DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+
 </mapper>

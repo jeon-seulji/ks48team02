@@ -124,6 +124,58 @@
 
         });
 
+        // ajax
+        function sortedListAjax(orderBy, callback) {
+            const request = $.ajax({
+                url: '/user/investment/ajax/sortedList',
+                method: 'POST',
+                async: false,
+                data: { "orderBy": orderBy },
+                dataType: 'json'
+            });
+
+            request.done(function (list) {
+                callback(list);
+            });
+
+            request.fail(function (err) {
+                console.log(err);
+            });
+        }
+        // 정렬 항목 클릭 시 호출
+        $('.d-flex li').on('click', function () {
+            // 클릭된 항목에 따라 서버에서 데이터를 가져와 화면 업데이트
+            const sortType = $(this).attr('id');
+            sortedListAjax(sortType, function (list) {
+
+                $('.investmentBox').empty();
+
+                let listElement = ''
+                $(list).each((idx, item) => {
+                    listElement += `<div class="col investment-item-box col-lg-4" onclick="location.href='/user/investment/detail/main?investmentCode=${item.investmentCode}'">`;
+                    listElement += `    <div class="investment-item-first-child">`;
+                    listElement += `        <img class="investment-item-third-child-image" src="${item.investmentImage}">`; // src="${item.investmentImage}"
+                    listElement += `    </div>`;
+                    listElement += `    <div class="investment-item-second-child">`;
+                    listElement += `        <span class="investment-item-span-first">${item.investAchievementPercent}%</span>`;
+                    listElement += `        <span class="investment-item-span-second">${item.investmentAmount}원</span>`;
+                    listElement += `        <span class="investment-item-span-third">${item.investmentDeadlineCnt}일 남음</span>`;
+                    listElement += `    </div>`;
+                    listElement += `    <div class="investment-item-third-child project-title">`;
+                    listElement += `        <a href="/user/investment/detail/main?investmentCode=${item.investmentCode}">${item.investmentSubject}</a>`;
+                    listElement += `    </div>`;
+                    listElement += `    <div class="investment-item-fourth-child">${item.investmentCompany}</div>`;
+                    listElement += `</div>`;
+
+                });
+                // 새로운 항목을 컨테이너에 추가
+                $('.investmentBox').append(listElement);
+            });
+        });
+
+
+
+
 
         // 달성 금액 설정
         $('.investment-item-span-second').each(function (){
@@ -159,25 +211,24 @@
                             <option>채권</option>
                         </select>
                         <ul class="d-flex" style="margin-top: 5px">
-                            <li id="recommendationOrder" class="ml-3" onclick="sortItemClickedStyle(this)">추천순</li>
-                            <li id="latestOrder" class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
-                            <li id="popularityOrder" class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>
-                            <li id="recruitmentAmountOrder" class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
-                            <li id="deadlineOrder" class="ml-3" onclick="sortItemClickedStyle(this)">마감임박순</li>
+                            <li id="recommendation" class="ml-3" onclick="sortItemClickedStyle(this)">추천순</li>
+                            <li id="latest" class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
+                            <li id="popularity" class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>
+                            <li id="recruitmentAmount" class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
+                            <li id="deadline" class="ml-3" onclick="sortItemClickedStyle(this)">마감임박순</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="container stretch" style="width: 100%; height: 100%">
-                    <div class="row">
+                    <div class="row investmentBox">
                         <div class="col investment-item-box col-lg-4" th:if="${investmentInfo != null}" th:each="l : ${investmentInfo}"
                              th:onclick="|location.href='@{/user/investment/detail/main(investmentCode=${l.investmentCode})}'|">
                             <div class="investment-item-first-child">
-                                <img class="investment-item-third-child-image" th:src="${l.investmentImage}">
+                                <img class="investment-item-third-child-image" th:src="|@{${l.investmentImage}}|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first" th:value="${l.investAchievementPercent}">[[${l.investAchievementPercent}]]%</span>
-                                <input class="investment-item-goalMoney" th:value="${l.investmentAmount}" hidden="hidden"/>
                                 <span class="investment-item-span-second" th:text="${l.investmentAmount}"></span>
                                 <span class="investment-item-span-third" th:value="${l.investmentDeadlineCnt}">[[${l.investmentDeadlineCnt}]]일 남음</span>
                             </div>

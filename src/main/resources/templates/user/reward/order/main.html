@@ -66,6 +66,7 @@
         let mobile = [[${orderMemberInfo.memberContactInfo}]];
         let addr = [[${orderMemberInfo.customer.customerAddr}]];
         let addrDetail = [[${orderMemberInfo.customer.customerAddrDetail}]];
+        let id = [[${orderMemberInfo.memberId}]];
 
         $(function(){
 
@@ -119,29 +120,28 @@
 
                 $(selectOption).each(function(idx,item){
 
+                    let rewardOptionCode = $(this).find('input[type="checkbox"]').attr('id');
                     let optionName = $(item).find('.optionName').text();
                     let optionContents = $(item).find('.optionContents').text();
-                    let optionPrice = Number($(item).find('.optionPrice').text().replaceAll(',','').replaceAll('원',''));
+                    let optionPrice = $(item).find('.optionPrice').data('price');
                     let optionAmount = $(item).find('.optionAmount').val();
-                    let optionDeliverPrice = $(item).find('.optionDeliverPrice').text();
+                    let optionDeliverPrice = $(item).find('.optionDeliverPrice').data('price');
 
                     //토스페이에 담을 옵션 정보 객체.
                     const product ={};
-                    product.name = optionName;
-                    product.unitAmount = optionPrice;
-                    product.quantity = optionAmount;
-                    product.currency = 'KRW';
-                    product.description = optionContents;
+                    product.optionName = optionName;
+                    product.optionPrice = optionPrice;
+                    product.orderQuantity = Number(optionAmount);
+                    product.rewardOptionCode = rewardOptionCode;
+                    product.rewardProjectCode = [[${rewardOrderInfo.rewardProjectCode}]];
+                    product.pricePerOption = Number(optionPrice) * Number(optionAmount);
                     products.push(product);
 
-
-                    //배송비가 무료배송이면 합산 x 아니면 가장 높은 배송비 할당.
-                    if(optionDeliverPrice != '무료 배송') {
-                        let deliverEle = Number(optionDeliverPrice.replaceAll('원','').replaceAll(',',''));
-                        if(deliverEle > orderDeliverPrice) {
-                            orderDeliverPrice = deliverEle;
+                    //옵션들 배송비 중 가장 높은 배송비 추출.
+                        if(optionDeliverPrice > orderDeliverPrice) {
+                            orderDeliverPrice = optionDeliverPrice;
                         }
-                    }
+
                     //선택된 옵션 순회하면서 옵션 금액을 리워드 금액에 합산
                     totalRewardPrice += (optionPrice * optionAmount);
 
@@ -152,7 +152,7 @@
                         '                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>\n' +
                         '                                    <span class="orderOptionName ml-2"></span>\n' +
                         '                                    <span class="orderOptionPrice font-weight-bold float-right mr-lg-2"></span>\n' +
-                        '                                    <span class="font-weight-bold float-right mr-lg-2">수량:<span class="orderOptionAmount"></span>개</span>\n' +
+                        '                                    <span class="font-weight-bold float-right mr-lg-2">수량 : <span class="orderOptionAmount"></span>개 </span>\n' +
                         '                                    <br>\n' +
                         '                                </div>');
 
@@ -178,35 +178,34 @@
                 if(orderDeliverPrice == 0) {
                     $('.orderOptionDeliverPrice').text('무료 배송');
                     $('#totalOrderDeliverPrice').text('무료 배송');
-                    $('#totalPayPriceHidden').val(totalRewardPrice);
                     $('#totalPayPrice').text(`${Number(totalRewardPrice*(1-orderMemberDiscount)).toLocaleString('ko-KR')} 원`);
                 } else {
                     $('.orderOptionDeliverPrice').text(`${orderDeliverPrice.toLocaleString('ko-KR')} 원`);
                     $('#totalOrderDeliverPrice').text(`${orderDeliverPrice.toLocaleString('ko-KR')} 원`);
-                    $('#totalPayPriceHidden').val(totalRewardPrice + orderDeliverPrice)
-                    $('#totalPayPrice').text(`${Number((totalRewardPrice*(1-orderMemberDiscount) + orderDeliverPrice)).toLocaleString('ko-KR')} 원`)
+                    $('#totalPayPrice').text(`${Number((totalRewardPrice*(1-orderMemberDiscount) + orderDeliverPrice)).toLocaleString('ko-KR')} 원`);
                 }
+                $('#memberRankDiscount').data('price',(totalRewardPrice * orderMemberDiscount));
+                $('#memberSavePoint').data('price',(totalRewardPrice * orderMemberSavePoint));
+                $('#totalRewardPrice').data('price',totalRewardPrice);
+                $('#totalPayPrice').data('price',(totalRewardPrice * (1-orderMemberDiscount) + orderDeliverPrice));
+                $('#totalOrderDeliverPrice').data('price', orderDeliverPrice);
             });
 
             //쿠폰 사용시 쿠폰 혜택 최종 결제금액에 적용
             $(document).on('change','.orderUseCoupon',function(){
-                let totalRewardPrice = Number($('#totalRewardPrice').text().replaceAll('원','').replaceAll(',',''));
+                let totalRewardPrice = $('#totalRewardPrice').data('price');
                 let point = Number($('#usePoint').val());
                 let coupon = Number($(this).val());
-                let deliver = $('#totalOrderDeliverPrice').text();
+                let deliver = $('#totalOrderDeliverPrice').data('price');
                 let paymentPrice =0;
-
-                if(deliver =='무료 배송') {
-                    deliver = 0;
-                } else {
-                    deliver = Number(deliver.replaceAll('원','').replaceAll(',',''));
-                }
 
                 //쿠폰 금액
                 if(coupon <= 0) {
                     paymentPrice =(totalRewardPrice - coupon - point  + deliver);
                     $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')} 원`);
                     $('#totalOrderCoupon').text(`${coupon.toLocaleString('ko-KR')} 원`);
+                    $('#totalPayPrice').data('price', paymentPrice);
+                    $('#totalOrderCoupon').data('price', coupon);
 
                 } else if( coupon > 100) {
                     //일정 금액 할인
@@ -214,20 +213,23 @@
                     paymentPrice =(totalRewardPrice * (1-orderMemberDiscount) - coupon - point  + deliver);
                     $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')} 원`);
                     $('#totalOrderCoupon').text(`${coupon.toLocaleString('ko-KR')} 원`);
+                    $('#totalPayPrice').data('price', paymentPrice);
+                    $('#totalOrderCoupon').data('price', coupon);
 
                 } else{
                     //퍼센트 할인
                     alert(`${coupon}% 할인`)
                     paymentPrice = (totalRewardPrice*(1 - (coupon/100 + orderMemberDiscount)) - point  + deliver);
                     $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')} 원`);
-                    $('#totalOrderCoupon').text(`${(totalRewardPrice*coupon/100).toLocaleString('ko-KR')} 원`)
+                    $('#totalOrderCoupon').text(`${(totalRewardPrice*coupon/100).toLocaleString('ko-KR')} 원`);
+                    $('#totalPayPrice').data('price', paymentPrice);
+                    $('#totalOrderCoupon').data('price', (totalRewardPrice*coupon/100));
                 }
             });
 
-
             //포인트 모두 사용 체크시, 포인트 금액 보유한 포인트 만큼 변동.
             $(document).on('change','#pointAllCheck',function(){
-                let totalPayPrice = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
+                let totalPayPrice = $('#totalPayPrice').data('price');
 
                 if($(this).prop('checked')) {
                     if(havePoint > totalPayPrice) {
@@ -246,16 +248,11 @@
             //포인트 사용 시 최종 결제 금액에 사용한 포인트 금액 표시, 보유 포인트와 최종 결제 금액을 넘어가면 사용 못하게.
             $(document).on('change','#usePoint',function(){
 
-                let totalRewardPrice = Number($('#totalRewardPrice').text().replaceAll('원','').replaceAll(',',''));
-                let totalPayPrice = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
+                let totalRewardPrice = $('#totalRewardPrice').data('price');
+                let totalPayPrice = $('#totalPayPrice').data('price');
                 let point = Number($(this).val());
                 let coupon = Number($('.orderUseCoupon').val());
-                let deliver = $('#totalOrderDeliverPrice').text();
-                if(deliver =='무료 배송') {
-                    deliver = 0;
-                } else {
-                    deliver = Number(deliver.replaceAll('원','').replaceAll(',',''));
-                }
+                let deliver = $('#totalOrderDeliverPrice').data('price');
 
                 let paymentPrice =0;
 
@@ -282,6 +279,8 @@
                 }
                 $('#totalOrderPoint').text(`${point.toLocaleString('ko-KR')}원`);
                 $('#totalPayPrice').text(`${paymentPrice.toLocaleString('ko-KR')}원`);
+                $('#totalOrderPoint').data('price', point);
+                $('#totalPayPrice').data('price', paymentPrice);
             });
 
 
@@ -335,32 +334,6 @@
                 }
             });
 
-            //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
-            $('.paymentBtn').click(function(){
-
-                let validCheck = $('#paymentInfo').find('input[type="text"]').not('input:disabled');
-                let isValid = true;
-
-                //필수 약관 동의 체크
-                $('.essential').each(function(idx,item){
-                    if(!$(item).prop('checked')) {
-                        alert('필수 약관에 모두 동의해주세요');
-                        $(item).focus();
-                        isValid = false;
-                        return isValid;
-                    }
-                });
-
-                //배송 정보 입력했는지 체크
-                if(isValid) {
-                    isValid = validationCheck(validCheck);
-                    if(isValid) {
-                        //결재 이벤트 실행
-                    }
-                }
-
-            });
-
             //주소 찾기 클릭시 daum주소 api 호출
             $('.findAddrBtn, #deliverMemberAddr').click(function(){
 
@@ -393,12 +366,12 @@
             });
 
             const clientKey = "test_ck_DpexMgkW36RWA44MXDDN3GbR5ozO"
-            const customerKey = "Rx0ztqnD-WCYUjhdczHyy" // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
+
+            const customerKey = crypto.randomUUID(); // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
             // let amount = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
 
 
             //const coupon = document.getElementById("coupon-box")
-            const button = document.getElementById("payment-button")
             // ------  결제위젯 초기화 ------
             // 비회원 결제에는 customerKey 대신 ANONYMOUS를 사용하세요.
             const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
@@ -431,59 +404,123 @@
             // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
             // 더 많은 결제 정보 파라미터는 결제위젯 SDK에서 확인하세요.
             // https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
-            button.addEventListener("click", function () {
 
-                const paymentMethodsWidget = paymentWidget.renderPaymentMethods(); // 결제창
-                const selectedPaymentMethod = paymentMethodsWidget.getSelectedPaymentMethod(); // 결제 정보
-                paymentMethodsWidget.updateAmount(Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',','')));
+            //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
+            $('.paymentBtn').click(function(){
 
-                console.log(products);
-                console.log(selectedPaymentMethod);
+                let validCheck = $('#paymentInfo').find('input[type="text"]').not('input:disabled');
+                let isValid = true;
 
-                const paymentObj = {
-                    orderId: "Rx0ztqnD-WCYUjhdczHyy",
-                    orderName: "토스 티셔츠 외 2건",
-                    customerEmail: [[${orderMemberInfo.memberEmail}]],
-                    customerName: [[${orderMemberInfo.memberName}]],
-                    mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
-                    products: products
+                //필수 약관 동의 체크
+                $('.essential').each(function(idx,item){
+                    if(!$(item).prop('checked')) {
+                        alert('필수 약관에 모두 동의해주세요');
+                        $(item).focus();
+                        isValid = false;
+                        return isValid;
+                    }
+                });
+
+                //배송 정보 입력했는지 체크
+                if(isValid) {
+                    isValid = validationCheck(validCheck);
+                    if(isValid) {
+                        let totalPrice = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
+                        //결재 이벤트 실행
+                        const paymentMethodsWidget = paymentWidget.renderPaymentMethods(); // 결제창
+                        const selectedPaymentMethod = paymentMethodsWidget.getSelectedPaymentMethod(); // 결제 정보
+                        paymentMethodsWidget.updateAmount(totalPrice);
+
+                        console.log(products);
+                        console.log(selectedPaymentMethod);
+                        let paymentMethod= selectedPaymentMethod.method;
+                        console.log(paymentMethod);
+                        if(paymentMethod == '간편결제') {
+                            paymentMethod = selectedPaymentMethod.easyPay.provider;
+                            console.log(paymentMethod);
+                        }
+
+                        const paymentObj = {
+                            orderId: crypto.randomUUID(),
+                            orderName: [[${rewardOrderInfo.projectSubject}]],
+                            amount: $('#totalPayPrice').data('price'),
+                            // successUrl: `${window.location.origin}/user/reward/payment`,
+                            // failUrl: `${window.location.origin}/fail`,
+                            customerEmail: [[${orderMemberInfo.memberEmail}]],
+                            customerName: [[${orderMemberInfo.memberName}]],
+                            mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
+                        };
+
+                        const paymentParam={
+                            usePoint : Number($('#usePoint').val()),
+                            deliveryPrice : $('#totalOrderDeliverPrice').data('price'),
+                            useCouponCode : $('.orderUseCoupon option:selected').attr('id') ?? null,
+                            couponIssueCode: $('.orderUseCoupon option:selected').attr('class') ?? null,
+                            couponDiscountPrice : $('#totalOrderCoupon').data('price') ?? null,
+                            memberRankDiscount :$('#memberRankDiscount').data('price'),
+                            memberSavePoint :$('#memberSavePoint').data('price'),
+                            orderPrice :$('#totalRewardPrice').data('price'),
+                            totalPayPrice :$('#totalPayPrice').data('price'),
+                            rewardProjectcode :[[${rewardOrderInfo.rewardProjectCode}]],
+                            rewardProjectSubject : [[${rewardOrderInfo.projectSubject}]],
+                            orderMemberName : name,
+                            orderMemberId : id,
+                            paymentMethod : paymentMethod,
+                            rewardOptionList : products
+                        };
+                        console.log(paymentObj);
+                        console.log(paymentParam);
+
+                        paymentWidget.requestPayment(paymentObj)
+                            .then(response => {
+                                paymentParam.paymentKey = response.paymentKey;
+                                paymentParam.orderId = response.orderId;
+                                paymentParam.amount = response.amount;
+
+                                const request =$.ajax({
+                                    type: "POST",
+                                    traditional: true,
+                                    url: '/user/reward/payment',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(paymentParam),
+                                    dataType: 'text'
+                                });
+                                request.done(function(response){
+                                    let redirectURI = response;
+                                    location.href = redirectURI;
+                                });
+                                request.fail(function(err){
+                                    console.log(err);
+                                })
+                            })
+
+                        /*
+                        paymentWidget.requestPayment(paymentObj)
+                                     .then(function(data){
+                                         console.log(data);
+                                         paymentParam.paymentKey = data.paymentKey
+                                         console.log(paymentObj);
+                                         //결제 완료 후 처리
+
+                                         for(const key in paymentObj){
+                                             const ele = $('<input />', { 'type': 'hidden', 'name': key, 'value': paymentObj[key]});
+                                             $('form').append(ele);
+                                         }
+                                        $('form').submit();
+                                     })
+                                     .catch(function(err){
+                                         // 에러 처리: 에러 목록을 확인하세요
+                                         // https://docs.tosspayments.com/reference/error-codes#failurl로-전달되는-에러
+                                         if (error.code === 'USER_CANCEL') {
+                                            // 결제 고객이 결제창을 닫았을 때 에러 처리
+                                         } else if (error.code === 'INVALID_CARD_COMPANY') {
+                                            // 유효하지 않은 카드 코드에 대한 에러 처리
+                                         }
+                                     });
+                         */
+                    }
                 }
-                paymentWidget.requestPayment({
-                    orderId: "Rx0ztqnD-WCYUjhdcziyz",
-                    orderName: "토스 티셔츠 외 2건",
-                    successUrl: `${window.location.origin}/user/reward/payment`,
-                    failUrl: `${window.location.origin}/fail`,
-                    customerEmail: [[${orderMemberInfo.memberEmail}]],
-                    customerName: [[${orderMemberInfo.memberName}]],
-                    mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
-                    products: products
-                })
-                /*
-                paymentWidget.requestPayment(paymentObj)
-                             .then(function(data){
-                                 console.log(data);
-                                 console.log(paymentObj);
-                                 //결제 완료 후 처리
-
-                                 for(const key in paymentObj){
-                                     const ele = $('<input />', { 'type': 'hidden', 'name': key, 'value': paymentObj[key]});
-                                     $('form').append(ele);
-                                 }
-                                $('form').submit();
-                             })
-                             .catch(function(err){
-                                 // 에러 처리: 에러 목록을 확인하세요
-                                 // https://docs.tosspayments.com/reference/error-codes#failurl로-전달되는-에러
-                                 if (error.code === 'USER_CANCEL') {
-                                    // 결제 고객이 결제창을 닫았을 때 에러 처리
-                                 } else if (error.code === 'INVALID_CARD_COMPANY') {
-                                    // 유효하지 않은 카드 코드에 대한 에러 처리
-                                 }
-                             });
-
-                 */
             });
-
         });
 
         //사용 포인트 음수로 입력하지 못하게
@@ -494,8 +531,10 @@
         });
 
 
-
-
+    //리워드 상세 페이지에서 선택한 옵션 주문 페이지에서 선택 되도록.
+    let selectedOptionCode = [[${rewardOptionCode}]];
+    $(`#${selectedOptionCode}`).prop('checked',true);
+    $(`#${selectedOptionCode}`).parents('.selectOption').find('.optionAmount').val(1);
 
 
 
@@ -540,222 +579,50 @@
                         <form>
                             <h5>리워드 선택</h5>
                             <br>
+                            <th:block  th:each="l : ${rewardOrderInfo.rewardOptionList}">
+                                <div class="selectOption form-check mb-lg-2 text-dark" >
+                                    <input class="optionCheck form-check-input" type="checkbox" value="" th:id="${l.rewardOptionCode}">
+                                    <div class="option" style="border: 1px solid #7D7D7D; border-radius: 25px;">
+                                        <label class="form-check-label col-lg-12 pb-lg-3" th:for="${l.rewardOptionCode}">
+                                            <span class="optionPrice font-weight-bold ml-2" th:text="|${#numbers.formatInteger(l.optionPrice, 0, 'COMMA')} 원|"
+                                                  th:attr="data-price=${l.optionPrice}"></span>
+                                            <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
+                                                <span class="optionRemainQuantity">300</span>개 남음
+                                            </span>
+                                            <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                            <div class="selectOption form-check mb-lg-2 text-dark">
-                                <input class="form-check-input" type="checkbox" value="" id="option1">
-                                <div class="option" style="border: 1px solid #7D7D7D; border-radius: 25px;">
-                                    <label class="form-check-label col-lg-12 pb-lg-3" for="option1">
-                                        <span class="optionPrice font-weight-bold ml-2">20,000원</span>
-                                        <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
-                                            <span class="optionRemainQuantity">300</span>개 남음
-                                        </span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                                            <span class="optionName ml-2" th:text="${l.optionName}"></span>
+                                            <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="optionName ml-2">옵션 1</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                                            <span class="optionContents ml-2" th:text="${l.optionContents}"></span>
+                                            <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="optionContents ml-2">옵션1 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                                            <span class="ml-2">주문 수량</span>
+                                            <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
+                                            <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="ml-2">주문 수량</span>
-                                        <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                                            <span class="ml-2">배송비</span>
+                                            <span class ="optionDeliverPrice font-weight-bold float-right mr-2" th:if="${l.optionDeliveryPrice} == 0" th:attr="data-price=${l.optionDeliveryPrice}">무료 배송</span>
+                                            <span class ="optionDeliverPrice font-weight-bold float-right mr-2" th:unless="${l.optionDeliveryPrice} == 0" th:text="|${#numbers.formatInteger(l.optionDeliveryPrice, 0, 'COMMA')} 원|"
+                                                  th:attr="data-price=${l.optionDeliveryPrice}"></span>
+                                            <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="ml-2">배송비</span>
-                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">5,000원</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                                            <span class="ml-2">발송 시작일</span>
+                                            <span class ="optionDeliverDate font-weight-bold float-right mr-2" th:text="${l.optionEstimatedDeliveryDate}"></span>
+                                            <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                        <span class="ml-2">발송 시작일</span>
-                                        <span class ="optionDeliverDate font-weight-bold float-right mr-2">2023-11-05</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">제한 수량</span>
-                                        <span class ="optionLimitQuantity font-weight-bold float-right mr-2 text-danger">300개</span>
-                                    </label>
+                                            <span class="ml-2">제한 수량</span>
+                                            <span class ="optionLimitQuantity font-weight-bold float-right mr-2 text-danger" th:text="${l.optionLimitQuantity}"></span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="selectOption form-check mb-lg-2 text-dark">
-                                <input class="form-check-input" type="checkbox" value="" id="option2">
-                                <div class="option" style="border: 1px solid #7D7D7D; border-radius: 25px;">
-                                    <label class=" form-check-label col-lg-12 pb-lg-3" for="option2">
-                                        <span class="optionPrice font-weight-bold ml-2">25,000원</span>
-                                        <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
-                                            <span class="optionRemainQuantity">300</span>개 남음
-                                        </span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionName ml-2">옵션 2</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionContents ml-2">옵션2 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">주문 수량</span>
-                                        <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">배송비</span>
-                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">3,000원</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">발송 시작일</span>
-                                        <span class ="optionDeliverDate font-weight-bold float-right mr-2">2023-11-05</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">제한 수량</span>
-                                        <span class ="optionLimitQuantity font-weight-bold float-right mr-2 text-danger">300개</span>
-                                    </label>
-                                </div>
-                            </div>
-
-
-                            <div class="selectOption form-check mb-lg-2 text-dark">
-                                <input class="form-check-input" type="checkbox" value="" id="option3">
-                                <div class="option" style="border: 1px solid #7D7D7D; border-radius: 25px;">
-                                    <label class="form-check-label col-lg-12 pb-lg-3" for="option3">
-                                        <span class="optionPrice font-weight-bold ml-2">30,000원</span>
-                                        <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
-                                            <span class="optionRemainQuantity">300</span>개 남음
-                                        </span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionName ml-2">옵션 3</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionContents ml-2">옵션3 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">주문 수량</span>
-                                        <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">배송비</span>
-                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">발송 시작일</span>
-                                        <span class ="optionDeliverDate font-weight-bold float-right mr-2">2023-11-05</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">제한 수량</span>
-                                        <span class ="optionLimitQuantity font-weight-bold float-right mr-2 text-danger">300개</span>
-                                    </label>
-                                </div>
-                            </div>
-
-
-                            <div class="selectOption form-check mb-lg-2 text-dark">
-                                <input class="form-check-input" type="checkbox" value="" id="option4">
-                                <div class="option" style="border: 1px solid #7D7D7D; border-radius: 25px;">
-                                    <label class=" form-check-label col-lg-12 pb-lg-3" for="option4">
-                                        <span class="optionPrice font-weight-bold ml-2">35,000원</span>
-                                        <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
-                                            <span class="optionRemainQuantity">300</span>개 남음
-                                        </span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionName ml-2">옵션 4</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionContents ml-2">옵션4 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">주문 수량</span>
-                                        <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">배송비</span>
-                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">발송 시작일</span>
-                                        <span class ="optionDeliverDate font-weight-bold float-right mr-2">2023-11-05</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">제한 수량</span>
-                                        <span class ="optionLimitQuantity font-weight-bold float-right mr-2 text-danger">300개</span>
-                                    </label>
-                                </div>
-                            </div>
-
-
-                            <div class="selectOption form-check mb-lg-2 text-dark">
-                                <input class="form-check-input" type="checkbox" value="" id="option5">
-                                <div class="option" style="border: 1px solid #7D7D7D; border-radius: 25px;">
-                                    <label class=" form-check-label col-lg-12 pb-lg-3" for="option5">
-                                        <span class="optionPrice font-weight-bold ml-2">40,000원</span>
-                                        <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
-                                            <span class="optionRemainQuantity">300</span>개 남음
-                                        </span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionName ml-2">옵션 5</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionContents ml-2">옵션5 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">주문 수량</span>
-                                        <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">배송비</span>
-                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">발송 시작일</span>
-                                        <span class ="optionDeliverDate font-weight-bold float-right mr-2">2023-11-05</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">제한 수량</span>
-                                        <span class ="optionLimitQuantity font-weight-bold float-right mr-2 text-danger">300개</span>
-                                    </label>
-                                </div>
-                            </div>
-
-
-                            <div class="selectOption form-check mb-lg-2 text-dark">
-                                <input class="form-check-input" type="checkbox" value="" id="option6">
-                                <div class="option" style="border: 1px solid #7D7D7D; border-radius: 25px;">
-                                    <label class="form-check-label col-lg-12 pb-lg-3" for="option6">
-                                        <span class="optionPrice font-weight-bold ml-2">45,000원</span>
-                                        <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
-                                            <span class="optionRemainQuantity">300</span>개 남음
-                                        </span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionName ml-2">옵션 6</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="optionContents ml-2">옵션6 상세 내용~~~</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">주문 수량</span>
-                                        <input type="number" class="optionAmount float-right mr-lg-2 h-75" style="width: 40px" value="0" readonly="readonly">
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">배송비</span>
-                                        <span class ="optionDeliverPrice font-weight-bold float-right mr-2">무료 배송</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">발송 시작일</span>
-                                        <span class ="optionDeliverDate font-weight-bold float-right mr-2">2023-11-05</span>
-                                        <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
-
-                                        <span class="ml-2">제한 수량</span>
-                                        <span class ="optionLimitQuantity font-weight-bold float-right mr-2 text-danger">300개</span>
-                                    </label>
-                                </div>
-                            </div>
-
-
+                            </th:block>
 
 
                             <br>
-
-                            <button class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button>
-
+                            <div class="d-flex justify-content-center">
+                                <button class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button>
+                            </div>
                         </form>
 
                     </div>
@@ -803,8 +670,8 @@
                                             <option value="0">보유 쿠폰이 없습니다.</option>
                                          </th:block>
                                          <th:block th:unless="${memberHaveCouponList == null}" th:each="l : ${memberHaveCouponList}">
-                                            <option th:if="${l.couponDiscountRate > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountRate}"></option>
-                                            <option th:if="${l.couponDiscountAmount > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountAmount}"></option>
+                                            <option th:if="${l.couponDiscountRate > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountRate}" th:id="${l.couponCode}" th:class="${l.memberCoupon.couponIssueCode}"></option>
+                                            <option th:if="${l.couponDiscountAmount > 0}" th:text="${l.couponName}" th:value="${l.couponDiscountAmount}" th:id="${l.couponCode}" th:class="${l.memberCoupon.couponIssueCode}"></option>
                                           </th:block>
                                 </select>
                             </span>
@@ -833,12 +700,12 @@
                                     <div class=" ml-lg-2 bg-light">
                                         <div class="ml-lg-2">
 
-                                            <p class="font-weight-bold">이름</p>
-                                            <p id="memberName">홍길동</p>
+                                            <p class="font-weight-bold" >이름</p>
+                                            <p id="memberName" th:text="${orderMemberInfo.memberName}"></p>
                                             <p class="mt-lg-3 font-weight-bold">이메일</p>
-                                            <p id="memberEmail">email01@email.com</p>
+                                            <p id="memberEmail" th:text="${orderMemberInfo.memberEmail}"></p>
                                             <p class="mt-lg-3 font-weight-bold">휴대폰 번호</p>
-                                            <p id="memberMobile" class="mb-lg-5">010-1111-1111</p>
+                                            <p id="memberMobile" class="mb-lg-5" th:text="${orderMemberInfo.memberContactInfo}"></p>
 
                                             <div class="form-check">
                                                 <input class="essential form-check-input" type="checkbox" value="" id="agreeNews">
@@ -943,37 +810,10 @@
                             <div class="mt-lg-5 mb-lg-5" style="border: 1px solid #4d4d4d; margin: 5px; width: 100%"></div>
 
                             <div class="ml-lg-2">
-                                <h5>결제 수단</h5>
-                                <div class="ml-lg-3 mt-lg-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="naverPay" checked="checked">
-                                        <label class="form-check-label" for="naverPay">
-                                            네이버페이
-                                        </label>
-                                    </div>
-                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="kakaoPay">
-                                        <label class="form-check-label" for="kakaoPay">
-                                            카카오페이
-                                        </label>
-                                    </div>
-                                    <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="creditCard">
-                                        <label class="form-check-label" for="creditCard">
-                                            신용카드
-                                        </label>
-                                    </div>
-
-                                    <!-- 결제 방법 영역-->
-                                    <div class="title">결제 방법</div>
-                                    <div id="payment-method"></div>
-                                    <div id="agreement"></div>
-                                    <button id="payment-button" type="button">결제하기</button>
-
-
-                                </div>
+                                <!-- 결제 방법 영역-->
+                                <div id="payment-method"></div>
+                                <div id="agreement"></div>
+<!--                                <button id="payment-button" type="button">결제하기</button>-->
                             </div>
 
                             <div class="ml-lg-2 mt-lg-5">
@@ -1010,10 +850,13 @@
 
 
                             <br><br>
-                            <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
-                            <button class="paymentBtn w-80 btn btn-primary  btn-lg" type="button">결제하기</button>
-
+                            <div class="d-flex justify-content-center">
+                                <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
+                                <button class="paymentBtn w-80 btn btn-primary  btn-lg" type="button">결제하기</button>
+                            </div>
                         </form>
+                        <br>
+                        <br>
                     </div>
 
 

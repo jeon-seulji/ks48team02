@@ -16,10 +16,17 @@ public class UserInvestmentService {
         this.userInvestmentMapper = userInvestmentMapper;
     }
 
-
-
     public List<InvestmentInfo> getInvestmentInfo(){
         List<InvestmentInfo> investmentInfo = userInvestmentMapper.getInvestmentInfo();
         return investmentInfo;
     }
+
+
+    public List<InvestmentInfo> getSortedList(String orderBy) {
+        return userInvestmentMapper.getSortedList(orderBy);
+    }
+
+
+
+
 }

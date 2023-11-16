@@ -146,7 +146,7 @@
                         </tr>
                         <tr>
                             <td style="background: #fff;"><span
-                                    th:text="*{#numbers.formatInteger(adminInvestment.investmentAchievementMoney,3,'COMMA')}"></span>
+                                    th:text="*{#numbers.formatInteger(adminInvestment.invInvestmentAchievementMoney,3,'COMMA')}"></span>
                                 원
                             </td>
                             <td><span>1,000</span> 건</td>
@@ -268,9 +268,9 @@
                             <a class="detail-link"
                                th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}"
                                th:text="*{corporateValueEvaluationCode}"></a></td>
-                        <td th:if="*{adminInvestment.investmentAchievementMoney == 0}">-</td>
-                        <td th:unless="*{adminInvestment.investmentAchievementMoney == 0}"
-                            th:text="${#numbers.formatInteger(investmentRequestJudgeInfo.adminInvestment.investmentAchievementMoney,3,'COMMA')} + ' 원'">
+                        <td th:if="*{investmentAchievementMoney == 0}">-</td>
+                        <td th:unless="*{investmentAchievementMoney == 0}"
+                            th:text="${#numbers.formatInteger(investmentRequestJudgeInfo.investmentAchievementMoney,3,'COMMA')} + ' 원'">
                         </td>
                         <td><span th:text="*{#numbers.formatInteger(businessProfits,3,'COMMA')}"></span> 원</td>
                         <td><span th:text="*{#numbers.formatInteger(depreciation,3,'COMMA')}"></span> 원</td>

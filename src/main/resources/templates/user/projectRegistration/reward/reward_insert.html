@@ -154,22 +154,6 @@
                 autoclose: true
             });
 
-            //프로젝트 시작 일자 선택하면 프로젝트 마감 일자 시작일자 이전 날짜는 선택 못하게.
-            // $('#projectStartDate').change(function () {
-            //     let projectEndDate = $('#projectEndDate');
-            //     let startDate = new Date($(this).val());
-            //     let endDate = new Date($(projectEndDate).val());
-            //
-            //     $(projectEndDate).prop('disabled', startDate == null);
-            //     projectEndDate.datepicker('setStartDate', startDate);
-            //
-            //     if (startDate >= endDate) {
-            //         $(projectEndDate).val('');
-            //     }
-            // });
-
-
-
             //summerNote
             $('#projectContents').summernote({
                 height: 700,                 // 에디터 높이
@@ -378,8 +362,9 @@
 
             //제출하기 버튼 클릭 시 이벤트 (동적바인딩)
             $(document).on('click','.submitBtn',function(){
-                let rewardOptionLength = $('.rewardOption').length;
-                let validCheck = $('#projectRegistrationForm').find('input, select, #projectContents')
+                let option = $('.rewardOption');
+                let rewardOptionLength = option.length;
+                let validCheck = $('#projectRegistrationForm').not('.rewardOption').find('input, select, #projectContents')
                     .not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]').not('#rewardLimitQuantity')
                     .not('#rewardPrice').not('#rewardSubject').not('#rewardContents').not('#deliverStartDate').not('#rewardDeliverPrice')
                     .not('#rewardDeliverSelect');
@@ -390,7 +375,56 @@
                     if(rewardOptionLength < 1) {
                         alert('리워드 옵션을 추가해주세요.');
                     } else if(confirm('정말 프로젝트를 등록하시겠습니까?')){
-                        $('#projectRegistrationForm').submit();
+
+                        const optionList = [];
+                        $(option).each((idx, item)=>{
+                            const optionObj = {};
+
+                            $.each($(item).find('input, textarea'),(idx,item)=>{
+
+                                let key = $(item).attr('name');
+                                let value = $(item).val();
+
+                                if(key == 'optionPrice') {
+                                    value= Number($(item).val().replaceAll('원','').replaceAll(',',''));
+                                }
+                                if(key == 'optionDeliveryPrice') {
+                                    if(value == '무료배송') {
+                                        value= 0;
+                                    } else {
+                                        value= Number($(item).val().replaceAll('원','').replaceAll(',',''));
+                                    }
+                                }
+                                optionObj[key] = value;
+                            })
+                            optionList.push(optionObj);
+                            // var jsonData = JSON.stringify(optionList);
+                        });
+
+                        const paramReward = {
+                            "rewardOptionList" : optionList
+                        };
+
+                        $(validCheck).each((idx,item)=>{
+                            let key = $(item).attr('name');
+                            let value = $(item).val();
+                            paramReward[key] = value;
+                        });
+
+                        $.ajax({
+                            type: 'POST',
+                            traditional : true,
+                            url: '/user/projectRegistration/reward',
+                            contentType: 'application/json',
+                            data: JSON.stringify(paramReward),
+                            dataType: 'json',
+                            success: function(){
+                                console.log('등록 성공')
+                                window.location.replace('/user/projectRegistration/reward/success');
+                            },
+                            error: function(err){
+                            }
+                        });
                     }
                 }
             });
@@ -487,6 +521,7 @@
                     <div class="row">
 
                         <div class="col-8">
+                            <input type="hidden" class="form-control" id="memberId" name="regMemberId" th:value="${session.SID}">
                             <label for="projectCategory" class="form-label fw-bord text-dark">카테고리를 선택해 주세요</label>
                             <br>
                             <select id="projectCategory" name="rewardCategoryCode">
@@ -588,7 +623,7 @@
                             </div>
                             <br>
                             <span>
-                                마감 일자 : <input type="text" id="projectEndDate" readonly="readonly">
+                                마감 일자 : <input name="projectEndDate" type="text" id="projectEndDate" readonly="readonly">
                             </span>
                             <br>
 

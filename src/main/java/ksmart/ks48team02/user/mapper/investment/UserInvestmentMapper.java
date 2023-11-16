@@ -12,4 +12,7 @@ public interface UserInvestmentMapper {
     public int addInvestment(InvestmentInfo investmentInfo);
 
     public List<InvestmentInfo> getInvestmentInfo();
+
+    List<InvestmentInfo> getSortedList(String orderBy);
+
 }

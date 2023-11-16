@@ -12,7 +12,7 @@ public class RewardProject {
     private String rewardProjectCode;
     private String rewardCategoryCode;
     private String projectJudgementReasonCode;
-    private String RegMemberId;
+    private String regMemberId;
     private String adminMemberId;
     private String storeCode;
     private String projectSubject;
@@ -22,7 +22,7 @@ public class RewardProject {
     private int projectAchievementMoney;
     private int projectGoalMoney;
     private int projectAchievementPercent;
-    private String RegCompany;
+    private String regCompany;
     private String projectRegDate;
     private int searchCount;
     private String projectJudgmentReason;
@@ -30,6 +30,10 @@ public class RewardProject {
     private String projectStartDate;
     private String projectEndDate;
     private int projectCondition;
+    private String storeImage;
+    private int storeLike;
+    private String storeMobile;
+    private String categoryName;
 
     private List<RewardOption> rewardOptionList;
 
