@@ -33,7 +33,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -53,8 +53,11 @@ public class InvestmentService {
             case "representativeName":
                 searchKey = "s.representative_name";
                 break;
+            case "investJudgeResult":
+                searchKey = "i.invest_judge_result";
+                break;
         }
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
 
         return investmentRequestJudgeList;
     }
@@ -144,7 +147,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 기업가치 평가결과 목록 조회
-    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
+    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -165,7 +168,7 @@ public class InvestmentService {
                 searchKey = "c.corp_value_fulfill";
                 break;
         }
-        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
 
         return corporateValueEvaluationList;
     }
@@ -187,6 +190,7 @@ public class InvestmentService {
         adminInvestmentMapper.addCorporateValueEvaluation(adminCorporateValueEvaluation);
     }
 
+    // 기업가치 평가 등록 후 심사요청에 평가코드 등록
     public void modifyInvestmentRequestCorpValueKey(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
         adminInvestmentMapper.modifyInvestmentRequestCorpValueKey(adminInvestmentRequestJudge);
     }
