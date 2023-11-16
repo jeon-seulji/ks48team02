@@ -105,6 +105,11 @@ public class PojectRegistrationContoller {
 
         return "user/projectRegistration/investment/invest_insert";
     }
+    //투자 프로젝트 등록 완료 페이지
+    @GetMapping(value = "investment/success")
+    public String investmentRegistrationSuccessPage(){
+        return "user/projectRegistration/investment/investment_insert_success";
+    }
 
 
     // 기부 프로젝트 완료 포스트맵핑으로 받기

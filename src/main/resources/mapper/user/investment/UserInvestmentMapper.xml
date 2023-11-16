@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.user.mapper.investment.UserInvestmentMapper">
 
+    <!--투자 프로젝트-->
     <resultMap id="InvestmentInfoResultMap" type="InvestmentInfo">
         <id property="investmentCode" column="investment_code"/>
         <result property="memberId" column="member_id"/>
@@ -30,21 +31,44 @@
         <result property="contractFile" column="contract_file"/>
         <result property="investJudgeSituation" column="invest_judge_situation"/>
         <result property="investmentDeadlineCnt" column="investmentDeadlineCnt"/>
+        
+        <association property="investmentContent" javaType="InvestmentContent">
+            <id property="investmentContentCode" column="investment_content_code"/>
+            <result property="memberId" column="member_id"/>
+            <result property="investmentCode" column="investment_code"/>
+            <result property="memberIdAdmin" column="member_id_admin"/>
+            <result property="projectIntroduction" column="project_introduction"/>
+            <result property="investmentIntroductionImage" column="investment_introduction_image"/>
+            <result property="marketAnalysis" column="market_analysis"/>
+            <result property="marketAnalysisImage" column="market_analysis_image"/>
+            <result property="majorFinancialInformation" column="major_financial_information"/>
+            <result property="majorFinancialInformationImage" column="major_financial_information_image"/>
+            <result property="risk" column="risk"/>
+            <result property="riskImage" column="risk_image"/>
+            <result property="majorManpower" column="major_manpower"/>
+            <result property="majorManpowerImage" column="major_manpower_image"/>
+            <result property="patentAwardDetails" column="patent_award_details"/>
+            <result property="patentAwardDetailsImage" column="patent_award_details_image"/>
+            <result property="etcInvestContent" column="etc_invest_content"/>
+            <result property="etcInvestContentImage" column="etc_invest_content_image"/>
+            <result property="registrationDate" column="registration_date"/>
+        </association>
     </resultMap>
+    
 
     <insert id="addInvestment" parameterType="InvestmentInfo">
         /* 투자 프로젝트 등록 */
         <selectKey keyProperty="investmentCode" resultType="String" order="BEFORE">
             SELECT
-            (CASE
-            WHEN COUNT(i.investment_reg_date) = 0 THEN CONCAT('inv_', CURDATE()+0, '_0001')
-            WHEN COUNT(i.investment_reg_date) > 9999 THEN CONCAT('inv_', CURDATE()+0, '_', COUNT(i.investment_reg_date)+1)
-            ELSE CONCAT('don_', CURDATE()+0, '_', LPAD(COUNT(i.investment_reg_date)+1, 4, '0'))
-            END) AS investmentCode
+                (CASE
+                WHEN COUNT(i.investment_reg_date) = 0 THEN CONCAT('inv_', CURDATE()+0, '_0001')
+                WHEN COUNT(i.investment_reg_date) > 9999 THEN CONCAT('inv_', CURDATE()+0, '_', COUNT(i.investment_reg_date)+1)
+                ELSE CONCAT('don_', CURDATE()+0, '_', LPAD(COUNT(i.investment_reg_date)+1, 4, '0'))
+                END) AS investmentCode
             FROM
-            investment AS i
+                investment AS i
             WHERE
-            DATE_FORMAT(i.investment_reg_date, '%Y-%m-%d') = CURDATE();
+                DATE_FORMAT(i.investment_reg_date, '%Y-%m-%d') = CURDATE();
         </selectKey>
         INSERT INTO investment
         (investment_code, member_id, store_code, investment_request_judge_code, total_category_code, member_id_seller, investment_subject,
@@ -59,15 +83,15 @@
 
     <select id="getInvestmentInfo" parameterType="String" resultMap="InvestmentInfoResultMap">
         SELECT
-        investment_code,
-        invest_achievement_percent,
-        investment_subject,
-        investment_amount,
-        DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
-        investment_image,
-        investment_company
+            investment_code,
+            invest_achievement_percent,
+            investment_subject,
+            investment_amount,
+            DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+            investment_image,
+            investment_company
         FROM
-        investment
+            investment
     </select>
 
     <select id="getSortedList" parameterType="String" resultMap="InvestmentInfoResultMap">
