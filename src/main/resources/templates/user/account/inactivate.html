@@ -158,7 +158,11 @@
 <th:block layout:fragment="customJsCode">
 
     <script th:inline="javascript">
+        let msg = [[${msg}]];
 
+        if (msg && msg.includes("탈퇴가 완료되었습니다.")) {
+            window.location.replace("/user/index");
+        }
 
 
     </script>

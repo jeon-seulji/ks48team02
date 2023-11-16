@@ -15,6 +15,6 @@ public interface AccountMapper {
      public boolean pwCheck(String loginId, String memberPw);
 
      //회원 계정 비활성화
-     public void inactivateMember(String loginId);
+     public Integer inactivateMember(String loginId);
 
 }

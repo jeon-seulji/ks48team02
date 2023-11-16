@@ -73,8 +73,8 @@ public class MemberAccountController {
     public String inactivate(HttpSession session, Model model, RedirectAttributes redirectAttributes){
         String loginId = (String) session.getAttribute("SID");
         model.addAttribute("loginId",loginId);
-        accountService.inactivateMember(loginId);
-
+        Integer result = accountService.inactivateMember(loginId);
+        if(result != 0) model.addAttribute("msg","탈퇴가 완료되었습니다.");
         session.invalidate();
 
 

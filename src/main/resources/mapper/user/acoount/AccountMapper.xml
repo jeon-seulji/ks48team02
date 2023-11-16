@@ -49,7 +49,7 @@
     </select>
 
     <!-- 회원 탈퇴 : unreg_status를 active로 변경-->
-    <select id="inactivateMember" parameterType="String">
+    <select id="inactivateMember" parameterType="String" resultType="Integer">
         /* 회원 비활성화 */
         UPDATE
             member

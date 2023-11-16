@@ -35,11 +35,11 @@ public class AccountService {
         return accountMapper.pwCheck(loginId, memberPw);
     }
 
-    public void inactivateMember(String loginId){
+    public Integer inactivateMember(String loginId){
 
         // System.out.printf("====AccountMapper가%d을 반환함====%n", accountMapper.inactivateMember(loginId));
         Log.info("탈퇴 아이디 {} ", loginId);
-        accountMapper.inactivateMember(loginId);
+        return accountMapper.inactivateMember(loginId);
     }
 
     }
