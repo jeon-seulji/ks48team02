@@ -626,12 +626,13 @@
             <if test="searchKey != null and searchKey != '' and searchSelectValue == 99">
                 c.corporate_value_evaluation_code IS NULL;
             </if>
-            <if test="searchKey != null and searchKey != '' and searchSelectValue != 100 and searchSelectValue != 1 and searchSelectValue != 2 and searchSelectValue != 99">
+            <if test="searchKey != null and searchKey != '' and searchSelectValue == '' or searchSelectValue == null">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
         </where>
     </select>
 
+    <!-- 특정 기업가치 평가결과 조회 -->
     <select id="getCorporateValueEvaluationByCode" resultMap="adminCorporateValueEvaluationListMap">
         /* 특정 기업가치 평가결과 조회 */
         SELECT
@@ -665,6 +666,7 @@
             c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </select>
 
+    <!-- 기업가치 평가결과 등록 -->
     <insert id="addCorporateValueEvaluation" parameterType="AdminCorporateValueEvaluation">
         <selectKey keyProperty="corporateValueEvaluationCode" resultType="String" order="BEFORE">
             /* 기업가치 평가코드 자동증가 */
@@ -679,12 +681,14 @@
             WHERE
                 DATE_FORMAT(c.corp_value_evaluate_day, '%Y-%m-%d') = CURDATE();
         </selectKey>
+        /* 기업가치 평가결과 등록 */
         INSERT INTO corporate_value_evaluation
         (corporate_value_evaluation_code, member_id, operating_profit, depreciation, ebitda, ev_ebitda, convert_ev, net_debt, evaluated_corp_value, stock_number, stock_price, corp_value_fulfill, corp_value_evaluate_day)
         VALUES
         (#{corporateValueEvaluationCode}, #{memberId}, #{operatingProfit}, #{depreciation}, #{ebitda}, #{evEbitda}, #{convertEv}, #{netDebt}, #{evaluatedCorpValue}, #{stockNumber}, #{stockPrice}, #{corpValueFulfill} ,NOW());
     </insert>
 
+    <!-- 기업가치 평과결과 등록 후 심사요청 외래키 수정 -->
     <update id="modifyInvestmentRequestCorpValueKey" parameterType="AdminInvestmentRequestJudge">
         <selectKey keyProperty="corporateValueEvaluationCode" resultType="String" order="BEFORE">
             /* 마지막 기업가치 평가코드 조회 */
@@ -693,6 +697,7 @@
             FROM
                 corporate_value_evaluation AS c
         </selectKey>
+        /* 기업가치 평과결과 등록 후 심사요청 외래키 수정 */
         UPDATE
             investment_request_judge
         SET
@@ -701,6 +706,7 @@
             investment_request_judge_code = #{investmentRequestJudgeCode}
     </update>
 
+    <!-- 자본시장법 범위충족기준 등록 -->
     <insert id="addLawSatistify" parameterType="AdminLawSatistifyReason">
         <selectKey keyProperty="lawSatistifyCode" resultType="String" order="BEFORE">
             /* 자본시장법 범위충족코드 자동증가 */
@@ -721,8 +727,6 @@
         VALUES
             (#{lawSatistifyCode}, #{memberId}, #{lawSatistifyReason}, #{lawSatistifyWhether}, CURRENT_TIMESTAMP());
     </insert>
-
-
 
     <!-- 투자펀딩 심사요청 수정 -->
     <update id="modifyInvestmentRequestJudge" parameterType="AdminInvestmentRequestJudge">
@@ -844,7 +848,9 @@
             incongruity_sectors_code = #{incongruitySectorsCode};
     </update>
 
+    <!-- 기업가치 평가 결과 수정 -->
     <update id="modifyCorporateValueEvaluation" parameterType="AdminCorporateValueEvaluation">
+        /* 기업가치 평가 결과 수정 */
         UPDATE corporate_value_evaluation
         <set>
             <if test="memberId != null and memberId != ''">
@@ -886,10 +892,12 @@
             <if test="corpValueFulfill != null and corpValueFulfill != ''">
                 corp_value_fulfill = #{corpValueFulfill},
             </if>
-            corp_value_evaluate_day = NOW()
+            <if test="corpValueFulfill == 0">
+                corp_value_fulfill = #{corpValueFulfill}
+            </if>
         </set>
         WHERE
-        corporate_value_evaluation_code = #{corporateValueEvaluationCode};
+            corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </update>
 
     <!-- 투자펀딩 심사요청 삭제 -->
@@ -900,6 +908,25 @@
             investment_request_judge
         WHERE
             investment_request_judge_code = #{investmentRequestJudgeCode};
+    </delete>
+
+    <!-- 자본시장 범위충족기준 삭제 -->
+    <delete id="removeLawSatistify" parameterType="String">
+        DELETE
+        FROM
+            law_satistify_reason
+        WHERE
+            law_satistify_code = #{lawSatistifyCode};
+    </delete>
+
+    <!-- 기업가치 평가 결과 삭제 -->
+    <delete id="removeCorporateValueEvaluation" parameterType="String">
+        /* 기업가치 평가 결과 삭제 */
+        DELETE
+        FROM
+            corporate_value_evaluation
+        WHERE
+            corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </delete>
 
 </mapper>
