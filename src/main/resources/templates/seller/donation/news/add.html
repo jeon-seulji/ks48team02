@@ -300,7 +300,9 @@
     <!-- main swiper slide start -->
 
     <div class="py-3 text-center bg-light">
-        <h2>기부 프로젝트 새소식 등록</h2>
+        <h2 th:if="${#strings.containsIgnoreCase(donationCode,'don')}">기부 프로젝트 새소식 등록</h2>
+        <h2 th:if="${#strings.containsIgnoreCase(donationCode,'rwd')}">리워드 프로젝트 새소식 등록</h2>
+        <h2 th:if="${#strings.containsIgnoreCase(donationCode,'inv')}">투자 프로젝트 새소식 등록</h2>
     </div>
     <br><br>
 

@@ -330,6 +330,8 @@
                         <div class="col-10">
                             <div class="mb-3">
                                 <label for="detailSubject" class="form-label" style="width: 100%">새소식 제목을 적어주세요</label>
+                                <input name="projectCode"
+                                        th:if="${l.newsCode == newsCode}" th:each="l : ${newsList}" th:value="${l.projectCode}" hidden="hidden">
                                 <input class="form-control" id="detailSubject" name="detailSubject" rows="20" style="width: 100%"
                                        th:if="${l.newsCode == newsCode}" th:each="l : ${newsList}" th:value="${l.newsSubject}"></input>
                             </div>

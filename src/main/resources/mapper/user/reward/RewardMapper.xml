@@ -88,31 +88,34 @@
             m.member_name,
             m.member_email,
             m.contact_info,
-            c.customer_gender,
-            c.customer_birth,
-            c.customer_addr,
-            c.customer_addr_detail,
-            c.customer_point,
-            cr.rank_name,
-            cr.discount_rate,
-            cr.point_saving_rate
+            IFNULL(c.customer_addr,'등록된 주소가 없습니다')AS customer_addr,
+            IFNULL(c.customer_addr_detail,'등록된 상세 주소가 없습니다')AS customer_addr_detail,
+            IFNULL(c.customer_point,0)AS customer_point,
+            IFNULL(cr.discount_rate,0)AS discount_rate,
+            IFNULL(cr.point_saving_rate,0)AS point_saving_rate
         FROM
             member AS m
-        INNER JOIN
+        LEFT JOIN
             customer AS c
         ON
             m.member_id= c.member_id
-        INNER JOIN
+        LEFT JOIN
             reward_customer_rank AS cr
         ON
             c.reward_rank_code = cr.reward_rank_code
-        INNER JOIN
-            donation_customer_rank AS dr
-        ON
-            c.donation_rank_code = dr.donation_rank_code
         WHERE
             m.member_id = #{memberId};
     </select>
+
+    <!--배송 요청사항 메세지 조회-->
+    <select id="deliveryMessage" resultType="DeliveryMessage">
+        SELECT
+            d.delivery_message_code AS deliveryMessageCode,
+            d.delivery_message_content AS deliveryMessageContect
+        FROM
+            delivery_message as d
+    </select>
+
     <!--리워드 프로젝트 등록-->
     <insert id="addRewardProject" parameterType="RewardProject">
         <selectKey keyProperty="rewardProjectCode,storeCode,regCompany" resultType="hashmap" order="BEFORE">
@@ -247,6 +250,22 @@
             s.member_id = m.member_id
         WHERE
             r.reward_project_code = #{rewardProjectCode};
+    </select>
+
+    <!--리워드 옵션 별 총 주문개수 조회-->
+    <select id="optionTotalOrderQuantity" parameterType="String" resultType="int">
+        SELECT
+            IFNULL(SUM(o.order_option_amount),0)
+        FROM
+            reward_option as r
+            LEFT JOIN
+                reward_order_detail as o
+            ON
+                r.reward_option_code = o.reward_option_code
+        WHERE
+            r.reward_option_code = #{rewardOptionCode}
+        GROUP BY
+            r.reward_option_code
     </select>
 
     <!--주문번호, 결제번호 생성-->

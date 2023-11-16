@@ -494,30 +494,6 @@
                                 })
                             })
 
-                        /*
-                        paymentWidget.requestPayment(paymentObj)
-                                     .then(function(data){
-                                         console.log(data);
-                                         paymentParam.paymentKey = data.paymentKey
-                                         console.log(paymentObj);
-                                         //결제 완료 후 처리
-
-                                         for(const key in paymentObj){
-                                             const ele = $('<input />', { 'type': 'hidden', 'name': key, 'value': paymentObj[key]});
-                                             $('form').append(ele);
-                                         }
-                                        $('form').submit();
-                                     })
-                                     .catch(function(err){
-                                         // 에러 처리: 에러 목록을 확인하세요
-                                         // https://docs.tosspayments.com/reference/error-codes#failurl로-전달되는-에러
-                                         if (error.code === 'USER_CANCEL') {
-                                            // 결제 고객이 결제창을 닫았을 때 에러 처리
-                                         } else if (error.code === 'INVALID_CARD_COMPANY') {
-                                            // 유효하지 않은 카드 코드에 대한 에러 처리
-                                         }
-                                     });
-                         */
                     }
                 }
             });
@@ -587,7 +563,7 @@
                                             <span class="optionPrice font-weight-bold ml-2" th:text="|${#numbers.formatInteger(l.optionPrice, 0, 'COMMA')} 원|"
                                                   th:attr="data-price=${l.optionPrice}"></span>
                                             <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
-                                                <span class="optionRemainQuantity">300</span>개 남음
+                                                <span class="optionRemainQuantity" th:text="|${#numbers.formatInteger(l.optionLimitQuantity - l.totalOrderQuantity, 0, 'COMMA')} 개 남음|"></span>
                                             </span>
                                             <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
@@ -749,13 +725,8 @@
                                         <label for="deliverRequest" class="font-weight-bold text-dark mt-lg-2">배송 요청사항</label>
                                         <br>
                                         <select id="deliverRequest">
-                                            <option value="DELM_001">문 앞에 두고 가주세요</option>
-                                            <option value="DELM_002">배송 전에 연락 해주세요</option>
-                                            <option value="DELM_003">부재시 문 앞에 놓아주세요</option>
-                                            <option value="DELM_004">부재시 경비실에 맡겨주세요</option>
-                                            <option value="DELM_005">기타</option>
+                                            <option th:each="l : ${deliveryMessageList}" th:value="${l.deliveryMessageCode}" th:text="${l.deliveryMessageContect}"></option>
                                         </select>
-                                        <!--                                        <input type="text" class="w-100" id="deliverRequest" value="" style="height: 35px">-->
                                         <br>
                                         <label for="elseDeliverRequest" hidden="hidden">기타 배송요청사항</label>
                                         <input type="text" class="w-100 mt-lg-2" id="elseDeliverRequest" value="" style="height: 35px" placeholder="기타" disabled>

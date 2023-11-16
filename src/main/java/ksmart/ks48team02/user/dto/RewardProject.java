@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.dto;
 
 
+import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.RewardOption;
 import lombok.Data;
 
@@ -35,6 +36,8 @@ public class RewardProject {
     private String storeMobile;
     private String categoryName;
 
+
+    private List<NewsList> newsLists;
     private List<RewardOption> rewardOptionList;
 
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.Coupon;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
+import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.controller.PojectRegistrationContoller;
@@ -97,7 +98,9 @@ public class RewardController {
         RewardProject rewardOrderInfo = rewardService.rewardProjectDetail(rewardProjectCode);
         Member orderMemberInfo = rewardService.getOrderMemberInfo(memberId);
         List<Coupon> memberHaveCouponList = adminCouponService.MemberHaveCouponById(memberId);
+        List<DeliveryMessage> deliveryMessageList = rewardService.deliveryMessage();
 
+        model.addAttribute("deliveryMessageList",deliveryMessageList);
         model.addAttribute("rewardOrderInfo", rewardOrderInfo);
         model.addAttribute("rewardOptionCode", rewardOptionCode);
         model.addAttribute("orderMemberInfo", orderMemberInfo);

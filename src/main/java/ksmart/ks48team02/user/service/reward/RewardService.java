@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.service.reward;
 
 
+import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.dto.Member;
@@ -30,6 +31,11 @@ public class RewardService {
 
         return orderMemberInfo;
     }
+    //배송 메세지 조회
+    public List<DeliveryMessage> deliveryMessage(){
+        List<DeliveryMessage> deliveryMessageList = rewardMapper.deliveryMessage();
+        return deliveryMessageList;
+    }
 
     //리워드 등록 하기
     public int addRewardProject (RewardProject rewardProject){
@@ -58,7 +64,12 @@ public class RewardService {
      public RewardProject rewardProjectDetail(String rewardProjectCode){
 
         RewardProject rewardProject =rewardMapper.rewardProjectDetail(rewardProjectCode);
-
+        List<RewardOption> rewardOptionList = rewardProject.getRewardOptionList();
+        rewardOptionList.forEach(option->{
+            String optionCode = option.getRewardOptionCode();
+            int totalOrderQuantity = rewardMapper.optionTotalOrderQuantity(optionCode);
+            option.setTotalOrderQuantity(totalOrderQuantity);
+        });
         return rewardProject;
      }
 
