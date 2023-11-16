@@ -25,7 +25,7 @@
     <link rel="stylesheet" th:href="@{/user/css/main_style.css}" />
 
     <link rel="stylesheet" href="//t1.daumcdn.net/postcode/cssjs/guide/1695281969613/guide.v2.min.css">
-
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 </head>
 
 
@@ -146,13 +146,27 @@
 
             //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
             $('.paymentBtn').click(function(){
+                let isValid = true;
                 $('.essential').each(function(idx,item){
                     if(!$(item).prop('checked')) {
                         alert('필수 약관에 모두 동의해주세요');
                         $(item).focus();
+                        isValid =false;
                         return false;
                     }
                 });
+                if(isValid){
+                    paymentWidget.requestPayment({
+                        orderId: "ZnMXcbHhAnrQHkkyFvZj8",
+                        orderName: "토스 티셔츠 외 2건",
+                        successUrl: window.location.origin + "/success",
+                        failUrl: window.location.origin + "/fail",
+                        customerEmail: "customer123@gmail.com",
+                        customerName: "김토스",
+                        customerMobilePhone: "01012341234"
+                    })
+                }
+
             });
 
             // 주문 금액 계산해서 넣기
@@ -169,10 +183,35 @@
 
         })
 
+        // 토스 결제
+        const clientKey = 'test_ck_P9BRQmyarY7j4lG4Oepv3J07KzLN' // 테스트용 클라이언트 키
+        const customerKey = 'test_ck_P9BRQmyarY7j4lG4Oepv3J07KzLN' // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
 
-
-
-
+        // 2. 결제위젯 SDK 초기화
+        const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
+        const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
+            '#payment-method',
+            {
+                value: 10000,
+                currency: 'KRW',
+                country: 'KR',
+            },
+            { variantKey: 'widgetA' }
+        )
+        const paymentMethods = paymentWidget.renderPaymentMethods('#payment-method', {
+            value: 10000,
+        })
+        /*$('#payment-button').on("click", function () {
+            paymentWidget.requestPayment({
+                orderId: "ZnMXcbHhAnrQHkkyFvZj8",
+                orderName: "토스 티셔츠 외 2건",
+                successUrl: window.location.origin + "/success",
+                failUrl: window.location.origin + "/fail",
+                customerEmail: "customer123@gmail.com",
+                customerName: "김토스",
+                customerMobilePhone: "01012341234"
+            })
+        })*/
 
 
     </script>
@@ -333,7 +372,7 @@
                     <figure class="text-center">
                         <blockquote class="blockquote">
                             <br>
-                            <h3 style="font-weight: bold;">결제 입금</h3><br>
+                            <h3 style="font-weight: bold;">결제 정보</h3><br>
                         </blockquote>
                     </figure>
                 </div>
@@ -344,39 +383,20 @@
                     <div class="col-lg-8">
 
                         <form>
-                            <h5 style="font-weight: bold;">결제 입금</h5>
+                            <h5 style="font-weight: bold;">결제 진행</h5>
                             <br>
-                            <div style="color: black; font-size: 18px;">투자예치금 계좌에 입금해 주세요.</div><br><br>
+                            <div style="color: black; font-size: 18px;">결제하실 금액만큼 결제를 진행해 주세요.</div><br><br>
                             <label class="form-text text-muted col-12" style="font-size: 16px; color: black"><span>청약 신청 수량</span> <span class="stockNumber">0주</span></label>
-                            <label class="form-text text-muted col-12" style="font-size: 18px;"><span style="color: #0b44d7">입금하실 금액</span> <span style="font-weight: bold" class="total-price">0<i></i>원</span></label>
+                            <label class="form-text text-muted col-12" style="font-size: 18px;"><span style="color: #0b44d7">결제하실 금액</span> <span style="font-weight: bold" class="total-price">0<i></i>원</span></label>
                             <br><br>
 
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <ul class="tight">
-                                        <li>
-                                            <dl>
-                                                <dd style="font-size: 15px">예금주</dd>
-                                                <dt style="font-size: 16px">김플루</dt>
-                                            </dl>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-10">
-                                    <ul class="tight">
-                                        <li>
-                                            <dl>
-                                                <dd style="font-size: 15px">플루은행</dd>
-                                                <dt style="font-size: 16px">142-555-567708</dt>
-                                            </dl>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <br><br>
 
                             <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
+                            <div id="payment-method" >토스결제하기</div>
+
+
+                            <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
                             <div class="ml-lg-2 mt-lg-5">
                                 <h5 style="font-weight: bold;">약관 동의</h5>
@@ -414,7 +434,9 @@
                             <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
                             <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button">이전단계</button>
-                            <button class="paymentBtn w-80 btn btn-primary  btn-lg" type="button">결제하기</button>
+                            <!--<button class="paymentBtn w-80 btn btn-primary  btn-lg" type="button">결제하기</button>-->
+                            <button id="payment-button" type="button" class="paymentBtn w-80 btn btn-primary  btn-lg">토스결제하기</button>
+
 
                         </form>
                     </div>

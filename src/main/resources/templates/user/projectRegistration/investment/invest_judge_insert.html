@@ -10,6 +10,7 @@
   <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
 
 
+
 </head>
 
 
@@ -18,6 +19,9 @@
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
+  <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!-- common js -->
+  <script src="/common/js/common-custom.js"></script>
 
 </th:block>
 
@@ -25,34 +29,33 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
   <script>
-    // main swiper slide
-    let mainSwiper = new Swiper("#main-swiper-slide", {
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false
-      },
-      loop: true,
-      pagination: {
-        el: ".swiper-pagination",
-        type: "fraction",
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
+    $(document).ready(function() {
+      // 증권 구분 셀렉트 박스의 변경 이벤트 핸들러 등록
+      $('#securitiesClassification').change(function() {
+        // 선택된 값 가져오기
+        let selectedValue = $(this).val();
 
-    // md join swiper slide
-    let mdJoinSwiper = new Swiper("#mdJoinProject .mySwiper", {
-      slidesPerView: 3,
-      grid: {
-        rows: 2,
-      },
-      // spaceBetween: 20,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
+        // 현금 보유량, 현재 주식 수, 발행 예정 주식 수 입력 필드의 부모 요소를 가져옴
+        let cashReservesInputGroup = $('#cashReserves').closest('.my-2');
+        let currentStockNumInputGroup = $('#currentStockNum').closest('.my-2');
+        let issueStockNumInputGroup = $('#issueStockNum').closest('.my-2');
+
+        // 주식형이 선택된 경우
+        if (selectedValue === '1') {
+          // 현금 보유량 입력 필드 숨김
+          cashReservesInputGroup.hide();
+          // 현재 주식 수와 발행 예정 주식 수 입력 필드 표시
+          currentStockNumInputGroup.show();
+          issueStockNumInputGroup.show();
+        } else if (selectedValue === '2') {
+          // 채권형이 선택된 경우
+          // 현금 보유량 입력 필드 표시
+          cashReservesInputGroup.show();
+          // 현재 주식 수와 발행 예정 주식 수 입력 필드 숨김
+          currentStockNumInputGroup.hide();
+          issueStockNumInputGroup.hide();
+        }
+      });
     });
 
     // rank tab function
@@ -64,15 +67,43 @@
       $('#'+tabData).show();
     });
 
-    // contents swiper slide
-    let contentsSwiperSlide = new Swiper(".contents-area", {
-      slidesPerView: 5,
-      spaceBetween: 20,
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
+    //약관 체크 모두 될 시 모두 동의에 체크.
+    $('.essential').not('#agreeNews').click(function(){
+      let checkLength = $('.essential').not('#agreeNews').length;
+      let checkedLength = $('.essential:checked').not('#agreeNews').length;
+      let isAllCheck = checkLength === checkedLength;
+      $('#allCheck').prop('checked',isAllCheck);
     });
+
+    //약관 모두 동의 체크시 모두 동의
+    $('#allCheck').click(function(){
+      $('.essential').not('#agreeNews').prop('checked',$(this).prop('checked'));
+    });
+
+    // 제출하기 클릭 시 필수 약관동의 모두 체크되어있는지 확인
+    $('.nextBtn').click(function(){
+
+      const targetEls = $('.needs-validation input, .needs-validation select, .needs-validation textarea');
+      // 값 유효성 검사
+      if(!validationEmptyFn(targetEls)){
+        return;
+      }
+
+
+      let isValid = true;
+      $('.essential').each(function(idx,item){
+        if(!$(item).prop('checked')) {
+          alert('필수 약관에 모두 동의해주세요');
+          $(item).focus();
+          isValid =false;
+          return false;
+        }
+      });
+    });
+
+
+
+
   </script>
 
 
@@ -88,19 +119,30 @@
         <!--<p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>-->
       </div>
 
+
       <div class="row g-5" style="justify-content: center;">
         <div class="col-md-7 col-lg-8">
           <form class="needs-validation" novalidate="">
             <div class="row g-3">
 
               <div class="my-2 col-12">
+                <label for="securitiesClassification" class="form-label fw-bord text-dark">증권 구분</label>
+                <div class="input-group mb-3">
+                  <select class="custom-select" id="securitiesClassification">
+                    <option value="" disabled="disabled" selected="selected">증권 구분</option>
+                    <option class="stock" value="1">주식형</option>
+                    <option class="bond" value="2">채권형</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row g-3">
+              <div class="my-2 col-12">
                 <label for="projectSubject" class="form-label fw-bord text-dark">프로젝트 제목</label>
                 <input type="text" class="form-control" id="projectSubject" placeholder="프로젝트 제목을 입력해주세요." value required>
-              </div>
-
-              <div class="my-2 col-12">
-                <label for="representativeName" class="form-label fw-bord text-dark">대표자 성함</label>
-                <input type="text" class="form-control" id="representativeName" placeholder="대표자 성함을 입력해주세요." value required>
               </div>
 
               <div class="my-2 col-12">
@@ -109,41 +151,43 @@
               </div>
 
               <div class="my-2 col-12">
-                <label for="projectContent" class="form-label fw-bord text-dark">프로젝트 내용</label>
-                <input type="text" class="form-control" id="projectContent" placeholder="프로젝트 내용을 입력해주세요." value required>
-              </div>
-
-              <div class="my-2 col-12">
                 <label for="investmentTargetAmount" class="form-label fw-bord text-dark">펀딩 목표 금액</label>
-                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="investmentTargetAmount" placeholder="펀딩 목표 금액을 입력해주세요." value required>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');" class="form-control" id="investmentTargetAmount" placeholder="펀딩 목표 금액을 입력해주세요." value required>
               </div>
 
               <div class="my-2 col-12">
                 <label for="operatingProfit" class="form-label fw-bord text-dark">영업 이익</label>
-                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="operatingProfit" placeholder="영업 이익 금액을 입력해주세요." value required>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');" class="form-control" id="operatingProfit" placeholder="영업 이익 금액을 입력해주세요." value required>
               </div>
 
               <div class="my-2 col-12">
                 <label for="depreciationExpense" class="form-label fw-bord text-dark">감가상각비</label>
-                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="depreciationExpense" placeholder="감가상각비를 입력해주세요." value required>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');" class="form-control" id="depreciationExpense" placeholder="감가상각비를 입력해주세요." value required>
               </div>
 
               <div class="my-2 col-12">
                 <label for="netBorrowings" class="form-label fw-bord text-dark">순차입금</label>
-                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="netBorrowings" placeholder="순차입금을 입력해주세요." value required>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');" class="form-control" id="netBorrowings" placeholder="순차입금을 입력해주세요." value required>
               </div>
 
               <div class="my-2 col-12">
                 <label for="currentStockNum" class="form-label fw-bord text-dark">현재 주식 수</label>
-                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="currentStockNum" placeholder="현재 주식 수를 입력해주세요." value required>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');" class="form-control" id="currentStockNum" placeholder="현재 주식 수를 입력해주세요." value required>
               </div>
 
               <div class="my-2 col-12">
                 <label for="issueStockNum" class="form-label fw-bord text-dark">발행 예정 주식 수</label>
-                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="issueStockNum" placeholder="발행 예정 주식 수를 입력해주세요." value required>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');" class="form-control" id="issueStockNum" placeholder="발행 예정 주식 수를 입력해주세요." value required>
               </div>
 
+              <div class="my-2 col-12">
+                <label for="cashReserves" class="form-label fw-bord text-dark">현금 보유량</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');" class="form-control" id="cashReserves" placeholder="현금 보유량을 입력해주세요." value required>
+              </div>
+
+
             </div>
+
 
 
             <hr class="my-4">
@@ -152,7 +196,7 @@
               <label for="businessType" class="form-label fw-bord text-dark">업종 선택</label>
               <div class="input-group mb-3">
                 <select class="custom-select" id="businessType">
-                  <option selected>업종 선택</option>
+                  <option value="" disabled="disabled" selected="selected">업종 선택</option>
                   <option value="1">복권 발행 및 판매업</option>
                   <option value="2">기원 운영업</option>
                   <option value="3">공연 기획업</option>
@@ -164,7 +208,7 @@
               <label for="capitalMarketsLawSatisfactionCriteria" class="form-label fw-bord text-dark">자본시장법 충족 기준</label>
               <div class="input-group mb-3">
                 <select class="custom-select" id="capitalMarketsLawSatisfactionCriteria">
-                  <option selected>자본시장법 충족 기준 선택</option>
+                  <option value="" disabled="disabled" selected="selected">자본시장법 충족 기준 선택</option>
                   <option value="1">창업 후 7년 이내 비상장</option>
                   <option value="2">비상장 벤처기업</option>
                   <option value="3">이노비즈 기업</option>
@@ -174,7 +218,7 @@
 
             <form>
               <div class="form-group">
-                <label for="investmentFile">첨부파일 업로드</label>
+                <label for="investmentFile">프로젝트 계획서 업로드</label>
                 <input type="file" class="form-control-file" id="investmentFile">
               </div>
             </form>
@@ -182,16 +226,35 @@
             <hr class="my-4">
 
 
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="same-address">
-              <label class="form-check-label" for="same-address">동의?</label>
+            <div class="ml-lg-2 mt-lg-5">
+              <h5 style="font-weight: bold;">약관 동의</h5>
+              <div class="ml-lg-3 mt-lg-4">
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="allCheck">
+                  <label class="form-check-label" for="allCheck">
+                    필수 약관 모두동의
+                  </label>
+                </div>
+                <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                <div class="form-check">
+                  <input class="essential form-check-input" type="checkbox" value="" id="agree1">
+                  <label class="form-check-label" for="agree1">
+                    개인정보 제3자 제공 동의 (필수)
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="essential form-check-input" type="checkbox" value="" id="agree2">
+                  <label class="form-check-label" for="agree2">
+                    책임 규정에 대한 동의 (필수)
+                  </label>
+                </div>
+              </div>
             </div>
 
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="save-info">
-              <label class="form-check-label" for="save-info">ㅇㅇ</label>
-            </div>
-            <button class="my-5 w-100 btn btn-primary btn-lg" type="submit">제출하기</button>
+            <hr class="my-4">
+
+            <button th:onclick="|location.href='@{/user/projectRegistration/investment/insert}'|" class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button><br><br>
           </form>
         </div>
       </div>

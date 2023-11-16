@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.ks48team02.user.mapper.account.AccountMapper">
+
+    <!-- ResultMap : DTO와 DB와 조회된 결과 맵핑 객체 -->
+    <resultMap type="Member" id="memberResultMap">
+        <!-- pk == id  -->
+        <id 	property="memberId" 		    column="member_id"/>
+        <!-- pk 제외한 모든 컬럼 == result -->
+        <result property="memberTypeCode" 		column="member_type_code"/>
+        <result property="memberName" 		    column="member_name"/>
+        <result property="memberPw" 		    column="member_pw"/>
+        <result property="memberRegDate" 	    column="member_reg_date"/>
+        <result property="memberEmail" 		    column="member_email"/>
+        <result property="memberContactInfo" 	column="contact_info"/>
+    </resultMap>
+
+    <!-- 회원가입 -->
+    <insert id="addMember" parameterType="Member">
+        /* 회원가입 */
+        INSERT INTO member
+            (member_id, member_type_code, member_name, member_pw, member_reg_date, member_email, contact_info)
+        VALUES
+            (#{memberId},#{memberTypeCode}, #{memberName}, #{memberPw}, CURDATE(), #{memberEmail}, #{memberContactInfo});
+    </insert>
+
+    <!-- 회원아이디 중복체크 -->
+    <select id="idCheck" parameterType="String" resultType="boolean">
+        /* 회원아이디 중복체크 */
+        SELECT
+            count(m.member_id)
+        FROM
+            member AS m
+        WHERE
+            m.member_id = #{memberId};
+    </select>
+
+
+</mapper>
+
+
+
+
+
+

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.ks48team02.user.mapper.investment.UserInvestmentMapper">
+
+    <resultMap id="InvestmentInfoResultMap" type="InvestmentInfo">
+        <id property="investmentCode" column="investment_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="storeCode" column="store_code"/>
+        <result property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
+        <result property="totalCategoryCode" column="total_category_code"/>
+        <result property="memberIdSeller" column="member_id_seller"/>
+        <result property="investmentSubject" column="investment_subject"/>
+        <result property="investmentImage" column="investment_image"/>
+        <result property="investmentLike" column="investment_like"/>
+        <result property="investmentAmount" column="investment_amount"/>
+        <result property="investmentAchievementMoney" column="investment_achievement_money"/>
+        <result property="investAchievementPercent" column="invest_achievement_percent"/>
+        <result property="investmentCompany" column="investment_company"/>
+        <result property="searchCount" column="search_count"/>
+        <result property="investCount" column="invest_count"/>
+        <result property="securitiesClassification" column="securities_classification"/>
+        <result property="investmentDisplayDate" column="investment_display_date"/>
+        <result property="investmentRegDate" column="investment_reg_date"/>
+        <result property="investmentDeadline" column="investment_deadline"/>
+        <result property="investmentReport" column="investment_report"/>
+        <result property="basicFee" column="basic_fee"/>
+        <result property="contractFeeRate" column="contract_fee_rate"/>
+        <result property="contractFile" column="contract_file"/>
+        <result property="investJudgeSituation" column="invest_judge_situation"/>
+        <result property="investmentDeadlineCnt" column="investmentDeadlineCnt"/>
+    </resultMap>
+
+    <insert id="addInvestment" parameterType="InvestmentInfo">
+        /* 투자 프로젝트 등록 */
+        <selectKey keyProperty="investmentCode" resultType="String" order="BEFORE">
+            SELECT
+            (CASE
+            WHEN COUNT(i.investment_reg_date) = 0 THEN CONCAT('inv_', CURDATE()+0, '_0001')
+            WHEN COUNT(i.investment_reg_date) > 9999 THEN CONCAT('inv_', CURDATE()+0, '_', COUNT(i.investment_reg_date)+1)
+            ELSE CONCAT('don_', CURDATE()+0, '_', LPAD(COUNT(i.investment_reg_date)+1, 4, '0'))
+            END) AS investmentCode
+            FROM
+            investment AS i
+            WHERE
+            DATE_FORMAT(i.investment_reg_date, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+        INSERT INTO investment
+        (investment_code, member_id, store_code, investment_request_judge_code, total_category_code, member_id_seller, investment_subject,
+        investment_image, investment_like, investment_amount, investment_achievement_money, invest_achievement_percent,
+        investment_company, search_count, invest_count, securities_classification, investment_display_date, investment_reg_date,
+        investment_deadline, investment_report, basic_fee, contract_fee_rate, contract_file, invest_judge_situation)
+        values
+        (#{investmentCode},'id001', 'sto004', #{investmentRequestJudgeCode}, #{totalCategoryCode}, 'id002', #{investmentSubject},
+        #{investmentImage}, '0', '0', '0', '0', #{investmentCompany}, '0', '0', #{securitiesClassification}, CURDATE(), #{investmentRegDate}, #{investmentDeadline},
+        #{investmentReport}, '3000000', 'null', #{contractFile}, '0');
+    </insert>
+
+    <select id="getInvestmentInfo" parameterType="String" resultMap="InvestmentInfoResultMap">
+        SELECT
+        investment_code,
+        invest_achievement_percent,
+        investment_subject,
+        investment_amount,
+        DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+        investment_image,
+        investment_company
+        FROM
+        investment
+    </select>
+
+    <select id="getSortedList" parameterType="String" resultMap="InvestmentInfoResultMap">
+        SELECT
+            investment_code,
+            invest_achievement_percent,
+            investment_subject,
+            investment_amount,
+            DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+            investment_image,
+            investment_company
+        FROM
+            investment
+        <choose>
+            <when test='orderBy == "recommendation"'>
+                ORDER BY invest_achievement_percent DESC
+            </when>
+            <when test='orderBy == "latest"'>
+                ORDER BY investment_reg_date DESC
+            </when>
+            <when test='orderBy == "popularity"'>
+                ORDER BY investment_like DESC
+            </when>
+            <when test='orderBy == "recruitmentAmount"'>
+                ORDER BY investment_amount DESC
+            </when>
+            <when test='orderBy == "deadline"'>
+                ORDER BY investmentDeadlineCnt ASC
+            </when>
+            <otherwise>
+                ORDER BY invest_achievement_percent DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+
+</mapper>

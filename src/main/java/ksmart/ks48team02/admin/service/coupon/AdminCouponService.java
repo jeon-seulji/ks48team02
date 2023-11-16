@@ -19,6 +19,13 @@ public class AdminCouponService {
         this.adminCouponMapper = adminCouponMapper;
     }
 
+    // 쿠폰 등록
+    public List<Coupon> getCouponCreate(){
+        List<Coupon> getCouponCreate = adminCouponMapper.getCouponCreate();
+
+        return getCouponCreate;
+    }
+
     // 쿠폰 목록
     public List<Coupon> getCouponList(){
         List<Coupon> couponList = adminCouponMapper.getCouponList();
