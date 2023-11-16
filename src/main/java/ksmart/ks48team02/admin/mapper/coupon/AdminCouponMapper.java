@@ -8,8 +8,15 @@ import java.util.List;
 @Mapper
 public interface AdminCouponMapper {
 
+    // 쿠폰 삭제
+    void deleteCoupon(String couponCode);
+
+
+    // 쿠폰 수정
+    void updateCoupon(Coupon coupon);
+
     // 쿠폰 등록
-    public List<Coupon> getCouponCreate();
+    void insertCoupon(Coupon coupon);
 
     //전체 쿠폰 조회
     public List<Coupon> getCouponList();
