@@ -1,6 +1,7 @@
 package ksmart.ks48team02.admin.dto;
 
 public class AdminInvestment {
+
     private String investmentCode;
     private String memberId;
     private String storeCode;
@@ -12,7 +13,7 @@ public class AdminInvestment {
     private String investmentImage;
     private int investmentLike;
     private long investmentAmount;
-    private long investmentAchievementMoney;
+    private long invInvestmentAchievementMoney;
     private int investAchievementPercent;
     private String investmentCompany;
     private int searchCount;
@@ -26,10 +27,10 @@ public class AdminInvestment {
     private float contractFeeRate;
     private String contractFile;
     private int investJudgeSituation;
-
     public String getInvestmentCode() {
         return investmentCode;
     }
+
     public void setInvestmentCode(String investmentCode) {
         this.investmentCode = investmentCode;
     }
@@ -93,11 +94,11 @@ public class AdminInvestment {
     public void setInvestmentAmount(long investmentAmount) {
         this.investmentAmount = investmentAmount;
     }
-    public long getInvestmentAchievementMoney() {
-        return investmentAchievementMoney;
+    public long getInvInvestmentAchievementMoney() {
+        return invInvestmentAchievementMoney;
     }
-    public void setInvestmentAchievementMoney(long investmentAchievementMoney) {
-        this.investmentAchievementMoney = investmentAchievementMoney;
+    public void setInvInvestmentAchievementMoney(long invInvestmentAchievementMoney) {
+        this.invInvestmentAchievementMoney = invInvestmentAchievementMoney;
     }
     public int getInvestAchievementPercent() {
         return investAchievementPercent;
@@ -203,8 +204,8 @@ public class AdminInvestment {
         builder.append(investmentLike);
         builder.append(", investmentAmount=");
         builder.append(investmentAmount);
-        builder.append(", investmentAchievementMoney=");
-        builder.append(investmentAchievementMoney);
+        builder.append(", invInvestmentAchievementMoney=");
+        builder.append(invInvestmentAchievementMoney);
         builder.append(", investAchievementPercent=");
         builder.append(investAchievementPercent);
         builder.append(", investmentCompany=");
@@ -234,4 +235,5 @@ public class AdminInvestment {
         builder.append("]");
         return builder.toString();
     }
+
 }

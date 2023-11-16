@@ -21,8 +21,15 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        $('#settDeleteBtn').click(function (){
-           let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
+        $('#settDeleteBtn').click(function () {
+            let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
+            console.log(deleteConfirm);
+            if (deleteConfirm) {
+                window.location.href = `[[@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=${corporateValueEvaluationInfo.corporateValueEvaluationCode})}]]` ;
+                alert('삭제되었습니다');
+            } else {
+                alert('취소되었습니다');
+            }
         });
     </script>
 </th:block>
@@ -43,7 +50,7 @@
                 </div>
                 <div class="info-more-btn">
                     <a class="more-btn" style="padding: 7px 10px 9px 19px;">
-                        <span>공고 상세 보기</span>
+                        <span>요청 상세 보기</span>
                     </a>
                 </div>
             </div>
@@ -94,7 +101,7 @@
                     </tr>
                     <tr>
                         <td style="background: #fff;"><span
-                                th:text="*{#numbers.formatInteger(adminInvestmentRequestJudge.InvestmentAchievementMoney,3,'COMMA')}"></span>
+                                th:text="*{#numbers.formatInteger(adminInvestmentRequestJudge.investmentAchievementMoney,3,'COMMA')}"></span>
                             원
                         </td>
                         <td><span th:text="*{#numbers.formatInteger(operatingProfit,3,'COMMA')}"></span> 원</td>
@@ -174,7 +181,6 @@
                         <td th:text="*{evEbitda}"></td>
                         <td><span th:text="*{#numbers.formatInteger(convertEv,3,'COMMA')}"></span> 원</td>
                         <td><span th:text="*{#numbers.formatInteger(netDebt,3,'COMMA')}"></span> 원</td>
-
                     </tr>
                     <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
                         <td style="height: 35px;" colspan="2">평가된 기업가치</td>
@@ -237,8 +243,8 @@
                             </button>
                         </li>
                         <li>
-                            <button id="settDeleteBtn" class="submitBtn" type="button"
-                                    th:onclick="|location.href='@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}'|">
+                            <button id="settDeleteBtn" name="settDeleteBtn" class="submitBtn" type="button"
+                                    th:onclick="return false">
                                 삭제
                             </button>
                         </li>

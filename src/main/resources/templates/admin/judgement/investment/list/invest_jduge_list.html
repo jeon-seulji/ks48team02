@@ -5,6 +5,11 @@
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 
@@ -15,7 +20,23 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
+    <script>
+        function toggleInput() {
+            let selectElement = document.getElementById('searchKey');
+            let searchInput = document.getElementById('inputSearchValue');
+            let searchSelect = document.getElementById('selectSearchValue');
 
+            if (selectElement.value === 'investJudgeResult') {
+                searchInput.classList.add('hidden');
+                searchSelect.classList.remove('hidden');
+                searchInput.value = '';
+            } else {
+                searchInput.classList.remove('hidden');
+                searchSelect.classList.add('hidden');
+                searchSelect.value = '';
+            }
+        }
+    </script>
 </th:block>
 
 
@@ -72,12 +93,11 @@
                     <option value="regist_d">신청일 순</option>
                     <option value="regist_a">신청일 역순</option>
                     <option>-----------------</option>
+                    <option value="project_name_d">요청 코드순</option>
+                    <option value="project_name_a">요청 코드 역순</option>
+                    <option>-----------------</option>
                     <option value="project_name_d">심사요청 제목순</option>
                     <option value="project_name_a">심사요청 제목역순</option>
-                    <option>-----------------</option>
-                    <option value="appli_progress_p">심사 승인</option>
-                    <option value="appli_progress_i">심사 대기</option>
-                    <option value="appli_progress_c">심사 반려</option>
                 </select>
                 <select name="count-select">
                     <option value="15">15개씩 보기</option>
@@ -127,7 +147,7 @@
                 <td th:text="${l.storeName}"></td>
                 <td th:text="${l.investmentCompany}"></td>
                 <td th:text="${l.representativeName}"></td>
-                <td th:text="${#numbers.formatInteger(l.InvestmentAchievementMoney,3,'COMMA')} + ' 원'"></td>
+                <td th:text="${#numbers.formatInteger(l.investmentAchievementMoney,3,'COMMA')} + ' 원'"></td>
                 <td th:text="${l.investmentRequestDate}"></td>
                 <td th:text="${l.investJudgeDate}"></td>
                 <td th:text="${l.memberId}"></td>
