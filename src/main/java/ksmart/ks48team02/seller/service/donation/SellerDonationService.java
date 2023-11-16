@@ -2,7 +2,9 @@ package ksmart.ks48team02.seller.service.donation;
 
 import ksmart.ks48team02.admin.dto.Donation;
 import ksmart.ks48team02.seller.dto.DonationList;
+import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.seller.mapper.donation.SellerDonationMapper;
+import ksmart.ks48team02.user.dto.AllDonationInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,43 @@ public class SellerDonationService {
 
     public void startProject(String donationCode){
         sellerDonationMapper.startProject(donationCode);
+    }
+
+    public List<AllDonationInfo> getAllDonationInfo(String memberId){
+        List<AllDonationInfo> allDonationInfo = sellerDonationMapper.getAllDonationInfo(memberId);
+        return allDonationInfo;
+    }
+
+    public void addNews(String detailSubject, String detailComent, String donationCode){
+        sellerDonationMapper.addNews(detailSubject, detailComent, donationCode);
+    }
+
+    public List<NewsList> getNews(){
+        return sellerDonationMapper.getNews();
+    };
+
+    public void updateNews(String detailSubject, String detailComent, String newsCode){
+        sellerDonationMapper.updateNews(detailSubject, detailComent, newsCode);
+    }
+
+    public void deleteNews(String newsCode){
+        sellerDonationMapper.deleteNews(newsCode);
+    }
+
+    public void addCondition(String detailComent, String donationCode){
+        sellerDonationMapper.addCondition(detailComent, donationCode);
+    }
+
+    public String modifyCondition(String donationCode){
+        return sellerDonationMapper.modifyCondition(donationCode);
+    }
+
+    public void updateCondition(String detailComent, String donationCode){
+        sellerDonationMapper.updateCondition(detailComent, donationCode);
+    }
+
+    public int isCondition(String donationCode){
+        return sellerDonationMapper.isCondition(donationCode);
     }
 
 }
