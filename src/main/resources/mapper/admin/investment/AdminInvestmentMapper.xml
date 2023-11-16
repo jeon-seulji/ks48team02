@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.admin.mapper.investment.AdminInvestmentMapper">
 
+
     <resultMap type="AdminInvestment" id="adminInvestmentListMap">
         <id property="investmentCode" column="investment_code"/>
         <result property="memberId" column="member_id"/>
@@ -16,7 +17,7 @@
         <result property="investmentImage" column="investment_image"/>
         <result property="investmentLike" column="investment_like"/>
         <result property="investmentAmount" column="investment_amount"/>
-        <result property="investmentAchievementMoney" column="investment_achievement_money"/>
+        <result property="invInvestmentAchievementMoney" column="invInvestmentAchievementMoney"/>
         <result property="investAchievementPercent" column="invest_achievement_percent"/>
         <result property="investmentCompany" column="investment_company"/>
         <result property="searchCount" column="search_count"/>
@@ -31,6 +32,7 @@
         <result property="contractFile" column="contract_file"/>
         <result property="investJudgeSituation" column="invest_judge_situation"/>
     </resultMap>
+
 
     <resultMap type="AdminInvestmentRequestJudge" id="adminInvestmentRequestJudgeListMap">
         <id property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
@@ -75,7 +77,7 @@
             <result property="investmentImage" column="investment_image"/>
             <result property="investmentLike" column="investment_like"/>
             <result property="investmentAmount" column="investment_amount"/>
-            <result property="investmentAchievementMoney" column="investment_achievement_money"/>
+            <result property="invInvestmentAchievementMoney" column="invInvestmentAchievementMoney"/>
             <result property="investAchievementPercent" column="invest_achievement_percent"/>
             <result property="investmentCompany" column="investment_company"/>
             <result property="searchCount" column="search_count"/>
@@ -270,7 +272,10 @@
                 #{amDateSettEndDate} >= DATE_FORMAT(i.investment_request_date, '%Y-%m-%d')
                 AND
             </if>
-            <if test="searchKey != null and searchKey != ''">
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != ''">
+                ${searchKey} = #{searchSelectValue};
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue == null or searchSelectValue == ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
         </where>
@@ -282,7 +287,7 @@
         SELECT
             inv.investment_code,
             inv.investment_subject,
-            inv.investment_achievement_money,
+            inv.investment_achievement_money AS invInvestmentAchievementMoney,
             inv.investment_amount,
             inv.invest_achievement_percent,
             inv.investment_deadline,
@@ -615,7 +620,13 @@
                 #{amDateSettEndDate} >= DATE_FORMAT(c.corp_value_evaluate_day, '%Y-%m-%d')
                 AND
             </if>
-            <if test="searchKey != null and searchKey != ''">
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != '' and searchSelectValue != 100 and searchSelectValue != 99">
+                ${searchKey} = #{searchSelectValue};
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue == 99">
+                c.corporate_value_evaluation_code IS NULL;
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != 100 and searchSelectValue != 1 and searchSelectValue != 2 and searchSelectValue != 99">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
         </where>
@@ -654,6 +665,42 @@
             c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </select>
 
+    <insert id="addCorporateValueEvaluation" parameterType="AdminCorporateValueEvaluation">
+        <selectKey keyProperty="corporateValueEvaluationCode" resultType="String" order="BEFORE">
+            /* 기업가치 평가코드 자동증가 */
+            SELECT
+                (CASE
+                WHEN COUNT(c.corp_value_evaluate_day) = 0 THEN CONCAT('cor_val_', CURDATE()+0, '_0001')
+                WHEN COUNT(c.corp_value_evaluate_day) > 9999 THEN CONCAT('cor_val_', CURDATE()+0, '_', COUNT(c.corp_value_evaluate_day)+1)
+                ELSE CONCAT('cor_val_', CURDATE()+0, '_', LPAD(COUNT(c.corp_value_evaluate_day)+1, 4, '0'))
+                END) AS corporateValueEvaluationCode
+            FROM
+                corporate_value_evaluation AS c
+            WHERE
+                DATE_FORMAT(c.corp_value_evaluate_day, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+        INSERT INTO corporate_value_evaluation
+        (corporate_value_evaluation_code, member_id, operating_profit, depreciation, ebitda, ev_ebitda, convert_ev, net_debt, evaluated_corp_value, stock_number, stock_price, corp_value_fulfill, corp_value_evaluate_day)
+        VALUES
+        (#{corporateValueEvaluationCode}, #{memberId}, #{operatingProfit}, #{depreciation}, #{ebitda}, #{evEbitda}, #{convertEv}, #{netDebt}, #{evaluatedCorpValue}, #{stockNumber}, #{stockPrice}, #{corpValueFulfill} ,NOW());
+    </insert>
+
+    <update id="modifyInvestmentRequestCorpValueKey" parameterType="AdminInvestmentRequestJudge">
+        <selectKey keyProperty="corporateValueEvaluationCode" resultType="String" order="BEFORE">
+            /* 마지막 기업가치 평가코드 조회 */
+            SELECT
+                MAX(c.corporate_value_evaluation_code) AS corporateValueEvaluationCode
+            FROM
+                corporate_value_evaluation AS c
+        </selectKey>
+        UPDATE
+            investment_request_judge
+        SET
+            corporate_value_evaluation_code = #{corporateValueEvaluationCode}
+        WHERE
+            investment_request_judge_code = #{investmentRequestJudgeCode}
+    </update>
+
     <insert id="addLawSatistify" parameterType="AdminLawSatistifyReason">
         <selectKey keyProperty="lawSatistifyCode" resultType="String" order="BEFORE">
             /* 자본시장법 범위충족코드 자동증가 */
@@ -672,11 +719,13 @@
         INSERT INTO law_satistify_reason
             (law_satistify_code, member_id, law_satistify_reason, law_satistify_whether, code_reg_day)
         VALUES
-            (#{lawSatistifyCode}, #{memberId}, #{lawSatistifyReason}, 1, CURRENT_TIMESTAMP());
+            (#{lawSatistifyCode}, #{memberId}, #{lawSatistifyReason}, #{lawSatistifyWhether}, CURRENT_TIMESTAMP());
     </insert>
 
+
+
     <!-- 투자펀딩 심사요청 수정 -->
-    <update id="modifyInvestmentRequestJudge" parameterType="ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge">
+    <update id="modifyInvestmentRequestJudge" parameterType="AdminInvestmentRequestJudge">
         /* 투자펀딩 심사요청 수정 */
         UPDATE investment_request_judge
         <set>
@@ -719,8 +768,8 @@
             <if test="invBusinessType != null and invBusinessType != ''">
                 business_type = #{invBusinessType},
             </if>
-            <if test="InvestmentAchievementMoney != null and InvestmentAchievementMoney != ''">
-                investment_achievement_money = #{InvestmentAchievementMoney},
+            <if test="investmentAchievementMoney != null and investmentAchievementMoney != ''">
+                investment_achievement_money = #{investmentAchievementMoney},
             </if>
             <if test="businessProfits != null and businessProfits != ''">
                 business_profits = #{businessProfits},
@@ -741,6 +790,9 @@
                 issue_stock_number = #{issueStockNumber},
             </if>
             <if test="investJudgeResult != null and investJudgeResult != ''">
+                invest_judge_result = #{investJudgeResult}
+            </if>
+            <if test="investJudgeResult == 0">
                 invest_judge_result = #{investJudgeResult}
             </if>
         </set>
@@ -790,6 +842,54 @@
         </set>
         WHERE
             incongruity_sectors_code = #{incongruitySectorsCode};
+    </update>
+
+    <update id="modifyCorporateValueEvaluation" parameterType="AdminCorporateValueEvaluation">
+        UPDATE corporate_value_evaluation
+        <set>
+            <if test="memberId != null and memberId != ''">
+                member_id = #{memberId},
+            </if>
+            <if test="operatingProfit != null and operatingProfit != ''">
+                operating_profit = #{operatingProfit},
+            </if>
+            <if test="depreciation != null and depreciation != ''">
+                depreciation = #{depreciation},
+            </if>
+            <if test="ebitda != null and ebitda != ''">
+                ebitda = #{ebitda},
+            </if>
+            <if test="evEbitda != null and evEbitda != ''">
+                ev_ebitda = #{evEbitda},
+            </if>
+            <if test="convertEv != null and convertEv != ''">
+                convert_ev = #{convertEv},
+            </if>
+            <if test="netDebt != null and netDebt != ''">
+                net_debt = #{netDebt},
+            </if>
+            <if test="stockNumber != null and stockNumber != ''">
+                stock_number = #{stockNumber},
+            </if>
+            <if test="stockNumber != null and stockNumber != ''">
+                stock_number = #{stockNumber},
+            </if>
+            <if test="evaluatedCorpValue != null and evaluatedCorpValue != ''">
+                evaluated_corp_value = #{evaluatedCorpValue},
+            </if>
+            <if test="stockPrice != null and stockPrice != ''">
+                stock_price = #{stockPrice},
+            </if>
+            <if test="stockPrice != null and stockPrice != ''">
+                stock_price = #{stockPrice},
+            </if>
+            <if test="corpValueFulfill != null and corpValueFulfill != ''">
+                corp_value_fulfill = #{corpValueFulfill},
+            </if>
+            corp_value_evaluate_day = NOW()
+        </set>
+        WHERE
+        corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </update>
 
     <!-- 투자펀딩 심사요청 삭제 -->

@@ -1,5 +1,7 @@
 package ksmart.ks48team02.admin.dto;
 
+import ksmart.ks48team02.admin.dto.AdminInvestment;
+
 public class AdminInvestmentRequestJudge {
 
     private String investmentRequestJudgeCode;
@@ -17,7 +19,7 @@ public class AdminInvestmentRequestJudge {
     private String cbtBusinessType;
     private String invBusinessType;
     private String investmentRequestContent;
-    private long InvestmentAchievementMoney;
+    private long investmentAchievementMoney;
     private String lawSatistifyReason;
     private long businessProfits;
     private long depreciation;
@@ -156,11 +158,11 @@ public class AdminInvestmentRequestJudge {
     }
 
     public long getInvestmentAchievementMoney() {
-        return InvestmentAchievementMoney;
+        return investmentAchievementMoney;
     }
 
-    public void setInvestmentAchievementMoney(long InvestmentAchievementMoney) {
-        this.InvestmentAchievementMoney = InvestmentAchievementMoney;
+    public void setInvestmentAchievementMoney(long investmentAchievementMoney) {
+        this.investmentAchievementMoney = investmentAchievementMoney;
     }
 
     public String getLawSatistifyReason() {
@@ -316,8 +318,8 @@ public class AdminInvestmentRequestJudge {
         builder.append(invBusinessType);
         builder.append(", investmentRequestContent=");
         builder.append(investmentRequestContent);
-        builder.append(", InvestmentAchievementMoney=");
-        builder.append(InvestmentAchievementMoney);
+        builder.append(", investmentAchievementMoney=");
+        builder.append(investmentAchievementMoney);
         builder.append(", lawSatistifyReason=");
         builder.append(lawSatistifyReason);
         builder.append(", businessProfits=");

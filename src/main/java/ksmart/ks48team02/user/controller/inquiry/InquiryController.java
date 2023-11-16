@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.controller.inquiry;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,14 +24,18 @@ public class InquiryController {
 
     // 플로키 문의하기
     @GetMapping("/add")
-    public String userFlockyInquiryPage(){
+    public String userFlockyInquiryPage(Model model){
+
+        model.addAttribute("title", "플로키 문의하기");
 
         return "user/inquiry/add";
     }
 
     //스토어 문의하기
     @GetMapping("/store")
-    public String userStoreInquiryPage(){
+    public String userStoreInquiryPage(Model model){
+
+        model.addAttribute("title", "스토어 문의하기");
 
         return "user/inquiry/store";
     }

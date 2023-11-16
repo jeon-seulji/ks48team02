@@ -5,16 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.Coupon;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
+import ksmart.ks48team02.common.dto.OrderTotal;
+import ksmart.ks48team02.common.dto.PaymentResult;
+import ksmart.ks48team02.user.controller.PojectRegistrationContoller;
 import ksmart.ks48team02.user.dto.Member;
+import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.reward.RewardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RequestMapping("/user/reward")
 public class RewardController {
 
+    private static final Logger log = LoggerFactory.getLogger(PojectRegistrationContoller.class);
     private static final Logger Log = LoggerFactory.getLogger(RewardController.class);
     private final RewardService rewardService;
     private final AdminCouponService adminCouponService;
@@ -40,13 +42,19 @@ public class RewardController {
     //리워드 메인 페이지
     @GetMapping(value = {"" , "/"})
     public String mainPage(Model model) {
-
+        List<RewardProject> rewardProjectList = rewardService.rewardProjectList();
+        model.addAttribute("rewardProjectList",rewardProjectList);
         return "user/reward/main";
     }
 
     //리워드 상세 페이지
     @GetMapping("/detail")
-    public String detailPage(Model model) {
+    public String detailPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+
+        model.addAttribute("rewardProject",rewardProject);
+        log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
 
         return "user/reward/detail/main";
     }
@@ -75,38 +83,39 @@ public class RewardController {
 
     //리워드 주문 페이지
     @GetMapping("/order")
-    public String orderPage(Model model, HttpSession session) {
-
+    public String orderPage(Model model, HttpSession session,
+                            @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                            @RequestParam(name = "rewardOptionCode", required = false) String rewardOptionCode) {
 
         String memberId = (String) session.getAttribute("SID");
 
         if(memberId == null) {
             return "user/account/login";
         }
+
+
+        RewardProject rewardOrderInfo = rewardService.rewardProjectDetail(rewardProjectCode);
         Member orderMemberInfo = rewardService.getOrderMemberInfo(memberId);
         List<Coupon> memberHaveCouponList = adminCouponService.MemberHaveCouponById(memberId);
 
-
+        model.addAttribute("rewardOrderInfo", rewardOrderInfo);
+        model.addAttribute("rewardOptionCode", rewardOptionCode);
         model.addAttribute("orderMemberInfo", orderMemberInfo);
-        model.addAttribute("memberHaveCouponList",memberHaveCouponList);
+        model.addAttribute("memberHaveCouponList", memberHaveCouponList);
 
         return "user/reward/order/main";
     }
 
     //리워드 결제 페이지
-    @GetMapping("/payment")
-    public String paymentPage(@RequestParam Map<String,Object> paymentResponse) throws IOException, InterruptedException {
-        /*
-        curl --request POST \
-  --url https://api.tosspayments.com/v1/payments/confirm \
-  --header 'Authorization: Basic dGVzdF9za19EbnlScFFXR3JOV0Q5WHBMemdaZzhLd3YxTTlFOg==' \
-  --header 'Content-Type: application/json' \
-  --header 'Idempotency-Key: a6a498c4-6f61-4183-a2ff-80176e69a067' \
-  --data '{"paymentKey":"5zJ4xY7m0kODnyRpQWGrN2xqGlNvLrKwv1M9ENjbeoPaZdL6","orderId":"a4CWyWY5m89PNh7xJwhk1","amount":15000}'
-         */
-        String payResult = "{\"paymentKey\":\""+paymentResponse.get("paymentKey")+"\", "
-                            +"\"orderId\":\""+paymentResponse.get("orderId")+"\", "
-                            +"\"amount\":\""+paymentResponse.get("amount")+"\"}";
+    @PostMapping("/payment")
+    @ResponseBody
+    public String paymentPage(@RequestBody PaymentResult paymentResult) throws IOException, InterruptedException {
+
+        log.info("paymentResult: {}", paymentResult);
+
+        String payResult = "{\"paymentKey\":\""+paymentResult.getPaymentKey()+"\", "
+                            +"\"orderId\":\""+paymentResult.getOrderId()+"\", "
+                            +"\"amount\":\""+paymentResult.getAmount()+"\"}";
 
         HttpRequest request = HttpRequest.newBuilder()
                                         .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
@@ -116,12 +125,30 @@ public class RewardController {
                                         .method("POST", HttpRequest.BodyPublishers.ofString(payResult))
                                         .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> map = mapper.readValue(response.body(), Map.class);
-        System.out.println(map.get("mId"));
-        return "redirect:/user";
+
+        // service 작업 진행.
+        OrderTotal orderAndPaymentCode = rewardService.getOrderAndPaymentCode();
+        String orderCode = orderAndPaymentCode.getOrderCode();
+        String paymentCode = orderAndPaymentCode.getRewardPaymentCode();
+
+        paymentResult.setOrderCode(orderCode);
+        paymentResult.setPaymentCode(paymentCode);
+
+        rewardService.rewardProjectPay(paymentResult);
+
+        // service insert 작업 후
+
+        return "/user";
     }
+
+//    @PostMapping("/payment")
+//    @ResponseBody
+//    public String paymentPage(){
+//
+//    }
 
     //리워드 결제 확인 페이지
     @GetMapping("/payment/confirm")
