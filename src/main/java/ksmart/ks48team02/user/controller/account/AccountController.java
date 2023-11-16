@@ -54,7 +54,9 @@ public class AccountController {
             // 로그인 처리 후에는 메인화면으로 전환
             return "redirect:/user";
         }
-        reAttr.addFlashAttribute("msg", "일치하는 회원의 정보가 없습니다.");
+        reAttr.addFlashAttribute("msg",resultMap.get("msg"));
+
+
         return "redirect:/user/account/login";
     }
 

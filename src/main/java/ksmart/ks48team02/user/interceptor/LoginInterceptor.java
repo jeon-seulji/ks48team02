@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.Objects;
+
 @Component
 public class LoginInterceptor implements HandlerInterceptor{
 
@@ -19,8 +21,15 @@ public class LoginInterceptor implements HandlerInterceptor{
 
         if(sessionId != null) {
             int sessionLevel = (int) session.getAttribute("SLEVEL");
+            String unregStatus = (String) session.getAttribute("UNREG_STATUS");
             String requestURI = request.getRequestURI();
 
+            if(Objects.equals(unregStatus, "inactive")){
+                if(requestURI.contains("user/mypage")){
+
+                    response.sendRedirect("/user/account");
+                }
+            }
             //!!!! 권한에 따라 상단 메뉴가 달라지더라도, 직접 주소를 입력하여 접속할 수 있으므로
             // 이를 막기 위해 하단 코드 작성 할 것!
 

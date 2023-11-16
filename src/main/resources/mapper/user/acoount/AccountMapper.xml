@@ -23,7 +23,7 @@
         INSERT INTO member
             (member_id, member_type_code, member_name, member_pw, member_reg_date, member_email, contact_info)
         VALUES
-            (#{memberId},#{memberTypeCode}, #{memberName}, #{memberPw}, CURDATE(), #{memberEmail}, #{memberContactInfo});
+            (#{memberId},#{memberTypeCode}, #{memberName}, #{memberPw}, SYSDATE(), #{memberEmail}, #{memberContactInfo});
     </insert>
 
     <!-- 회원아이디 중복체크 -->
@@ -50,12 +50,14 @@
 
     <!-- 회원 탈퇴 : unreg_status를 active로 변경-->
     <select id="inactivateMember" parameterType="String">
+        /* 회원 비활성화 */
         UPDATE
             member
         SET
-            unreg_status = 'active'
+            unreg_status = 'active',
+            unreg_date = SYSDATE()
         WHERE
-            member_id = #{memberId};
+            member_id = #{loginId};
     </select>
 
     <!--    -->

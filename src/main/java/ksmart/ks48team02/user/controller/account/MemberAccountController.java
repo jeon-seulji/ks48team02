@@ -45,9 +45,8 @@ public class MemberAccountController {
     @PostMapping(value="/idCheck")
     @ResponseBody
     public boolean idCheck(@RequestParam(name="memberId") String memberId ) {
-        boolean duplicationStatus = accountService.idCheck(memberId);
 
-        return duplicationStatus;
+        return accountService.idCheck(memberId);
     }
 
     // 회원 탈퇴 페이지
@@ -68,20 +67,18 @@ public class MemberAccountController {
         String loginId = (String) session.getAttribute("SID");
 
 
-        boolean comparePwResult = accountService.pwCheck(loginId, memberPw);
-
-        return comparePwResult;
+        return accountService.pwCheck(loginId, memberPw);
     }
     @PostMapping("/inactivate")
-    public String inactivate(HttpSession session, Model model){
+    public String inactivate(HttpSession session, Model model, RedirectAttributes redirectAttributes){
         String loginId = (String) session.getAttribute("SID");
         model.addAttribute("loginId",loginId);
         accountService.inactivateMember(loginId);
 
-        return "user/account/inactivate";
+        session.invalidate();
+
+
+        return "user/account/inactivate"; //
     }
-
-
-
 
 }

@@ -17,7 +17,6 @@
             display: flex;
             justify-content: center;
             overflow: hidden;
-            /*// height:100vh ;*/
             align-items: center;
         }
 
@@ -190,8 +189,8 @@
                                 class="submitBtn_black"
                                 data-toggle="modal"
                                 data-target="#exampleModal"
-                                data-what="hello"
                                 style="margin-left:470px" disabled>탈퇴하기</button>
+
                     </div>
 
                     <!-- 모달팝업 -->
@@ -230,7 +229,11 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-    <script>
+    <script th:inline="javascript">
+        let msg = [[${msg}]];
+
+
+
         /* 비밀번호 입력란 focusout 이벤트리스너 설정 (비밀번호 일지 확인 검사 : ajax) */
         const $loginId = document.getElementById('loginId');
         const $inputPw = document.getElementById('checkPassword'); // 비밀번호 확인 입력란

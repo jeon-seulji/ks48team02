@@ -2,12 +2,16 @@ package ksmart.ks48team02.user.service.account;
 
 import ksmart.ks48team02.user.dto.Member;
 import ksmart.ks48team02.user.mapper.account.AccountMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class AccountService {
+
+    private static final Logger Log = LoggerFactory.getLogger(AccountService.class);
     // DI(의존성 주입)
     private final AccountMapper accountMapper;
 
@@ -23,18 +27,21 @@ public class AccountService {
 
     // 아이디 중복체크
     public boolean idCheck(String memberId) {
-        boolean duplicationStatus = accountMapper.idCheck(memberId);
-        return duplicationStatus;
+        return accountMapper.idCheck(memberId);
     }
 
     // 비밀번호 일치 확인
     public boolean pwCheck(String loginId, String memberPw){
-        boolean comparePwResult = accountMapper.pwCheck(loginId, memberPw);
-        return comparePwResult;
+        return accountMapper.pwCheck(loginId, memberPw);
     }
 
     public void inactivateMember(String loginId){
+
+        // System.out.printf("====AccountMapper가%d을 반환함====%n", accountMapper.inactivateMember(loginId));
+        Log.info("탈퇴 아이디 {} ", loginId);
         accountMapper.inactivateMember(loginId);
     }
 
-}
+    }
+
+
