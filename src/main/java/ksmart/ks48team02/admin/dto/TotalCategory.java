@@ -10,7 +10,7 @@ public class TotalCategory {
     private String projectPatition;
     private String categoryName;
     private String categoryComment;
-    private String rewardCategoryUsageStatus;
+    private String CategoryUsageStatus;
     private String categoryRegDate;
 
 

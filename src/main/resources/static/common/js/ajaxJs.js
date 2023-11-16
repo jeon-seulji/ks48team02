@@ -82,6 +82,7 @@ $('select[name="orderby"]').on('change',function(){
             $('#orderListForm tbody').append(`<tr>
                                                  <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                                               </tr>`);
+            return;
         }
         $(list).each((idx, l) => {
             $('#orderListForm tbody').append(`<tr></tr>`)

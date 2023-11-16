@@ -61,7 +61,8 @@
         UPDATE
             donation
         SET
-            donation_condition = 1
+            donation_condition = 1,
+            admin_member_id = #{adminId}
         WHERE
             donation_code = #{donationCode};
     </update>

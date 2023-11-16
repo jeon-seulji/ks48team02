@@ -40,12 +40,13 @@ public class InvestmentController {
                                         ,@RequestParam(name = "searchKey", required = false) String searchKey
                                         ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                         ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate) {
+                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                        ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue) {
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
 
         if(searchKey != null) {
-            investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+            investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
         }else {
             investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList();
         }
@@ -107,11 +108,12 @@ public class InvestmentController {
                                                  ,@RequestParam(name = "searchKey", required = false) String searchKey
                                                  ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue
                                                  ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                                 ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate){
+                                                 ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                                 ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue) {
 
         List<AdminCorporateValueEvaluation> corporateValueEvaluationList = null;
         if(searchKey != null) {
-            corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+            corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
         }else {
             corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList();
         }

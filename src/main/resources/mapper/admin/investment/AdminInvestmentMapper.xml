@@ -272,7 +272,10 @@
                 #{amDateSettEndDate} >= DATE_FORMAT(i.investment_request_date, '%Y-%m-%d')
                 AND
             </if>
-            <if test="searchKey != null and searchKey != ''">
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != ''">
+                ${searchKey} = #{searchSelectValue};
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue == null or searchSelectValue == ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
         </where>
@@ -617,7 +620,13 @@
                 #{amDateSettEndDate} >= DATE_FORMAT(c.corp_value_evaluate_day, '%Y-%m-%d')
                 AND
             </if>
-            <if test="searchKey != null and searchKey != ''">
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != '' and searchSelectValue != 100 and searchSelectValue != 99">
+                ${searchKey} = #{searchSelectValue};
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue == 99">
+                c.corporate_value_evaluation_code IS NULL;
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != 100 and searchSelectValue != 1 and searchSelectValue != 2 and searchSelectValue != 99">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
         </where>
@@ -781,6 +790,9 @@
                 issue_stock_number = #{issueStockNumber},
             </if>
             <if test="investJudgeResult != null and investJudgeResult != ''">
+                invest_judge_result = #{investJudgeResult}
+            </if>
+            <if test="investJudgeResult == 0">
                 invest_judge_result = #{investJudgeResult}
             </if>
         </set>
