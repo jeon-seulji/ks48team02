@@ -23,8 +23,8 @@ public class AdminDonationService {
         return donationList;
     }
 
-    public void judgementApprove(String donationCode){
-        adminDonationMapper.judgementApprove(donationCode);
+    public void judgementApprove(String donationCode, String adminId){
+        adminDonationMapper.judgementApprove(donationCode, adminId);
     }
 
     public void judgementReject(String donationCode, String judgeRejectReason, String judgeRejectReasonDetail ,String adminId){
