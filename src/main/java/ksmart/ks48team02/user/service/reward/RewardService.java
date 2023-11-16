@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.service.reward;
 
 
+import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.dto.Member;
@@ -30,9 +31,14 @@ public class RewardService {
 
         return orderMemberInfo;
     }
+    //배송 메세지 조회
+    public List<DeliveryMessage> deliveryMessage(){
+        List<DeliveryMessage> deliveryMessageList = rewardMapper.deliveryMessage();
+        return deliveryMessageList;
+    }
 
     //리워드 등록 하기
-    public int addRewardProject (RewardProject rewardProject){
+    public void addRewardProject (RewardProject rewardProject){
         int addReward = rewardMapper.addRewardProject(rewardProject);
         String rewardProjectCode = rewardProject.getRewardProjectCode();
         List<RewardOption> optionList = rewardProject.getRewardOptionList();
@@ -42,10 +48,8 @@ public class RewardService {
             option.setRewardProjectCode(rewardProjectCode);
             rewardMapper.rewardOptionAdd(option);
         });
-        //insert 작업
-        return addReward;
-    }
 
+    }
 
     //리워드프로젝트 전체 조회.
     public List<RewardProject> rewardProjectList (){
@@ -58,7 +62,12 @@ public class RewardService {
      public RewardProject rewardProjectDetail(String rewardProjectCode){
 
         RewardProject rewardProject =rewardMapper.rewardProjectDetail(rewardProjectCode);
-
+        List<RewardOption> rewardOptionList = rewardProject.getRewardOptionList();
+        rewardOptionList.forEach(option->{
+            String optionCode = option.getRewardOptionCode();
+            int totalOrderQuantity = rewardMapper.optionTotalOrderQuantity(optionCode);
+            option.setTotalOrderQuantity(totalOrderQuantity);
+        });
         return rewardProject;
      }
 
@@ -72,7 +81,9 @@ public class RewardService {
     //주문 진행
     public void rewardProjectPay(PaymentResult paymentResult){
         String orderCode = paymentResult.getOrderCode();
+        String rewardProjectCode = paymentResult.getRewardProjectcode();
         List<RewardOption> rewardOptionList = paymentResult.getRewardOptionList();
+
 
         //통합 주문 테이블 인서트
         rewardMapper.orderTableInsert(paymentResult);
@@ -83,11 +94,15 @@ public class RewardService {
             option.setOrderCode(orderCode);
             rewardMapper.rewardOrderDetailInsert(option);
         });
-
         System.out.println("주문상세테이블 등록 완료");
+
         //결제 테이블 인서트
         rewardMapper.rewardPaymentsInsert(paymentResult);
         System.out.println("결제테이블 등록 완료");
+
+        //프로젝트 달성 금액, 달성률 업데이트
+        rewardMapper.projectAchievementMoney(rewardProjectCode);
+        System.out.println("프로젝트 달성금액, 달성률 업데이트 완료");
 
         if( paymentResult.getUsePoint() > 0) {
             //포인트 사용 내역 인서트
@@ -103,8 +118,9 @@ public class RewardService {
             rewardMapper.useCouponLogInsert(paymentResult);
             System.out.println("쿠폰등록 완료");
 
+            String couponIssueCode = paymentResult.getCouponIssueCode();
             //쿠폰 사용 시 보유 쿠폰 사용했음으로 업데이트.
-            rewardMapper.usedCouponUpdate(paymentResult);
+            rewardMapper.usedCouponUpdate(couponIssueCode);
             System.out.println("쿠폰사용 로그 등록 완료");
         }
 

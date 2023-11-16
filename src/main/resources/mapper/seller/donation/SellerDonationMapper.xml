@@ -71,17 +71,16 @@
     <insert id="addNews" parameterType="String">
         <selectKey keyProperty="newsCode" resultType="String" order="BEFORE">
             SELECT
-            (
-                CASE
-                WHEN COUNT(news_datetime) = 0     THEN CONCAT('new_', CURDATE()+0, '_0001')
-                WHEN COUNT(news_datetime) > 9999  THEN CONCAT('new_', CURDATE()+0, '_', COUNT(news_datetime)+1)
-                ELSE CONCAT('new_', CURDATE()+0, '_', LPAD(COUNT(news_datetime)+1, 4, '0'))
-                END
-            ) AS newsCode
+                (CASE
+                    WHEN
+                        COUNT(n.news_code) = 0  THEN CONCAT('new_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('new_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(n.news_code,'_',-1)AS UNSIGNED )+1))
+                END) AS newsCode
             FROM
-                `news`
+                news as n
             WHERE
-                DATE_FORMAT(news_datetime, '%Y-%m-%d') = CURDATE();
+                SUBSTRING_INDEX(SUBSTRING_INDEX(n.news_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
             INSERT INTO `news`
                 (news_code, project_code, news_subject, news_content, news_datetime, news_modify_datetime, news_delete_datetime , news_display)
@@ -125,13 +124,13 @@
     <insert id="addCondition" parameterType="String">
         <selectKey keyProperty="conditionCode" resultType="String" order="BEFORE">
             SELECT
-            (
-            CASE
-            WHEN COUNT(condition_datetime) = 0     THEN CONCAT('con_', CURDATE()+0, '_0001')
-            WHEN COUNT(condition_datetime) > 9999  THEN CONCAT('con_', CURDATE()+0, '_', COUNT(condition_datetime)+1)
-            ELSE CONCAT('con_', CURDATE()+0, '_', LPAD(COUNT(condition_datetime)+1, 4, '0'))
-            END
-            ) AS conditionCode
+                (
+                CASE
+                WHEN COUNT(condition_datetime) = 0     THEN CONCAT('con_', CURDATE()+0, '_0001')
+                WHEN COUNT(condition_datetime) > 9999  THEN CONCAT('con_', CURDATE()+0, '_', COUNT(condition_datetime)+1)
+                ELSE CONCAT('con_', CURDATE()+0, '_', LPAD(COUNT(condition_datetime)+1, 4, '0'))
+                END
+                ) AS conditionCode
             FROM
                 `condition`
             WHERE

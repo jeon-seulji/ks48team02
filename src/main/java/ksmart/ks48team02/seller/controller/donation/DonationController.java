@@ -133,8 +133,16 @@ public class DonationController {
                               @RequestParam(name = "detailComent") String detailContent,
                               @RequestParam(name = "donationCode") String donationCode){
         sellerDonationService.addNews(detailSubject, detailContent, donationCode);
+        String reAddr = "redirect:/seller/";
+        if(donationCode.contains("don")) {
+            reAddr = reAddr.concat("donation/news");
+        } else if (donationCode.contains("RWD") || donationCode.contains("rwd")) {
+            reAddr = reAddr.concat("reward/news");
+        } else if (donationCode.contains("inv")) {
+            reAddr = reAddr.concat("investment/news");
+        }
 
-        return "redirect:/seller/donation/news";
+        return reAddr;
     }
 
     @GetMapping("/news/add")
@@ -151,22 +159,46 @@ public class DonationController {
         model.addAttribute("newsCode", newsCode);
         model.addAttribute("newsList",newsList);
 
+
         return "seller/donation/news/modify";
     }
     @PostMapping("/news/modify/update")
     public String newsModifyUpdate(@RequestParam(name = "detailSubject") String detailSubject,
                                    @RequestParam(name = "detailComent") String detailContent,
-                                   @RequestParam(name = "newsCode") String newsCode){
+                                   @RequestParam(name = "newsCode") String newsCode,
+                                   @RequestParam(name = "projectCode") String projectCode){
         sellerDonationService.updateNews(detailSubject, detailContent, newsCode);
 
-        return "redirect:/seller/donation/news";
+        String reAddr = "redirect:/seller/";
+        if(projectCode.contains("don")) {
+            reAddr = reAddr.concat("donation/news");
+        } else if (projectCode.contains("RWD") || projectCode.contains("rwd")) {
+            reAddr = reAddr.concat("reward/news");
+        } else if (projectCode.contains("inv")) {
+            reAddr = reAddr.concat("investment/news");
+        }
+
+        return reAddr;
     }
 
     @GetMapping("/news/delete")
-    public String newsDelete(@RequestParam(name = "delNewsCode") String newsCode){
+    public String newsDelete(@RequestParam(name = "delNewsCode") String newsCode,
+                             @RequestParam(name = "projectCode", required = false) String projectCode){
         sellerDonationService.deleteNews(newsCode);
 
-        return "redirect:/seller/donation/news";
+        String reAddr = "redirect:/seller/";
+
+        if(projectCode != null) {
+            if (projectCode.contains("RWD") || projectCode.contains("rwd")) {
+                reAddr = reAddr.concat("reward/news");
+            } else if (projectCode.contains("inv")) {
+                reAddr = reAddr.concat("investment/news");
+            }
+        } else {
+            reAddr = reAddr.concat("donation/news");
+        }
+
+        return reAddr;
     }
 
     @PostMapping("/condition/isProject")

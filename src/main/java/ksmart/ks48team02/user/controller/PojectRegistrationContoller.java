@@ -60,8 +60,6 @@ public class PojectRegistrationContoller {
         String memberType = (String)session.getAttribute("STYPECODE");
         String returnAddr = "user/account/login";
 
-
-
         return "user/projectRegistration/main";
     }
 
@@ -73,7 +71,6 @@ public class PojectRegistrationContoller {
 
         model.addAttribute("categoryList",categoryList);
 
-
         return "user/projectRegistration/reward/reward_insert";
     }
 
@@ -84,7 +81,7 @@ public class PojectRegistrationContoller {
 
         rewardService.addRewardProject(parameters);
 
-        return "redirect:/user/projectRegistration/reward/success";
+        return "/user/projectRegistration/reward/success";
     }
 
     //리워드 프로젝트 등록 완료 페이지

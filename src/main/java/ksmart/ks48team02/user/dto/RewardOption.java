@@ -18,5 +18,6 @@ public class RewardOption {
     private String orderCode;
     private int orderQuantity;
     private int pricePerOption;
+    private int totalOrderQuantity;
 
 }

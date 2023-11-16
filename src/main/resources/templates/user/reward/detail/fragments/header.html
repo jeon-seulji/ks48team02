@@ -16,13 +16,13 @@
                 <div class="collapse navbar-collapse" id="ftco-nav-detail">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item" id="story">
-                            <a th:href="@{/user/reward/detail}" class="nav-link">스토리</a>
+                            <a th:href="@{/user/reward/detail(rewardProjectCode=${rewardProject.rewardProjectCode})}" class="nav-link">스토리</a>
                         </li>
                         <li class="nav-item" id="news">
-                            <a th:href="@{/user/reward/detail/news}" class="nav-link">새소식</a>
+                            <a th:href="@{/user/reward/detail/news(rewardProjectCode=${rewardProject.rewardProjectCode})}" class="nav-link">새소식</a>
                         </li>
                         <li class="nav-item" id="comments">
-                            <a th:href="@{/user/reward/detail/comment}" class="nav-link">댓글</a>
+                            <a th:href="@{/user/reward/detail/comment(rewardProjectCode=${rewardProject.rewardProjectCode})}" class="nav-link">댓글</a>
                         </li>
                         <li class="nav-item" id="policy">
                             <a th:href="@{/user/reward/detail/refundPolicy}" class="nav-link">환불.정책</a>
