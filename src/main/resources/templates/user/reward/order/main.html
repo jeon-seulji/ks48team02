@@ -163,7 +163,9 @@
                     $('#selectedOption').prepend($(addSelectedOption));
                 });
                 //보유 포인트
-                $('#havePoint').text(`${havePoint.toLocaleString('ko-KR')}`);
+                if(havePoint) {
+                    $('#havePoint').text(`${havePoint.toLocaleString('ko-KR')}`);
+                }
 
                 // 최종 리워드 비용
                 $('#totalRewardPrice').text(`${totalRewardPrice.toLocaleString('ko-KR')} 원`);
@@ -491,7 +493,7 @@
                                 });
                                 request.fail(function(err){
                                     console.log(err);
-                                })
+                                });
                             })
 
                     }

@@ -62,14 +62,14 @@ public class RewardController {
 
     //리워드 상세 페이지 댓글
     @GetMapping("/detail/comment")
-    public String commentPage(Model model) {
+    public String commentPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
 
         return "user/reward/detail/comment";
     }
 
     //리워드 상세 페이지 새소식
     @GetMapping("/detail/news")
-    public String newsPage(Model model) {
+    public String newsPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
 
         return "user/reward/detail/news/main";
     }
@@ -132,17 +132,20 @@ public class RewardController {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> map = mapper.readValue(response.body(), Map.class);
 
-        // service 작업 진행.
-        OrderTotal orderAndPaymentCode = rewardService.getOrderAndPaymentCode();
-        String orderCode = orderAndPaymentCode.getOrderCode();
-        String paymentCode = orderAndPaymentCode.getRewardPaymentCode();
 
+        //주문코드, 결제코드 생성
+        OrderTotal orderAndPaymentCode = rewardService.getOrderAndPaymentCode();
+
+        //paymentResult 객체에 주문코드 할당
+        String orderCode = orderAndPaymentCode.getOrderCode();
         paymentResult.setOrderCode(orderCode);
+
+        //paymentResult 객체에 결제코드 할당
+        String paymentCode = orderAndPaymentCode.getRewardPaymentCode();
         paymentResult.setPaymentCode(paymentCode);
 
+        //프로젝트 등록 service
         rewardService.rewardProjectPay(paymentResult);
-
-        // service insert 작업 후
 
         return "/user";
     }

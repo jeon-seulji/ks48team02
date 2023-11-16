@@ -49,6 +49,9 @@ public interface RewardMapper {
     //리워드 결제 관리 테이블 인서트
     public int rewardPaymentsInsert(PaymentResult paymentResult);
 
+    //프로젝트 달성 금액, 달성률 업데이트
+    public int projectAchievementMoney(String rewardProjectCode);
+
     //포인트 사용 내역 인서트.
     public int usePointLogInsert(PaymentResult paymentResult);
 
@@ -62,7 +65,7 @@ public interface RewardMapper {
     public int useCouponLogInsert (PaymentResult paymentResult);
 
     //사용한 쿠폰 사용했음으로 업데이트
-    public int usedCouponUpdate (PaymentResult paymentResult);
+    public int usedCouponUpdate (String couponIssueCode);
 
 
 }

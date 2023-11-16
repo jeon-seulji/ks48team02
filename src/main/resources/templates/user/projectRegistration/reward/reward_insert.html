@@ -411,19 +411,20 @@
                             paramReward[key] = value;
                         });
 
-                        $.ajax({
+                        const request = $.ajax({
                             type: 'POST',
                             traditional : true,
                             url: '/user/projectRegistration/reward',
                             contentType: 'application/json',
                             data: JSON.stringify(paramReward),
-                            dataType: 'json',
-                            success: function(){
-                                console.log('등록 성공')
-                                window.location.replace('/user/projectRegistration/reward/success');
-                            },
-                            error: function(err){
-                            }
+                            dataType: 'json'
+                        });
+                        request.done(function(response){
+                            let redirectURI = response;
+                            location.href = redirectURI;
+                        });
+                        request.fail(function(err){
+                            console.log(err);
                         });
                     }
                 }
