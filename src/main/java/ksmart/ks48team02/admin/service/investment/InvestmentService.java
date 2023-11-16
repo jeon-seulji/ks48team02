@@ -218,4 +218,12 @@ public class InvestmentService {
     public void reomveInvestmentJudge(String investmentRequestJudgeCode) {
         adminInvestmentMapper.removeInvestmentRequestJudge(investmentRequestJudgeCode);
     }
+
+    public void removeLawSatistify(String lawSatistifyCode) {
+        adminInvestmentMapper.removeLawSatistify(lawSatistifyCode);
+    }
+
+    public void removeCorporateValueEvaluation(String corporateValueEvaluationCode) {
+        adminInvestmentMapper.removeCorporateValueEvaluation(corporateValueEvaluationCode);
+    }
 }
