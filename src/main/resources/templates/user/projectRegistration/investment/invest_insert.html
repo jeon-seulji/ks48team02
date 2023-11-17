@@ -58,15 +58,6 @@
       });
     });
 
-    // rank tab function
-    $('.tab-menu-btn li').on('click',function(){
-      $('.tab-menu-btn li').removeClass('active');
-      $(this).addClass('active');
-      let tabData = $(this).attr('data-tab');
-      $('.main-rank-area').hide();
-      $('#'+tabData).show();
-    });
-
     //약관 체크 모두 될 시 모두 동의에 체크.
     $('.essential').not('#agreeNews').click(function(){
       let checkLength = $('.essential').not('#agreeNews').length;

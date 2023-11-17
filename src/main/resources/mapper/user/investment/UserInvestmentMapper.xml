@@ -31,7 +31,7 @@
         <result property="contractFile" column="contract_file"/>
         <result property="investJudgeSituation" column="invest_judge_situation"/>
         <result property="investmentDeadlineCnt" column="investmentDeadlineCnt"/>
-        
+
         <association property="investmentContent" javaType="InvestmentContent">
             <id property="investmentContentCode" column="investment_content_code"/>
             <result property="memberId" column="member_id"/>
@@ -54,7 +54,34 @@
             <result property="registrationDate" column="registration_date"/>
         </association>
     </resultMap>
-    
+
+    <insert id="addInvestmentContent" parameterType="investmentInfo">
+        /* 투자 프로젝트 상세내용 등록 */
+        <selectKey keyProperty="investmentContentCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                WHEN COUNT(ic.registration_date) = 0 THEN CONCAT('inv_con_', CURDATE()+0, '_0001')
+                WHEN COUNT(ic.registration_date) > 9999 THEN CONCAT('inv_con_', CURDATE()+0, '_', COUNT(ic.registration_date)+1)
+                ELSE CONCAT('inv_con_', CURDATE()+0, '_', LPAD(COUNT(ic.registration_date)+1, 4, '0'))
+                END) AS investmentContentCode
+            FROM
+                investment_content AS ic
+            WHERE
+                DATE_FORMAT(ic.registration_date, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+        INSERT INTO InvestmentContent
+            (investment_content_code, member_id, investment_code, member_id_admin, project_introduction,
+            investment_introduction_image, market_analysis, market_analysis_image, major_financial_information,
+            major_financial_information_image, risk, risk_image, major_manpower, major_manpower_image,
+            patent_award_details, patent_award_details_image, etc_invest_content, etc_invest_content_image,
+            registration_date)
+        VALUES
+            (#{investmentContentCode}, 'id002', #{investmentCode}, 'id001', #{projectIntroduction},
+            #{investmentIntroductionImage}, #{marketAnalysis}, #{marketAnalysisImage}, #{majorFinancialInformation},
+            #{majorFinancialInformationImage}, #{risk}, #{riskImage}, #{majorManpower}, #{majorManpowerImage},
+            #{patentAwardDetails}, #{patentAwardDetailsImage}, #{etcInvestContent}, #{etcInvestContentImage},
+            #{registrationDate})
+    </insert>
 
     <insert id="addInvestment" parameterType="InvestmentInfo">
         /* 투자 프로젝트 등록 */
@@ -71,14 +98,14 @@
                 DATE_FORMAT(i.investment_reg_date, '%Y-%m-%d') = CURDATE();
         </selectKey>
         INSERT INTO investment
-        (investment_code, member_id, store_code, investment_request_judge_code, total_category_code, member_id_seller, investment_subject,
-        investment_image, investment_like, investment_amount, investment_achievement_money, invest_achievement_percent,
-        investment_company, search_count, invest_count, securities_classification, investment_display_date, investment_reg_date,
-        investment_deadline, investment_report, basic_fee, contract_fee_rate, contract_file, invest_judge_situation)
+            (investment_code, member_id, store_code, investment_request_judge_code, total_category_code, member_id_seller, investment_subject,
+            investment_image, investment_like, investment_amount, investment_achievement_money, invest_achievement_percent,
+            investment_company, search_count, invest_count, securities_classification, investment_display_date, investment_reg_date,
+            investment_deadline, investment_report, basic_fee, contract_fee_rate, contract_file, invest_judge_situation)
         values
-        (#{investmentCode},'id001', 'sto004', #{investmentRequestJudgeCode}, #{totalCategoryCode}, 'id002', #{investmentSubject},
-        #{investmentImage}, '0', '0', '0', '0', #{investmentCompany}, '0', '0', #{securitiesClassification}, CURDATE(), #{investmentRegDate}, #{investmentDeadline},
-        #{investmentReport}, '3000000', 'null', #{contractFile}, '0');
+            (#{investmentCode},'id001', 'sto004', #{investmentRequestJudgeCode}, #{totalCategoryCode}, 'id002', #{investmentSubject},
+            #{investmentImage}, '0', '0', '0', '0', #{investmentCompany}, '0', '0', #{securitiesClassification}, CURDATE(), #{investmentRegDate}, #{investmentDeadline},
+            #{investmentReport}, '3000000', 'null', #{contractFile}, '0');
     </insert>
 
     <select id="getInvestmentInfo" parameterType="String" resultMap="InvestmentInfoResultMap">
@@ -93,6 +120,8 @@
         FROM
             investment
     </select>
+
+
 
     <select id="getSortedList" parameterType="String" resultMap="InvestmentInfoResultMap">
         SELECT

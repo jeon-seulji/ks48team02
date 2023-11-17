@@ -106,15 +106,14 @@
     }
 
     // 다음단계 클릭 시 필수 약관동의 모두 체크되어있는지 확인
-    $('.nextBtn').click(function(){
+    $('.nextBtn').click(function(e){
+      e.preventDefault();  // 기존 이벤트 동작 중단
 
       const targetEls = $('.needs-validation input, .needs-validation select, .needs-validation textarea');
       // 값 유효성 검사
       if(!validationEmptyFn(targetEls)){
-
         return;
       }
-
 
       let isValid = true;
       $('.essential').each(function(idx,item){
@@ -125,6 +124,11 @@
           return false;
         }
       });
+
+      // 유효성 검사와 약관 동의 검증이 모두 통과하면 다음 화면으로 이동
+      if (isValid) {
+        location.href='/user/projectRegistration/investment/insert';
+      }
     });
 
 
@@ -280,7 +284,7 @@
 
             <hr class="my-4">
 
-            <button th:onclick="|location.href='@{/user/projectRegistration/investment/insert}'|" class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button><br><br>
+            <button class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button><br><br>
           </form>
         </div>
       </div>
