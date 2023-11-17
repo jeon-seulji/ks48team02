@@ -164,7 +164,7 @@ function confirmBtnFn(e){
 }
 
 // input [type='date'] min setting
-$('input[type="date"]').prop('min',nowDateFomat);
+// $('input[type="date"]').prop('min',nowDateFomat);
 
 // 배송 메세지 직접 입력
 $('select[name="deliveryMessage"]').on('change', function(){
@@ -304,4 +304,35 @@ function payFormat($els){
         $(item).siblings('.order-pay').text(priceForm);
     });
 
+}
+
+// 검색 form queryString 반환 fn
+function searchObject(){
+    const $inputEls = $('.order-category-select input:checked');
+
+    const arr = [];
+    $($inputEls).each((idx, item) => {
+        let checkBoxValue = $(item).attr('name');
+        arr.push(checkBoxValue);
+
+    });
+    // console.log(arr, '<--arr');
+
+
+    let amDateSettStartDate = $('input[name="amDateSettStartDate"]').val();
+    let amDateSettEndDate = $('input[name="amDateSettEndDate"]').val();
+    let userSearchKey = $('select[name="userSearchKey"]').val();
+    let userSearchable = $('input[name="userSearchable"]').val();
+
+    console.log(userSearchable, '<-- userSearchable');
+
+    $('input[name="dateSettStartDate"]').val(amDateSettStartDate);
+    $('input[name="dateSettEndDate"]').val(amDateSettEndDate);
+    $('input[name="searchKey"]').val(userSearchKey);
+    $('input[name="searchValue"]').val(userSearchable);
+
+    let queryString = $('#searchForm').serializeObject();
+    queryString.projectPartition = arr;
+
+    return queryString;
 }

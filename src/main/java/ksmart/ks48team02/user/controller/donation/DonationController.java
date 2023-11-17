@@ -77,8 +77,6 @@ public class DonationController {
             }
         }
         model.addAttribute("viewCount", viewCount);
-        model.addAttribute("counter", new Counter());
-        // 대댓글 계산
 
         return "user/donation/detail/comment";
     }
