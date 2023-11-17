@@ -1,5 +1,6 @@
 package ksmart.ks48team02.admin.service.donation;
 
+import ksmart.ks48team02.admin.dto.AllProjectList;
 import ksmart.ks48team02.admin.dto.Donation;
 import ksmart.ks48team02.admin.dto.DonationJudgementReason;
 import ksmart.ks48team02.admin.mapper.donation.AdminDonationMapper;
@@ -32,6 +33,10 @@ public class AdminDonationService {
     }
     public List<DonationJudgementReason> judgementReason(){
         return adminDonationMapper.judgementReason();
+    }
+
+    public List<AllProjectList> getAllprojectList(){
+        return adminDonationMapper.getAllprojectList();
     }
 
 
