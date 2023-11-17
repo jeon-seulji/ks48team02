@@ -16,101 +16,100 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-    <script th:src="@{/user/js/jquery.min.js}"></script>
+
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        $(function () {
-            // 유효성 검사
-            function validationCheck(data) {
-                let isValid = true;
 
-                if (typeof data === 'object') {
-                    $.each(data, function() {
-                        let elementType = $(this).attr('type');
+        // 유효성 검사
+        function validationCheck(data) {
+            console.log('aaa');
+            let isValid = true;
 
-                        if (elementType === 'radio') {
-                            // Check if at least one radio button is checked
-                            if (!$(`input[name="${$(this).attr('name')}"]:checked`).val()) {
-                                isValid = false;
-                                alert(`심사 결과 필수 선택 항목입니다.`);
-                                return false;
-                            }
-                        } else {
-                            let checkValue = $(this).val();
-                            if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
-                                isValid = false;
-                                let eleId = $(this).attr('id');
-                                let cate = $(`label[for="${eleId}"]`).text();
-                                alert(`${cate} 필수 입력 항목입니다.`);
-                                $(this).focus();
-                                return false;
-                            }
+            if (typeof data === 'object') {
+                $.each(data, function () {
+                    let elementType = $(this).attr('type');
+
+                    if (elementType === 'radio') {
+                        // Check if at least one radio button is checked
+                        if (!$(`input[name="${$(this).attr('name')}"]:checked`).val()) {
+                            isValid = false;
+                            alert(`심사 결과 필수 선택 항목입니다.`);
+                            return false;
                         }
-                    });
-                } else {
-                    if (data == null || data == '' || typeof data == 'undefined') {
-                        isValid = false;
-                    }
-                }
-                return isValid;
-            }
-
-            $('#settAddBtn').click(function(){
-
-                let check = true;
-
-                $('select').each(function() {
-                    let selectedOption = $(this).val();
-                    if (selectedOption === null || selectedOption === '' || typeof selectedOption == 'undefined') {
-                        check = false;
-                        alert(`심사요청 코드를 선택해주세요.`);
-                        $(this).focus();
-                        return false;
-                    }
-                    else {
-                        const formEles = $('#addCorporateValueForm input, #addCorporateValueForm input:radio, #addCorporateValueForm select');
-
-                        let isValid = validationCheck(formEles);
-
-                        if(isValid) $('#addCorporateValueForm').submit();
+                    } else {
+                        let checkValue = $(this).val();
+                        if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
+                            isValid = false;
+                            let eleId = $(this).attr('id');
+                            let cate = $(`label[for="${eleId}"]`).text();
+                            alert(`${cate} 필수 입력 항목입니다.`);
+                            $(this).focus();
+                            return false;
+                        }
                     }
                 });
+            } else {
+                if (data == null || data == '' || typeof data == 'undefined') {
+                    isValid = false;
+                }
+            }
+            return isValid;
+        }
+
+        $('#settAddBtn').click(function () {
+            console.log(111);
+            let check = true;
+
+            $('select').each(function () {
+                let selectedOption = $(this).val();
+                if (selectedOption === null || selectedOption === '' || typeof selectedOption == 'undefined') {
+                    check = false;
+                    alert(`심사요청 코드를 선택해주세요.`);
+                    $(this).focus();
+                    return false;
+                } else {
+                    const formEles = $('#addCorporateValueForm input, #addCorporateValueForm input:radio, #addCorporateValueForm select');
+
+                    let isValid = validationCheck(formEles);
+
+                    if (isValid) $('#addCorporateValueForm').submit();
+                }
             });
+        });
 
-            // 입력 값이 변경될 때마다 계산 실행
-            $('.corp-value-calc').on('input', function () {
-                let businessProfits = parseInt($('#businessProfits').val()) || 0;
-                let depreciation = parseInt($('#depreciation').val()) || 0;
-                let evEbitda = parseFloat($('#evEbitda').val()) || 0;
-                let netDebt = parseInt($('#netDebt').val()) || 0;
-                let stockNumber = parseInt($('#stockNumber').val()) || 1;
+        // 입력 값이 변경될 때마다 계산 실행
+        $('.corp-value-calc').on('input', function () {
+            let businessProfits = parseInt($('#businessProfits').val()) || 0;
+            let depreciation = parseInt($('#depreciation').val()) || 0;
+            let evEbitda = parseFloat($('#evEbitda').val()) || 0;
+            let netDebt = parseInt($('#netDebt').val()) || 0;
+            let stockNumber = parseInt($('#stockNumber').val()) || 1;
 
-                // 수식 계산
-                let ebitaCalculate = Math.floor(businessProfits + depreciation);
-                let convertEvCalculate = Math.floor((businessProfits + depreciation) * evEbitda);
-                let corpCalculate = Math.floor((businessProfits + depreciation) * evEbitda - netDebt);
-                let stockPriceCalculate = Math.floor(((businessProfits + depreciation) * evEbitda - netDebt) / stockNumber);
-                let ebitaCalculateResult = (businessProfits + depreciation).toLocaleString('ko-kr') + ' 원';
-                let convertEvCalculateResult = ((businessProfits + depreciation) * evEbitda).toLocaleString('ko-kr') + ' 원';
-                let corpCalculateResult = ((businessProfits + depreciation) * evEbitda - netDebt).toLocaleString('ko-kr') + ' 원';
-                let stockPriceCalculateResult = (((businessProfits + depreciation) * evEbitda - netDebt) / stockNumber).toLocaleString('ko-kr') + ' 원';
+            // 수식 계산
+            let ebitaCalculate = Math.floor(businessProfits + depreciation);
+            let convertEvCalculate = Math.floor((businessProfits + depreciation) * evEbitda);
+            let corpCalculate = Math.floor((businessProfits + depreciation) * evEbitda - netDebt);
+            let stockPriceCalculate = Math.floor(((businessProfits + depreciation) * evEbitda - netDebt) / stockNumber);
+            let ebitaCalculateResult = (businessProfits + depreciation).toLocaleString('ko-kr') + ' 원';
+            let convertEvCalculateResult = ((businessProfits + depreciation) * evEbitda).toLocaleString('ko-kr') + ' 원';
+            let corpCalculateResult = ((businessProfits + depreciation) * evEbitda - netDebt).toLocaleString('ko-kr') + ' 원';
+            let stockPriceCalculateResult = (((businessProfits + depreciation) * evEbitda - netDebt) / stockNumber).toLocaleString('ko-kr') + ' 원';
 
-                // 계산 결과를 화면에 표시
-                $('#ebitdaCalculate').text(ebitaCalculateResult);
-                $('#convertEvCalculate').text(convertEvCalculateResult);
-                $('#evaluatedCorpCalculate').text(corpCalculateResult);
-                $('#stockPriceCalculate').text(stockPriceCalculateResult);
+            // 계산 결과를 화면에 표시
+            $('#ebitdaCalculate').text(ebitaCalculateResult);
+            $('#convertEvCalculate').text(convertEvCalculateResult);
+            $('#evaluatedCorpCalculate').text(corpCalculateResult);
+            $('#stockPriceCalculate').text(stockPriceCalculateResult);
 
-                // 계산 결과를 input에 반영
-                $('#ebitda').val(ebitaCalculate);
-                $('#convertEv').val(convertEvCalculate);
-                $('#evaluatedCorpValue').val(corpCalculate);
-                $('#stockPrice').val(stockPriceCalculate);
-            });
-        })
+            // 계산 결과를 input에 반영
+            $('#ebitda').val(ebitaCalculate);
+            $('#convertEv').val(convertEvCalculate);
+            $('#evaluatedCorpValue').val(corpCalculate);
+            $('#stockPrice').val(stockPriceCalculate);
+        });
 
         $("#investmentRequestJudgeCode").change(function () {
             const $investmentRequestJudgeCode = document.querySelector('#investmentRequestJudgeCode');
@@ -121,8 +120,8 @@
             $.ajax({
                 type: "GET",
                 url: '/admin/investment/check/' + inputData,
-                data: { selectedValue: selectedValue },
-                dataType : 'json',
+                data: {selectedValue: selectedValue},
+                dataType: 'json',
                 success: function (data) {
                     console.log(data);
                     $('#investmentRequestJudgeCodeInput').val(data.investmentRequestJudgeCode);
@@ -158,13 +157,14 @@
         <div class="project-info-title-area">
             <div class="project-info-title">
                 <h5>투자 심사요청 코드</h5>
-                    <select id="investmentRequestJudgeCode" name="investmentRequestJudgeCode">
-                        <option value="">===투자 심사요청 코드를 선택해주세요===</option>
-                        <th:block th:unless="${investmentRequestJudgeList == null}"
-                                  th:each="l : ${investmentRequestJudgeList}">
-                            <option th:value="${l.investmentRequestJudgeCode}" th:text="${l.investmentRequestJudgeCode}"></option>
-                        </th:block>
-                    </select>
+                <select id="investmentRequestJudgeCode" name="investmentRequestJudgeCode">
+                    <option value="">===투자 심사요청 코드를 선택해주세요===</option>
+                    <th:block th:unless="${investmentRequestJudgeList == null}"
+                              th:each="l : ${investmentRequestJudgeList}">
+                        <option th:value="${l.investmentRequestJudgeCode}"
+                                th:text="${l.investmentRequestJudgeCode}"></option>
+                    </th:block>
+                </select>
             </div>
             <div class="info-more-btn">
                 <a class="more-btn" style="padding: 7px 10px 9px 19px;">
@@ -358,7 +358,8 @@
                     </div>
                 </form>
                 <input type="text" name="memberId" id="memberIdInput" value="id100" hidden="hidden">
-                <input type="text" name="investmentRequestJudgeCode" id="investmentRequestJudgeCodeInput" hidden="hidden">
+                <input type="text" name="investmentRequestJudgeCode" id="investmentRequestJudgeCodeInput"
+                       hidden="hidden">
                 <input type="number" name="ebitda" id="ebitda"
                        class="corp-value-result" placeholder="EBITA를 입력해주세요" readonly="readonly" hidden="hidden">
                 <input type="number" name="convertEv" id="convertEv"

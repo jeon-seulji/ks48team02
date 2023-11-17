@@ -33,7 +33,6 @@
         <result property="investJudgeSituation" column="invest_judge_situation"/>
     </resultMap>
 
-
     <resultMap type="AdminInvestmentRequestJudge" id="adminInvestmentRequestJudgeListMap">
         <id property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
         <result property="lawSatistifyCode" column="law_satistify_code"/>
@@ -208,7 +207,19 @@
             store AS s
             ON
             i.store_code = s.store_code
-        ORDER BY i.investment_request_judge_code;
+        ORDER BY i.investment_request_judge_code DESC
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
+    </select>
+
+    <!-- 투자펀딩 심사요청 전체 행의 갯수 -->
+    <select id="getInvestmentRequestJudgeCnt" resultType="int">
+        /* 투자펀딩 심사요청 전체 행의 갯수 */
+        SELECT
+            COUNT(1)
+        FROM
+            investment_request_judge
     </select>
 
     <!-- 검색조건에 따른 투자펀딩 심사요청 목록 조회 -->
@@ -273,12 +284,15 @@
                 AND
             </if>
             <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != ''">
-                ${searchKey} = #{searchSelectValue};
+                ${searchKey} = #{searchSelectValue}
             </if>
             <if test="searchKey != null and searchKey != '' and searchSelectValue == null or searchSelectValue == ''">
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
             </if>
         </where>
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
     </select>
 
     <!-- 코드에 따른 특정 투자펀딩 심사요청 조회 -->
@@ -673,7 +687,7 @@
             SELECT
                 (CASE
                 WHEN COUNT(c.corporate_value_evaluation_code) = 0 THEN CONCAT('cor_val_', CURDATE()+0, '_0001')
-                WHEN COUNT(c.corporate_value_evaluation_code) > 9999 THEN CONCAT('cor_val_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1)
+                WHEN MAX(c.corporate_value_evaluation_code) = CONCAT('cor_val_', CURDATE()+0, '_9999') THEN CONCAT('cor_val_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1)
                 ELSE CONCAT('cor_val_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
                 END) AS corporateValueEvaluationCode
             FROM
@@ -713,7 +727,7 @@
             SELECT
                 (CASE
                 WHEN COUNT(l.law_satistify_code) = 0 THEN CONCAT('law_stf_', CURDATE()+0, '_0001')
-                WHEN COUNT(l.law_satistify_code) > 9999 THEN CONCAT('law_stf_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1)
+                WHEN MAX(l.law_satistify_code) = CONCAT('law_stf_', CURDATE()+0, '_9999') THEN CONCAT('law_stf_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1)
                 ELSE CONCAT('law_stf_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
                 END) AS lawSatistifyCode
             FROM
@@ -735,7 +749,7 @@
             SELECT
                 (CASE
                 WHEN COUNT(i.incongruity_sectors_code) = 0 THEN CONCAT('inc_sec_', CURDATE()+0, '_0001')
-                WHEN COUNT(i.incongruity_sectors_code) > 9999 THEN CONCAT('inc_sec_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code,'_',-1) AS UNSIGNED))+1)
+                WHEN MAX(i.incongruity_sectors_code) = CONCAT('inc_sec_', CURDATE()+0, '_9999') THEN CONCAT('inc_sec_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code,'_',-1) AS UNSIGNED))+1)
                 ELSE CONCAT('inc_sec_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code, '_', -1) AS UNSIGNED))+1, 4, '0'))
                 END) AS incongruitySectorsCode
             FROM

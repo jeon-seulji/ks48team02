@@ -1,6 +1,7 @@
 package ksmart.ks48team02.admin.controller.judgement;
 
 import java.util.List;
+import java.util.Map;
 
 import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
 import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
@@ -41,20 +42,32 @@ public class InvestmentController {
                                         ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                         ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
                                         ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
-                                        ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue) {
+                                        ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
+                                        ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage) {
+
+        Map<String, Object> resultMap = null;
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
 
         if(searchKey != null) {
-            investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
+            resultMap = investmentService.getInvestmentRequestJudgeList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue, currentPage);
+            investmentRequestJudgeList = (List<AdminInvestmentRequestJudge>) resultMap.get("investmentRequestJudgeList");
         }else {
-            investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList();
+            resultMap = investmentService.getInvestmentRequestJudgeList(currentPage);
+            investmentRequestJudgeList = (List<AdminInvestmentRequestJudge>) resultMap.get("investmentRequestJudgeList");
         }
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
 
         model.addAttribute("title", "관리자 : 투자 펀딩 심사 요청");
         model.addAttribute("contentsTitle","투자 펀딩 심사 요청");
         model.addAttribute("contentsSubTitle","투자 펀딩 심사 요청을 관리합니다");
         model.addAttribute("investmentRequestJudgeList", investmentRequestJudgeList);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
 
         return "admin/judgement/investment/list/invest_jduge_list";
     }
@@ -210,13 +223,16 @@ public class InvestmentController {
     }
 
     @GetMapping("/insert/corporate-value")
-    public String addCorporateValueEvaluation(Model model){
+    public String addCorporateValueEvaluation(Model model, @RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage){
 
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeList();
+        Map<String, Object> resultMap = investmentService.getInvestmentRequestJudgeList(currentPage);
+
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = (List<AdminInvestmentRequestJudge>) resultMap.get("investmentRequestJudgeList");
 
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 등록");
         model.addAttribute("contentsTitle","기업가치 평가 결과 등록");
         model.addAttribute("investmentRequestJudgeList",investmentRequestJudgeList);
+        model.addAttribute("currentPage", currentPage);
 
         return "admin/judgement/investment/insert/corporate_value_evaluation_insert";
     }

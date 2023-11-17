@@ -1,6 +1,8 @@
 package ksmart.ks48team02.admin.service.investment;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import org.springframework.stereotype.Service;
@@ -26,14 +28,51 @@ public class InvestmentService {
     }
 
     // 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList() {
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeList();
+    public Map<String, Object> getInvestmentRequestJudgeList(int currentPage) {
 
-        return investmentRequestJudgeList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 보여줄 행의 시작점
+        int startRowNum = (currentPage - 1) * rowPerpage;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getInvestmentRequestJudgeCnt();
+
+        // 마지막페이지: (전체 행의 갯수/보여줄 행의 갯수) 올림처리
+        int lastPage = (int) Math.ceil(rowCnt/rowPerpage);
+
+        // 보여줄 페이지 번호 초기값:1
+        int startPageNum = 1;
+
+        // 마지막 페이지 번호 초기값:10(10 미만일경우 마지막페이지만큼)
+        int endPageNum = (lastPage < 10) ? lastPage : 10;
+
+        // 동적으로 페이지번호 구성
+        if(currentPage > 6 && lastPage > 9) {
+            startPageNum = currentPage -5;
+            endPageNum = currentPage + 4;
+            if(endPageNum >= lastPage) {
+                startPageNum = lastPage - 9;
+                endPageNum = lastPage;
+            }
+        }
+
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeList(startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("investmentRequestJudgeList", investmentRequestJudgeList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+
+
     }
 
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue) {
+    public Map<String, Object> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue, int currentPage) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -57,9 +96,43 @@ public class InvestmentService {
                 searchKey = "i.invest_judge_result";
                 break;
         }
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
 
-        return investmentRequestJudgeList;
+        // 보여줄 행의 시작점
+        int startRowNum = (currentPage - 1) * rowPerpage;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getInvestmentRequestJudgeCnt();
+
+        // 마지막페이지: (전체 행의 갯수/보여줄 행의 갯수) 올림처리
+        int lastPage = (int) Math.ceil(rowCnt/rowPerpage);
+
+        // 보여줄 페이지 번호 초기값:1
+        int startPageNum = 1;
+
+        // 마지막 페이지 번호 초기값:10(10 미만일경우 마지막페이지만큼)
+        int endPageNum = (lastPage < 10) ? lastPage : 10;
+
+        // 동적으로 페이지번호 구성
+        if(currentPage > 6 && lastPage > 9) {
+            startPageNum = currentPage -5;
+            endPageNum = currentPage + 4;
+            if(endPageNum >= lastPage) {
+                startPageNum = lastPage - 9;
+                endPageNum = lastPage;
+            }
+        }
+
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("investmentRequestJudgeList", investmentRequestJudgeList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 특정 투자펀딩 심사요청 조회
@@ -239,4 +312,5 @@ public class InvestmentService {
     public void removeCorporateValueEvaluation(String corporateValueEvaluationCode) {
         adminInvestmentMapper.removeCorporateValueEvaluation(corporateValueEvaluationCode);
     }
+
 }
