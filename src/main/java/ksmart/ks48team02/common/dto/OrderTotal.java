@@ -14,8 +14,6 @@ public class OrderTotal {
     private String orderConfirmDate;
     private String orderCancellDate;
 
-    private String rewardOrderDetailCode;
-    private String rewardPaymentCode;
 
     @Override
     public String toString() {
@@ -32,25 +30,7 @@ public class OrderTotal {
                 ", orderApplicationDate='" + orderApplicationDate + '\'' +
                 ", orderConfirmDate='" + orderConfirmDate + '\'' +
                 ", orderCancellDate='" + orderCancellDate + '\'' +
-                ", rewardOrderDetailCode='" + rewardOrderDetailCode + '\'' +
-                ", rewardPaymentCode='" + rewardPaymentCode + '\'' +
                 '}';
-    }
-
-    public String getRewardOrderDetailCode() {
-        return rewardOrderDetailCode;
-    }
-
-    public void setRewardOrderDetailCode(String rewardOrderDetailCode) {
-        this.rewardOrderDetailCode = rewardOrderDetailCode;
-    }
-
-    public String getRewardPaymentCode() {
-        return rewardPaymentCode;
-    }
-
-    public void setRewardPaymentCode(String rewardPaymentCode) {
-        this.rewardPaymentCode = rewardPaymentCode;
     }
 
     public String getOrderCode() {
@@ -147,7 +127,5 @@ public class OrderTotal {
     public void setOrderCancellDate(String orderCancellDate) {
         this.orderCancellDate = orderCancellDate;
     }
-
-
 
 }

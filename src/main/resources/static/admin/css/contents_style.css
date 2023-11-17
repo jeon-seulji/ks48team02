@@ -801,3 +801,12 @@ select[name="searchKey"] ~ input {
     padding: 6px 10px;
     border: 1px solid #ccc;
 }
+.order-list-pager a {
+    opacity: 0.8;
+}
+.order-list-pager.currentPage a {
+    opacity: 1;
+}
+.list-btn-area button.no-action{
+    opacity: 0.25;
+}
