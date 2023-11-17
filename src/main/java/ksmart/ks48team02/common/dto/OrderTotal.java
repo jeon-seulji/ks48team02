@@ -13,24 +13,44 @@ public class OrderTotal {
     private String orderApplicationDate;
     private String orderConfirmDate;
     private String orderCancellDate;
-
+    private String rewardOrderDetailCode;
+    private String rewardPaymentCode;
 
     @Override
     public String toString() {
-        return "OrderTotal{" +
-                "orderCode='" + orderCode + '\'' +
-                ", memberId='" + memberId + '\'' +
-                ", orderCategoryCode='" + orderCategoryCode + '\'' +
-                ", orderName='" + orderName + '\'' +
-                ", orderFundingName='" + orderFundingName + '\'' +
-                ", orderTotalPrice=" + orderTotalPrice +
-                ", orderCategoryDetail='" + orderCategoryDetail + '\'' +
-                ", goodsCode='" + goodsCode + '\'' +
-                ", goodsPartition='" + goodsPartition + '\'' +
-                ", orderApplicationDate='" + orderApplicationDate + '\'' +
-                ", orderConfirmDate='" + orderConfirmDate + '\'' +
-                ", orderCancellDate='" + orderCancellDate + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("OrderTotal{");
+        sb.append("orderCode='").append(orderCode).append('\'');
+        sb.append(", memberId='").append(memberId).append('\'');
+        sb.append(", orderCategoryCode='").append(orderCategoryCode).append('\'');
+        sb.append(", orderName='").append(orderName).append('\'');
+        sb.append(", orderFundingName='").append(orderFundingName).append('\'');
+        sb.append(", orderTotalPrice=").append(orderTotalPrice);
+        sb.append(", orderCategoryDetail='").append(orderCategoryDetail).append('\'');
+        sb.append(", goodsCode='").append(goodsCode).append('\'');
+        sb.append(", goodsPartition='").append(goodsPartition).append('\'');
+        sb.append(", orderApplicationDate='").append(orderApplicationDate).append('\'');
+        sb.append(", orderConfirmDate='").append(orderConfirmDate).append('\'');
+        sb.append(", orderCancellDate='").append(orderCancellDate).append('\'');
+        sb.append(", rewardOrderDetailCode='").append(rewardOrderDetailCode).append('\'');
+        sb.append(", rewardPaymentCode='").append(rewardPaymentCode).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public String getRewardOrderDetailCode() {
+        return rewardOrderDetailCode;
+    }
+
+    public void setRewardOrderDetailCode(String rewardOrderDetailCode) {
+        this.rewardOrderDetailCode = rewardOrderDetailCode;
+    }
+
+    public String getRewardPaymentCode() {
+        return rewardPaymentCode;
+    }
+
+    public void setRewardPaymentCode(String rewardPaymentCode) {
+        this.rewardPaymentCode = rewardPaymentCode;
     }
 
     public String getOrderCode() {
