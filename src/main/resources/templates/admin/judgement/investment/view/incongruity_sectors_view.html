@@ -25,7 +25,7 @@
             let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
             console.log(deleteConfirm);
             if (deleteConfirm) {
-                window.location.href = `[[@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=${corporateValueEvaluationInfo.corporateValueEvaluationCode})}]]` ;
+                window.location.href = `[[@{/admin/investment/delete/incongruity-sectors(incongruitySectorsCode=${incongruitySectorsInfo.incongruitySectorsCode})}]]` ;
                 alert('삭제되었습니다');
             } else {
                 alert('취소되었습니다');
@@ -90,7 +90,7 @@
                         </li>
                         <li>
                             <button id="settDeleteBtn" class="submitBtn" type="button"
-                                    th:onclick="|location.href='@{/admin/investment/delete/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}'|">
+                                    th:onclick="return false">
                                 삭제
                             </button>
                         </li>

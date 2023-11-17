@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.user.dto.InvestmentContent;
 import ksmart.ks48team02.user.dto.InvestmentInfo;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,10 @@ public class InvestmentController {
     @GetMapping("/detail/main")
     public String getDetailMainPage(Model model) {
 
+        List<InvestmentContent> investmentContent = userInvestmentService.getInvestmentContent();
+
         model.addAttribute("title", "투자 상세 페이지");
+
 
         return "user/investment/detail/main";
     }
