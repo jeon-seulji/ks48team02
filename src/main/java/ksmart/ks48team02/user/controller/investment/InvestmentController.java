@@ -44,6 +44,7 @@ public class InvestmentController {
     public String getDetailMainPage(Model model) {
 
         List<InvestmentContent> investmentContent = userInvestmentService.getInvestmentContent();
+        model.addAttribute("investmentContent", investmentContent);
 
         model.addAttribute("title", "투자 상세 페이지");
 
