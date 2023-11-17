@@ -1,15 +1,22 @@
 package ksmart.ks48team02.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
 import ksmart.ks48team02.user.dto.DonationRegistration;
-import ksmart.ks48team02.user.dto.InvestmentRegistration;
+import ksmart.ks48team02.user.dto.InvestmentInfo;
+import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
+import ksmart.ks48team02.user.service.reward.RewardService;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,23 +25,32 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+import java.util.*;
 @Controller
 @RequestMapping("/user/projectRegistration")
 public class PojectRegistrationContoller {
 
+    private static final Logger log = LoggerFactory.getLogger(PojectRegistrationContoller.class);
     private final DonationService donationService;
 
     private final UserInvestmentService userInvestmentService;
 
     private final TotalCategoryService totalCategoryService;
 
-    public PojectRegistrationContoller(DonationService donationService, TotalCategoryService totalCategoryService, UserInvestmentService userInvestmentService){
+    private final RewardService rewardService;
+
+    public PojectRegistrationContoller(DonationService donationService, TotalCategoryService totalCategoryService, UserInvestmentService userInvestmentService, RewardService rewardService){
         this.donationService = donationService;
         this.totalCategoryService = totalCategoryService;
         this.userInvestmentService = userInvestmentService;
+        this.rewardService = rewardService;
     }
 
     //프로젝트 등록 메인 페이지
@@ -43,8 +59,6 @@ public class PojectRegistrationContoller {
 
         String memberType = (String)session.getAttribute("STYPECODE");
         String returnAddr = "user/account/login";
-
-
 
         return "user/projectRegistration/main";
     }
@@ -57,22 +71,49 @@ public class PojectRegistrationContoller {
 
         model.addAttribute("categoryList",categoryList);
 
-
         return "user/projectRegistration/reward/reward_insert";
     }
-    //투자 프로젝트 등록 페이지
-    @GetMapping(value = {"/investment/judge"})
-    public String investmentRegistrationPage(Model model) {
 
-        model.addAttribute("title", "투자펀딩 심사 요청, 공고 등록");
+    //리워드 프로젝트 등록 진행.
+    @PostMapping(value= "/reward")
+    @ResponseBody
+    public String rewardRegistrationPage(@RequestBody RewardProject parameters) throws JsonProcessingException {
+
+        rewardService.addRewardProject(parameters);
+
+        return "/user/projectRegistration/reward/success";
+    }
+
+    //리워드 프로젝트 등록 완료 페이지
+    @GetMapping("/reward/success")
+    public String rewardProjectSuccessPage(){
+
+        return "user/projectRegistration/reward/reward_insert_success";
+    }
+
+
+    //투자 프로젝트 심사 요청 페이지
+    @GetMapping(value = {"/investment/judge"})
+    public String investmentJudgePage(Model model) {
+
+        model.addAttribute("title", "투자펀딩 심사 요청 페이지");
 
         return "user/projectRegistration/investment/invest_judge_insert";
     }
-    @PostMapping("/investment")
-    public String investmentRegistrationPage(InvestmentRegistration investmentRegistration){
-        userInvestmentService.addInvesetment(investmentRegistration);
-        return "redirect:/user/investment/main";
+    //투자 프로젝트 공고 등록 페이지
+    @GetMapping(value = {"/investment/insert"})
+    public String investmentRegistrationPage(Model model) {
+
+        model.addAttribute("title", "투자펀딩 공고 등록 페이지");
+
+        return "user/projectRegistration/investment/invest_insert";
     }
+    //투자 프로젝트 등록 완료 페이지
+    @GetMapping(value = "investment/success")
+    public String investmentRegistrationSuccessPage(){
+        return "user/projectRegistration/investment/investment_insert_success";
+    }
+
 
     // 기부 프로젝트 완료 포스트맵핑으로 받기
     @PostMapping("/donation")
@@ -99,7 +140,7 @@ public class PojectRegistrationContoller {
                                                 HttpServletRequest request) {
         JsonObject jsonObject = new JsonObject();
 
-        String fileRoot = "C:\\summernote_image\\";	//저장될 외부 파일 경로
+        String fileRoot = getOsFileRootPath();	//저장될 외부 파일 경로
         // 우분투 파일 루트 file:////home/springboot/resource
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
@@ -121,5 +162,36 @@ public class PojectRegistrationContoller {
         return jsonObject;
     }
 
+    @RequestMapping(value = "/deleteSummernoteImageFile", produces = "application/json; charset=utf8")
+    @ResponseBody
+    public void deleteSummernoteImageFile(@RequestParam("file") String fileName) {
+        // 폴더 위치
+        String filePath = getOsFileRootPath();
+
+        // 해당 파일 삭제
+        deleteFile(filePath, fileName);
+    }
+
+    // 파일 하나 삭제
+    private void deleteFile(String filePath, String fileName) {
+        Path path = Paths.get(filePath, fileName);
+        try {
+            Files.delete(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getOsFileRootPath(){
+        String os = System.getProperty("os.name").toLowerCase();
+        String rootPath = "/home/springboot/resources/summernote_image";
+        if (os.contains("win")) {
+            rootPath = "C:\\summernote_image";
+        } else if (os.contains("mac")) {
+            rootPath = "Users/Shared/summernote_image";
+        }
+
+        return rootPath;
+    }
 
 }

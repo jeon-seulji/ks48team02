@@ -118,4 +118,126 @@
             t.total_category_code = d.total_category_code
     </select>
 
+    <select id="getCondition" parameterType="String">
+        SELECT
+            condition_content
+        FROM
+            `condition`
+        WHERE
+            project_code = #{donationCode};
+    </select>
+
+    <select id="getNewsList" parameterType="String" resultType="NewsList">
+        SELECT
+            news_code AS newsCode,
+            project_code AS projectCode,
+            news_subject AS newsSubject,
+            news_content AS newsContent,
+            news_datetime AS newsDatetime,
+            news_modify_datetime AS newsModifyDatetime,
+            news_delete_datetime AS newsDeleteDatetime,
+            news_display AS newsDisplay
+        FROM
+            news
+        WHERE
+            project_code = #{donationCode};
+    </select>
+
+    <select id="getDetailNews" parameterType="String" resultType="NewsList">
+        SELECT
+            news_code AS newsCode,
+            project_code AS projectCode,
+            news_subject AS newsSubject,
+            news_content AS newsContent,
+            news_datetime AS newsDatetime,
+            news_modify_datetime AS newsModifyDatetime,
+            news_delete_datetime AS newsDeleteDatetime,
+            news_display AS newsDisplay
+        FROM
+            news
+        WHERE
+            news_code = #{newsCode};
+    </select>
+
+    <select id="getMember" parameterType="String" resultType="CommentMember">
+        SELECT
+            member_id AS memberId,
+            member_type_code AS memberTypeCode,
+            member_name AS memberName,
+            member_pw AS memberPw,
+            member_reg_date AS memberRegDate,
+            member_email AS memberEmail,
+            contact_info AS contactInfo,
+            unreg_date AS unregDate,
+            unreg_status AS unregStatus
+        FROM
+            member
+        WHERE
+            member_id = #{memberId};
+    </select>
+
+    <insert id="CommentAdd" parameterType="String">
+        /* 기부 상품 등록*/
+        <selectKey keyProperty="donationCommentCode" resultType="String" order="BEFORE">
+            SELECT
+                (
+                CASE
+                WHEN COUNT(comment_datetime) = 0     THEN CONCAT('com_', CURDATE()+0, '_0001')
+                WHEN COUNT(comment_datetime) > 9999  THEN CONCAT('com_', CURDATE()+0, '_', COUNT(comment_datetime)+1)
+                ELSE CONCAT('com_', CURDATE()+0, '_', LPAD(COUNT(comment_datetime)+1, 4, '0'))
+                END
+                ) AS donationCommentCode
+            FROM
+                donation_comment
+            WHERE
+                DATE_FORMAT(comment_datetime, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+        INSERT INTO donation_comment
+            (donation_comment_code, member_id, donation_code, member_name, comment_content, comment_datetime, comment_modify_datetime, comment_delete_datetime,
+             comment_code, comment_class)
+        VALUES
+            (#{donationCommentCode}, #{memberId}, #{donationCode}, #{memberName}, #{commentContent}, NOW(), NULL, NULL, NULL, 'comment');
+    </insert>
+
+    <select id="getCommentList" parameterType="String" resultType="DonationCommentList">
+        SELECT
+            donation_comment_code AS donationCommentCode,
+            member_id AS memberId,
+            donation_code AS donationCode,
+            member_name AS memberName,
+            comment_content AS commentContent,
+            comment_datetime AS commentDatetime,
+            comment_modify_datetime AS commentModifyDatetime,
+            comment_delete_datetime AS commentDeleteDatetime,
+            comment_code AS commentCode,
+            comment_class AS commentClass
+        FROM
+            donation_comment
+        WHERE
+            donation_code = #{donationCode};
+    </select>
+
+    <insert id="replyAdd" parameterType="String">
+        /* 기부 상품 등록*/
+        <selectKey keyProperty="donationCommentCode" resultType="String" order="BEFORE">
+            SELECT
+                (
+                CASE
+                WHEN COUNT(comment_datetime) = 0     THEN CONCAT('com_', CURDATE()+0, '_0001')
+                WHEN COUNT(comment_datetime) > 9999  THEN CONCAT('com_', CURDATE()+0, '_', COUNT(comment_datetime)+1)
+                ELSE CONCAT('com_', CURDATE()+0, '_', LPAD(COUNT(comment_datetime)+1, 4, '0'))
+                END
+                ) AS donationCommentCode
+            FROM
+                donation_comment
+            WHERE
+                DATE_FORMAT(comment_datetime, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+            INSERT INTO donation_comment
+            (donation_comment_code, member_id, donation_code, member_name, comment_content, comment_datetime, comment_modify_datetime, comment_delete_datetime,
+            comment_code, comment_class)
+            VALUES
+            (#{donationCommentCode}, #{memberId}, #{donationCode}, #{memberName}, #{reply}, NOW(), NULL, NULL, #{parentCommentCode}, 'reply');
+    </insert>
+
 </mapper>

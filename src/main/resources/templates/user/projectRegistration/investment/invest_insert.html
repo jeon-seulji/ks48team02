@@ -10,6 +10,7 @@
   <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
 
 
+
 </head>
 
 
@@ -18,6 +19,9 @@
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
+  <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!-- common js -->
+  <script src="/common/js/common-custom.js"></script>
 
 </th:block>
 
@@ -25,109 +29,229 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
   <script>
-    $('.nav-item').removeClass('active');
-    let $rewardMenuEls = $('.nav-item:nth-child(3)');
-    $($rewardMenuEls).addClass('active');
+    $(document).ready(function() {
+      // 증권 구분 셀렉트 박스의 변경 이벤트 핸들러 등록
+      $('#securitiesClassification').change(function() {
+        // 선택된 값 가져오기
+        let selectedValue = $(this).val();
 
-    var mainSwiper = new Swiper("#main-swiper-slide", {
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false
-      },
-      loop: true,
-      pagination: {
-        el: ".swiper-pagination",
-        type: "fraction",
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
+        // 현금 보유량, 현재 주식 수, 발행 예정 주식 수 입력 필드의 부모 요소를 가져옴
+        let cashReservesInputGroup = $('#cashReserves').closest('.my-2');
+        let currentStockNumInputGroup = $('#currentStockNum').closest('.my-2');
+        let issueStockNumInputGroup = $('#issueStockNum').closest('.my-2');
+
+        // 주식형이 선택된 경우
+        if (selectedValue === '1') {
+          // 현금 보유량 입력 필드 숨김
+          cashReservesInputGroup.hide();
+          // 현재 주식 수와 발행 예정 주식 수 입력 필드 표시
+          currentStockNumInputGroup.show();
+          issueStockNumInputGroup.show();
+        } else if (selectedValue === '2') {
+          // 채권형이 선택된 경우
+          // 현금 보유량 입력 필드 표시
+          cashReservesInputGroup.show();
+          // 현재 주식 수와 발행 예정 주식 수 입력 필드 숨김
+          currentStockNumInputGroup.hide();
+          issueStockNumInputGroup.hide();
+        }
+      });
     });
+
+    //약관 체크 모두 될 시 모두 동의에 체크.
+    $('.essential').not('#agreeNews').click(function(){
+      let checkLength = $('.essential').not('#agreeNews').length;
+      let checkedLength = $('.essential:checked').not('#agreeNews').length;
+      let isAllCheck = checkLength === checkedLength;
+      $('#allCheck').prop('checked',isAllCheck);
+    });
+
+    //약관 모두 동의 체크시 모두 동의
+    $('#allCheck').click(function(){
+      $('.essential').not('#agreeNews').prop('checked',$(this).prop('checked'));
+    });
+
+    // 제출하기 클릭 시 필수 약관동의 모두 체크되어있는지 확인
+    $('.nextBtn').click(function(){
+
+      const targetEls = $('.needs-validation input, .needs-validation select, .needs-validation textarea');
+      // 값 유효성 검사
+      if(!validationEmptyFn(targetEls)){
+        return;
+      }
+
+
+      let isValid = true;
+      $('.essential').each(function(idx,item){
+        if(!$(item).prop('checked')) {
+          alert('필수 약관에 모두 동의해주세요');
+          $(item).focus();
+          isValid =false;
+          return false;
+        }
+      });
+    });
+
+
+
 
   </script>
 
+
+
 </th:block>
 
+<th:block layout:fragment="customContents">
+  <div class="container">
+    <main>
+      <div class="py-5 text-center">
+        <!--<img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">-->
+        <h2>투자 프로젝트 공고 등록</h2>
+        <!--<p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>-->
+      </div>
+
+
+      <div class="row g-5" style="justify-content: center;">
+        <div class="col-md-7 col-lg-8">
+          <form class="needs-validation" novalidate="">
+            <div class="row g-3">
+              <div class="my-2 col-12">
+                <label for="projectIntroduction" class="form-label fw-bord text-dark">프로젝트 소개</label>
+                <textarea rows="6" class="form-control" id="projectIntroduction" placeholder="프로젝트 소개를 입력해주세요."></textarea>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="investmentIntroductionImage" class="form-label fw-bord text-dark">프로젝트 소개 이미지(url)</label>
+                <input type="text" class="form-control" id="investmentIntroductionImage" placeholder="프로젝트 소개 이미지(url)를 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="marketAnalysis" class="form-label fw-bord text-dark">시장 분석</label>
+                <textarea rows="6" class="form-control" id="marketAnalysis" placeholder="시장 분석을 입력해주세요."></textarea>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="marketAnalysisImage" class="form-label fw-bord text-dark">시장 분석 이미지(url)</label>
+                <input type="text" class="form-control" id="marketAnalysisImage" placeholder="시장 분석 이미지(url)를 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="majorFinancialInformation" class="form-label fw-bord text-dark">주요 재무 정보</label>
+                <textarea rows="6" class="form-control" id="majorFinancialInformation" placeholder="주요 재무 정보를 입력해주세요."></textarea>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="majorFinancialInformationImage" class="form-label fw-bord text-dark">주요 재무 정보 이미지(url)</label>
+                <input type="text" class="form-control" id="majorFinancialInformationImage" placeholder="주요 재무 정보 이미지(url)를 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="risk" class="form-label fw-bord text-dark">리스크</label>
+                <textarea rows="6" class="form-control" id="risk" placeholder="리스크를 입력해주세요."></textarea>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="riskImage" class="form-label fw-bord text-dark">리스크 이미지(url)</label>
+                <input type="text" class="form-control" id="riskImage" placeholder="리스크 이미지(url)를 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="majorManpower" class="form-label fw-bord text-dark">주요 인력</label>
+                <textarea rows="6" class="form-control" id="majorManpower" placeholder="주요 인력을 입력해주세요."></textarea>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="majorManpowerImage" class="form-label fw-bord text-dark">주요 인력 이미지(url)</label>
+                <input type="text" class="form-control" id="majorManpowerImage" placeholder="주요 인력 이미지(url)를 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="patentAwardDetails" class="form-label fw-bord text-dark">특허/수상 내역</label>
+                <textarea rows="6" class="form-control" id="patentAwardDetails" placeholder="특허/수상 내역을 입력해주세요."></textarea>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="patentAwardDetailsImage" class="form-label fw-bord text-dark">특허/수상 내역 이미지(url)</label>
+                <input type="text" class="form-control" id="patentAwardDetailsImage" placeholder="특허/수상 내역 이미지(url)를 입력해주세요." value required>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="etcInvestContent" class="form-label fw-bord text-dark">기타 투자 내용</label>
+                <textarea rows="6" class="form-control" id="etcInvestContent" placeholder="기타 투자 내용을 입력해주세요."></textarea>
+              </div>
+
+              <div class="my-2 col-12">
+                <label for="etcInvestContentImage" class="form-label fw-bord text-dark">기타 투자 내용 이미지(url)</label>
+                <input type="text" class="form-control" id="etcInvestContentImage" placeholder="기타 투자 내용 이미지(url)를 입력해주세요." value required>
+              </div>
+
+
+
+
+
+            </div>
+
+
+
+            <hr class="my-4">
+
+
+
+            <form>
+              <div class="form-group">
+                <label for="ContractFile">프로젝트 계약서 업로드</label>
+                <input type="file" class="form-control-file" id="ContractFile">
+              </div>
+
+              <div class="form-group">
+                <label for="investmentReport">프로젝트 보고서 업로드</label>
+                <input type="file" class="form-control-file" id="investmentReport">
+              </div>
+            </form>
+
+            <hr class="my-4">
+
+
+            <div class="ml-lg-2 mt-lg-5">
+              <h5 style="font-weight: bold;">약관 동의</h5>
+              <div class="ml-lg-3 mt-lg-4">
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="allCheck">
+                  <label class="form-check-label" for="allCheck">
+                    필수 약관 모두동의
+                  </label>
+                </div>
+                <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
+                <div class="form-check">
+                  <input class="essential form-check-input" type="checkbox" value="" id="agree1">
+                  <label class="form-check-label" for="agree1">
+                    개인정보 제3자 제공 동의 (필수)
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="essential form-check-input" type="checkbox" value="" id="agree2">
+                  <label class="form-check-label" for="agree2">
+                    책임 규정에 대한 동의 (필수)
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-center">
+              <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button" onClick="history.back();">이전단계</button>
+              <button class="paymentBtn w-80 btn btn-primary  btn-lg" type="button" th:onclick="|location.href='@{/user/projectRegistration/investment/success}'|">등록하기</button>
+            </div><br>
+          </form>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</th:block>
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
-<th:block layout:fragment="customContents">
 
-  <section id="main-swiper-slide" class="swiper mySwiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide slide-1">
-        <div class="container">
-          <div>
-            <div class="sub-title">NEW</div>
-            <h2>
-              플로키 투자회원 전용
-              <br>
-              카톡방 오픈
-            </h2>
-            <div class="slide-description">
-              플로키 회원이라면 누구나 입장 가능
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide slide-2">
-        <div class="container">
-          <div>
-            <div class="sub-title">EVENT</div>
-            <h2>
-              특별히 검증된 상품만 모았어요
-              <br>
-              신상품 10% 할인
-            </h2>
-            <div class="slide-description">
-              이벤트 페이지 참조
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide slide-3">
-        <div class="container">
-          <div>
-            <div class="sub-title">REWARD</div>
-            <h2>
-              시선집중 스페셜 기획전
-              <br>
-              추천 프로젝트를 만나보세요
-            </h2>
-            <div class="slide-description">
-              펀딩 마감기간 임박
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="controller-area">
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
-    </div>
-    <div class="swiper-pagination"></div>
-
-
-  </section>
-  <div id="sortInvest">
-    <div class="container">
-      <div id="sortInvestMargin" class="mt70 m-mt50 xs-mt40">
-        <div class="floky-title-01">진행 중인 투자</div>
-        <span class="floky-titleDesc-01 hidden-xs hidden-sm">플로키에서 핫한 프로젝트들을 만나보세요.</span>
-        <div class="floky-ivs-select">
-          <select dir="rtl" class="crowdy-select-box">
-            <option value="" disabled="disabled" hidden="hidden"></option>
-            <option value="1">펀딩금액순</option>
-            <option value="2">마감임박순</option>
-            <option value="3">최신순</option>
-            <option value="4">목표달성률순</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</th:block>
 </html>

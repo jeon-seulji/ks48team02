@@ -16,7 +16,7 @@ public interface AdminInvestmentMapper {
     public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList();
 
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate);
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue);
 
     // 코드에 따른 특정 투자펀딩 심사요청 조회
     public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String investmentRequestJudgeCode);
@@ -46,14 +46,22 @@ public interface AdminInvestmentMapper {
     public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList();
 
     // 검색조건에 따른 기업가치 평과결가 목록 조회
-
-    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate);
+    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue);
 
     // 특정 기업가치 평가결과 조회
     public AdminCorporateValueEvaluation getCorporateValueEvaluationByCode(String corporateValueEvaluationCode);
 
     // 자본시장 범위충족기준 등록
     public int addLawSatistify(AdminLawSatistifyReason adminLawSatistifyReason);
+
+    // 부적합 업종 등록
+    public int addIncogruitySector(AdminIncongruitySectors adminIncongruitySectors);
+
+    // 기업가치 평가결과 등록
+    public int addCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation);
+
+    // 기업가치 평과결과 등록 후 심사요청 외래키 수정
+    public int modifyInvestmentRequestCorpValueKey(AdminInvestmentRequestJudge adminInvestmentRequestJudge);
 
     // 투자펀딩 심사요청 수정
     public int modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge);
@@ -64,6 +72,18 @@ public interface AdminInvestmentMapper {
     // 부적합 업종 수정
     public int modifyIncongruitySectors(AdminIncongruitySectors adminIncongruitySectors);
 
+    // 기업가치 평가 결과 수정
+    public int modifyCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation);
+
     // 투자펀딩 심사요청 삭제
     public int removeInvestmentRequestJudge(String investmentRequestJudgeCode);
+
+    // 자본시장 범위충족기준 삭제
+    public int removeLawSatistify(String lawSatistifyCode);
+
+    // 부적합 업종 삭제
+    public int removeIncogruitySectors(String incongruitySectorsCode);
+
+    // 기업가치 평가 결과 삭제
+    public int removeCorporateValueEvaluation(String corporateValueEvaluationCode);
 }

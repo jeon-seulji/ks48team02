@@ -59,16 +59,16 @@
                     $.each(data, function (idx, item) {
                         let checkValue = $(this).val();
 
-                        if($(item).attr('id') == 'detailComent') {
-                            let noteIsEmpty = $('#detailComent').summernote('isEmpty');
+                        if($(item).attr('id') == 'projectContents') {
+                            let noteIsEmpty = $('#projectContents').summernote('isEmpty');
                             console.log(noteIsEmpty);
 
-                            if($('#detailComent').summernote('isEmpty')){
+                            if(noteIsEmpty){
                                 isValid = false;
                                 let eleId = $(this).attr('id');
                                 let cate = $(`label[for="${eleId}"]`).text();
                                 alert(`${cate} 필수 입력 항목입니다.`);
-                                $('#detailComent').summernote('focus');
+                                $('#projectContents').summernote('focus');
                                 return isValid;
                             }
                         }
@@ -116,7 +116,7 @@
 
             //다음 단계 버튼 클릭시 화면전환, 빈 값 있는지 유효성 검사.
             $(document).on('click', '.nextBtn', function(){
-                let validCheck = $(this).parents('.info-contents-area').find('input, select, #detailComent').not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]');
+                let validCheck = $(this).parents('.info-contents-area').find('input, select, #projectContents').not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]');
                 console.log(validCheck)
                 let isValid = validationCheck(validCheck);
 
@@ -154,26 +154,95 @@
                 autoclose: true
             });
 
-            //프로젝트 시작 일자 선택하면 프로젝트 마감 일자 시작일자 이전 날짜는 선택 못하게.
-            // $('#projectStartDate').change(function () {
-            //     let projectEndDate = $('#projectEndDate');
-            //     let startDate = new Date($(this).val());
-            //     let endDate = new Date($(projectEndDate).val());
-            //
-            //     $(projectEndDate).prop('disabled', startDate == null);
-            //     projectEndDate.datepicker('setStartDate', startDate);
-            //
-            //     if (startDate >= endDate) {
-            //         $(projectEndDate).val('');
-            //     }
-            // });
+            //summerNote
+            $('#projectContents').summernote({
+                height: 700,                 // 에디터 높이
+                minHeight: null,             // 최소 높이
+                maxHeight: null,             // 최대 높이
+                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR",					// 한글 설정
+                placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
+                callbacks: {	//여기 부분이 이미지를 첨부하는 부분
+                    onImageUpload : function(files) {
+                        uploadSummernoteImageFile(files[0],this);
+                    },
+                    onPaste: function (e) {
+                        var clipboardData = e.originalEvent.clipboardData;
+                        if (clipboardData && clipboardData.items && clipboardData.items.length) {
+                            var item = clipboardData.items[0];
+                            if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                                e.preventDefault();
+                            }
+                        }
+                    }
+                }
+            });
 
-            //summerNote Api
-            $('#detailComent').summernote({
-                placeholder: '프로젝트 스토리를 입력해주세요',
-                lang: 'ko-KR',
-                tabsize: 2,
-                height: 300
+            /**
+             * 이미지 파일 업로드
+             */
+            function uploadSummernoteImageFile(file, editor) {
+                data = new FormData();
+                data.append("file", file);
+                $.ajax({
+                    data : data,
+                    type : "POST",
+                    url : "/user/projectRegistration/uploadSummernoteImageFile",
+                    contentType : false,
+                    processData : false,
+                    success : function(data) {
+                        //항상 업로드된 파일의 url이 있어야 한다.
+                        $(editor).summernote('insertImage', data.url);
+                    }
+                });
+            }
+
+            // summernote 드래그 & 드랍 구현
+            $("div.note-editable").on('drop',function(e){
+                for(i=0; i< e.originalEvent.dataTransfer.files.length; i++){
+                    uploadSummernoteImageFile(e.originalEvent.dataTransfer.files[i],$("#projectContents")[0]);
+                }
+                e.preventDefault();
+            })
+
+            // 썸네일 이미지 저장 구현
+            $('#confirmBtn').click(function( ) {
+                if($('#thumbnailImage').val() == '' || typeof $('#thumbnailImage').val() == 'undefined' || $('#thumbnailImage').val() == null){
+                    alert('썸네일을 넣어주세요!');
+                    return;
+                }
+
+                $('#confirmBtn').css('display', 'none');
+                $('#confirmMessage').css('display', 'block');
+                $('#thumbnailImage').css('display', 'none');
+                var formData = new FormData();	//FormData 객체 생성
+                var inputFile = $("input[type='file']"); //input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+                var files = inputFile[0].files;
+                //files : 선택한 모든 파일을 나열하는 FileList 객체입니다.
+                //multiple 특성을 지정하지 않닸다면 두 개 이상의 파일을 포함하지 않습니다.
+                for (var i = 0; i < files.length; i++) {
+                    console.log(files[i]);
+                    formData.append("file", files[i]);//키,값으로 append
+                }
+
+                //실제 업로드 부분
+                //upload ajax
+                $.ajax({
+                    url: '/user/projectRegistration/uploadSummernoteImageFile',	//경로
+                    processData: false,	//기본값은 true
+                    //ajax 통신을 통해 데이터를 전송할 때, 기본적으로 key와 value값을 Query String으로 변환해서 보냅니다.
+                    contentType: false,	// multipart/form-data타입을 사용하기위해 false 로 지정합니다.
+                    data: formData,
+                    type: 'POST',
+                    dataType:'json',
+                    success: function(result){
+                        console.log(result.fileName);
+                        $('#confirmThumbnailImage').val(result.fileName); // 이미지 이름 DB 에 저장
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){	//오류 메시지 판정
+                        console.log(textStatus);
+                    }
+                }); //$.ajax
             });
 
             //리워드 추가 버튼 클릭 시 값이 비어있지 않다면 슬라이더 폼 추가
@@ -193,17 +262,19 @@
                         '                    <div class="card border-primary mb-4 shadow-sm">\n' +
                         '                      <div class="card-header ">\n' +
                         '                       <span style="background: red; color: white; border-radius: 5px; padding: 2px;"><span class="rewardLimitQuantity">300</span>개</span><br>\n' +
-                        '                       <span><h5 class="rewardSebjectH my-0 fw-normal"></h5></span>\n' +
+                        '                        <input name="optionLimitQuantity" class="rewardLimitQuantityHidden" hidden="hidden">\n' +
+                        '                       <span><h5 class="rewardSubjectH my-0 fw-normal"></h5></span>\n' +
+                        '                       <input name="optionName" class="rewardSubjectHidden" hidden="hidden">\n' +
                         '                      </div>\n' +
                         '                      <div class="card-body">\n' +
                         '                        <p class="text-dark">리워드 내용</p>\n' +
-                        '                        <textarea class="rewardContents" rows="3" readonly="readonly" style="width: 205px"></textarea>\n' +
+                        '                        <textarea name="optionContents" class="rewardContents" rows="3" readonly="readonly" style="width: 205px"></textarea>\n' +
                         '                        <p class="text-dark">리워드 금액</p>\n' +
-                        '                        <input class="rewardPriceInput" type="text" readonly value="">\n' +
+                        '                        <input name="optionPrice" class="rewardPriceInput" type="text" readonly value="">\n' +
                         '                        <p class="text-dark">예상 배송일</p>\n' +
-                        '                        <input class="deliverStartDate" type="text" readonly value="">\n' +
+                        '                        <input name="optionEstimatedDeliveryDate" class="deliverStartDate" type="text" readonly value="">\n' +
                         '                        <p class="text-dark">배송비</p>\n' +
-                        '                        <input class="rewardDeliverPrice" type="text" readonly value="">\n' +
+                        '                        <input name="optionDeliveryPrice" class="rewardDeliverPrice" type="text" readonly value="">\n' +
                         '                        <br><br>\n' +
                         '                        <button type="button" class="modifyBtn w-70 btn btn-sm btn-primary">수정</button>\n' +
                         '                        <button type="button" class="delBtn w-70 btn btn-sm btn-danger">삭제</button>\n' +
@@ -212,7 +283,9 @@
                         '                  </div>')
 
                     $(card).find('.rewardLimitQuantity').text(rewardLimitQuantity);
-                    $(card).find('.rewardSebjectH').text(rewardSubject);
+                    $(card).find('.rewardSubjectH').text(rewardSubject);
+                    $(card).find('.rewardLimitQuantityHidden').val(rewardLimitQuantity);
+                    $(card).find('.rewardSubjectHidden').val(rewardSubject);
                     $(card).find('.rewardContents').text(rewardContents);
                     $(card).find('.rewardPriceInput').val(`${Number(rewardPrice).toLocaleString('ko-KR')}원`);
                     $(card).find('.deliverStartDate').val(deliverStartDate);
@@ -289,8 +362,9 @@
 
             //제출하기 버튼 클릭 시 이벤트 (동적바인딩)
             $(document).on('click','.submitBtn',function(){
-                let rewardOptionLength = $('.rewardOption').length;
-                let validCheck = $('#projectRegistrationForm').find('input, select, #detailComent')
+                let option = $('.rewardOption');
+                let rewardOptionLength = option.length;
+                let validCheck = $('#projectRegistrationForm').not('.rewardOption').find('input, select, #projectContents')
                     .not('#modalSearchTagAdd').not('input[class*=note]').not('input[type="checkbox"]').not('#rewardLimitQuantity')
                     .not('#rewardPrice').not('#rewardSubject').not('#rewardContents').not('#deliverStartDate').not('#rewardDeliverPrice')
                     .not('#rewardDeliverSelect');
@@ -301,7 +375,57 @@
                     if(rewardOptionLength < 1) {
                         alert('리워드 옵션을 추가해주세요.');
                     } else if(confirm('정말 프로젝트를 등록하시겠습니까?')){
-                        submit();
+
+                        const optionList = [];
+                        $(option).each((idx, item)=>{
+                            const optionObj = {};
+
+                            $.each($(item).find('input, textarea'),(idx,item)=>{
+
+                                let key = $(item).attr('name');
+                                let value = $(item).val();
+
+                                if(key == 'optionPrice') {
+                                    value= Number($(item).val().replaceAll('원','').replaceAll(',',''));
+                                }
+                                if(key == 'optionDeliveryPrice') {
+                                    if(value == '무료배송') {
+                                        value= 0;
+                                    } else {
+                                        value= Number($(item).val().replaceAll('원','').replaceAll(',',''));
+                                    }
+                                }
+                                optionObj[key] = value;
+                            })
+                            optionList.push(optionObj);
+                            // var jsonData = JSON.stringify(optionList);
+                        });
+
+                        const paramReward = {
+                            "rewardOptionList" : optionList
+                        };
+
+                        $(validCheck).each((idx,item)=>{
+                            let key = $(item).attr('name');
+                            let value = $(item).val();
+                            paramReward[key] = value;
+                        });
+
+                        const request = $.ajax({
+                            type: 'POST',
+                            traditional : true,
+                            url: '/user/projectRegistration/reward',
+                            contentType: 'application/json',
+                            data: JSON.stringify(paramReward),
+                            dataType: 'json'
+                        });
+                        request.done(function(response){
+                            let redirectURI = response;
+                            location.href = redirectURI;
+                        });
+                        request.fail(function(err){
+                            console.log(err);
+                        });
                     }
                 }
             });
@@ -386,7 +510,7 @@
                 </ul>
             </div>
 
-            <form id="projectRegistrationForm" class=" col-lg-10">
+            <form id="projectRegistrationForm" class=" col-lg-10" th:action="@{/user/projectRegistration/reward}" method="post">
                 <!-- defaultInfo area -->
                 <div id="defaultInfo" class="info-contents-area" style="display: block;">
                     <h5 class="mb-2 fw-bord">프로젝트의 성공 조건 & 수수료 안내</h5>
@@ -398,29 +522,40 @@
                     <div class="row">
 
                         <div class="col-8">
+                            <input type="hidden" class="form-control" id="memberId" name="regMemberId" th:value="${session.SID}">
                             <label for="projectCategory" class="form-label fw-bord text-dark">카테고리를 선택해 주세요</label>
                             <br>
-                            <select id="projectCategory" name="projectCategory">
+                            <select id="projectCategory" name="rewardCategoryCode">
                                 <option value="">==선택==</option>
                                 <option th:if="${categoryList != null}" th:each="l : ${categoryList}" th:text="${l.categoryName}" th:value="${l.totalCategoryCode}"></option>
                             </select>
                             <br><br>
 
                             <label for="projectSubject" class="form-label fw-bord text-dark">프로젝트의 제목을 적어주세요</label>
-                            <input type="text" class="form-control" id="projectSubject" placeholder="제목을 입력해 주세요.">
+                            <input name="projectSubject" type="text" class="form-control" id="projectSubject" placeholder="제목을 입력해 주세요.">
                             <br>
 
                             <label for="projectGoalMoney" class="form-label fw-bord text-dark">목표 금액을 적어주세요</label>
-                            <input type="number" class="form-control" id="projectGoalMoney" placeholder="목표 금액을 입력해주세요.">
+                            <input name="projectGoalMoney" type="number" class="form-control" id="projectGoalMoney" placeholder="목표 금액을 입력해주세요.">
                             <br>
 
                             <div class="mb-3">
-                                <label for="thumbnailImage" class="form-label fw-bord text-dark">썸네일 이미지를 등록해주세요.</label>
+                                <label for="thumbnailImage" class="form-label fw-bord text-dark">썸네일 이미지를 등록해주세요</label>
                                 <br>
                                 <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
                                     <img src="" class="img-thumbnail" alt="썸네일이미지" style="height: 200px; width: 350px; display: none;">
                                 </div>
                                 <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
+                            </div>
+                            <label for="confirmThumbnailImage">썸네일 확정을 해주세요</label>
+                            <input id="confirmThumbnailImage" name="projectThumbnailImage" style="display: none">
+                            <div class="mb-3">
+                                <button id="confirmBtn" type="button" style="border-radius: 5px; background-color: #0b44d7; color: whitesmoke; padding: 5px">썸네일 확정</button>
+                            </div>
+                            <div id="confirmMessage" style="background: #ddfffc; border-radius: 5px; padding: 10px; font-size: 12px; color: black; display: none">
+                                <p>
+                                    <b>썸네일이 확정 되었습니다!</b><br>
+                                </p>
                             </div>
 
                             <br>
@@ -489,7 +624,7 @@
                             </div>
                             <br>
                             <span>
-                                마감 일자 : <input type="text" id="projectEndDate" readonly="readonly">
+                                마감 일자 : <input name="projectEndDate" type="text" id="projectEndDate" readonly="readonly">
                             </span>
                             <br>
 
@@ -515,21 +650,21 @@
 
                     <div class="row g">
                         <div class="col-10">
-                            <div class="mb-3">
-                                <label for="detailImage" class="form-label fw-bord text-dark">상세 이미지를 등록해주세요.</label>
-                                <div class="banner-content" style="background-color: #7D7D7D">상세 이미지</div>
-                                <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
-                                <input class="form-control w-75" id="detailImage" type="file">
-                            </div>
+<!--                            <div class="mb-3">-->
+<!--                                <label for="detailImage" class="form-label fw-bord text-dark">상세 이미지를 등록해주세요.</label>-->
+<!--                                <div class="banner-content" style="background-color: #7D7D7D">상세 이미지</div>-->
+<!--                                &lt;!&ndash;                <input type="file" accept="image/png, image/jpeg" multiple>&ndash;&gt;-->
+<!--                                <input class="form-control w-75" id="detailImage" type="file">-->
+<!--                            </div>-->
 
-                            <label for="detailMovie" class="form-label fw-bord text-dark">동영상 주소를 적어주세요</label>
-                            <input type="text" class="form-control w-75" id="detailMovie" placeholder="동영상 주소를 적어주세요."
-                                   value="" required="">
-                            <br>
+<!--                            <label for="detailMovie" class="form-label fw-bord text-dark">동영상 주소를 적어주세요</label>-->
+<!--                            <input type="text" class="form-control w-75" id="detailMovie" placeholder="동영상 주소를 적어주세요."-->
+<!--                                   value="" required="">-->
+<!--                            <br>-->
 
                             <div class="mb-3">
-                                <label for="detailComent" class="form-label">프로젝트 스토리를 적어주세요</label>
-                                <div id="detailComent"></div>
+                                <label for="projectContents" class="form-label">프로젝트 스토리를 적어주세요</label>
+                                <textarea id="projectContents" name="projectContents"></textarea>
                             </div>
 
                             <br><br>

@@ -6,10 +6,6 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <style>
-        #settDeleteBtn {
-            background-color: red;
-        }
-
         input {
             width: 100%;
         }
@@ -19,7 +15,7 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-
+    <script th:src="@{/user/js/jquery.min.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
@@ -137,7 +133,7 @@
                     </tr>
                     <tr>
                         <td style="background: #fff;"><span
-                                th:text="*{#numbers.formatInteger(adminInvestment.investmentAchievementMoney,3,'COMMA')}"></span>
+                                th:text="*{#numbers.formatInteger(adminInvestment.invInvestmentAchievementMoney,3,'COMMA')}"></span>
                             원
                         </td>
                         <td><span>1,000</span> 건</td>
@@ -185,7 +181,7 @@
                             <td colspan="5"><input type="text" id="investmentRequestSubject"
                                                    name="investmentRequestSubject"
                                                    th:value="*{investmentRequestSubject}"
-                                                   placeholder="투자 심사요청 제목을 입력해주세요."></td>
+                                                   placeholder="투자 심사요청 제목을 입력해주세요"></td>
                         </tr>
                         <tr>
                             <td>
@@ -273,7 +269,6 @@
                                     <option value="">해당없음</option>
                                 </select>
                             </td>
-                            <td th:unless="*{incongruitySectorsCode == null}" th:text="*{incongruitySectorsCode}"></td>
                             <td th:text="*{companyBusinessTypeCode}"></td>
                             <td th:text="*{cbtBusinessType}"></td>
                         </tr>
@@ -294,7 +289,7 @@
                                    th:href="@{/admin/investment/view/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}"
                                    th:text="*{corporateValueEvaluationCode}"></a></td>
                             <td>
-                                <input type="number" id="InvestmentAchievementMoney" name="InvestmentAchievementMoney"
+                                <input type="number" id="investmentAchievementMoney" name="investmentAchievementMoney"
                                        placeholder="목표펀딩금액을 입력해주세요" th:value="*{investmentAchievementMoney}">
                             </td>
                             <td>
@@ -335,15 +330,15 @@
                             <td id="investJudgeResult" colspan="5" class="progress-radio-area">
                                 <ul>
                                     <li>
-                                        <input id="preProgress" type="radio" name="investJudgeResult" value="0" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 0}">
+                                        <input id="preProgress" type="radio" name="investJudgeResult" value="0" th:checked="*{investJudgeResult == 0}">
                                         <label for="preProgress">심사 대기</label>
                                     </li>
                                     <li>
-                                        <input id="Progress" type="radio" name="investJudgeResult" value="1" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 1}">
+                                        <input id="Progress" type="radio" name="investJudgeResult" value="1" th:checked="*{investJudgeResult == 1}">
                                         <label for="Progress">심사 승인</label>
                                     </li>
                                     <li>
-                                        <input id="ProgressCompleted" type="radio" name="investJudgeResult" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 2}"
+                                        <input id="ProgressCompleted" type="radio" name="investJudgeResult" th:checked="*{investJudgeResult == 2}"
                                                value="2">
                                         <label for="ProgressCompleted">심사 반려</label>
                                     </li>

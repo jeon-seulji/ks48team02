@@ -1,12 +1,14 @@
 package ksmart.ks48team02.admin.controller.board;
 
 import ksmart.ks48team02.admin.dto.Coupon;
+import ksmart.ks48team02.admin.mapper.coupon.AdminCouponMapper;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -88,9 +90,20 @@ public class BoardController {
         return "admin/board/couponAdd";
     }
 
+
+    @PostMapping("/couponCreate")
+    public String couponCreateAdd(Coupon coupon){
+
+        return "redirect:/admin/board/couponCreate";
+    }
+
+
     // 쿠폰 등록
     @GetMapping("/couponCreate")
-    public String couponCreate(){
+    public String couponCreate(Model model) {
+
+
+        model.addAttribute("title", "쿠폰 등록");
 
         return "admin/board/couponCreate";
     }

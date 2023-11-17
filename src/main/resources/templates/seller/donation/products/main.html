@@ -72,14 +72,27 @@
                 const $startProjectDate = $(this).find('.table-data-center.start-project-date');
                 $startProjectDate.text('');
                 $startProjectDate.children();
-                const $startButton = $('<button class="startBtn" style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>');
+                const $startButton = $('<button type="button" class="startBtn" style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>');
 
                 // 시작 버튼을 요소에 추가합니다.
                 $startProjectDate.append($startButton);
 
                 // 시작 버튼에 클릭 이벤트 리스너를 추가.
                 $startButton.click(function() {
-                    $startButton.remove();
+                    let donationCode = $(this).parent('td').parent('tr').children('td:eq(0)').text();
+                    $.ajax({
+                        method : "POST",
+                        url: "/seller/donation/products/startProject",
+                        data : {donationCode : donationCode},
+                        dataType : "text",
+                        success: function (){
+                            $startButton.remove();
+                            location.reload();
+                        },
+                        error: function (error){
+                            console.log("AJAX 요청 실패")
+                        }
+                    });
                 });
                 $judgeCon.text('심사완료');
             }
@@ -119,12 +132,12 @@
             }
         });
 
-        $('button').click(function (){
+/*        $('button').click(function (){
             if($(this).attr('class') == 'startBtn'){
                 let donationCode = $(this).parent('td').parent('tr').children('td:eq(0)').text();
-                window.location.href = `http://localhost:8088/seller/donation/products?donationCode=${donationCode}`;
+                window.location.href = "@{/product(donationCode=${donationCode})}";
             }
-        });
+        });*/
 
         function isProject(judgeReason){
             if($(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').length == 0){
