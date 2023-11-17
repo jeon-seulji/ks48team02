@@ -54,11 +54,11 @@ public interface AdminInvestmentMapper {
     // 자본시장 범위충족기준 등록
     public int addLawSatistify(AdminLawSatistifyReason adminLawSatistifyReason);
 
-    // 기업가치 평가결과 등록
-    public int addCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation);
-
     // 부적합 업종 등록
     public int addIncogruitySector(AdminIncongruitySectors adminIncongruitySectors);
+
+    // 기업가치 평가결과 등록
+    public int addCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation);
 
     // 기업가치 평과결과 등록 후 심사요청 외래키 수정
     public int modifyInvestmentRequestCorpValueKey(AdminInvestmentRequestJudge adminInvestmentRequestJudge);
@@ -80,6 +80,9 @@ public interface AdminInvestmentMapper {
 
     // 자본시장 범위충족기준 삭제
     public int removeLawSatistify(String lawSatistifyCode);
+
+    // 부적합 업종 삭제
+    public int removeIncogruitySectors(String incongruitySectorsCode);
 
     // 기업가치 평가 결과 삭제
     public int removeCorporateValueEvaluation(String corporateValueEvaluationCode);

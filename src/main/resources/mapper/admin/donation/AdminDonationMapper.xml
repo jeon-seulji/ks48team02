@@ -90,4 +90,51 @@
             donation_judgement_reason
     </select>
 
+    <select id="getAllprojectList" resultType="AllProjectList">
+        SELECT
+            d.donation_code AS projectCode,
+            d.donation_condition AS projectCondition,
+            d.member_id AS memberId,
+            d.donation_subject AS projectSubject,
+            s.store_name AS storeName,
+            d.donation_achievement_money AS projectAchievementMoney,
+            d.donation_goal_money AS projectGoalMoney,
+            d.donation_reg_date AS projectRegDate,
+            d.donation_end_date AS projectEndDate,
+            d.admin_member_id AS adminId
+        FROM
+            donation AS d
+        INNER join
+            store AS s
+        ON
+            d.store_code = s.store_code
+        UNION
+        SELECT
+            r.reward_project_code,
+            r.project_condition,
+            r.member_id,
+            r.project_subject,
+            r.reg_company,
+            r.project_achievement_money,
+            r.project_goal_money,
+            r.project_reg_date,
+            r.project_end_date,
+            r.admin_member_id
+        FROM
+            reward_project AS r
+        UNION
+        SELECT
+            i.investment_code,
+            i.invest_judge_situation,
+            i.member_id_seller,
+            i.investment_subject,
+            i.investment_company,
+            i.investment_amount,
+            i.investment_achievement_money,
+            i.investment_reg_date,
+            i.investment_deadline,
+            i.member_id
+        FROM
+            investment AS i;
+    </select>
 </mapper>

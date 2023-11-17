@@ -202,6 +202,13 @@ public class InvestmentController {
         return "admin/judgement/investment/insert/incongruity_sectors_insert";
     }
 
+    @PostMapping("/insert/incongruity-sectors")
+    public String addIncongruitySectors(AdminIncongruitySectors adminIncongruitySectors) {
+
+        investmentService.addIncogruitySector(adminIncongruitySectors);
+        return "redirect:/admin/investment/search/incongruity-sectors";
+    }
+
     @GetMapping("/insert/corporate-value")
     public String addCorporateValueEvaluation(Model model){
 
@@ -347,12 +354,25 @@ public class InvestmentController {
     }
 
     @GetMapping("/delete/incongruity-sectors")
-    public String removeIncongruitySectors(Model model) {
+    public String removeIncongruitySectors(@RequestParam(value = "incongruitySectorsCode") String incongruitySectorsCode, Model model) {
+
+        investmentService.removeIncogruitySectors(incongruitySectorsCode);
 
         model.addAttribute("title", "관리자 : 부적합 업종 삭제");
         model.addAttribute("contentsTitle","부적합 업종 삭제");
+        model.addAttribute("incongruitySectorsCode", incongruitySectorsCode);
 
-        return "admin/judgement/investment/delete/incongruity_sectors_delete";
+        return "redirect:/admin/investment/search/incongruity-sectors";
+    }
+
+    @PostMapping("/delete/incongruity-sectors")
+    public String removeIncongruitySectors(@RequestParam(value = "incongruitySectorsCode") String incongruitySectorsCode, RedirectAttributes redirectAttributes) {
+
+        investmentService.removeIncogruitySectors(incongruitySectorsCode);
+
+        redirectAttributes.addAttribute("incongruitySectorsCode", incongruitySectorsCode);
+
+        return "redirect:/admin/investment/search/incongruity-sectors";
     }
 
     @GetMapping("/delete/corporate-value")
