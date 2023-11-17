@@ -1,6 +1,7 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
 import ksmart.ks48team02.common.dto.*;
+import ksmart.ks48team02.common.service.delivery.DeliveryService;
 import ksmart.ks48team02.common.service.order.OrderService;
 import ksmart.ks48team02.common.service.payments.PaymentsService;
 import org.slf4j.Logger;
@@ -10,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller("adminOrderManagement")
@@ -22,12 +22,15 @@ public class OrderManagementController {
 
     private final OrderService orderService;
     private final PaymentsService paymentsService;
+    public final DeliveryService deliveryService;
 
     public OrderManagementController(OrderService orderService,
-                                     PaymentsService paymentsService){
+                                     PaymentsService paymentsService,
+                                     DeliveryService deliveryService){
 
         this.orderService = orderService;
         this.paymentsService = paymentsService;
+        this.deliveryService = deliveryService;
     }
 
     // 주문 검색 ajax
@@ -89,15 +92,7 @@ public class OrderManagementController {
     @ResponseBody
     public Map<String, Object> getOrderListOrderBy(Model model,
                                                     @RequestBody Map<String, Object> paramMap){
-//                                                @RequestParam(name="orderby",
-//                                                        required = false,
-//                                                        defaultValue = "order_d") String orderby,
-//                                                @RequestParam(name="currentPage",
-////                                                        required = false,
-//                                                        defaultValue = "1") int currentPage,
-//                                                @RequestParam(name="rowPerPage",
-////                                                        required = false,
-//                                                        defaultValue = "15") int rowPerPage){
+        log.info("param {}", paramMap);
         log.info("currentPage {}", paramMap.get("currentPage"));
         log.info("rowPerPage {}", paramMap.get("rowPerPage"));
         Map<String, Object> list = orderService.getOrderList(paramMap);
@@ -156,6 +151,8 @@ public class OrderManagementController {
         model.addAttribute("title","관리자 : 배송 관리");
         model.addAttribute("contentsTitle","배송 관리");
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
+
+
         return "admin/order/delivery";
     }
 

@@ -83,7 +83,6 @@
                 dataType: 'json'
             });
             request.done(function(list){
-                console.log(list, '<--');
                 callback(list);
             });
             request.fail(function(err){
@@ -157,15 +156,12 @@
                     )
 
             });
-
-
             let priceEls = $('input[name="orderPrice"]');
             payFormat(priceEls);
         }
 
         // pager setting
         function setPagerData(arr, currentPage, list){
-            console.log(list, '<--list');
             let lastPage = list.lastPage;
             let startPageNum = list.startPageNum;
             $('.list-btn-area button').removeClass('no-action');
@@ -187,7 +183,6 @@
                 if(item == startPageNum) classArr.push('startPageNum');
                 if(item == lastPage) classArr.push('lastPage');
 
-                // console.log(classArr, '<-- classArr');
                 $('.order-list-pager').append(`<li class="${classArr.join(' ')}"><a data-value="${item}">${item}</a></li>`);
             });
         }
@@ -204,24 +199,22 @@
             let rowPerPage = $('select[name="count-select"]').val();
 
             const queryString = searchObject();
-            queryString.orderbyValue = orderbyValue;
+            queryString.orderby = orderbyValue;
             queryString.currentPage = currentPage;
             queryString.rowPerPage = rowPerPage;
 
-            console.log(queryString);
             //ajax 호출
-            // adminOrderListAjax(queryString, function(list) {
-            //     console.log(list);
-            //     /*
-            //     // list count
-            //     $('.total-list').text(list.orderList.length);
-            //     setOrderData(list.orderList);
-            //
-            //     // pager setting
-            //     const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
-            //     setPagerData(pageNumArr, list.currentPage, list);
-            //     */
-            // });
+            adminOrderListAjax(queryString, function(list) {
+
+                // list count
+                $('.total-list').text(list.orderList.length);
+                setOrderData(list.orderList);
+
+                // pager setting
+                const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
+                setPagerData(pageNumArr, list.currentPage, list);
+
+            });
         });
 
         // 페이징 ajax
@@ -231,7 +224,7 @@
             let rowPerPage = $('select[name="count-select"]').val();
 
             const queryString = searchObject();
-            queryString.orderbyValue = orderbyValue;
+            queryString.orderby = orderbyValue;
             queryString.currentPage = pageNumber;
             queryString.rowPerPage = rowPerPage;
             console.log(queryString, '<-- queryString');
@@ -280,7 +273,7 @@
             });
             const queryString = searchObject();
 
-            queryString.orderbyValue = orderbyValue;
+            queryString.orderby = orderbyValue;
             queryString.rowPerPage = rowPerPage;
 
 
@@ -299,95 +292,26 @@
 
                 // pager setting
                 setPagerData(numberArr, currentPage, list);
-
             });
-
-
-
         });
-        // order search ajax
-        function orderSearchAjax(queryString, callback){
-            const request = $.ajax({
-                url: '/admin/order/ajax/search',
-                method : 'POST',
-                data : JSON.stringify(queryString),
-                contentType: 'application/json',
-                dataType: 'json'
-            })
-            request.done(function(list){
-                // console.log(list, '<--');
-                callback(list);
-            });
-            request.fail(function(err){
-                console.log(err);
-            });
-        }
-
-        function searchObject(){
-            const $inputEls = $('.order-category-select input:checked');
-            // console.log($inputEls);
-            const arr = [];
-            $($inputEls).each((idx, item) => {
-                let checkBoxValue = $(item).attr('name');
-                arr.push(checkBoxValue);
-                // switch(checkBoxValue){
-                //     case 'reward':
-                //         arr.push('ORDC_001', 'ORDC_002', 'ORDC_003');
-                //         break;
-                //     case 'projectCompleted':
-                //         arr.push('ORDC_004', 'ORDC_005');
-                //         break;
-                //     case 'projectFail':
-                //         arr.push('ORDC_013');
-                //         break;
-                //     case 'refunding':
-                //         arr.push('ORDC_009');
-                //         break;
-                //     case 'refundCompleted':
-                //         arr.push('ORDC_010');
-                //         break;
-                //     case 'swapping':
-                //         arr.push('ORDC_011');
-                //         break;
-                //     case 'swappingCompleted':
-                //         arr.push('ORDC_006','ORDC_007','ORDC_008');
-                //         break;
-                //     case 'orderCompleted':
-                //         arr.push('ORDC_012');
-                //         break;
-                //     case 'orderCancle':
-                //         arr.push('ORDC_014',);
-                //         break;
-                // }
-            });
-            console.log(arr, '<--arr');
 
 
-            let amDateSettStartDate = $('input[name="amDateSettStartDate"]').val();
-            let amDateSettEndDate = $('input[name="amDateSettEndDate"]').val();
-            let userSearchKey = $('select[name="userSearchKey"]').val();
-            let userSearchable = $('select[name="userSearchable"]').val();
-
-            $('input[name="dateSettStartDate"]').val(amDateSettStartDate);
-            $('input[name="dateSettEndDate"]').val(amDateSettEndDate);
-            $('input[name="searchKey"]').val(userSearchKey);
-            $('input[name="searchValue"]').val(userSearchable);
-
-            let queryString = $('#searchForm').serializeObject();
-            queryString.projectPartition = arr;
-
-            return queryString;
-        }
-
+        // 검색 버튼 조회
         $('.orderSearchBtn').on('click', function(){
-            let queryString = searchObject();
-            // console.log(queryString, '<-- queryString');
 
-            orderSearchAjax(queryString, function(list){
+            let orderbyValue = $('select[name="orderby"]').val();
+            let rowPerPage = $('select[name="count-select"]').val();
+            let currentPage = 1;
 
-                console.log(list, '<--list');
-                // data setting
-                setOrderData(list);
+            const queryString = searchObject();
+            queryString.orderby = orderbyValue;
+            queryString.currentPage = currentPage;
+            queryString.rowPerPage = rowPerPage;
+
+            adminOrderListAjax(queryString, function(list){
+
+                $('.total-list').text(list.orderList.length);
+                setOrderData(list.orderList);
 
                 // pager setting
                 const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
@@ -395,74 +319,14 @@
             });
         });
     </script>
-
 </th:block>
 
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <div class="admin-content-wrapper form-table">
-        <form id="searchForm" name="searchForm">
-            <input type="hidden" name="dateSettStartDate">
-            <input type="hidden" name="dateSettEndDate">
-            <input type="hidden" name="searchKey">
-            <input type="hidden" name="searchValue">
-        </form>
-        <table class="partition-select">
-            <tbody>
-                <tr>
-                    <td>
-                        기간
-                    </td>
-                    <td>
-                        <input type="date" name="amDateSettStartDate">
-                        <span> - </span>
-                        <input type="date" name="amDateSettEndDate">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        분류
-                    </td>
-                    <td class="order-category-select" style="height: auto !important;">
-                        <ul>
-                            <li>
-                                <input id="rwd" type="checkbox" name="rwd">
-                                <label for="rwd">리워드</label>
-                            </li>
-                            <li>
-                                <input id="don" type="checkbox" name="don">
-                                <label for="don">기부</label>
-                            </li>
-                            <li>
-                                <input id="inv" type="checkbox" name="inv">
-                                <label for="inv">투자</label>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        검색 키워드
-                    </td>
-                    <td class="order-category-select">
-                        <select name="userSearchKey">
-                            <option value="total">전체</option>
-                            <option value="orderCode">주문코드</option>
-                            <option value="orderName">주문자명</option>
-                            <option value="orderId">주문아이디</option>
-                            <option value="projectName">공고명</option>
-                            <option value="projectPartition">분류</option>
-                        </select>
-                        <input type="text" style="padding: 6px 10px; width: 250px;" name="userSearchable">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="btn-area">
-            <button type="button" class="orderSearchBtn submitBtn">검색</button>
-        </div>
-    </div>
+    <!-- search form fragments start -->
+    <th:block th:replace="~{common/fragments/searchFormFragments :: searchFormFragments}"></th:block>
+    <!-- search form fragments end -->
     <div class="title-wrap">
         <h4 class="admin-content-title">주문 목록</h4>
         <div class="btnArea">

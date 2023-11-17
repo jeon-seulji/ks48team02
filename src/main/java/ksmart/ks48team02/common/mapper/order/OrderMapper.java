@@ -14,10 +14,11 @@ public interface OrderMapper {
     public List<OrderTotal> getOrderList(Map<String, Object> paramMap);
 
     // 전체 주문 목록 행 조회
-    public int getOrderCnt(String orderby);
+    public int getOrderCnt(Map<String, Object> paramMap);
 
     // 특정 주문 조회
     public OrderTotal getOrderInfoById(String orderCode);
 
-    public List<OrderTotal> adminOrderSearchAjax(Map<String, Object> searchForm);
+
+
 }

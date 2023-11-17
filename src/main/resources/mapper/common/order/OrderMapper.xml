@@ -21,6 +21,7 @@
     
     <sql id="orderListWhere">
         <where>
+            <!-- 기간 선택 -->
             <if test="dateSettStartDate != null and dateSettStartDate != ''">
                 DATE_FORMAT(ot.order_application_date, '%Y-%m-%d') >= #{dateSettStartDate}
             </if>
@@ -28,121 +29,63 @@
                 AND
                 #{dateSettEndDate} >= DATE_FORMAT(ot.order_application_date, '%Y-%m-%d')
             </if>
-            <if test="searchKey != null and searchKey != '' and searchKey != 'total'">
-                AND
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
-            </if>
-        </where>
-    </sql>
-
-    <!-- order list 조회 -->
-    <select id="getOrderList" parameterType="map" resultMap="orderMap">
-        SELECT
-            ot.order_code,
-            ot.member_id,
-            ot.order_category_code,
-            ot.order_name,
-            ot.order_funding_name,
-            ot.order_total_price,
-            ot.order_category_detail,
-            ot.goods_code,
-            substring(goods_code, 1,3) as goodsPartition,
-            ot.order_application_date,
-            ot.order_confirm_date,
-            ot.order_cancell_date
-        FROM
-            order_table AS ot
-<!--        <choose>-->
-<!--            <when test="orderby == 'order_d'">-->
-<!--                ORDER BY ot.order_application_date DESC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'order_a'">-->
-<!--                ORDER BY ot.order_application_date ASC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'order_name_d'">-->
-<!--                ORDER BY ot.order_name DESC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'order_name_a'">-->
-<!--                ORDER BY ot.order_name ASC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'projecting_o'">-->
-<!--                WHERE ot.order_category_code IN ('ORDC_001','ORDC_002','ORDC_003')-->
-<!--                ORDER BY ot.order_application_date DESC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'projectFail_o'">-->
-<!--                WHERE ot.order_category_code = 'ORDC_013'-->
-<!--                ORDER BY ot.order_application_date DESC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'deliveryWait_o'">-->
-<!--                WHERE ot.order_category_code = 'ORDC_004'-->
-<!--                ORDER BY ot.order_application_date ASC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'deliveryCompleted_o'">-->
-<!--                WHERE ot.order_category_code = 'ORDC_005'-->
-<!--                ORDER BY ot.order_application_date ASC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'swapping_o'">-->
-<!--                WHERE ot.order_category_code IN ('ORDC_011','ORDC_012')-->
-<!--                ORDER BY ot.order_application_date ASC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'refunding_o'">-->
-<!--                WHERE ot.order_category_code IN ('ORDC_009','ORDC_010')-->
-<!--                ORDER BY ot.order_application_date ASC-->
-<!--            </when>-->
-<!--            <when test="orderby == 'orderCompleted'">-->
-<!--                WHERE ot.order_category_code IN ('ORDC_006','ORDC_007','ORDC_008')-->
-<!--                ORDER BY ot.order_application_date ASC-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                ORDER BY ot.order_application_date DESC-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-
-<!--        <if test="startRowNum > -1">-->
-<!--            LIMIT  #{startRowNum}, #{rowPerPage};-->
-<!--        </if>-->
-        <where>
-            <if test="dateSettStartDate != null and dateSettStartDate != ''">
-                DATE_FORMAT(ot.order_application_date, '%Y-%m-%d') >= #{dateSettStartDate}
-            </if>
-            <if test="dateSettEndDate != null and dateSettEndDate != ''">
-                AND
-                #{dateSettEndDate} >= DATE_FORMAT(ot.order_application_date, '%Y-%m-%d')
-            </if>
-            <if test="searchKey != null and searchKey != '' and searchKey != 'total'">
-                AND
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
-            </if>
-            <if test="orderCategoryCode != null and cateIsArray == 'Y'">
+            <!-- 공고 분류 선택 -->
+            <if test="projectPartition != null">
                 AND
                 substring(goods_code, 1,3) IN
-                <foreach collection="orderCategoryCode" item="item" open="(" close=")"  separator=",">
+                <foreach collection="projectPartition" item="item" open="(" close=")"  separator=",">
                     #{item}
                 </foreach>
             </if>
+            <!-- 공고 상태 선택 -->
             <if test="orderby == 'projecting_o'">
                 AND
                 ot.order_category_code IN ('ORDC_001','ORDC_002','ORDC_003')
             </if>
             <if test="orderby == 'projectFail_o'">
+                AND
                 ot.order_category_code = 'ORDC_013'
             </if>
             <if test="orderby == 'deliveryWait_o'">
+                AND
                 ot.order_category_code = 'ORDC_004'
             </if>
             <if test="orderby == 'deliveryCompleted_o'">
+                AND
                 ot.order_category_code = 'ORDC_005'
             </if>
             <if test="orderby == 'swapping_o'">
+                AND
                 ot.order_category_code IN ('ORDC_011','ORDC_012')
             </if>
             <if test="orderby == 'refunding_o'">
+                AND
                 ot.order_category_code IN ('ORDC_009','ORDC_010')
             </if>
             <if test="orderby == 'orderCompleted'">
+                AND
                 ot.order_category_code IN ('ORDC_006','ORDC_007','ORDC_008')
             </if>
+            <!-- 키워드 선택 -->
+            <if test="searchKey != null and searchKey == 'total'">
+                AND
+                (
+                    ot.order_code LIKE CONCAT('%', #{searchValue}, '%')
+                    OR
+                    ot.member_id LIKE CONCAT('%', #{searchValue}, '%')
+                    OR
+                    ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
+                    OR
+                    ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
+                )
+            </if>
+            <if test="searchKey != null and searchKey != 'total' and searchKey != ''">
+                AND
+                ot.${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+            </if>
+
         </where>
+        <!-- ORDER BY -->
         <choose>
             <when test="orderby == 'order_d'">
                 ORDER BY ot.order_application_date DESC
@@ -177,57 +120,49 @@
             <when test="orderby == 'orderCompleted'">
                 ORDER BY ot.order_application_date ASC
             </when>
-            <otherwise>
-                ORDER BY ot.order_application_date DESC
-            </otherwise>
+<!--            <otherwise>-->
+<!--                ORDER BY ot.order_application_date DESC-->
+<!--            </otherwise>-->
         </choose>
+
+
+    </sql>
+
+    <!-- order list 조회 -->
+    <select id="getOrderList" parameterType="map" resultMap="orderMap">
+        SELECT
+            ot.order_code,
+            ot.member_id,
+            ot.order_category_code,
+            ot.order_name,
+            ot.order_funding_name,
+            ot.order_total_price,
+            ot.order_category_detail,
+            ot.goods_code,
+            substring(goods_code, 1,3) as goodsPartition,
+            ot.order_application_date,
+            ot.order_confirm_date,
+            ot.order_cancell_date
+        FROM
+            order_table AS ot
+        <include refid="orderListWhere"></include>
 
         <if test="startRowNum > -1">
             LIMIT ${startRowNum}, ${rowPerPage};
         </if>
+
     </select>
 
 
     <!-- 체크 포인트 : category code dto 적용한 로직으로 수정 -->
     <!-- 전체 주문 행 갯수 -->
-    <select id="getOrderCnt" resultType="int" parameterType="String">
+    <select id="getOrderCnt" resultType="int" parameterType="map">
         /* 전체 주문 행 조회 */
         SELECT
             COUNT(1)
         FROM
-            order_table
-        <where>
-            <if test="orderby == 'projecting_o'">
-                order_category_code IN ('ORDC_001','ORDC_002','ORDC_003')
-
-            </if>
-            <if test="orderby == 'projectFail_o'">
-                order_category_code = 'ORDC_013'
-
-            </if>
-            <if test="orderby == 'deliveryWait_o'">
-                order_category_code = 'ORDC_004'
-
-            </if>
-            <if test="orderby == 'deliveryCompleted_o'">
-                order_category_code = 'ORDC_005'
-
-            </if>
-            <if test="orderby == 'swapping_o'">
-                order_category_code IN ('ORDC_011','ORDC_012')
-
-            </if>
-            <if test="orderby == 'refunding_o'">
-                order_category_code IN ('ORDC_009','ORDC_010')
-
-            </if>
-            <if test="orderby == 'orderCompleted'">
-                order_category_code IN ('ORDC_006','ORDC_007','ORDC_008')
-
-            </if>
-
-        </where>
-
+            order_table AS ot
+        <include refid="orderListWhere"></include>
     </select>
 
     <!-- 특정 주문 조회 -->
@@ -251,106 +186,5 @@
             ot.order_code = #{orderCode};
     </select>
 
-    <!-- 검색조건에 따른 주문 목록 조회 -->
-    <select id="adminOrderSearchAjax" parameterType="Map" resultMap="orderMap">
-        /* 검색조건에 따른 주문 목록 조회 */
-        SELECT
-            ot.order_code,
-            ot.member_id,
-            ot.order_category_code,
-            ot.order_name,
-            ot.order_funding_name,
-            ot.order_total_price,
-            ot.order_category_detail,
-            ot.goods_code,
-            ot.order_application_date,
-            ot.order_confirm_date,
-            ot.order_cancell_date
-        FROM
-            order_table AS ot
-        <where>
-            <if test="dateSettStartDate != null and dateSettStartDate != ''">
-                DATE_FORMAT(ot.order_application_date, '%Y-%m-%d') >= #{dateSettStartDate}
-            </if>
-            <if test="dateSettEndDate != null and dateSettEndDate != ''">
-                AND
-                #{dateSettEndDate} >= DATE_FORMAT(ot.order_application_date, '%Y-%m-%d')
-            </if>
-            <if test="searchKey != null and searchKey != '' and searchKey != 'total'">
-                AND
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
-            </if>
-            <if test="orderCategoryCode != null and cateIsArray == 'Y'">
-                AND
-                substring(goods_code, 1,3) IN
-                <foreach collection="orderCategoryCode" item="item" open="(" close=")"  separator=",">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="orderby == 'projecting_o'">
-                AND
-                ot.order_category_code IN ('ORDC_001','ORDC_002','ORDC_003')
-            </if>
-            <if test="orderby == 'projectFail_o'">
-                ot.order_category_code = 'ORDC_013'
-            </if>
-            <if test="orderby == 'deliveryWait_o'">
-                ot.order_category_code = 'ORDC_004'
-            </if>
-            <if test="orderby == 'deliveryCompleted_o'">
-                ot.order_category_code = 'ORDC_005'
-            </if>
-            <if test="orderby == 'swapping_o'">
-                ot.order_category_code IN ('ORDC_011','ORDC_012')
-            </if>
-            <if test="orderby == 'refunding_o'">
-                ot.order_category_code IN ('ORDC_009','ORDC_010')
-            </if>
-            <if test="orderby == 'orderCompleted'">
-                ot.order_category_code IN ('ORDC_006','ORDC_007','ORDC_008')
-            </if>
-        </where>
-        <choose>
-            <when test="orderby == 'order_d'">
-                ORDER BY ot.order_application_date DESC
-            </when>
-            <when test="orderby == 'order_a'">
-                ORDER BY ot.order_application_date ASC
-            </when>
-            <when test="orderby == 'order_name_d'">
-                ORDER BY ot.order_name DESC
-            </when>
-            <when test="orderby == 'order_name_a'">
-                ORDER BY ot.order_name ASC
-            </when>
-            <when test="orderby == 'projecting_o'">
-                ORDER BY ot.order_application_date DESC
-            </when>
-            <when test="orderby == 'projectFail_o'">
-                ORDER BY ot.order_application_date DESC
-            </when>
-            <when test="orderby == 'deliveryWait_o'">
-                ORDER BY ot.order_application_date ASC
-            </when>
-            <when test="orderby == 'deliveryCompleted_o'">
-                ORDER BY ot.order_application_date ASC
-            </when>
-            <when test="orderby == 'swapping_o'">
-                ORDER BY ot.order_application_date ASC
-            </when>
-            <when test="orderby == 'refunding_o'">
-                ORDER BY ot.order_application_date ASC
-            </when>
-            <when test="orderby == 'orderCompleted'">
-                ORDER BY ot.order_application_date ASC
-            </when>
-            <otherwise>
-                ORDER BY ot.order_application_date DESC
-            </otherwise>
-        </choose>
 
-        <if test="startRowNum > -1">
-            LIMIT  #{startRowNum}, #{rowPerPage};
-        </if>
-    </select>
 </mapper>
