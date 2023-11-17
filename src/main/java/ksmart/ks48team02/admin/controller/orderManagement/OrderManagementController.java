@@ -75,6 +75,7 @@ public class OrderManagementController {
         paramMap.put("rowPerPage", rowPerPage);
 
         log.info("paramMap : {}", paramMap);
+
         // 주문 목록 진열
         Map<String, Object> resultMap = orderService.getOrderList(paramMap);
         log.info("주문 목록 : {}", resultMap.get("orderList"));
@@ -152,16 +153,54 @@ public class OrderManagementController {
         model.addAttribute("contentsTitle","배송 관리");
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
 
+        Map<String, Object> paramMap = null;
+        paramMap = new HashMap<String, Object>();
+
+        String orderby = "orderby";
+        int currentPage = 1;
+        int rowPerPage = 15;
+
+        paramMap.put("orderby", orderby);
+        paramMap.put("currentPage", currentPage);
+        paramMap.put("rowPerPage", rowPerPage);
+
+        // 배송 정보 목록 조회
+        Map<String, Object> resultMap = deliveryService.getDeliveryList(paramMap);
+
+        log.info("배송 목록 : {}", resultMap);
+        log.info("배송 목록 : {}", resultMap.get("deliveryList"));
+
+        model.addAttribute("deliveryList", resultMap.get("deliveryList"));
+        model.addAttribute("lastPage",resultMap.get("lastPage"));
+        model.addAttribute("startPageNum",resultMap.get("startPageNum"));
+        model.addAttribute("endPageNum",resultMap.get("endPageNum"));
+        model.addAttribute("currentPage",resultMap.get("currentPage"));
 
         return "admin/order/delivery";
     }
 
     // 배송 정보
     @GetMapping( "/delivery/detail")
-    public String adminOrderDeliveryInfo(Model model){
+    public String adminOrderDeliveryInfo(Model model,
+                                         @RequestParam(name="orderDeliveryCode") String orderDeliveryCode){
         model.addAttribute("title","관리자 : 배송 정보");
         model.addAttribute("contentsTitle","배송 정보");
         model.addAttribute("contentsSubTitle","관리자 배송 정보");
+
+        // 특정 배송 정보 조회
+        OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(orderDeliveryCode);
+
+        log.info("getDeliveryByCode : {}", getDeliveryByCode);
+
+        model.addAttribute("getDeliveryByCode", getDeliveryByCode);
+
+        // 배송 카테고리 조회
+        DeliveryCourierCategory deliveryCourierCategory = deliveryService.getDeliveryCourierCategory();
+
+        log.info("DeliveryCourierCategory : {}", deliveryCourierCategory);
+
+        model.addAttribute("deliveryCourierCategory", deliveryCourierCategory);
+
         return "admin/order/deliveryDetailInfo";
     }
 

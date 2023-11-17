@@ -12,19 +12,31 @@
         <result property="switchingCode" column="switching_code"/>
         <result property="rewardRefundCode" column="reward_refund_code"/>
         <result property="deliveryCategory" column="delivery_category"/>
+        <result property="memberId" column="member_id"/>
         <result property="deliveryName" column="delivery_name"/>
         <result property="deliveryPhone" column="delivery_phone"/>
         <result property="deliveryAddress" column="delivery_address"/>
         <result property="deliveryMessage" column="delivery_message"/>
+        <result property="deliveryMessageCode" column="delivery_message_code"/>
         <result property="numberInvoice" column="numberInvoice"/>
         <result property="deliveryCourier" column="delivery_courier"/>
         <result property="deliveryState" column="delivery_state"/>
         <result property="deliveryStartDate" column="delivery_start_date"/>
         <result property="deliveryEndDate" column="delivery_end_date"/>
+        <result property="dueDateArrival" column="due_date_arrival"/>
+    </resultMap>
+
+    <!-- DeliveryCourierCategory map -->
+    <resultMap id="deliveryCourierCategoryMap" type="DeliveryCourierCategory">
+        <id property="deliveryCategoryCode" column="delivery_category_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="deliveryCourierName" column="delivery_courier_name"/>
+        <result property="addDate" column="add_date"/>
+        <result property="categoryStatus" column="category_status"/>
     </resultMap>
 
     <!-- delivery list  조회 -->
-    <select id="getDeliveryList" resultMap="orderDeliveryMap">
+    <select id="getDeliveryList" parameterType="map" resultMap="orderDeliveryMap">
         SELECT
             od.order_delivery_code,
             od.order_code,
@@ -32,6 +44,44 @@
             od.switching_code,
             od.reward_refund_code,
             od.delivery_category,
+            od.member_id,
+            od.delivery_name,
+            od.delivery_phone,
+            od.delivery_address,
+            od.delivery_message,
+            od.numberInvoice,
+            od.delivery_courier,
+            od.delivery_state,
+            od.delivery_start_date,
+            od.delivery_end_date,
+            od.delivery_end_date
+        FROM
+            order_delivery AS od
+        <if test="startRowNum > -1">
+            LIMIT ${startRowNum}, ${rowPerPage};
+        </if>
+    </select>
+
+
+    <!-- 전체 행 수 조회 -->
+    <select id="getDeliveryCnt" parameterType="map" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            order_delivery AS od
+
+    </select>
+
+    <!-- 특정 배송 정보 조회 -->
+    <select id="getDeliveryByCode" parameterType="String" resultMap="orderDeliveryMap">
+        SELECT
+            od.order_delivery_code,
+            od.order_code,
+            od.delivery_category_code,
+            od.switching_code,
+            od.reward_refund_code,
+            od.delivery_category,
+            od.member_id,
             od.delivery_name,
             od.delivery_phone,
             od.delivery_address,
@@ -42,9 +92,19 @@
             od.delivery_start_date,
             od.delivery_end_date
         FROM
-            order_delivery AS od;
+            order_delivery AS od
+        WHERE
+            od.order_delivery_code = #{orderDeliveryCode};
     </select>
 
-
-
+    <select id="getDeliveryCourierCategory" resultMap="deliveryCourierCategoryMap">
+        SELECT
+            dcc.delivery_category_code,
+            dcc.member_id,
+            dcc.delivery_courier_name,
+            dcc.add_date,
+            dcc.category_status
+        FROM
+            delivery_courier_category AS dcc;
+    </select>
 </mapper>

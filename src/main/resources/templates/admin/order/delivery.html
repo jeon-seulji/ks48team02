@@ -101,7 +101,7 @@
                         </th>
                         <th style="width:12%;">배송 관리코드</th>
                         <th style="width:8%;">배송유형</th>
-                        <th style="width:5%;">배송상태</th>
+                        <th style="width:8%;">배송상태</th>
                         <th style="width:10%;">주문 아이디</th>
                         <th style="width:10%;">택배사</th>
                         <th style="width:17%;">
@@ -116,46 +116,43 @@
                     </thead>
                     <tbody>
                     <!-- 조회 결과 없음 -->
-                    <tr style="display:none;">
+                    <tr th:if="${deliveryList == null}">
                         <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                     </tr>
                     <!-- 조회 결과 contents -->
-                    <tr>
+                    <tr th:unless="${deliveryList == null}" th:each="l : ${deliveryList}">
                         <td class="table-data-center">
                             <input type="checkbox" name="selectList">
                         </td>
                         <td class="table-data-center">
-                            <a class="detail-link" th:href="@{/seller/reword/order/delivery/detail}">ORD_20230922_000001</a>
+                            <a class="detail-link" th:title="${l.orderDeliveryCode}" th:href="@{/admin/order/delivery/detail?(orderDeliveryCode=${l.orderDeliveryCode})}">[[${l.orderDeliveryCode}]]</a>
                         </td>
                         <td  class="table-data-center">
-                            일반 주문 배송
+                            [[${l.deliveryCategory}]]
                         </td>
                         <td class="table-data-center">
-                            배송중
-                        </td>
-                        <td >
-                            id100
-                        </td>
-
-                        <td >
-                            우체국택배
+                            [[${l.deliveryState}]]
                         </td>
                         <td>
-                            1324-343-2375758
+                            [[${l.memberId}]]
                         </td>
-
+                        <td >
+                            [[${(l.deliveryCourier == null)?'-':l.deliveryCourier}]]
+                        </td>
+                        <td>
+                            [[${(l.numberInvoice == null)?'-':l.numberInvoice}]]
+                        </td>
                         <td  class="table-data-center">
-                            2023-10-20
-                        </td>
-
-                        <td class="table-data-center">
-                            2023-10-15
+                            [[${(l.numberInvoice == null)? '-':l.numberInvoice}]]
                         </td>
                         <td class="table-data-center">
-                            -
+                            [[${(l.deliveryStartDate == null)? '-':l.deliveryStartDate}]]
                         </td>
                         <td class="table-data-center">
-                            <a class="detail-link" th:href="@{/seller/reword/order/detail}">ORD_20230922_000001</a>
+                            [[${(l.deliveryEndDate == null)? '-':l.deliveryEndDate}]]
+                        </td>
+                        <td class="table-data-center">
+                            <a class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}}">[[${l.orderCode}]]</a>
                         </td>
                     </tr>
                     </tbody>
