@@ -728,6 +728,28 @@
             (#{lawSatistifyCode}, #{memberId}, #{lawSatistifyReason}, #{lawSatistifyWhether}, CURRENT_TIMESTAMP());
     </insert>
 
+    <!-- 부적합 업종 등록 -->
+    <insert id="addIncogruitySector" parameterType="AdminIncongruitySectors">
+        <selectKey keyProperty="incongruitySectorsCode" resultType="String" order="BEFORE">
+            /* 부적합 업종코드 자동증가 */
+            SELECT
+                (CASE
+                WHEN COUNT(i.incongruity_sectors_code) = 0 THEN CONCAT('inc_sec_', CURDATE()+0, '_0001')
+                WHEN COUNT(i.incongruity_sectors_code) > 9999 THEN CONCAT('inc_sec_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code,'_',-1) AS UNSIGNED))+1)
+                ELSE CONCAT('inc_sec_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code, '_', -1) AS UNSIGNED))+1, 4, '0'))
+                END) AS incongruitySectorsCode
+            FROM
+                incongruity_sectors AS i
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(i.incongruity_sectors_code, '_', 3), '_', -1) = CURDATE()+0;
+        </selectKey>
+        /* 부적합 업종 등록 */
+        INSERT INTO incongruity_sectors
+            (incongruity_sectors_code, member_id, incongruity_sectors_business, incongruity_sectors_whether, code_reg_day)
+        VALUES
+            (#{incongruitySectorsCode}, #{memberId}, #{incongruitySectorsBusiness}, #{incongruitySectorsWhether}, CURRENT_TIMESTAMP());
+    </insert>
+
     <!-- 투자펀딩 심사요청 수정 -->
     <update id="modifyInvestmentRequestJudge" parameterType="AdminInvestmentRequestJudge">
         /* 투자펀딩 심사요청 수정 */
@@ -821,6 +843,9 @@
             <if test="lawSatistifyWhether != null and lawSatistifyWhether != ''">
                 law_satistify_whether = #{lawSatistifyWhether}
             </if>
+            <if test="lawSatistifyWhether == 0">
+                law_satistify_whether = #{lawSatistifyWhether}
+            </if>
         </set>
         WHERE
             law_satistify_code = #{lawSatistifyCode};
@@ -841,6 +866,9 @@
                 member_id = #{memberId},
             </if>
             <if test="incongruitySectorsWhether != null and incongruitySectorsWhether != ''">
+                incongruity_sectors_whether = #{incongruitySectorsWhether}
+            </if>
+            <if test="incongruitySectorsWhether == 0">
                 incongruity_sectors_whether = #{incongruitySectorsWhether}
             </if>
         </set>
@@ -917,6 +945,15 @@
             law_satistify_reason
         WHERE
             law_satistify_code = #{lawSatistifyCode};
+    </delete>
+
+    <!-- 부적합 업종 삭제 -->
+    <delete id="removeIncogruitySectors" parameterType="String">
+        DELETE
+        FROM
+            incongruity_sectors
+        WHERE
+            incongruity_sectors_code = #{incongruitySectorsCode};
     </delete>
 
     <!-- 기업가치 평가 결과 삭제 -->

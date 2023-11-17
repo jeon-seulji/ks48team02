@@ -185,6 +185,11 @@ public class InvestmentService {
         adminInvestmentMapper.addLawSatistify(adminLawSatistifyReason);
     }
 
+    // 부적합 업종 등록
+    public void addIncogruitySector(AdminIncongruitySectors adminIncongruitySectors) {
+        adminInvestmentMapper.addIncogruitySector(adminIncongruitySectors);
+    }
+
     // 기업가치 평가결과 등록
     public void addCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation) {
         adminInvestmentMapper.addCorporateValueEvaluation(adminCorporateValueEvaluation);
@@ -215,14 +220,22 @@ public class InvestmentService {
         adminInvestmentMapper.modifyCorporateValueEvaluation(adminCorporateValueEvaluation);
     }
 
+    // 투자펀딩 심사요청 삭제
     public void reomveInvestmentJudge(String investmentRequestJudgeCode) {
         adminInvestmentMapper.removeInvestmentRequestJudge(investmentRequestJudgeCode);
     }
 
+    // 자본시장 범위충족기준 삭제
     public void removeLawSatistify(String lawSatistifyCode) {
         adminInvestmentMapper.removeLawSatistify(lawSatistifyCode);
     }
 
+    // 부적합 업종 삭제
+    public void removeIncogruitySectors(String incongruitySectorsCode) {
+        adminInvestmentMapper.removeIncogruitySectors(incongruitySectorsCode);
+    }
+
+    // 기업가치 평가 결과 삭제
     public void removeCorporateValueEvaluation(String corporateValueEvaluationCode) {
         adminInvestmentMapper.removeCorporateValueEvaluation(corporateValueEvaluationCode);
     }
