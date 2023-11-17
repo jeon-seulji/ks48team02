@@ -85,7 +85,7 @@ public class WebConfig implements WebMvcConfigurer{
         if (os.contains("win")) {
             rootPath = "file:///C:/summernote_image/";
         } else if (os.contains("mac")) {
-            rootPath = "file:////Users/Shared/summernote_image";
+            rootPath = "file:////Users/Shared/summernote_image/";
         }
 
         return rootPath;
