@@ -186,7 +186,7 @@ public class PojectRegistrationContoller {
         String os = System.getProperty("os.name").toLowerCase();
         String rootPath = "/home/springboot/resources/summernote_image";
         if (os.contains("win")) {
-            rootPath = "C:\\summernote_image";
+            rootPath = "C:\\summernote_image\\";
         } else if (os.contains("mac")) {
             rootPath = "Users/Shared/summernote_image";
         }
