@@ -36,24 +36,24 @@
         let selectedValue = $(this).val();
 
         // 현금 보유량, 현재 주식 수, 발행 예정 주식 수 입력 필드의 부모 요소를 가져옴
-        let cashReservesInputGroup = $('#cashReserves').closest('.my-2');
-        let currentStockNumInputGroup = $('#currentStockNum').closest('.my-2');
-        let issueStockNumInputGroup = $('#issueStockNum').closest('.my-2');
+        let cashReservesInput = $('#cashReserves').closest('.my-2');
+        let currentStockNumInput = $('#currentStockNum').closest('.my-2');
+        let issueStockNumInput = $('#issueStockNum').closest('.my-2');
 
         // 주식형이 선택된 경우
         if (selectedValue === '1') {
-          // 현금 보유량 입력 필드 숨김
-          cashReservesInputGroup.hide();
-          // 현재 주식 수와 발행 예정 주식 수 입력 필드 표시
-          currentStockNumInputGroup.show();
-          issueStockNumInputGroup.show();
+          // 현재 주식 수와 발행 예정 주식 수 필드 표시
+          currentStockNumInput.show();
+          issueStockNumInput.show();
+          // 현금 보유량 입력 필드 숨기고 유효성 검사 제거
+          cashReservesInput.hide().find('input').prop('required', true);
         } else if (selectedValue === '2') {
           // 채권형이 선택된 경우
           // 현금 보유량 입력 필드 표시
-          cashReservesInputGroup.show();
-          // 현재 주식 수와 발행 예정 주식 수 입력 필드 숨김
-          currentStockNumInputGroup.hide();
-          issueStockNumInputGroup.hide();
+          cashReservesInput.show();
+          // 현재 주식 수와 발행 예정 주식 수 입력 필드 숨기고 유효성 검사 제거
+          currentStockNumInput.hide().find('input').prop('required', true);
+          issueStockNumInput.hide().find('input').prop('required', true);
         }
       });
     });
@@ -80,15 +80,40 @@
       $('.essential').not('#agreeNews').prop('checked',$(this).prop('checked'));
     });
 
-    // 제출하기 클릭 시 필수 약관동의 모두 체크되어있는지 확인
-    $('.nextBtn').click(function(){
+
+    function validationEmptyFn($els) {
+      let isFalse = true;
+      $($els).each((idx, item) => {
+        let value = $(item).val();
+        let labelId = $(item).attr('id');
+
+        // 주식형이 선택되었을 때 현금 보유량 필드는 유효성 검사에서 제외
+        if (labelId === 'cashReserves' && $('#securitiesClassification').val() === '1') {
+          return true;
+        }else if ((labelId === 'currentStockNum' || labelId === 'issueStockNum') && $('#securitiesClassification').val() === '2'){
+          return true;
+        }
+
+        if (value == null || value === '' || typeof value === 'undefined') {
+          let labelText = $(`label[for=${labelId}]`).text();
+          alert(labelText + '는 필수 입력 항목입니다');
+          $(item).focus();
+          isFalse = false;
+          return false;
+        }
+      });
+      return isFalse;
+    }
+
+    // 다음단계 클릭 시 필수 약관동의 모두 체크되어있는지 확인
+    $('.nextBtn').click(function(e){
+      e.preventDefault();  // 기존 이벤트 동작 중단
 
       const targetEls = $('.needs-validation input, .needs-validation select, .needs-validation textarea');
       // 값 유효성 검사
       if(!validationEmptyFn(targetEls)){
         return;
       }
-
 
       let isValid = true;
       $('.essential').each(function(idx,item){
@@ -99,6 +124,11 @@
           return false;
         }
       });
+
+      // 유효성 검사와 약관 동의 검증이 모두 통과하면 다음 화면으로 이동
+      if (isValid) {
+        location.href='/user/projectRegistration/investment/insert';
+      }
     });
 
 
@@ -254,7 +284,7 @@
 
             <hr class="my-4">
 
-            <button th:onclick="|location.href='@{/user/projectRegistration/investment/insert}'|" class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button><br><br>
+            <button class="nextBtn w-80 btn btn-primary btn-lg" type="button">다음단계</button><br><br>
           </form>
         </div>
       </div>
