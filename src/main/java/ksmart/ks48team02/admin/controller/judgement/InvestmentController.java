@@ -325,12 +325,25 @@ public class InvestmentController {
     }
 
     @GetMapping("/delete/law-satistify")
-    public String removeLawSatistify(Model model) {
+    public String removeLawSatistify(@RequestParam(value = "lawSatistifyCode") String lawSatistifyCode, Model model) {
+
+        investmentService.removeLawSatistify(lawSatistifyCode);
 
         model.addAttribute("title", "관리자 : 자본시장법 범위충족기준 삭제");
         model.addAttribute("contentsTitle", "자본시장법 범위충족기준 삭제");
+        model.addAttribute("lawSatistifyCode", lawSatistifyCode);
 
-        return "admin/judgement/investment/delete/law_satistify_delete";
+        return "redirect:/admin/investment/search/law-satistify";
+    }
+
+    @PostMapping("/delete/law-satistify")
+    public String removeLawSatistify(@RequestParam(value = "lawSatistifyCode") String lawSatistifyCode, RedirectAttributes redirectAttributes) {
+
+        investmentService.removeLawSatistify(lawSatistifyCode);
+
+        redirectAttributes.addAttribute("lawSatistifyCode", lawSatistifyCode);
+
+        return "redirect:/admin/investment/search/law-satistify";
     }
 
     @GetMapping("/delete/incongruity-sectors")
@@ -343,12 +356,25 @@ public class InvestmentController {
     }
 
     @GetMapping("/delete/corporate-value")
-    public String removeCorporateValueEvaluation(Model model) {
+    public String removeCorporateValueEvaluation(@RequestParam(value = "corporateValueEvaluationCode") String corporateValueEvaluationCode, Model model) {
+
+        investmentService.removeCorporateValueEvaluation(corporateValueEvaluationCode);
 
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 삭제");
         model.addAttribute("contentsTitle","기업가치 평가 결과 삭제");
+        model.addAttribute("corporateValueEvaluationCode", corporateValueEvaluationCode);
 
-        return "admin/judgement/investment/delete/corporate_value_evaluation_delete";
+        return "redirect:/admin/investment/search/corporate-value";
+    }
+
+    @PostMapping("/delete/corporate-value")
+    public String removeCorporateValueEvaluation(@RequestParam(value = "corporateValueEvaluationCode") String corporateValueEvaluationCode, RedirectAttributes redirectAttributes) {
+
+        investmentService.removeCorporateValueEvaluation(corporateValueEvaluationCode);
+
+        redirectAttributes.addAttribute("corporateValueEvaluationCode", corporateValueEvaluationCode);
+
+        return "redirect:/admin/investment/search/corporate-value";
     }
 
     @GetMapping("/check/{investmentRequestJudgeCode}")

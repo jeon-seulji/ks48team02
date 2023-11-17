@@ -26,7 +26,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.UUID;
 
+import java.util.*;
 @Controller
 @RequestMapping("/user/projectRegistration")
 public class PojectRegistrationContoller {
@@ -54,8 +60,6 @@ public class PojectRegistrationContoller {
         String memberType = (String)session.getAttribute("STYPECODE");
         String returnAddr = "user/account/login";
 
-
-
         return "user/projectRegistration/main";
     }
 
@@ -67,7 +71,6 @@ public class PojectRegistrationContoller {
 
         model.addAttribute("categoryList",categoryList);
 
-
         return "user/projectRegistration/reward/reward_insert";
     }
 
@@ -78,7 +81,7 @@ public class PojectRegistrationContoller {
 
         rewardService.addRewardProject(parameters);
 
-        return "redirect:/user/projectRegistration/reward/success";
+        return "/user/projectRegistration/reward/success";
     }
 
     //리워드 프로젝트 등록 완료 페이지
@@ -132,7 +135,7 @@ public class PojectRegistrationContoller {
                                                 HttpServletRequest request) {
         JsonObject jsonObject = new JsonObject();
 
-        String fileRoot = "C:\\summernote_image\\";	//저장될 외부 파일 경로
+        String fileRoot = getOsFileRootPath();	//저장될 외부 파일 경로
         // 우분투 파일 루트 file:////home/springboot/resource
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
@@ -154,5 +157,36 @@ public class PojectRegistrationContoller {
         return jsonObject;
     }
 
+    @RequestMapping(value = "/deleteSummernoteImageFile", produces = "application/json; charset=utf8")
+    @ResponseBody
+    public void deleteSummernoteImageFile(@RequestParam("file") String fileName) {
+        // 폴더 위치
+        String filePath = getOsFileRootPath();
+
+        // 해당 파일 삭제
+        deleteFile(filePath, fileName);
+    }
+
+    // 파일 하나 삭제
+    private void deleteFile(String filePath, String fileName) {
+        Path path = Paths.get(filePath, fileName);
+        try {
+            Files.delete(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getOsFileRootPath(){
+        String os = System.getProperty("os.name").toLowerCase();
+        String rootPath = "file:////home/springboot/resource/summernote_image/";
+        if (os.contains("win")) {
+            rootPath = "C:\\summernote_image\\";
+        } else if (os.contains("mac")) {
+            rootPath = "file:////Users/Shared/summernote_image";
+        }
+
+        return rootPath;
+    }
 
 }

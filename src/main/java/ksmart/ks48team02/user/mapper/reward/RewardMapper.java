@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.mapper.reward;
 
 
+import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.dto.Member;
@@ -18,6 +19,9 @@ public interface RewardMapper {
     //주문 회원 정보 조회
     public Member getOrderMemberInfo(String memberId);
 
+    //배송 메세지 조회
+    public List<DeliveryMessage> deliveryMessage();
+
     //프로젝트 등록
     public int addRewardProject (RewardProject rewardProject);
 
@@ -30,6 +34,9 @@ public interface RewardMapper {
     //리워드 프로젝트 상세 페이지
     public RewardProject rewardProjectDetail(String rewardProjectCode);
 
+    //옵션당 총 주문 개수 조회
+    public int optionTotalOrderQuantity (String optionCode);
+
     //주문번호, 주문상세번호, 결제번호 생성.
     public OrderTotal getOrderAndPaymentCode();
 
@@ -41,6 +48,9 @@ public interface RewardMapper {
 
     //리워드 결제 관리 테이블 인서트
     public int rewardPaymentsInsert(PaymentResult paymentResult);
+
+    //프로젝트 달성 금액, 달성률 업데이트
+    public int projectAchievementMoney(String rewardProjectCode);
 
     //포인트 사용 내역 인서트.
     public int usePointLogInsert(PaymentResult paymentResult);
@@ -55,7 +65,7 @@ public interface RewardMapper {
     public int useCouponLogInsert (PaymentResult paymentResult);
 
     //사용한 쿠폰 사용했음으로 업데이트
-    public int usedCouponUpdate (PaymentResult paymentResult);
+    public int usedCouponUpdate (String couponIssueCode);
 
 
 }
