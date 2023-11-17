@@ -47,18 +47,18 @@
                 prevEl: ".swiper-button-prev",
             },
         });
-        let donationContentsSwiperSlide = new Swiper("#donationProject .contents-area", {
+        let rewardProjectSwiperSlide = new Swiper("#rewardProject .contents-area", {
             slidesPerView: 3,
             spaceBetween: 12,
             navigation: {
-                nextEl: "#donationProject .swiper-button-next",
-                prevEl: "#donationProject .swiper-button-prev",
+                nextEl: "#rewardProject .swiper-button-next",
+                prevEl: "#rewardProject .swiper-button-prev",
             },
         });
     </script>
     <script type="text/javascript">
-        // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 기부코드
-        let donationCode = '[[${rewardProject.rewardProjectCode}]]';
+        // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 코드
+        let rewardProjectCode = '[[${rewardProject.rewardProjectCode}]]';
         // 썸네일 이미지 경로 지정
         let thumbNailImageSrc = $('#thumbNailImage').attr('src');
         $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${rewardProject.projectThumbnailImage}]]');
@@ -125,7 +125,7 @@
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
             <div class="col-lg-12 story-header" style="padding: 0px">
-                <p style="color: black; font-weight: bold; font-size: 20px">기부 프로젝트 스토리</p>
+                <p style="color: black; font-weight: bold; font-size: 20px">리워드 프로젝트 스토리</p>
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
             <div class="col-lg-12 story-body">

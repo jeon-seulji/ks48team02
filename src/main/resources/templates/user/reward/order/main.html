@@ -315,10 +315,16 @@
                 $('.essential').not('#agreeNews').prop('checked',$(this).prop('checked'));
             });
 
-            //옵션 수량 음수로는 선택할 수 없게
+            //옵션 수량 음수로는 선택할 수 없고, 제한 수량을 초과하여 선택하지 못하게.
+            let remainQuantity = $('.optionRemainQuantity').data('quantity');
+
             $('.optionAmount').change(function(){
+
                 if($(this).val() < 1) {
                     $(this).val(1);
+                } else if ( $(this).val() > remainQuantity){
+                    alert('제한 수량을 초과하였습니다.');
+                    $(this).val(remainQuantity);
                 }
             });
 
@@ -370,37 +376,23 @@
             const clientKey = "test_ck_DpexMgkW36RWA44MXDDN3GbR5ozO"
 
             const customerKey = crypto.randomUUID(); // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
-            // let amount = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
 
-
-            //const coupon = document.getElementById("coupon-box")
             // ------  결제위젯 초기화 ------
-            // 비회원 결제에는 customerKey 대신 ANONYMOUS를 사용하세요.
             const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
-            // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
-            // ------  결제 UI 렌더링 ------
-            // 결제 UI를 렌더링할 위치를 지정합니다. `#payment-method`와 같은 CSS 선택자와 결제 금액 객체를 추가하세요.
-            // DOM이 생성된 이후에 렌더링 메서드를 호출하세요.
-            // https://docs.tosspayments.com/reference/widget-sdk#renderpaymentmethods선택자-결제-금액-옵션
+
             const paymentMethodWidget = paymentWidget.renderPaymentMethods(
                 "#payment-method",
                 { value:0},
-                // 렌더링하고 싶은 결제 UI의 variantKey
-                // 결제 수단 및 스타일이 다른 멀티 UI를 직접 만들고 싶다면 계약이 필요해요.
-                // https://docs.tosspayments.com/guides/payment-widget/admin#멀티-결제-ui
                 { variantKey: "DEFAULT" }
             );
 
             // ------  이용약관 UI 렌더링 ------
-            // 이용약관 UI를 렌더링할 위치를 지정합니다. `#agreement`와 같은 CSS 선택자를 추가하세요.
-            // https://docs.tosspayments.com/reference/widget-sdk#renderagreement선택자-옵션
+
             paymentWidget.renderAgreement(
                 '#agreement',
                 { variantKey: "AGREEMENT" } // 기본 이용약관 UI 렌더링
             );
-            // ------ 금액 업데이트 ------
-            // 새로운 결제 금액을 넣어주세요.
-            // https://docs.tosspayments.com/reference/widget-sdk#updateamount결제-금액
+
 
 
             // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
@@ -427,7 +419,7 @@
                 if(isValid) {
                     isValid = validationCheck(validCheck);
                     if(isValid) {
-                        let totalPrice = Number($('#totalPayPrice').text().replaceAll('원','').replaceAll(',',''));
+                        let totalPrice = $('#totalPayPrice').data('price');
                         //결재 이벤트 실행
                         const paymentMethodsWidget = paymentWidget.renderPaymentMethods(); // 결제창
                         const selectedPaymentMethod = paymentMethodsWidget.getSelectedPaymentMethod(); // 결제 정보
@@ -436,23 +428,37 @@
                         console.log(products);
                         console.log(selectedPaymentMethod);
                         let paymentMethod= selectedPaymentMethod.method;
-                        console.log(paymentMethod);
+
                         if(paymentMethod == '간편결제') {
                             paymentMethod = selectedPaymentMethod.easyPay.provider;
-                            console.log(paymentMethod);
-                        }
 
+                        }
+                        console.log(paymentMethod);
+
+                        //결제 요청시 필요한 객체
                         const paymentObj = {
                             orderId: crypto.randomUUID(),
                             orderName: [[${rewardOrderInfo.projectSubject}]],
-                            amount: $('#totalPayPrice').data('price'),
-                            // successUrl: `${window.location.origin}/user/reward/payment`,
-                            // failUrl: `${window.location.origin}/fail`,
+                            amount: totalPrice,
                             customerEmail: [[${orderMemberInfo.memberEmail}]],
                             customerName: [[${orderMemberInfo.memberName}]],
                             mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
                         };
+                        let deliveryMessage = $('#deliverRequest option:selected').text()
+                        if(deliveryMessage == '기타') {
+                            deliveryMessage = $('#elseDeliverRequest').val();
+                        }
 
+                        //배송 정보 담기
+                        const deliveryMemberInfo = {
+                            deliveryMemberName : $('#deliverMemberName').val(),
+                            deliveryMemberMobile : $('#deliverMemberMobile').val(),
+                            deliveryMemberAddr : `${$('#deliverMemberAddr').val()}, ${$('#deliverMemberAddrDetail').val()}`,
+                            deliveryMessageCode : $('#deliverRequest').val(),
+                            deliveryMessage : deliveryMessage
+                        }
+
+                        //결제 완료 후 DB작업에 필요한 객체
                         const paymentParam={
                             usePoint : Number($('#usePoint').val()),
                             deliveryPrice : $('#totalOrderDeliverPrice').data('price'),
@@ -468,7 +474,8 @@
                             orderMemberName : name,
                             orderMemberId : id,
                             paymentMethod : paymentMethod,
-                            rewardOptionList : products
+                            rewardOptionList : products,
+                            deliveryMemberInfo : deliveryMemberInfo
                         };
                         console.log(paymentObj);
                         console.log(paymentParam);
@@ -495,7 +502,6 @@
                                     console.log(err);
                                 });
                             })
-
                     }
                 }
             });
@@ -565,7 +571,8 @@
                                             <span class="optionPrice font-weight-bold ml-2" th:text="|${#numbers.formatInteger(l.optionPrice, 0, 'COMMA')} 원|"
                                                   th:attr="data-price=${l.optionPrice}"></span>
                                             <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">
-                                                <span class="optionRemainQuantity" th:text="|${#numbers.formatInteger(l.optionLimitQuantity - l.totalOrderQuantity, 0, 'COMMA')} 개 남음|"></span>
+                                                <span class="optionRemainQuantity" th:text="|${#numbers.formatInteger(l.optionLimitQuantity - l.totalOrderQuantity, 0, 'COMMA')} 개 남음|"
+                                                      th:data-quantity="${l.optionLimitQuantity - l.totalOrderQuantity}"></span>
                                             </span>
                                             <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 

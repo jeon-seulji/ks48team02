@@ -37,6 +37,9 @@ public interface RewardMapper {
     //옵션당 총 주문 개수 조회
     public int optionTotalOrderQuantity (String optionCode);
 
+    //프로젝트 총 참여인원 조회
+    public int rewardProjectJoinNumber (String rewardProjectCode);
+
     //주문번호, 주문상세번호, 결제번호 생성.
     public OrderTotal getOrderAndPaymentCode();
 
@@ -49,8 +52,11 @@ public interface RewardMapper {
     //리워드 결제 관리 테이블 인서트
     public int rewardPaymentsInsert(PaymentResult paymentResult);
 
+    // 결제 시 리워드 배송 테이블 인서트
+    public int orderDeliveryInsert (PaymentResult paymentResult);
+
     //프로젝트 달성 금액, 달성률 업데이트
-    public int projectAchievementMoney(String rewardProjectCode);
+    public int projectAchievementMoney(PaymentResult paymentResult);
 
     //포인트 사용 내역 인서트.
     public int usePointLogInsert(PaymentResult paymentResult);
@@ -60,6 +66,9 @@ public interface RewardMapper {
 
     //포인트 사용 시 보유 포인트에서 차감
     public int customerUsePoint(PaymentResult paymentResult);
+
+    //포인트 적립
+    public int customerSavePoint(PaymentResult paymentResult);
 
     //쿠폰 사용 내역 인서트
     public int useCouponLogInsert (PaymentResult paymentResult);

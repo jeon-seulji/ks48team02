@@ -193,13 +193,6 @@
             $(this).text(daysRemaining + "일 남음");
         });
 
-        $('.reward-item-span-first').each(function (){
-            let goalMoney = parseInt($(this).next().val());
-            let achievementMoney = parseInt($(this).next().next().text());
-
-            let percent = (achievementMoney / goalMoney) * 100;
-            $(this).text(parseInt(percent) + '%');
-        });
 
         // 달성 금액 설정
         $('.reward-item-span-second').each(function (){
@@ -208,11 +201,12 @@
 
         $('.news-modify-btn').click(function (){
             let $newsCode = $(this).parent('div').prev().children('option:selected').val();
-            let modifyProjectCode = $(this).parents('#reward-item-box').find('.projectCode').val();
+            let modifyProjectCode = $(this).parents('.reward-item-box').find('.projectCode').val();
             if ($newsCode == 0){
                 alert('새소식을 선택 해주세요!');
                 return false;
             }
+            console.log(modifyProjectCode);
             $('#newsCode').val($newsCode);
             $('#modifyProjectCode').val(modifyProjectCode)
             $('#newsModifyForm').submit();
@@ -250,7 +244,7 @@
                         <img class="reward-item-third-child-image" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|">
                     </div>
                     <div class="reward-item-second-child">
-                        <span class="reward-item-span-first"></span>
+                        <span class="reward-item-span-first" th:text="|${l.projectAchievementPercent}% 달성|"></span>
                         <input class="projectCode" hidden="hidden" th:value="${l.rewardProjectCode}"/>
                         <input class="reward-item-goalMoney" th:value="${l.projectGoalMoney}" hidden="hidden"/>
                         <span class="reward-item-span-second" th:text="${l.projectAchievementMoney}"></span>

@@ -13,7 +13,6 @@ public class OrderTotal {
     private String orderApplicationDate;
     private String orderConfirmDate;
     private String orderCancellDate;
-
     private String rewardOrderDetailCode;
     private String rewardPaymentCode;
 

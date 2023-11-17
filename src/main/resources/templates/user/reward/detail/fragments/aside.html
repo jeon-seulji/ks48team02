@@ -10,26 +10,24 @@
             <span style="display: inline-block;">
                 <a id="category" th:href="@{#}" style="text-decoration: none; color: grey" th:text="|${rewardProject.categoryName} >|"></a>
             </span>
-            <span style="display: inline-block;">
-                <div style="background: lightgrey; padding: 2px; border-radius: 10px">
-                    <a th:href="@{#}" style="text-decoration: none; color: black">
-                        <span>
-                            <span style="color: #235FD9">#</span>
-                        </span>
-                    </a>
-                </div>
-            </span>
+<!--            <span style="display: inline-block;">-->
+<!--                <div style="background: lightgrey; padding: 2px; border-radius: 10px">-->
+<!--                    <a th:href="@{#}" style="text-decoration: none; color: black">-->
+<!--                        <span>-->
+<!--                            <span style="color: #235FD9">#</span>-->
+<!--                        </span>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </span>-->
         </div>
         <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
         <div>
-            <p style="font-weight: bold; font-size: 20px; color: black" th:text="${rewardProject.projectSubject}">시설 퇴소를 앞둔, 음악으로 세상에 서고 싶은 사랑이</p>
-            <p id="subContens">사랑이는 첫돌이 되기 전, 보육원에 맡겨졌습니다. 엄마가 미성년자일 때 임신을 하게 되었고, 남자친구와는 헤어지게 되어 홀로 사랑이를 낳았다고 합니다.
-                아이를 혼자 키울 수 없던 엄마는 사랑이를 보육원에 맡겼고 지금껏 사랑이는 엄마, 아빠가 누구인지조차 알지 못합니다.</p>
+            <p style="font-weight: bold; font-size: 20px; color: black" th:text="${rewardProject.projectSubject}"></p>
         </div>
         <div>
             <div>
-                <span style="font-size: 20px; color: #235FD9; font-weight: bold">337</span>
-                <span style="color: #235FD9">명 참여</span>
+                <span style="font-size: 20px; color: #235FD9; font-weight: bold" th:text="${rewardProject.totalJoinNumber}">0</span>
+                <span style="color: #235FD9" >명 참여</span>
                 <span id="deadLine" style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;"></span>
                 <input id="projectEndDate" th:value="${rewardProject.projectEndDate}" hidden="hidden">
             </div>

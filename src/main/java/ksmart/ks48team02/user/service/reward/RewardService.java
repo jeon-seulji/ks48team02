@@ -63,6 +63,10 @@ public class RewardService {
 
         RewardProject rewardProject =rewardMapper.rewardProjectDetail(rewardProjectCode);
         List<RewardOption> rewardOptionList = rewardProject.getRewardOptionList();
+        int totalJoinNumber = rewardMapper.rewardProjectJoinNumber(rewardProjectCode);
+         rewardProject.setTotalJoinNumber(totalJoinNumber);
+
+        //리워드 옵션 당 주문 갯수 조회.
         rewardOptionList.forEach(option->{
             String optionCode = option.getRewardOptionCode();
             int totalOrderQuantity = rewardMapper.optionTotalOrderQuantity(optionCode);
@@ -101,8 +105,11 @@ public class RewardService {
         System.out.println("결제테이블 등록 완료");
 
         //프로젝트 달성 금액, 달성률 업데이트
-        rewardMapper.projectAchievementMoney(rewardProjectCode);
+        rewardMapper.projectAchievementMoney(paymentResult);
         System.out.println("프로젝트 달성금액, 달성률 업데이트 완료");
+
+        //리워드 배송 테이블 인서트
+        rewardMapper.orderDeliveryInsert(paymentResult);
 
         if( paymentResult.getUsePoint() > 0) {
             //포인트 사용 내역 인서트
@@ -111,6 +118,9 @@ public class RewardService {
             rewardMapper.customerUsePoint(paymentResult);
             System.out.println("포인트사용 로그 등록 완료");
         }
+
+        //포인트 적립
+        rewardMapper.customerSavePoint(paymentResult);
 
         if(paymentResult.getUseCouponCode() != null) {
 

@@ -4,14 +4,17 @@ package ksmart.ks48team02.user.controller.reward;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.Coupon;
+import ksmart.ks48team02.admin.dto.DonationInfo;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
 import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
+import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.controller.PojectRegistrationContoller;
-import ksmart.ks48team02.user.dto.Member;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
+import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.reward.RewardService;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -28,17 +31,15 @@ import java.util.Map;
 
 @Controller("userRewardController")
 @RequestMapping("/user/reward")
+@AllArgsConstructor
 public class RewardController {
 
     private static final Logger log = LoggerFactory.getLogger(PojectRegistrationContoller.class);
     private static final Logger Log = LoggerFactory.getLogger(RewardController.class);
     private final RewardService rewardService;
     private final AdminCouponService adminCouponService;
+    private final DonationService donationService;
 
-    public RewardController (RewardService rewardService, AdminCouponService adminCouponService){
-        this.adminCouponService = adminCouponService;
-        this.rewardService = rewardService;
-    }
 
     //리워드 메인 페이지
     @GetMapping(value = {"" , "/"})
@@ -62,21 +63,93 @@ public class RewardController {
 
     //리워드 상세 페이지 댓글
     @GetMapping("/detail/comment")
-    public String commentPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+    public String commentPage(HttpSession session, Model model,
+                              @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        String memberId = (String)session.getAttribute("SID");
+
+        model.addAttribute("rewardProject",rewardProject);
+        model.addAttribute("memberId", memberId);
+        log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
+
+        // getcomment 만들어서 댓글 가져오기.
+        List<DonationCommentList> rewardCommentList = donationService.getCommentList(rewardProjectCode);
+
+        model.addAttribute("rewardCommentList", rewardCommentList);
+        // 리뷰 개수 계산
+        int viewCount = 0;
+        for (int i = 0; i < rewardCommentList.size(); i++) {
+            if(rewardCommentList.get(i).getCommentClass().equals("comment")){
+                viewCount++;
+            }
+        }
+        model.addAttribute("viewCount", viewCount);
+        model.addAttribute("counter", new Counter());
+        // 대댓글 계산
 
         return "user/reward/detail/comment";
     }
 
+    @PostMapping("/detail/comment")
+    public String commentAdd(HttpSession session, Model model,
+                             @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                             @RequestParam(name = "commentContent") String commentContent){
+
+        String memberId = (String)session.getAttribute("SID");
+
+        CommentMember commentMember = donationService.getMember(memberId);
+        model.addAttribute("commentMember", commentMember);
+
+        donationService.CommentAdd(memberId, rewardProjectCode, commentMember.getMemberName(), commentContent);
+
+        return "redirect:/user/reward/detail/comment?rewardProjectCode=" + rewardProjectCode;
+    }
+
+    @PostMapping("/detail/reply")
+    public String replyAdd(HttpSession session, Model model,
+                           @RequestParam(name = "reply") String reply,
+                           @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                           @RequestParam(name = "parentCommentCode") String parentCommentCode){
+
+        String memberId = (String)session.getAttribute("SID");
+
+        CommentMember commentMember = donationService.getMember(memberId);
+        model.addAttribute("commentMember", commentMember);
+
+        donationService.replyAdd(reply, rewardProjectCode, parentCommentCode, memberId, commentMember.getMemberName());
+        System.out.println("@@@@@@@@@@@@@@@@@@@== " + parentCommentCode);
+
+
+        return "redirect:/user/reward/detail/comment?rewardProjectCode=" + rewardProjectCode;
+    }
+
+
+
     //리워드 상세 페이지 새소식
     @GetMapping("/detail/news")
     public String newsPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        List<NewsList> newsList = donationService.getNewsList(rewardProjectCode);
+
+        model.addAttribute("rewardProject",rewardProject);
+        model.addAttribute("newsList",newsList);
 
         return "user/reward/detail/news/main";
     }
 
     //리워드 새소식 상세 페이지
     @GetMapping("/detail/news/detail")
-    public String newsDetailPage(){
+    public String newsDetailPage(Model model,
+                                 @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                                 @RequestParam(name = "newCode") String newsCode){
+
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        NewsList newsList = donationService.getDetailNews(newsCode);
+
+        model.addAttribute("rewardProject",rewardProject);
+        model.addAttribute("newsList", newsList);
 
         return "user/reward/detail/news/detail";
     }
@@ -93,7 +166,6 @@ public class RewardController {
         if(memberId == null) {
             return "user/account/login";
         }
-
 
         RewardProject rewardOrderInfo = rewardService.rewardProjectDetail(rewardProjectCode);
         Member orderMemberInfo = rewardService.getOrderMemberInfo(memberId);
@@ -150,12 +222,6 @@ public class RewardController {
         return "/user";
     }
 
-//    @PostMapping("/payment")
-//    @ResponseBody
-//    public String paymentPage(){
-//
-//    }
-
     //리워드 결제 확인 페이지
     @GetMapping("/payment/confirm")
     public String paymentConfirmPage(Model model) {
@@ -165,7 +231,12 @@ public class RewardController {
 
     //리워드 환불 정책 페이지
     @GetMapping("/detail/refundPolicy")
-    public String refundPolicyPage(){
+    public String refundPolicyPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode){
+
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+
+        model.addAttribute("rewardProject",rewardProject);
+        log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
 
         return"user/reward/detail/refundPolicy";
     }

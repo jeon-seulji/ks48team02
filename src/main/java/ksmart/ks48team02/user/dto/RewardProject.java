@@ -35,6 +35,7 @@ public class RewardProject {
     private int storeLike;
     private String storeMobile;
     private String categoryName;
+    private int totalJoinNumber;
 
 
     private List<NewsList> newsLists;
