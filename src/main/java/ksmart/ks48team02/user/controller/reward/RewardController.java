@@ -66,59 +66,75 @@ public class RewardController {
     public String commentPage(HttpSession session, Model model,
                               @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
 
-        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //접속 회원 아이디
         String memberId = (String)session.getAttribute("SID");
+        //프로젝트 정보 조회
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //댓글 리스트 조회
+        List<RewardComment> rewardCommentList = rewardService.getCommentList(rewardProjectCode);
 
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("memberId", memberId);
-        log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
-
-        // getcomment 만들어서 댓글 가져오기.
-        List<DonationCommentList> rewardCommentList = donationService.getCommentList(rewardProjectCode);
-
         model.addAttribute("rewardCommentList", rewardCommentList);
-        // 리뷰 개수 계산
-        int viewCount = 0;
-        for (int i = 0; i < rewardCommentList.size(); i++) {
-            if(rewardCommentList.get(i).getCommentClass().equals("comment")){
-                viewCount++;
-            }
-        }
-        model.addAttribute("viewCount", viewCount);
-        model.addAttribute("counter", new Counter());
-        // 대댓글 계산
+
 
         return "user/reward/detail/comment";
     }
 
+    //댓글 등록
     @PostMapping("/detail/comment")
     public String commentAdd(HttpSession session, Model model,
                              @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
                              @RequestParam(name = "commentContent") String commentContent){
 
+
         String memberId = (String)session.getAttribute("SID");
+        String memberName = (String) session.getAttribute("SNAME");
 
-        CommentMember commentMember = donationService.getMember(memberId);
-        model.addAttribute("commentMember", commentMember);
 
-        donationService.CommentAdd(memberId, rewardProjectCode, commentMember.getMemberName(), commentContent);
+
+        rewardService.addRewardComment(memberId, rewardProjectCode, memberName, commentContent);
 
         return "redirect:/user/reward/detail/comment?rewardProjectCode=" + rewardProjectCode;
     }
 
+    //댓글 삭제
+    @GetMapping("/detail/commentDelete")
+    public String commentDelete(Model model,
+                                HttpSession session,
+                                @RequestParam(name= "rewardCommentCode") String rewardCommentCode,
+                                @RequestParam(name = "rewardProjectCode") String rewardProjectCode){
+
+        //접속 회원 아이디
+        String memberId = (String)session.getAttribute("SID");
+        //프로젝트 정보 조회
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //댓글 리스트 조회
+        List<RewardComment> rewardCommentList = rewardService.getCommentList(rewardProjectCode);
+
+        model.addAttribute("rewardProject",rewardProject);
+        model.addAttribute("memberId", memberId);
+        model.addAttribute("rewardCommentList", rewardCommentList);
+
+        rewardService.commentDelete(rewardCommentCode);
+
+        return "redirect:/user/reward/detail/comment?rewardProjectCode=" + rewardProjectCode;
+    }
+
+    //대댓글 등록
     @PostMapping("/detail/reply")
     public String replyAdd(HttpSession session, Model model,
                            @RequestParam(name = "reply") String reply,
                            @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
                            @RequestParam(name = "parentCommentCode") String parentCommentCode){
 
+
         String memberId = (String)session.getAttribute("SID");
+        String memberName = (String) session.getAttribute("SNAME");
 
-        CommentMember commentMember = donationService.getMember(memberId);
-        model.addAttribute("commentMember", commentMember);
 
-        donationService.replyAdd(reply, rewardProjectCode, parentCommentCode, memberId, commentMember.getMemberName());
-        System.out.println("@@@@@@@@@@@@@@@@@@@== " + parentCommentCode);
+
+        rewardService.addReplyComment(reply, rewardProjectCode, parentCommentCode, memberId, memberName);
 
 
         return "redirect:/user/reward/detail/comment?rewardProjectCode=" + rewardProjectCode;

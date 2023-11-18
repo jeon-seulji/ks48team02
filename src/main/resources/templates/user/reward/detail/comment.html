@@ -54,7 +54,7 @@
         .comments-reply{
             display: none;
         }
-        .donation-comments{
+        .reward-comments{
             color: black;
             white-space: pre-line;
             overflow: hidden;
@@ -62,6 +62,7 @@
             text-align: left;
             padding-left: 5px;
         }
+
     </style>
 </head>
 
@@ -74,7 +75,11 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
 
-    <script>
+    <script th:inline="javascript">
+
+        //현재 로그인 한 아이디
+        const  loginMemberId = [[${memberId}]];
+
         var swiper = new Swiper(".mySwiper", {
             spaceBetween: 30,    // 슬라이드 사이 여백
             slidesPerView : 'auto', // 한 슬라이드에 보여줄 갯수
@@ -109,8 +114,8 @@
         const $commentBoxClose = document.getElementById('commentBoxClose');
 
         $writeButton.addEventListener('click', function (){
-            const  sessionId = '[[${memberId}]]';
-            if (sessionId == '' || sessionId == null || typeof sessionId == 'undefined'){
+
+            if (loginMemberId == '' || loginMemberId == null || typeof loginMemberId == 'undefined'){
                 alert('글쓰기 기능은 로그인을 해야합니다!');
                 return false;
             }else{
@@ -133,9 +138,12 @@
         });
 
         $('.reply').on('click', function (){
-            const $clickedReply = $(this);
-            const $replyArrow = $clickedReply.find('.replyArrow');
-            const $commentsReply = $clickedReply.siblings('.comments-reply');
+
+
+
+            const $replyArrow = $(this).find('.replyArrow');
+            const $commentsReply = $(this).siblings('.comments-reply');
+
             if ($replyArrow.text() == '▽') {
                 $replyArrow.text("△");
                 $commentsReply.css('display', 'inline-block');
@@ -143,11 +151,17 @@
                 $replyArrow.text("▽");
                 $commentsReply.css('display', 'none');
             }
+
+            $('.replyArrow').not($(this).find('.replyArrow')).text("▽");
+            $('.comments-reply').not($(this).siblings('.comments-reply')).css('display', 'none');
+
         });
 
-    </script>
 
-    <script>
+
+
+
+
         // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 코드
         let rewardProjectCode = '[[${rewardProject.rewardProjectCode}]]';
         // 썸네일 이미지 경로 지정
@@ -173,8 +187,6 @@
         // 남은 일 수
         $('#deadLine').text(daysRemaining + '일남음');
 
-        // 회사 이름 설정
-        $('#company').text('[[${rewardProject.regCompany}]]');
         // 달성 금액 설정
         $('#achievementMoney').text(`[[${rewardProject.projectAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
 
@@ -189,20 +201,28 @@
         });
 
         $('.replyBtn').click(function (){
-            const  sessionId = '[[${memberId}]]';
-            if (sessionId == '' || sessionId == null || typeof sessionId == 'undefined'){
+
+            if (loginMemberId == '' || loginMemberId == null || typeof loginMemberId == 'undefined'){
                 alert('글쓰기 기능은 로그인을 해야합니다!');
                 return false;
             }else{
                 const parentCommentCode = $(this).next().val();
                 const reply = $(this).prev().val();
-                const donationCode = $(this).next().next().val();
+                const rewardProjectCode = [[${rewardProject.rewardProjectCode}]];
+
+                if (reply.length < 5) {
+                    alert('다섯글자 이상 입력해 주세요.');
+                    return false;
+                }
+
+
                 $.ajax({
                     type: "post",
-                    url: "/user/donation/detail/reply",
-                    data: { parentCommentCode : parentCommentCode,
+                    url: "/user/reward/detail/reply",
+                    data: {
+                        parentCommentCode : parentCommentCode,
                         reply : reply,
-                        donationCode : donationCode },
+                        rewardProjectCode : rewardProjectCode},
                     success: function (){
                         console.log("ajxa성공");
                     },
@@ -230,15 +250,16 @@
 
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
-<th:block layout:fragment="customContents">F
+<th:block layout:fragment="customContents">
     <div class="col-lg-12" style="height: 40px"></div>
     <div class="container">
         <div>
-            <div class="col-lg-12 row">
+            <div class="col-lg-12">
+                <br>
                 <span style="font-weight: bold; font-size: 20px; color: black">댓글</span>
-                <span id="reviewSize" style="color: #235FD9; font-weight: bold; margin-left: 5px;" th:text="${viewCount}"></span>
+                <span id="reviewSize" style="color: #235FD9; font-weight: bold; margin-left: 5px;" th:text="${#lists.size(rewardCommentList)}"></span>
                 <span style="float: right">
-                    <button id="commentBtn" type="button" style="background: #235FD9; width: 100%; height: 40px; color: white; font-size: 15px; outline-color: #235FD9; outline-width: 1px">글쓰기</button>
+                    <button id="commentBtn" type="button" style="background: #235FD9; width: 100%; height: 40px; color: white; font-size: 15px; outline-color: #235FD9; outline-width: 1px">댓글 쓰기</button>
                 </span>
             </div>
         </div>
@@ -246,59 +267,61 @@
     <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 comments-review" th:if="${l.commentClass == 'comment'}" th:each="l , cl: ${rewardCommentList}">
+            <div class="col-lg-12 comments-review my-lg-3"  th:each="l : ${rewardCommentList}">
                 <div class="user-comments-profile">
                     <div style="display: inline-block;">
                         <img src="https://picpac.kr/common/img/default_profile.png" style="width: 50px; height: 50px; border-radius: 30px;">
                     </div>
-                    <div style="display: inline-block; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
-                        <p th:text="${l.memberName}"></p>
+                    <div style="display: inline; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
+                        <span  th:text="${l.memberId}"></span>
+                        <span class="float-right">
+                            <a th:if="${memberId == l.memberId}" onclick='return confirm("댓글을 삭제하시겠습니까?");' class="delCommentBtn btn btn-sm btn-danger btn rounded-pill justify-content-end" th:href="@{/user/reward/detail/commentDelete(rewardProjectCode=${rewardProject.rewardProjectCode},rewardCommentCode=${l.rewardCommentCode})}">삭제</a>
+                        </span>
                     </div>
                 </div>
                 <div class="col-lg-12" style="height: 10px"></div>
-                <div style="background: #f9fafb; border-radius: 5px; padding: 10px">
-                    <div>
-                        <div class="donation-comments" th:text="${l.commentContent}"></div>
+                <div style="background: #f9fafb; border-radius: 5px; padding: 10px" class=" mb-lg-2">
+                    <div >
+                        <div class="reward-comments" th:text="${l.commentContent}"></div>
                     </div>
                 </div>
                 <div class="reply" style="display: inline-block; cursor: pointer">
                     <span>💬</span>
-                    <span class="comment-count"></span>
-                    <span class="replyArrow" style="margin-left: 3px">▽</span>
+                    <span class="comment-count" th:text="${#lists.size(l.rewardReplyList)}"></span>
+                    <span class="replyArrow" style="margin-left: 3px">▽</span><span></span>
                 </div>
                 <div class="comments-reply" style="width: 100%">
                     <div style="display: flex; margin-bottom: 10px">
                         <form id="replyForm" th:action="@{/user/reward/detail/reply}" method="post"> <!-- form 반복문 해결-->
                             <div style="display: inline-block; top: 0; margin-right: 5px; margin-bottom: 5px;">
                                 <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
-                                <span th:text="${session.memberId}" style="color: black; margin-left: 5px; font-weight: bold"></span>
+                                <span th:text="${memberId}" style="color: black; margin-left: 5px; font-weight: bold"></span>
                             </div>
                             <div style="display: flex">
-                                <textarea class="reply" style="width: 540px; height: 60px; resize: none; outline-color: #235FD9; outline-width: 1px; padding: 10px;" minlength="10" maxlength="200" placeholder="댓글을 입력해주세요!"></textarea>
+                                <textarea class="replyContents" style="width: 540px; height: 60px; resize: none; outline-color: #235FD9; outline-width: 1px; padding: 10px;" minlength="10" maxlength="200" placeholder="댓글을 입력해주세요!"></textarea>
                                 <button class="replyBtn btn btn-primary my-2" type="button" style="background-color: #235FD9; margin-left: 5px; width: 60px">입력</button>
-                                <input class="parentCommentCode" hidden="hidden" th:value="${l.donationCommentCode}">
-                                <input class="donationCode" hidden="hidden" th:value="${donationCode}">
+                                <input class="parentCommentCode" hidden="hidden" th:value="${l.rewardCommentCode}">
+                                <input class="rewardProjectCode" hidden="hidden" th:value="${l.rewardProjectCode}">
                             </div>
                         </form>
                     </div>
-                    <div hidden="hidden" class="replyCnt" th:value="${counter.clear()}" th:with="replyCnt = ${counter.get()}" th:text="${replyCnt}"></div>
-                    <div class="reply" style="display: flex; margin-bottom: 15px" th:if="${l.donationCommentCode == rl.commentCode}" th:each="rl, rlStat : ${rewardCommentList}">
-                        <div hidden="hidden" th:text="${counter.incrementAndGet()}"></div>
+                    <div class="replyContents" style="display: flex; margin-bottom: 15px" th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardReplyList}">
                         <div style="top: 0; margin-right: 5px;">
                             <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
                         </div>
-                        <div style="background: #f9fafb; border-radius: 5px; padding: 10px; width: 100%">
+                        <div  style="background: #f9fafb; border-radius: 5px; padding: 10px; width: 100%">
                             <div>
-                                <div class="reply-user-id" style="font-weight: bold; color: black;" th:text="${rl.memberName}">
-                                </div>
-                                <div class="donation-comments" th:text="${rl.commentContent}">
-                                </div>
-                                <div class="rlSize" hidden="hidden" th:text="${rlStat.count}"></div>
-                                <div hidden="hidden" th:text="${rl.commentCode}"></div>
+                                <div class="replyMemberId" style="font-weight: bold; color: black;" th:text="${rl.memberId}"></div>
+                                <span th:text="${rl.commentContent}"></span>
+                                <span style="float: right">
+                                    <a th:if="${memberId == rl.memberId}" onclick='return confirm("댓글을 삭제하시겠습니까?");' class="delReplyBtn btn-sm btn-danger btn rounded-pill" th:href="@{/user/reward/detail/commentDelete(rewardProjectCode=${rewardProject.rewardProjectCode},rewardCommentCode=${rl.rewardCommentCode})}">삭제</a>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
+                <hr>
+
             </div>
             <div class="col-lg-12" style="height: 20px"></div>
         </div>
@@ -328,7 +351,7 @@
                 <div style="margin-top: 10px">
                     <button id="commentAddBtn" type="button" style="background: #235FD9; width: 100%; height: 40px; color: white; font-size: 15px; outline-color: #235FD9; outline-width: 1px">글쓰기</button>
                 </div>
-                <input hidden="hidden" name="donationCode" th:value="${donationCode}">
+                <input hidden="hidden" name="rewardProjectCode" th:value="${rewardProject.rewardProjectCode}">
             </form>
         </div>
         <!-- 부가설명을 위한 데이터 -->

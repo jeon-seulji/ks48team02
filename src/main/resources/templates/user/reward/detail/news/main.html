@@ -10,6 +10,9 @@
         .reward-new-box{
             cursor: pointer;
         }
+
+
+
     </style>
 </head>
 
@@ -78,8 +81,6 @@
         // 남은 일 수
         $('#deadLine').text(daysRemaining + '일남음');
 
-        // 회사 이름 설정
-        $('#company').text('[[${rewardProject.regCompany}]]');
         // 달성 금액 설정
         $('#achievementMoney').text(`[[${rewardProject.projectAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
     </script>
@@ -91,12 +92,13 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12" style="margin-top: 30px; margin-bottom: -10px;">
-                <h5 style="display: inline-block; font-weight: bold; font-size: 15px">새소식</h5>
-                <h5 id="newsCount" style="display: inline-block; color: #235FD9; font-weight: bold; font-size: 15px" th:text="${newsList.size()}"></h5>
+                <br>
+                <h3 style="display: inline-block; font-weight: bold; font-size: 28px">새소식 </h3>
+                <h3 id="newsCount" style="display: inline-block; color: #235FD9; font-weight: bold; font-size: 25px" th:text="${#lists.size(newsList)}"></h3>
             </div>
             <div class="col-lg-12" style="border: 2px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
-            <div class="col-lg-12 reward-new-box" th:onclick="|location.href='@{/user/reward/detail/news/detail(newCode=${l.newsCode},rewardProjectCode=${rewardProject.rewardProjectCode})}'|"
+            <div class="col-lg-12 reward-new-box mt-lg-3" th:onclick="|location.href='@{/user/reward/detail/news/detail(newCode=${l.newsCode},rewardProjectCode=${rewardProject.rewardProjectCode})}'|"
                  th:each="l : ${newsList}">
                 <div>
                     <span style="color: black; font-weight: bold; font-size: 11px">공지사항</span>

@@ -81,6 +81,19 @@
             cursor: pointer;
         }
 
+        ul.d-flex li:hover {
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #fdfdfe;
+            opacity: 90%;
+            transition: 0.1s;
+            color: #0b44d7;
+        }
+
+        donation-comments
+
     </style>
 
 </head>
@@ -318,7 +331,7 @@
             $('#news').addClass('active');
         } else if (currentPath === '/user/reward/detail/comment') {
             $('#comments').addClass('active');
-        } else if (currentPath === '/user/reward/detail/policy') {
+        } else if (currentPath === '/user/reward/detail/refundPolicy') {
             $('#policy').addClass('active');
         }/* else if (/!* 다른 페이지의 경로 *!/) {
             // 다른 페이지에 해당하는 메뉴 항목을 활성화

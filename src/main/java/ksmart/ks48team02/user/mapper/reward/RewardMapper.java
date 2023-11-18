@@ -5,6 +5,7 @@ import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.dto.Member;
+import ksmart.ks48team02.user.dto.RewardComment;
 import ksmart.ks48team02.user.dto.RewardOption;
 import ksmart.ks48team02.user.dto.RewardProject;
 import org.apache.ibatis.annotations.Mapper;
@@ -75,6 +76,18 @@ public interface RewardMapper {
 
     //사용한 쿠폰 사용했음으로 업데이트
     public int usedCouponUpdate (String couponIssueCode);
+
+    //댓글 조회
+    public List<RewardComment> getCommentList (String rewardProjectCode);
+
+    //댓글 달기
+    public int addRewardComment (String memberId, String rewardProjectCode, String memberName, String commentContent);
+
+    //댓글 삭제
+    public int commentDelete (String rewardCommentCode);
+
+    //대댓글 달기
+    public int addReplyComment (String reply, String rewardProjectCode, String parentCommentCode,  String memberId, String memberName);
 
 
 }

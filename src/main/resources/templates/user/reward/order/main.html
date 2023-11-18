@@ -9,16 +9,7 @@
     <style>
 
 
-        ul.d-flex li:hover {
-            cursor: pointer;
-        }
 
-        .option:hover {
-            background-color: #fdfdfe;
-            opacity: 90%;
-            transition: 0.1s;
-            color: #0b44d7;
-        }
 
         #payment-button{ width:100%; padding:15px; background-color:#3065AC; color:white; border-radius:3px; font-size:16px; border:none; margin-top:10px}
         .title {margin: 0 0 4px; font-size: 24px; font-weight: 600;color: #4e5968;}
@@ -564,7 +555,7 @@
                             <h5>리워드 선택</h5>
                             <br>
                             <th:block  th:each="l : ${rewardOrderInfo.rewardOptionList}">
-                                <div class="selectOption form-check mb-lg-2 text-dark" >
+                                <div class="selectOption form-check mb-lg-2 text-dark" style="cursor: pointer">
                                     <input class="optionCheck form-check-input" type="checkbox" value="" th:id="${l.rewardOptionCode}">
                                     <div class="option" style="border: 1px solid #7D7D7D; border-radius: 25px;">
                                         <label class="form-check-label col-lg-12 pb-lg-3" th:for="${l.rewardOptionCode}">

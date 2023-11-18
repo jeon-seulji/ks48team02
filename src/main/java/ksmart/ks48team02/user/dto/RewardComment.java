@@ -19,6 +19,6 @@ public class RewardComment {
     private String commentPostNum;
     private String commentClass;
 
-    List<RewardComment> rewardCommentList;
+    List<RewardComment> rewardReplyList;
 
 }

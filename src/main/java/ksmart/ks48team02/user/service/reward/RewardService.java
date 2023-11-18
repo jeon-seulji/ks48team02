@@ -5,6 +5,7 @@ import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.dto.Member;
+import ksmart.ks48team02.user.dto.RewardComment;
 import ksmart.ks48team02.user.dto.RewardOption;
 import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.mapper.reward.RewardMapper;
@@ -134,5 +135,28 @@ public class RewardService {
             System.out.println("쿠폰사용 로그 등록 완료");
         }
 
+    }
+
+    //댓글 조회
+    public List<RewardComment> getCommentList (String rewardProjectCode) {
+
+        List<RewardComment> rewardCommentList = rewardMapper.getCommentList(rewardProjectCode);
+
+        return rewardCommentList;
+    }
+
+    //댓글 달기
+    public void addRewardComment (String memberId, String rewardProjectCode, String memberName, String commentContent) {
+        rewardMapper.addRewardComment(memberId, rewardProjectCode, memberName, commentContent);
+    }
+
+    //댓글 삭제
+    public void commentDelete (String rewardCommentCode) {
+        rewardMapper.commentDelete(rewardCommentCode);
+    }
+
+    //대댓글 달기
+    public void addReplyComment (String reply, String rewardProjectCode, String parentCommentCode,  String memberId, String memberName){
+        rewardMapper.addReplyComment(reply, rewardProjectCode, parentCommentCode, memberId, memberName);
     }
 }
