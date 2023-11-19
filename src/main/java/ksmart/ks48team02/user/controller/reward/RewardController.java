@@ -44,8 +44,11 @@ public class RewardController {
     //리워드 메인 페이지
     @GetMapping(value = {"" , "/"})
     public String mainPage(Model model) {
+
+
         List<RewardProject> rewardProjectList = rewardService.rewardProjectList();
         model.addAttribute("rewardProjectList",rewardProjectList);
+
         return "user/reward/main";
     }
 
@@ -176,21 +179,25 @@ public class RewardController {
     public String orderPage(Model model, HttpSession session,
                             @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
                             @RequestParam(name = "rewardOptionCode", required = false) String rewardOptionCode) {
-
+        //로그인 한 아이디 불러오기
         String memberId = (String) session.getAttribute("SID");
 
+        //로그인 하지 않았다면 로그인 화면으로 이동.
         if(memberId == null) {
             return "user/account/login";
         }
 
+        //프로젝트 상세 정보 가져오기
         RewardProject rewardOrderInfo = rewardService.rewardProjectDetail(rewardProjectCode);
+        //로그인 한 회원 정보 가져오기
         Member orderMemberInfo = rewardService.getOrderMemberInfo(memberId);
+        //로그인 한 회원 보유 쿠폰 리스트 가져오기
         List<Coupon> memberHaveCouponList = adminCouponService.MemberHaveCouponById(memberId);
+        //배송 메세지 리스트 가져오기
         List<DeliveryMessage> deliveryMessageList = rewardService.deliveryMessage();
 
         model.addAttribute("deliveryMessageList",deliveryMessageList);
         model.addAttribute("rewardOrderInfo", rewardOrderInfo);
-        model.addAttribute("rewardOptionCode", rewardOptionCode);
         model.addAttribute("orderMemberInfo", orderMemberInfo);
         model.addAttribute("memberHaveCouponList", memberHaveCouponList);
 
@@ -202,12 +209,14 @@ public class RewardController {
     @ResponseBody
     public String paymentPage(@RequestBody PaymentResult paymentResult) throws IOException, InterruptedException {
 
+        //결제 DB작업에 필요한 데이터 잘 받았는지 log4j로 출력
         log.info("paymentResult: {}", paymentResult);
 
         String payResult = "{\"paymentKey\":\""+paymentResult.getPaymentKey()+"\", "
                             +"\"orderId\":\""+paymentResult.getOrderId()+"\", "
                             +"\"amount\":\""+paymentResult.getAmount()+"\"}";
 
+        //토스 API에 결제 완료 후, 결제에 사용된 데이터 요청.
         HttpRequest request = HttpRequest.newBuilder()
                                         .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
                                         .header("Authorization","Basic dGVzdF9za19EbnlScFFXR3JOV0Q5WHBMemdaZzhLd3YxTTlFOg==")
@@ -232,17 +241,17 @@ public class RewardController {
         String paymentCode = orderAndPaymentCode.getRewardPaymentCode();
         paymentResult.setPaymentCode(paymentCode);
 
-        //프로젝트 등록 service
+        //프로젝트 결제 서비스 진행
         rewardService.rewardProjectPay(paymentResult);
 
-        return "/user";
+        return "/user/reward/order/paymentConfirm";
     }
 
     //리워드 결제 확인 페이지
-    @GetMapping("/payment/confirm")
+    @GetMapping("/order/paymentConfirm")
     public String paymentConfirmPage(Model model) {
 
-        return "user/reward/payment/confirm";
+        return "user/reward/order/paymentConfirm";
     }
 
     //리워드 환불 정책 페이지

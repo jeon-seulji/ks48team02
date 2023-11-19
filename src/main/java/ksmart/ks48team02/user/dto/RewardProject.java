@@ -5,6 +5,7 @@ import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.RewardOption;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -24,12 +25,12 @@ public class RewardProject {
     private int projectGoalMoney;
     private int projectAchievementPercent;
     private String regCompany;
-    private String projectRegDate;
+    private LocalDateTime projectRegDate;
     private int searchCount;
     private String projectJudgmentReason;
-    private String projectJudgementDate;
-    private String projectStartDate;
-    private String projectEndDate;
+    private LocalDateTime projectJudgementDate;
+    private LocalDateTime projectStartDate;
+    private LocalDateTime projectEndDate;
     private int projectCondition;
     private String storeImage;
     private int storeLike;

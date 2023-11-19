@@ -3,6 +3,8 @@ package ksmart.ks48team02.user.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class RewardOption {
 
@@ -14,7 +16,7 @@ public class RewardOption {
     private int optionLimitQuantity;
     private String optionName;
     private int optionDeliveryPrice;
-    private String optionEstimatedDeliveryDate;
+    private LocalDateTime optionEstimatedDeliveryDate;
     private String orderCode;
     private int orderQuantity;
     private int pricePerOption;

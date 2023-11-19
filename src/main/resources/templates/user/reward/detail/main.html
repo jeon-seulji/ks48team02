@@ -73,7 +73,13 @@
         // 차이를 일(day) 단위로 변환
         let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
         // 남은 일 수
-        $('#deadLine').text(daysRemaining + '일남음');
+        if( daysRemaining < 1) {
+            $('#deadLine').text("프로젝트 마감.");
+            $('#deadLine').css("color","white");
+            $('#deadLine').css("background-color","red");
+        } else {
+            $('#deadLine').text(daysRemaining + '일남음');
+        }
 
         // 회사 이름 설정
         $('#company').text('[[${rewardProject.regCompany}]]');

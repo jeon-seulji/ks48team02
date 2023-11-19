@@ -89,7 +89,7 @@ public class PojectRegistrationContoller {
     @GetMapping("/reward/success")
     public String rewardProjectSuccessPage(){
 
-        return "user/projectRegistration/reward/reward_insert_success";
+        return "/user/projectRegistration/reward/reward_insert_success";
     }
 
 

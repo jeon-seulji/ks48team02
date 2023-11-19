@@ -335,7 +335,6 @@
 
             //주소 찾기 클릭시 daum주소 api 호출
             $('.findAddrBtn, #deliverMemberAddr').click(function(){
-
                 new daum.Postcode({
                     oncomplete: function(data) { //선택시 입력값 세팅
                         $('#deliverMemberAddr').val(data.address); // 주소 넣기
@@ -378,17 +377,11 @@
             );
 
             // ------  이용약관 UI 렌더링 ------
-
             paymentWidget.renderAgreement(
                 '#agreement',
                 { variantKey: "AGREEMENT" } // 기본 이용약관 UI 렌더링
             );
 
-
-
-            // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
-            // 더 많은 결제 정보 파라미터는 결제위젯 SDK에서 확인하세요.
-            // https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
 
             //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
             $('.paymentBtn').click(function(){
@@ -412,21 +405,21 @@
                     if(isValid) {
                         let totalPrice = $('#totalPayPrice').data('price');
                         //결재 이벤트 실행
+
                         const paymentMethodsWidget = paymentWidget.renderPaymentMethods(); // 결제창
                         const selectedPaymentMethod = paymentMethodsWidget.getSelectedPaymentMethod(); // 결제 정보
+
+                        //토스 API결제 위젯에 최종 결제금액 업데이트
                         paymentMethodsWidget.updateAmount(totalPrice);
 
-                        console.log(products);
-                        console.log(selectedPaymentMethod);
+                        //결제 방법 paymentMethod 변수에 담기.
                         let paymentMethod= selectedPaymentMethod.method;
-
+                        //결제 방법이 간편걸제라면 간편결제 중 무슨 결제인지 담기.
                         if(paymentMethod == '간편결제') {
                             paymentMethod = selectedPaymentMethod.easyPay.provider;
-
                         }
-                        console.log(paymentMethod);
 
-                        //결제 요청시 필요한 객체
+                        //토스페이API 결제 요청시 필요한 객체
                         const paymentObj = {
                             orderId: crypto.randomUUID(),
                             orderName: [[${rewardOrderInfo.projectSubject}]],
@@ -435,12 +428,14 @@
                             customerName: [[${orderMemberInfo.memberName}]],
                             mobilePhone: [[${orderMemberInfo.memberContactInfo}]],
                         };
+
+                        //배송 요청 메세지가 '기타' 라면 상세 배송 요청 메세지 담기.
                         let deliveryMessage = $('#deliverRequest option:selected').text()
                         if(deliveryMessage == '기타') {
                             deliveryMessage = $('#elseDeliverRequest').val();
                         }
 
-                        //배송 정보 담기
+                        //배송 정보 deliveryMemberInfo 객체에 담기
                         const deliveryMemberInfo = {
                             deliveryMemberName : $('#deliverMemberName').val(),
                             deliveryMemberMobile : $('#deliverMemberMobile').val(),
@@ -449,7 +444,7 @@
                             deliveryMessage : deliveryMessage
                         }
 
-                        //결제 완료 후 DB작업에 필요한 객체
+                        //DB작업에 필요한 데이터 paymentParam 객체에 담기.
                         const paymentParam={
                             usePoint : Number($('#usePoint').val()),
                             deliveryPrice : $('#totalOrderDeliverPrice').data('price'),
@@ -468,23 +463,26 @@
                             rewardOptionList : products,
                             deliveryMemberInfo : deliveryMemberInfo
                         };
-                        console.log(paymentObj);
+
                         console.log(paymentParam);
 
+                        //결제 신청
                         paymentWidget.requestPayment(paymentObj)
                             .then(response => {
                                 paymentParam.paymentKey = response.paymentKey;
                                 paymentParam.orderId = response.orderId;
                                 paymentParam.amount = response.amount;
 
-                                const request =$.ajax({
-                                    type: "POST",
+                                //결제 완료 후 DB작업을 위해 ajax요청
+                                const request = $.ajax({
+                                    type: 'POST',
                                     traditional: true,
                                     url: '/user/reward/payment',
                                     contentType: 'application/json',
                                     data: JSON.stringify(paymentParam),
                                     dataType: 'text'
                                 });
+                                //DB작업 완료 되었다면 결제 완료 페이지로 이동.
                                 request.done(function(response){
                                     let redirectURI = response;
                                     location.href = redirectURI;
@@ -504,6 +502,7 @@
                 $(this).val(0);
             }
         });
+
 
 
     //리워드 상세 페이지에서 선택한 옵션 주문 페이지에서 선택 되도록.
@@ -540,6 +539,7 @@
                         <blockquote class="blockquote">
                             <br>
                             <h3>리워드 상품을 선택해 주세요.</h3>
+
                         </blockquote>
                         <figcaption class="blockquote-footer">
                             <cite title="Source Title">지금 바로 플로키에서!</cite>
@@ -584,7 +584,7 @@
                                             <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                             <span class="ml-2">발송 시작일</span>
-                                            <span class ="optionDeliverDate font-weight-bold float-right mr-2" th:text="${l.optionEstimatedDeliveryDate}"></span>
+                                            <span class ="optionDeliverDate font-weight-bold float-right mr-2" th:text="${#temporals.format(l.optionEstimatedDeliveryDate,'yyyy.MM.dd')}"></span>
                                             <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                             <span class="ml-2">제한 수량</span>
@@ -745,7 +745,7 @@
                                     <div>
                                         <input type="number" id="totalPayPriceHidden" hidden="hidden" ></input>
                                         <span class="ml-2">리워드 금액</span>
-                                        <span id="totalRewardPrice" class=" font-weight-bold float-right mr-lg-2">35000원</span>
+                                        <span id="totalRewardPrice" class=" font-weight-bold float-right mr-lg-2"></span>
                                         <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">포인트 사용 금액</span>
@@ -769,7 +769,7 @@
                                         <div style="border: 2px solid #f3f4f5; margin: 10px; width: 100%"></div>
 
                                         <span class="ml-2 font-weight-bold" style="font-size: 20px">총 결제 금액</span>
-                                        <span id="totalPayPrice" class="font-weight-bold float-right mr-lg-2" style="font-size: 20px">70000원</span>
+                                        <span id="totalPayPrice" class="font-weight-bold float-right mr-lg-2" style="font-size: 20px"></span>
 
                                     </div>
                                 </div>
@@ -783,13 +783,15 @@
                             <div class="ml-lg-2">
                                 <!-- 결제 방법 영역-->
                                 <div id="payment-method"></div>
-                                <div id="agreement"></div>
+
 <!--                                <button id="payment-button" type="button">결제하기</button>-->
                             </div>
 
                             <div class="ml-lg-2 mt-lg-5">
                                 <h5>약관 동의</h5>
                                 <div class="ml-lg-3 mt-lg-4">
+
+                                    <div id="agreement"></div>
 
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" id="allCheck">
