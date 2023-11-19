@@ -1,19 +1,30 @@
 package ksmart.ks48team02.seller.controller.reward;
 
+import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.seller.service.reward.SellerRewardService;
+import ksmart.ks48team02.user.dto.RewardProject;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 
 @Controller("sellerRewardController")
 @RequestMapping("/seller/reward")
+@AllArgsConstructor
 public class RewardController {
-
+    SellerRewardService sellerRewardService;
 
     // 판매자 상품 관리 페이지
     @GetMapping("/products")
-    public String productsPage(Model model) {
+    public String productsPage(Model model, HttpSession httpSession) {
+
+        String sellerId = (String) httpSession.getAttribute("SID");
+        List<RewardProject> projectList = sellerRewardService.projectListBySellerID(sellerId);
+        model.addAttribute("projectList",projectList);
 
         return "seller/reward/products/main";
     }
@@ -34,7 +45,11 @@ public class RewardController {
 
     //판매자 리워드 새소식 관리 페이지 (새소식 목록 조회+ 삭제)
     @GetMapping("/news")
-    public String newsPage(Model model) {
+    public String newsPage(Model model, HttpSession httpSession) {
+        String sellerId = (String) httpSession.getAttribute("SID");
+
+        List<RewardProject> newsListPerProject = sellerRewardService.getNewsListBySellerId(sellerId);
+        model.addAttribute("newsListPerProject",newsListPerProject);
 
         return "seller/reward/news/main";
     }

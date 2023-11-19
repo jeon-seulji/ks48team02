@@ -33,7 +33,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -53,8 +53,11 @@ public class InvestmentService {
             case "representativeName":
                 searchKey = "s.representative_name";
                 break;
+            case "investJudgeResult":
+                searchKey = "i.invest_judge_result";
+                break;
         }
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
 
         return investmentRequestJudgeList;
     }
@@ -144,7 +147,7 @@ public class InvestmentService {
     }
 
     // 검색조건에 따른 기업가치 평가결과 목록 조회
-    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
+    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -165,7 +168,7 @@ public class InvestmentService {
                 searchKey = "c.corp_value_fulfill";
                 break;
         }
-        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
 
         return corporateValueEvaluationList;
     }
@@ -180,6 +183,21 @@ public class InvestmentService {
     // 자본시장법 범위충족기준 등록
     public void addLawSatistify(AdminLawSatistifyReason adminLawSatistifyReason) {
         adminInvestmentMapper.addLawSatistify(adminLawSatistifyReason);
+    }
+
+    // 부적합 업종 등록
+    public void addIncogruitySector(AdminIncongruitySectors adminIncongruitySectors) {
+        adminInvestmentMapper.addIncogruitySector(adminIncongruitySectors);
+    }
+
+    // 기업가치 평가결과 등록
+    public void addCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation) {
+        adminInvestmentMapper.addCorporateValueEvaluation(adminCorporateValueEvaluation);
+    }
+
+    // 기업가치 평가 등록 후 심사요청에 평가코드 등록
+    public void modifyInvestmentRequestCorpValueKey(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+        adminInvestmentMapper.modifyInvestmentRequestCorpValueKey(adminInvestmentRequestJudge);
     }
 
     // 투자펀딩 심사요청 수정
@@ -197,7 +215,28 @@ public class InvestmentService {
         adminInvestmentMapper.modifyIncongruitySectors(adminIncongruitySectors);
     }
 
+    // 기업가치 평가 수정
+    public void modifyCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation) {
+        adminInvestmentMapper.modifyCorporateValueEvaluation(adminCorporateValueEvaluation);
+    }
+
+    // 투자펀딩 심사요청 삭제
     public void reomveInvestmentJudge(String investmentRequestJudgeCode) {
         adminInvestmentMapper.removeInvestmentRequestJudge(investmentRequestJudgeCode);
+    }
+
+    // 자본시장 범위충족기준 삭제
+    public void removeLawSatistify(String lawSatistifyCode) {
+        adminInvestmentMapper.removeLawSatistify(lawSatistifyCode);
+    }
+
+    // 부적합 업종 삭제
+    public void removeIncogruitySectors(String incongruitySectorsCode) {
+        adminInvestmentMapper.removeIncogruitySectors(incongruitySectorsCode);
+    }
+
+    // 기업가치 평가 결과 삭제
+    public void removeCorporateValueEvaluation(String corporateValueEvaluationCode) {
+        adminInvestmentMapper.removeCorporateValueEvaluation(corporateValueEvaluationCode);
     }
 }

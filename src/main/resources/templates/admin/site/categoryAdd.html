@@ -69,8 +69,11 @@
     <!--    <link rel="stylesheet" th:href="@{/admin/css/reset.css}">-->
     <!--    <link rel="stylesheet" th:href="@{/admin/css/style_adnim.css}">-->
     <link th:href="@{/admin/css/style_add_goods.css}" rel="stylesheet">
+
 </head>
+
 <body>
+
 <th:block layout:fragment="customContents">
     <div class="boardMain" style="margin-bottom: 20px;">
         <h3>카테고리 등록</h3>
@@ -83,7 +86,7 @@
             <section class="admin-right-bt">
                 <section class="admin-addgoods-area">
                     <h3 class="admin-title">카테고리 등록하기</h3>
-                    <form id="add-goods-frm" action="#" method="post">
+                    <form id="add-goods-frm" method="post">
                         <table class="admin-table">
                             <caption>카테고리 분류 표시설정</caption>
                             <colgroup>
@@ -92,77 +95,57 @@
                             </colgroup>
                             <thead class="goods-table-caption">
                             <tr>
-                                <th colspan="2">상품 표시설정</th>
+                                <th colspan="2">카테고리 표시설정</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr class="goods-category">
                                 <input class="code_depth_1" type="hidden" name="c_code_depth_1">
                                 <input class="c_code_depth_2" type="hidden" name="c_code_depth_2">
-                                <th class="categoryGoods">상품분류선택</th>
+                                <th class="categoryGoods">카테고리 분류선택</th>
                                 <td>
                                     <table class="categoryArea" style="table-layout:fixed">
-                                        <caption class="category">상품분류 선택</caption>
+                                        <caption class="category">카테고리분류 선택</caption>
                                         <thead>
                                         <tr>
                                             <th class="category_title" colspan="2">
-                                                상품분류를 선택 후 상품분류 적용 버튼을 눌러주세요.
+                                                카테고리 분류를 선택 후 카테고리분류 확인 버튼을 눌러주세요.
                                             </th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="category-list-area">
                                         <tr>
                                             <td class="depth-1">
                                                 <div class="category-list">
-                                                    <ul depth="1">
-                                                        <li data-tab="nothing" value="N">(대분류) 없음</li>
-                                                        <li data-tab="reward-category" value="A">(대분류) 리워드</li>
-                                                        <li data-tab="donation-category" value="B">(대분류) 기부</li>
-                                                        <li data-tab="investment-category" value="C">(대분류) 투자</li>
+                                                    <ul class="category-depth-1" depth="1">
+                                                        <li data-value="nothing">(대분류) 없음</li>
+                                                        <th:block th:each="tc : ${categoryAdd}">
+                                                            <li th:if="${tc.projectPatition == 'reward'}" th:data-value="${tc.projectPatition}">(대분류) 리워드</li>
+                                                            <li th:if="${tc.projectPatition == 'donation'}" th:data-value="${tc.projectPatition}">(대분류) 기부</li>
+                                                            <li th:if="${tc.projectPatition == 'investment'}" th:data-value="${tc.projectPatition}">(대분류) 투자</li>
+                                                        </th:block>
                                                     </ul>
 
                                                     <div class="addCateArea">
                                                         <button class="addCateBtn">추가</button>
                                                     </div>
-
-
                                                 </div>
                                             </td>
-                                            <td  class="depth-2">
-                                                <div id="reward-category" class="category-list" style="display:none;">
-                                                    <ul depth="2">
-                                                        <li value="001">(소분류) 책</li>
-                                                        <li value="002">(소분류) 영화</li>
-                                                        <li value="003">(소분류) 그림</li>
-                                                        <li value="004">(소분류) 공연</li>
-                                                        <li value="005">(소분류) 전시</li>
+
+                                            <td class="depth-2">
+                                                <div class="category-list">
+                                                    <ul class="category-depth-2" depth="2">
+
                                                     </ul>
                                                 </div>
-                                                <div id="donation-category" class="category-list" style="display:none;">
-                                                    <ul depth="2">
-                                                        <li value="001">(소분류) 환경</li>
-                                                        <li value="002">(소분류) 다문화</li>
-                                                        <li value="003">(소분류) 지구촌</li>
-                                                        <li value="004">(소분류) 시민사회</li>
-                                                        <li value="005">(소분류) 동물</li>
-                                                    </ul>
-
-                                                </div>
-                                                <div id="investment-category" class="category-list" style="display:none;">
-                                                    <ul depth="2">
-                                                        <li value="001">(소분류) 주식</li>
-                                                        <li value="002">(소분류) 채권</li>
-                                                    </ul>
-                                                </div>
-
-
                                             </td>
+
                                         </tr>
                                         </tbody>
                                     </table>
-
                                 </td>
                             </tr>
+                            </tbody>
                             <tr class="goods-rectrictions">
                                 <th class="category">표시제한</th>
                                 <td>
@@ -170,17 +153,14 @@
                                     <label for="restrictions" class="restrictions">모두에게 표시</label>
                                     <input type="radio" name="g_restrictions" id="non-restrictions">
                                     <label for="non-restrictions" class="non-restrictions">회원에게만 표시</label>
-
+                                    <input type="radio" name="adminRestrictions" id="adminRestrictions">
+                                    <label for="adminRestrictions" class="adminRestriction">관리자에게만 표시</label>
                                 </td>
                             </tr>
-                            </tbody>
                         </table>
-
-
 
                         <div class="boardTable">
                             <table border="1">
-
                                 <tr>
                                     <th class="category">분류명</th>
                                     <td>
@@ -188,33 +168,29 @@
                                         <span>[<em class="typing-length">0</em>/ 250 ]</span>
                                     </td>
                                 </tr>
-
                                 <tr>
-                                    <th class="category">분류설명</th>
+                                    <th class="category" name="categoryComment">분류설명</th>
                                     <td>
                                         <textarea class="textArea"></textarea>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <th class="category">표시상태</th>
                                     <td class="radio-btn-area">
-                        <span>
-                            <input id="displayStatus" type="radio" name="displayStatus" checked>
-                            <label for="displayStatus" class="radioBtn">
-                                표시함
-                            </label>
-                        </span>
                                         <span>
-                             <input id="nonDisplayStatus" type="radio" name="displayStatus">
-                        <label for="nonDisplayStatus" class="radioBtn">
-                            표시안함
-                        </label>
-                        </span>
-
+                                            <input id="displayStatus" type="radio" name="displayStatus" checked>
+                                            <label for="displayStatus" class="radioBtn">
+                                                표시함
+                                            </label>
+                                        </span>
+                                        <span>
+                                            <input id="nonDisplayStatus" type="radio" name="displayStatus">
+                                            <label for="nonDisplayStatus" class="radioBtn">
+                                            표시안함
+                                        </label>
+                                        </span>
                                     </td>
                                 </tr>
-
                             </table>
                         </div>
                         <div class="btnCenter">
@@ -223,32 +199,75 @@
                             </a>
                         </div>
                     </form>
+                </section>
+            </section>
+        </section>
 </th:block>
 <th:block layout:fragment="customJsCode">
     <script>
 
-        $('.depth-1 ul').on('click', 'li', function(){
-            var clickDataTab = $(this).attr('data-tab');
-            var clickListValue = $(this).attr('value');
-            var categoryName = $(this).text();
+        //        $('.depth-1 ul').on('click', 'li', function(){
+        //            var clickDataTab = $(this).attr('data-tab');
+        //            var clickListValue = $(this).attr('value');
+        //            var categoryName = $(this).text();
+        //
+        //            $('.depth-2 > div').hide();
+        //            $("#" + clickDataTab).show();
+        //
+        //            $(".code_depth_1").val(clickListValue);
+        //            $('.category_title').text('').prepend("<span>" + categoryName + "</span>");
+        //        });
 
-            $('.depth-2 > div').hide();
-            $("#" + clickDataTab).show();
+        console.log('aa')
 
-            $(".code_depth_1").val(clickListValue);
-            $('.category_title').text('').prepend("<span>" + categoryName + "</span>");
-        });
+        function ajaxCateAdd(projectPatition, callback){
+            const request = $.ajax({
+                url: '/admin/site/ajaxCategoryAdd', // 요청을 보낼 URL 연결 완료
+                type: 'POST', // HTTP 메소드
+                data: { 'projectPatition': projectPatition }, // 서버에 전송할 데이터
+                dataType: 'json', // 서버에서 받을 데이터의 형식
+            })
 
-        console.log('aa');
+            request.done(function (list){
+                callback(list);
+            })
 
-        // // 상품명 count
+            request.fail(function (err){
+                console.log(err);
+            })
+        }
+
+
+        // 글 쓰면 카운트
         function productNameCount(e){
             var count = $(e).val().length;
             $('.typing-length').text(count);
         }
 
+        $(document).on('click','.category-depth-1 li', function(e){
+
+            let projectPatition = $(e.target).attr('data-value'); // this => e.target
+            console.log(projectPatition, '<--projectPatition');
+            ajaxCateAdd(projectPatition, function (list){
+                $('.category-depth-2 li').remove();
+
+                $(list).each((idx, tc) => {
+                    $('.category-depth-2').append(`<li data-value="${idx+1}">(중분류) ${tc.categoryName}</li>`);
+                })
+            })
+
+        })
     </script>
 </th:block>
-
 </body>
+<!--                                                <div id="donation-category" class="category-list" style="display:none;">-->
+<!--                                                    <ul depth="2">-->
+<!--                                                        <li value="001">(소분류) 환경</li>-->
+<!--                                                        <li value="002">(소분류) 다문화</li>-->
+<!--                                                        <li value="003">(소분류) 지구촌</li>-->
+<!--                                                        <li value="004">(소분류) 시민사회</li>-->
+<!--                                                        <li value="005">(소분류) 동물</li>-->
+<!--                                                    </ul>-->
+<!--                                                </div>-->
+
 </html>

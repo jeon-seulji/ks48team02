@@ -98,9 +98,7 @@
 <!--                <tr th:if="${couponList == null}">-->
 <!--                    <td colspan="12">쿠폰의 목록이 없습니다.</td>-->
 <!--                </tr>-->
-                <th>
 
-                </th>
                 <tr th:unless="${couponList == null}" th:each="c : ${couponList}">
                     <td><input type="checkbox" name="admin_board"></td>
                     <td th:text="${c.couponCode}"></td>

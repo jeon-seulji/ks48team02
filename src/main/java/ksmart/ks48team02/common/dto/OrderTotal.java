@@ -14,6 +14,27 @@ public class OrderTotal {
     private String orderConfirmDate;
     private String orderCancellDate;
 
+    // test
+    public String getRewardOrderDetailCode() {
+        return rewardOrderDetailCode;
+    }
+
+    public void setRewardOrderDetailCode(String rewardOrderDetailCode) {
+        this.rewardOrderDetailCode = rewardOrderDetailCode;
+    }
+
+    public String getRewardPaymentCode() {
+        return rewardPaymentCode;
+    }
+
+    public void setRewardPaymentCode(String rewardPaymentCode) {
+        this.rewardPaymentCode = rewardPaymentCode;
+    }
+
+    private String rewardOrderDetailCode;
+    private String rewardPaymentCode;
+
+    // test end
 
     @Override
     public String toString() {

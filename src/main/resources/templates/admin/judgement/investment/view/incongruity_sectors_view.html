@@ -15,12 +15,23 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-
+    <script th:src="@{/user/js/jquery.min.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-
+    <script>
+        $('#settDeleteBtn').click(function () {
+            let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
+            console.log(deleteConfirm);
+            if (deleteConfirm) {
+                window.location.href = `[[@{/admin/investment/delete/incongruity-sectors(incongruitySectorsCode=${incongruitySectorsInfo.incongruitySectorsCode})}]]` ;
+                alert('삭제되었습니다');
+            } else {
+                alert('취소되었습니다');
+            }
+        });
+    </script>
 </th:block>
 
 
@@ -29,7 +40,6 @@
 
     <div class="admin-wrapper" th:object="${incongruitySectorsInfo}">
 
-        <!-- contents -->
         <div class="admin-content-wrapper form-table" style="margin-top: 40px;">
             <div class="project-info-title">
                 <h5>부적합 업종 코드</h5>
@@ -38,7 +48,7 @@
             <form id="projectInfoDetailBt" method="get">
                 <table class="settlement-log application-info-detail" style="border:none;">
                     <tbody>
-                    <!-- contents -->
+                    <tr>
                     <td>
                         부적합 업종
                     </td>
@@ -49,6 +59,13 @@
                             등록한 아이디
                         </td>
                         <td th:text="*{memberId}" colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            부적합 여부
+                        </td>
+                        <td th:if="*{incongruitySectorsWhether == 0}" colspan="5">부적합</td>
+                        <td th:if="*{incongruitySectorsWhether == 1}" colspan="5">적합</td>
                     </tr>
                     <tr>
                         <td>
@@ -73,7 +90,7 @@
                         </li>
                         <li>
                             <button id="settDeleteBtn" class="submitBtn" type="button"
-                                    th:onclick="|location.href='@{/admin/investment/delete/incongruity-sectors(incongruitySectorsCode=*{incongruitySectorsCode})}'|">
+                                    th:onclick="return false">
                                 삭제
                             </button>
                         </li>

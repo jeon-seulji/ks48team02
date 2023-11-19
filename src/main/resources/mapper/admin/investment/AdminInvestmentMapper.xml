@@ -17,7 +17,7 @@
         <result property="investmentImage" column="investment_image"/>
         <result property="investmentLike" column="investment_like"/>
         <result property="investmentAmount" column="investment_amount"/>
-        <result property="investmentAchievementMoney" column="investment_achievement_money"/>
+        <result property="invInvestmentAchievementMoney" column="invInvestmentAchievementMoney"/>
         <result property="investAchievementPercent" column="invest_achievement_percent"/>
         <result property="investmentCompany" column="investment_company"/>
         <result property="searchCount" column="search_count"/>
@@ -65,7 +65,6 @@
         <result property="rejectCnt" column="rejectCnt"/>
         <result property="cbtBusinessType" column="cbtBusinessType"/>
 
-
         <association property="adminInvestment" javaType="AdminInvestment">
             <id property="investmentCode" column="investment_code"/>
             <result property="memberId" column="member_id"/>
@@ -78,7 +77,7 @@
             <result property="investmentImage" column="investment_image"/>
             <result property="investmentLike" column="investment_like"/>
             <result property="investmentAmount" column="investment_amount"/>
-            <result property="investmentAchievementMoney" column="investment_achievement_money"/>
+            <result property="invInvestmentAchievementMoney" column="invInvestmentAchievementMoney"/>
             <result property="investAchievementPercent" column="invest_achievement_percent"/>
             <result property="investmentCompany" column="investment_company"/>
             <result property="searchCount" column="search_count"/>
@@ -95,7 +94,6 @@
         </association>
     </resultMap>
 
-
     <resultMap type="AdminLawSatistifyReason" id="adminLawSatistifyReasonListMap">
         <id property="lawSatistifyCode" column="law_satistify_code"/>
         <result property="lawSatistifyReason" column="law_satistify_reason"/>
@@ -103,7 +101,6 @@
         <result property="lawSatistifyWhether" column="law_satistify_whether"/>
         <result property="codeRegDay" column="code_reg_day"/>
     </resultMap>
-
 
     <resultMap type="AdminIncongruitySectors" id="adminIncongruitySectorsListMap">
         <id property="incongruitySectorsCode" column="incongruity_sectors_code"/>
@@ -127,7 +124,6 @@
         <result property="stockPrice" column="stock_price"/>
         <result property="corpValueFulfill" column="corp_value_fulfill"/>
         <result property="corpValueEvaluateDay" column="corp_value_evaluate_day"/>
-
 
         <association property="adminInvestmentRequestJudge" javaType="AdminInvestmentRequestJudge">
             <id property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
@@ -276,7 +272,10 @@
                 #{amDateSettEndDate} >= DATE_FORMAT(i.investment_request_date, '%Y-%m-%d')
                 AND
             </if>
-            <if test="searchKey != null and searchKey != ''">
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != ''">
+                ${searchKey} = #{searchSelectValue};
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue == null or searchSelectValue == ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
         </where>
@@ -288,7 +287,7 @@
         SELECT
             inv.investment_code,
             inv.investment_subject,
-            inv.investment_achievement_money,
+            inv.investment_achievement_money AS invInvestmentAchievementMoney,
             inv.investment_amount,
             inv.invest_achievement_percent,
             inv.investment_deadline,
@@ -621,12 +620,19 @@
                 #{amDateSettEndDate} >= DATE_FORMAT(c.corp_value_evaluate_day, '%Y-%m-%d')
                 AND
             </if>
-            <if test="searchKey != null and searchKey != ''">
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != '' and searchSelectValue != 100 and searchSelectValue != 99">
+                ${searchKey} = #{searchSelectValue};
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue == 99">
+                c.corporate_value_evaluation_code IS NULL;
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue == '' or searchSelectValue == null">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
         </where>
     </select>
 
+    <!-- 특정 기업가치 평가결과 조회 -->
     <select id="getCorporateValueEvaluationByCode" resultMap="adminCorporateValueEvaluationListMap">
         /* 특정 기업가치 평가결과 조회 */
         SELECT
@@ -660,30 +666,92 @@
             c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </select>
 
+    <!-- 기업가치 평가결과 등록 -->
+    <insert id="addCorporateValueEvaluation" parameterType="AdminCorporateValueEvaluation">
+        <selectKey keyProperty="corporateValueEvaluationCode" resultType="String" order="BEFORE">
+            /* 기업가치 평가코드 자동증가 */
+            SELECT
+                (CASE
+                WHEN COUNT(c.corporate_value_evaluation_code) = 0 THEN CONCAT('cor_val_', CURDATE()+0, '_0001')
+                WHEN COUNT(c.corporate_value_evaluation_code) > 9999 THEN CONCAT('cor_val_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1)
+                ELSE CONCAT('cor_val_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
+                END) AS corporateValueEvaluationCode
+            FROM
+                corporate_value_evaluation AS c
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(c.corporate_value_evaluation_code, '_', 3), '_', -1) = CURDATE()+0;
+        </selectKey>
+        /* 기업가치 평가결과 등록 */
+        INSERT INTO corporate_value_evaluation
+        (corporate_value_evaluation_code, member_id, operating_profit, depreciation, ebitda, ev_ebitda, convert_ev, net_debt, evaluated_corp_value, stock_number, stock_price, corp_value_fulfill, corp_value_evaluate_day)
+        VALUES
+        (#{corporateValueEvaluationCode}, #{memberId}, #{operatingProfit}, #{depreciation}, #{ebitda}, #{evEbitda}, #{convertEv}, #{netDebt}, #{evaluatedCorpValue}, #{stockNumber}, #{stockPrice}, #{corpValueFulfill} ,NOW());
+    </insert>
 
+    <!-- 기업가치 평과결과 등록 후 심사요청 외래키 수정 -->
+    <update id="modifyInvestmentRequestCorpValueKey" parameterType="AdminInvestmentRequestJudge">
+        <selectKey keyProperty="corporateValueEvaluationCode" resultType="String" order="BEFORE">
+            /* 마지막 기업가치 평가코드 조회 */
+            SELECT
+                MAX(c.corporate_value_evaluation_code) AS corporateValueEvaluationCode
+            FROM
+                corporate_value_evaluation AS c
+        </selectKey>
+        /* 기업가치 평과결과 등록 후 심사요청 외래키 수정 */
+        UPDATE
+            investment_request_judge
+        SET
+            corporate_value_evaluation_code = #{corporateValueEvaluationCode}
+        WHERE
+            investment_request_judge_code = #{investmentRequestJudgeCode}
+    </update>
+
+    <!-- 자본시장법 범위충족기준 등록 -->
     <insert id="addLawSatistify" parameterType="AdminLawSatistifyReason">
         <selectKey keyProperty="lawSatistifyCode" resultType="String" order="BEFORE">
             /* 자본시장법 범위충족코드 자동증가 */
             SELECT
                 (CASE
-                WHEN COUNT(l.code_reg_day) = 0 THEN CONCAT('law_stf_', CURDATE()+0, '_0001')
-                WHEN COUNT(l.code_reg_day) > 9999 THEN CONCAT('law_stf_', CURDATE()+0, '_', COUNT(l.code_reg_day)+1)
-                ELSE CONCAT('law_stf_', CURDATE()+0, '_', LPAD(COUNT(l.code_reg_day)+1, 4, '0'))
+                WHEN COUNT(l.law_satistify_code) = 0 THEN CONCAT('law_stf_', CURDATE()+0, '_0001')
+                WHEN COUNT(l.law_satistify_code) > 9999 THEN CONCAT('law_stf_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1)
+                ELSE CONCAT('law_stf_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
                 END) AS lawSatistifyCode
             FROM
                 law_satistify_reason AS l
             WHERE
-                DATE_FORMAT(l.code_reg_day, '%Y-%m-%d') = CURDATE();
+                SUBSTRING_INDEX(SUBSTRING_INDEX(l.law_satistify_code, '_', 3), '_', -1) = CURDATE()+0;
         </selectKey>
         /* 자본시장법 범위충족기준 등록 */
         INSERT INTO law_satistify_reason
             (law_satistify_code, member_id, law_satistify_reason, law_satistify_whether, code_reg_day)
         VALUES
-            (#{lawSatistifyCode}, #{memberId}, #{lawSatistifyReason}, 1, CURRENT_TIMESTAMP());
+            (#{lawSatistifyCode}, #{memberId}, #{lawSatistifyReason}, #{lawSatistifyWhether}, CURRENT_TIMESTAMP());
+    </insert>
+
+    <!-- 부적합 업종 등록 -->
+    <insert id="addIncogruitySector" parameterType="AdminIncongruitySectors">
+        <selectKey keyProperty="incongruitySectorsCode" resultType="String" order="BEFORE">
+            /* 부적합 업종코드 자동증가 */
+            SELECT
+                (CASE
+                WHEN COUNT(i.incongruity_sectors_code) = 0 THEN CONCAT('inc_sec_', CURDATE()+0, '_0001')
+                WHEN COUNT(i.incongruity_sectors_code) > 9999 THEN CONCAT('inc_sec_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code,'_',-1) AS UNSIGNED))+1)
+                ELSE CONCAT('inc_sec_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code, '_', -1) AS UNSIGNED))+1, 4, '0'))
+                END) AS incongruitySectorsCode
+            FROM
+                incongruity_sectors AS i
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(i.incongruity_sectors_code, '_', 3), '_', -1) = CURDATE()+0;
+        </selectKey>
+        /* 부적합 업종 등록 */
+        INSERT INTO incongruity_sectors
+            (incongruity_sectors_code, member_id, incongruity_sectors_business, incongruity_sectors_whether, code_reg_day)
+        VALUES
+            (#{incongruitySectorsCode}, #{memberId}, #{incongruitySectorsBusiness}, #{incongruitySectorsWhether}, CURRENT_TIMESTAMP());
     </insert>
 
     <!-- 투자펀딩 심사요청 수정 -->
-    <update id="modifyInvestmentRequestJudge" parameterType="ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge">
+    <update id="modifyInvestmentRequestJudge" parameterType="AdminInvestmentRequestJudge">
         /* 투자펀딩 심사요청 수정 */
         UPDATE investment_request_judge
         <set>
@@ -726,8 +794,8 @@
             <if test="invBusinessType != null and invBusinessType != ''">
                 business_type = #{invBusinessType},
             </if>
-            <if test="InvestmentAchievementMoney != null and InvestmentAchievementMoney != ''">
-                investment_achievement_money = #{InvestmentAchievementMoney},
+            <if test="investmentAchievementMoney != null and investmentAchievementMoney != ''">
+                investment_achievement_money = #{investmentAchievementMoney},
             </if>
             <if test="businessProfits != null and businessProfits != ''">
                 business_profits = #{businessProfits},
@@ -748,6 +816,9 @@
                 issue_stock_number = #{issueStockNumber},
             </if>
             <if test="investJudgeResult != null and investJudgeResult != ''">
+                invest_judge_result = #{investJudgeResult}
+            </if>
+            <if test="investJudgeResult == 0">
                 invest_judge_result = #{investJudgeResult}
             </if>
         </set>
@@ -772,6 +843,9 @@
             <if test="lawSatistifyWhether != null and lawSatistifyWhether != ''">
                 law_satistify_whether = #{lawSatistifyWhether}
             </if>
+            <if test="lawSatistifyWhether == 0">
+                law_satistify_whether = #{lawSatistifyWhether}
+            </if>
         </set>
         WHERE
             law_satistify_code = #{lawSatistifyCode};
@@ -794,9 +868,64 @@
             <if test="incongruitySectorsWhether != null and incongruitySectorsWhether != ''">
                 incongruity_sectors_whether = #{incongruitySectorsWhether}
             </if>
+            <if test="incongruitySectorsWhether == 0">
+                incongruity_sectors_whether = #{incongruitySectorsWhether}
+            </if>
         </set>
         WHERE
             incongruity_sectors_code = #{incongruitySectorsCode};
+    </update>
+
+    <!-- 기업가치 평가 결과 수정 -->
+    <update id="modifyCorporateValueEvaluation" parameterType="AdminCorporateValueEvaluation">
+        /* 기업가치 평가 결과 수정 */
+        UPDATE corporate_value_evaluation
+        <set>
+            <if test="memberId != null and memberId != ''">
+                member_id = #{memberId},
+            </if>
+            <if test="operatingProfit != null and operatingProfit != ''">
+                operating_profit = #{operatingProfit},
+            </if>
+            <if test="depreciation != null and depreciation != ''">
+                depreciation = #{depreciation},
+            </if>
+            <if test="ebitda != null and ebitda != ''">
+                ebitda = #{ebitda},
+            </if>
+            <if test="evEbitda != null and evEbitda != ''">
+                ev_ebitda = #{evEbitda},
+            </if>
+            <if test="convertEv != null and convertEv != ''">
+                convert_ev = #{convertEv},
+            </if>
+            <if test="netDebt != null and netDebt != ''">
+                net_debt = #{netDebt},
+            </if>
+            <if test="stockNumber != null and stockNumber != ''">
+                stock_number = #{stockNumber},
+            </if>
+            <if test="stockNumber != null and stockNumber != ''">
+                stock_number = #{stockNumber},
+            </if>
+            <if test="evaluatedCorpValue != null and evaluatedCorpValue != ''">
+                evaluated_corp_value = #{evaluatedCorpValue},
+            </if>
+            <if test="stockPrice != null and stockPrice != ''">
+                stock_price = #{stockPrice},
+            </if>
+            <if test="stockPrice != null and stockPrice != ''">
+                stock_price = #{stockPrice},
+            </if>
+            <if test="corpValueFulfill != null and corpValueFulfill != ''">
+                corp_value_fulfill = #{corpValueFulfill},
+            </if>
+            <if test="corpValueFulfill == 0">
+                corp_value_fulfill = #{corpValueFulfill}
+            </if>
+        </set>
+        WHERE
+            corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </update>
 
     <!-- 투자펀딩 심사요청 삭제 -->
@@ -807,6 +936,34 @@
             investment_request_judge
         WHERE
             investment_request_judge_code = #{investmentRequestJudgeCode};
+    </delete>
+
+    <!-- 자본시장 범위충족기준 삭제 -->
+    <delete id="removeLawSatistify" parameterType="String">
+        DELETE
+        FROM
+            law_satistify_reason
+        WHERE
+            law_satistify_code = #{lawSatistifyCode};
+    </delete>
+
+    <!-- 부적합 업종 삭제 -->
+    <delete id="removeIncogruitySectors" parameterType="String">
+        DELETE
+        FROM
+            incongruity_sectors
+        WHERE
+            incongruity_sectors_code = #{incongruitySectorsCode};
+    </delete>
+
+    <!-- 기업가치 평가 결과 삭제 -->
+    <delete id="removeCorporateValueEvaluation" parameterType="String">
+        /* 기업가치 평가 결과 삭제 */
+        DELETE
+        FROM
+            corporate_value_evaluation
+        WHERE
+            corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </delete>
 
 </mapper>
