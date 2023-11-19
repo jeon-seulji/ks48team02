@@ -22,7 +22,7 @@ public class UserMemberService {
     // 로그인 시 아이디, 비밀번호 일치 확인+ 회원의 권한과 이름 리턴
     public Map<String, Object> checkMemberInfo(String memberId, String memberPw){
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        boolean unregStagus = false;
+
         boolean isChecked = false;
         Member memberInfo = userMemberMapper.getMemberInfoById(memberId);
         if(memberInfo != null) {
