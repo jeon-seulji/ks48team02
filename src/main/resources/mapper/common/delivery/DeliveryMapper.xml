@@ -35,6 +35,72 @@
         <result property="categoryStatus" column="category_status"/>
     </resultMap>
 
+    <!-- 여기부터 작업 -->
+    <sql id="deliveryListWhere">
+        <where>
+        <!-- 기간 선택 -->
+        <if test="dateSettStartDate != null and dateSettStartDate != ''">
+            DATE_FORMAT(ot.order_application_date, '%Y-%m-%d') >= #{dateSettStartDate}
+        </if>
+        <if test="dateSettEndDate != null and dateSettEndDate != ''">
+            AND
+            #{dateSettEndDate} >= DATE_FORMAT(ot.order_application_date, '%Y-%m-%d')
+        </if>
+        <!-- 공고 분류 선택 -->
+        <if test="projectPartition != null">
+            AND
+            substring(goods_code, 1,3) IN
+            <foreach collection="projectPartition" item="item" open="(" close=")"  separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <!-- 공고 상태 선택 -->
+        <if test="orderby == 'projecting_o'">
+            AND
+            ot.order_category_code IN ('ORDC_001','ORDC_002','ORDC_003')
+        </if>
+        <if test="orderby == 'projectFail_o'">
+            AND
+            ot.order_category_code = 'ORDC_013'
+        </if>
+        <if test="orderby == 'deliveryWait_o'">
+            AND
+            ot.order_category_code = 'ORDC_004'
+        </if>
+        <if test="orderby == 'deliveryCompleted_o'">
+            AND
+            ot.order_category_code = 'ORDC_005'
+        </if>
+        <if test="orderby == 'swapping_o'">
+            AND
+            ot.order_category_code IN ('ORDC_011','ORDC_012')
+        </if>
+        <if test="orderby == 'refunding_o'">
+            AND
+            ot.order_category_code IN ('ORDC_009','ORDC_010')
+        </if>
+        <if test="orderby == 'orderCompleted'">
+            AND
+            ot.order_category_code IN ('ORDC_006','ORDC_007','ORDC_008')
+        </if>
+        <!-- 키워드 선택 -->
+        <if test="searchKey != null and searchKey == 'total'">
+            AND
+            (
+            ot.order_code LIKE CONCAT('%', #{searchValue}, '%')
+            OR
+            ot.member_id LIKE CONCAT('%', #{searchValue}, '%')
+            OR
+            ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
+            OR
+            ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
+            )
+        </if>
+        <if test="searchKey != null and searchKey != 'total' and searchKey != ''">
+            AND
+            ot.${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+        </if>
+    </sql>
     <!-- delivery list  조회 -->
     <select id="getDeliveryList" parameterType="map" resultMap="orderDeliveryMap">
         SELECT

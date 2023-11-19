@@ -89,7 +89,7 @@ public class OrderManagementController {
     }
 
     // 주문 목록 정렬 ajax
-    @PostMapping(value="/ajax/list")
+    @PostMapping(value="/list/ajax")
     @ResponseBody
     public Map<String, Object> getOrderListOrderBy(Model model,
                                                     @RequestBody Map<String, Object> paramMap){
@@ -179,6 +179,17 @@ public class OrderManagementController {
         return "admin/order/delivery";
     }
 
+    // 배송관리 ajax
+    @PostMapping(value = "/delivery/ajax")
+    public Map<String, Object> adminOrderDeliveryAjax(@RequestBody Map<String, Object> paramMap){
+        log.info("param {}", paramMap);
+        log.info("currentPage {}", paramMap.get("currentPage"));
+        log.info("rowPerPage {}", paramMap.get("rowPerPage"));
+        Map<String, Object> list = deliveryService.getDeliveryList(paramMap);
+        log.info("ajax list {}", list);
+
+        return list;
+    };
     // 배송 정보
     @GetMapping( "/delivery/detail")
     public String adminOrderDeliveryInfo(Model model,

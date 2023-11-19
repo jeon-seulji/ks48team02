@@ -23,26 +23,113 @@
             $('input[name="amDateSettEndDate"]').prop('min',startDate);
         });
 
-
-
-
         let startDateValue = startDate(nowDateSet);
         let endDateValue = `${nowDateSet.getFullYear()}-${String(nowDateSet.getMonth() + 1).padStart(2, '0')}-${String(nowDateSet.getDate()).padStart(2, '0')}`;
 
-        console.log(startDateValue, '<-- start value');
-        console.log(endDateValue, '<-- end value');
+        // console.log(startDateValue, '<-- start value');
+        // console.log(endDateValue, '<-- end value');
 
         $('input[name="amDateSettStartDate"]').val(startDateValue);
         $('input[name="amDateSettEndDate"]').val(endDateValue);
-
-
-
-
 
         // loaded category checkbox all checked
         const $categoryEls = $('.order-category-select input');
         $($categoryEls).prop('checked', true);
 
+        // ajax js
+        function adminDeliveryAjax(queryString, callback){
+            const request = $.ajax({
+                url : '/admin/order/delivery/ajax',
+                method: 'POST',
+                data : JSON.stringify(queryString),
+                contextType : 'application/json',
+                datatype: 'json',
+            });
+            request.done(function(list){
+                callback(list);
+            });
+            request.fail(function(err){
+                console.log(err);
+            });
+        }
+
+        function setOrderData(list){
+            $('.settlement-log tbody tr').remove();
+            if(list.length == 0) {
+                $('.settlement-log tbody').append(`<tr>
+                                                     <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                                                   </tr>`);
+            }
+            $(list).each((idx, l) => {
+                $('.settlement-log tbody').append('<tr></tr>');
+                $('.settlement-log tbody tr').append(`<td class="table-data-center">
+                                                        <input type="checkbox" name="selectList">
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <a class="detail-link" title="${l.orderDeliveryCode}" href="@{/admin/order/delivery/detail?(orderDeliveryCode=${l.orderDeliveryCode})}">${l.orderDeliveryCode}</a>
+                                                    </td>
+                                                    <td  class="table-data-center">
+                                                        ${l.deliveryCategory}
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        ${(l.deliveryState == '1')? '출고대기':(l.deliveryState == '2')? '배송중':'배송완료'}
+                                                    </td>
+                                                    <td>
+                                                        ${l.memberId}
+                                                    </td>
+                                                    <td>
+                                                        ${l.deliveryName}
+                                                    </td>
+                                                    <td >
+                                                        ${(l.deliveryCourier == null)?'-':l.deliveryCourier}
+                                                    </td>
+                                                    <td>
+                                                        ${(l.numberInvoice == null)?'-':l.numberInvoice}
+                                                    </td>
+                                                    <td  class="table-data-center">
+                                                        ${(l.numberInvoice == null)? '-':l.numberInvoice}
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        ${(l.deliveryStartDate == null)? '-':l.deliveryStartDate}
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        ${(l.deliveryEndDate == null)? '-':l.deliveryEndDate}
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <a class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}}">${l.orderCode}</a>
+                                                    </td>`);
+            });
+
+            let priceEls = $('input[name="orderPrice"]');
+            payFormat(priceEls);
+        }
+
+
+        $('select[name="orderby"], select[name="count-select"]').on('change', function(){
+            $('#allSelectBtn').prop('checked', false);
+            let orderbyValue = $('select[name="orderby"]').val();
+
+            $('.select-list-count').text('0');
+
+            // page value
+            let currentPage = 1;
+            let rowPerPage = $('select[name="count-select"]').val();
+
+            const queryString = searchObject();
+            queryString.orderby = orderbyValue;
+            queryString.currentPage = currentPage;
+            queryString.rowPerPage = rowPerPage;
+
+            adminDeliveryAjax(queryString, function(list){
+                // list count
+                $('.total-list').text(list.deliveryList.length);
+                setOrderData(list.deliveryList);
+
+                // pager setting
+                const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
+                setPagerData(pageNumArr, list.currentPage, list);
+            });
+        });
 
     </script>
 </th:block>
@@ -72,8 +159,8 @@
                 </div>
                 <div class="list-count-selector">
                     <select name="orderby">
-                        <option value="delived_d">배송일 역순</option>
-                        <option value="delived_a">배송일 순</option>
+                        <option value="delived_d">등록일 역순</option>
+                        <option value="delived_a">등록일 순</option>
                         <option>-----------------</option>
                         <option value="order_name_d">주문자 역순</option>
                         <option value="order_name_a">주문자 순</option>
@@ -92,9 +179,8 @@
                 </div>
             </div>
             <!-- contents area -->
-            <form id="orderListForm">
-                <table class="settlement-log">
-                    <thead>
+            <table class="settlement-log">
+                <thead>
                     <tr>
                         <th style="width:5%;">
                             <input type="checkbox" name="allSelect" id="allSelectBtn">
@@ -102,7 +188,8 @@
                         <th style="width:12%;">배송 관리코드</th>
                         <th style="width:8%;">배송유형</th>
                         <th style="width:8%;">배송상태</th>
-                        <th style="width:10%;">주문 아이디</th>
+                        <th style="width:7%;">주문 아이디</th>
+                        <th style="width:7%;">주문자명</th>
                         <th style="width:10%;">택배사</th>
                         <th style="width:17%;">
                             운송장번호
@@ -113,8 +200,8 @@
                         <th style="width:8%;">배송 완료일</th>
                         <th style="width:12%;">주문 코드</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     <!-- 조회 결과 없음 -->
                     <tr th:if="${deliveryList == null}">
                         <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
@@ -131,10 +218,13 @@
                             [[${l.deliveryCategory}]]
                         </td>
                         <td class="table-data-center">
-                            [[${l.deliveryState}]]
+                            [[${(l.deliveryState == '1')? '출고대기':(l.deliveryState == '2')? '배송중':'배송완료'}]]
                         </td>
                         <td>
                             [[${l.memberId}]]
+                        </td>
+                        <td>
+                            [[${l.deliveryName}]]
                         </td>
                         <td >
                             [[${(l.deliveryCourier == null)?'-':l.deliveryCourier}]]
@@ -155,27 +245,36 @@
                             <a class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}}">[[${l.orderCode}]]</a>
                         </td>
                     </tr>
-                    </tbody>
-                </table>
-            </form>
+                </tbody>
+            </table>
+
             <!-- list pager -->
             <div class="board-page-area">
                 <div class="list-controller-inner">
-                    <ul>
-                        <li class="link-active"><a th:href="@{#}">1</a></li>
-                        <li><a th:href="@{#}">2</a></li>
-                        <li><a th:href="@{#}">3</a></li>
-                        <li><a th:href="@{#}">4</a></li>
-                        <li><a th:href="@{#}">5</a></li>
-                        <li><a th:href="@{#}">6</a></li>
+                    <ul class="order-list-pager">
+                        <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
+                            <li th:unless="${num != currentPage}" class="link-active currentPage"><a th:data-value="${num}">[[${num}]]</a></li>
+                            <li th:if="${num != currentPage}"><a th:data-value="${num}">[[${num}]]</a></li>
+                        </th:block>
                     </ul>
                     <div class="list-btn-area">
-                        <button class="prev-transfer">
-                            <span>prev</span>
-                        </button>
-                        <button class="next-transfer">
-                            <span>next</span>
-                        </button>
+                        <th:block th:if="${startPageNum == currentPage}">
+                            <button class="prev-transfer no-action">
+                                <span>prev</span>
+                            </button>
+                            <button class="next-transfer">
+                                <span>next</span>
+                            </button>
+                        </th:block>
+                        <th:block th:if="${lastPage == currentPage}">
+                            <button class="prev-transfer">
+                                <span>prev</span>
+                            </button>
+                            <button class="next-transfer no-action">
+                                <span>next</span>
+                            </button>
+                        </th:block>
+
                     </div>
                 </div>
 

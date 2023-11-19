@@ -314,10 +314,8 @@ function searchObject(){
     $($inputEls).each((idx, item) => {
         let checkBoxValue = $(item).attr('name');
         arr.push(checkBoxValue);
-
     });
     // console.log(arr, '<--arr');
-
 
     let amDateSettStartDate = $('input[name="amDateSettStartDate"]').val();
     let amDateSettEndDate = $('input[name="amDateSettEndDate"]').val();
@@ -335,4 +333,32 @@ function searchObject(){
     queryString.projectPartition = arr;
 
     return queryString;
+}
+
+
+// pager setting
+function setPagerData(arr, currentPage, list){
+    let lastPage = list.lastPage;
+    let startPageNum = list.startPageNum;
+    $('.list-btn-area button').removeClass('no-action');
+
+    if(currentPage == startPageNum) {
+        $('.prev-transfer').addClass('no-action');
+    }
+    if(currentPage == lastPage){
+        $('.next-transfer').addClass('no-action');
+    }
+
+    $('.order-list-pager li').remove();
+    $(arr).each((idx, item) => {
+        let classArr = [];
+        if(item == currentPage) {
+            classArr.push('link-active');
+            classArr.push('currentPage');
+        }
+        if(item == startPageNum) classArr.push('startPageNum');
+        if(item == lastPage) classArr.push('lastPage');
+
+        $('.order-list-pager').append(`<li class="${classArr.join(' ')}"><a data-value="${item}">${item}</a></li>`);
+    });
 }
