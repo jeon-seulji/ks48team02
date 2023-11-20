@@ -108,6 +108,18 @@
         </collection>
     </resultMap>
 
+    <!-- 리워드 공고 상세 result map -->
+    <resultMap id="rewardOptionMap" type="RewardOption">
+        <id property="rewardOptionCode" column="reward_option_code"/>
+        <result property="rewardProjectCode" column="reward_project_code"/>
+        <result property="optionContents" column="option_contents"/>
+        <result property="optionPrice" column="option_price"/>
+        <result property="optionLimitQuantity" column="option_limit_quantity"/>
+        <result property="optionName" column="option_name"/>
+        <result property="optionDeliveryPrice" column="option_delivery_price"/>
+        <result property="optionEstimatedDeliveryDate" column="option_estimated_delivery_date"/>
+    </resultMap>
+
     <!--주문 회원 정보 조회-->
     <select id="getOrderMemberInfo" parameterType="String" resultMap="memberResultMap">
 
@@ -624,7 +636,22 @@
     </insert>
 
 
-
+    <!-- 리워드 공고 옵션 조회 -->
+    <select id="getRewardOptionByCode" parameterType="String" resultMap="rewardOptionMap">
+        SELECT
+            ro.reward_option_code,
+            ro.reward_project_code,
+            ro.option_contents,
+            ro.option_price,
+            ro.option_limit_quantity,
+            ro.option_name,
+            ro.option_delivery_price,
+            ro.option_estimated_delivery_date
+        FROM
+            reward_option AS ro
+        WHERE
+            ro.reward_project_code = #{rewardProjectCode};
+    </select>
 
 
 

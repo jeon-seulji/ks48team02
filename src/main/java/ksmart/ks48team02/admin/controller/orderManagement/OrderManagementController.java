@@ -5,6 +5,8 @@ import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.service.delivery.DeliveryService;
 import ksmart.ks48team02.common.service.order.OrderService;
 import ksmart.ks48team02.common.service.payments.PaymentsService;
+import ksmart.ks48team02.user.dto.RewardOption;
+import ksmart.ks48team02.user.service.reward.RewardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,14 +27,17 @@ public class OrderManagementController {
     private final OrderService orderService;
     private final PaymentsService paymentsService;
     public final DeliveryService deliveryService;
+    public final RewardService rewardService;
 
     public OrderManagementController(OrderService orderService,
                                      PaymentsService paymentsService,
-                                     DeliveryService deliveryService){
+                                     DeliveryService deliveryService,
+                                     RewardService rewardService){
 
         this.orderService = orderService;
         this.paymentsService = paymentsService;
         this.deliveryService = deliveryService;
+        this.rewardService = rewardService;
     }
 
     // 주문 검색 ajax
@@ -125,19 +130,33 @@ public class OrderManagementController {
         // 특정 결제 정보 및 배송 정보조회
         switch(goodsPartition){
             case "rwd":
+                // 옵션 정보
+                List<RewardOrderDetail> getRewardOptionByOrderCode = orderService.getRewardOptionByOrderCode(orderCode);
+                log.info("getRewardOptionByOrderCode {}", getRewardOptionByOrderCode);
+                model.addAttribute("getRewardOptionByOrderCode", getRewardOptionByOrderCode);
+
+                // 공고 옵션 조회
+                String rewardProjectCode = OrderInfoById.getGoodsCode();
+                List<RewardOption> getRewardOptionByCode = rewardService.getRewardOptionByCode(rewardProjectCode);
+                log.info("getRewardOptionByCode {}", getRewardOptionByCode);
+                model.addAttribute("getRewardOptionByCode", getRewardOptionByCode);
+
                 // 결제 정보
                 RewardPayments getRewardPaymentsById = paymentsService.getRewardPaymentsById(orderCode);
                 log.info("paymentsInfo {}", getRewardPaymentsById);
                 model.addAttribute("paymentsInfo", getRewardPaymentsById);
+
                 // 배송 정보
                 OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(null, orderCode);
                 model.addAttribute("getDeliveryByCode", getDeliveryByCode);
                 break;
+
             case "don":
                 DonationPayments getDonationPaymentsById = paymentsService.getDonationPaymentsById(orderCode);
                 log.info("paymentsInfo {}", getDonationPaymentsById);
                 model.addAttribute("paymentsInfo", getDonationPaymentsById);
                 break;
+
             case "inv":
                 InvestPayments getInvestPaymentsById = paymentsService.getInvestPaymentsById(orderCode);
                 log.info("paymentsInfo {}", getInvestPaymentsById);

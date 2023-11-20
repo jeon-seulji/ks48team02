@@ -2,7 +2,9 @@ package ksmart.ks48team02.common.service.order;
 
 import ksmart.ks48team02.admin.controller.orderManagement.OrderManagementController;
 import ksmart.ks48team02.common.dto.OrderTotal;
+import ksmart.ks48team02.common.dto.RewardOrderDetail;
 import ksmart.ks48team02.common.mapper.order.OrderMapper;
+import ksmart.ks48team02.user.dto.RewardOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -86,8 +88,6 @@ public class OrderService {
             resultMap.put("currentPage", currentPage); // 현재 페이지
             resultMap.put("endPageNum", endPageNum); // 끝 페이지
         }
-
-
         return resultMap;
     }
 
@@ -98,7 +98,12 @@ public class OrderService {
         return OrderInfoById;
     }
 
-
+    // 주문 코드에 따른 주문 상세 조회
+    public List<RewardOrderDetail> getRewardOptionByOrderCode(String orderCode){
+        List<RewardOrderDetail> getRewardOptionByOrderCode = null;
+        getRewardOptionByOrderCode = orderMapper.getRewardOptionByOrderCode(orderCode);
+        return getRewardOptionByOrderCode;
+    }
 
 
 }

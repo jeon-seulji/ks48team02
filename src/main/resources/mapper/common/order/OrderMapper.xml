@@ -18,7 +18,16 @@
         <result property="orderConfirmDate" column="order_confirm_date"/>
         <result property="orderCancellDate" column="order_cancell_date"/>
     </resultMap>
-    
+
+    <resultMap id="rewardOptionMap" type="RewardOrderDetail">
+        <id property="rewardOrderDetailCode" column="rd_order_detail_code"/>
+        <result property="rewardOptionCode" column="reward_option_code"/>
+        <result property="orderCode" column="option_price"/>
+        <result property="orderOptionAmount" column="order_option_amount"/>
+        <result property="optionPrice" column="option_price"/>
+        <result property="optionTotalPrice" column="option_total_price"/>
+    </resultMap>
+
     <sql id="orderListWhere">
         <where>
             <!-- 기간 선택 -->
@@ -186,5 +195,19 @@
             ot.order_code = #{orderCode};
     </select>
 
+    <!-- 주문 코드에 따른 주문 상세 조회 -->
+    <select id="getRewardOptionByOrderCode" parameterType="String" resultMap="rewardOptionMap">
+        SELECT
+            rod.rd_order_detail_code,
+            rod.reward_option_code,
+            rod.order_code,
+            rod.order_option_amount,
+            rod.option_price,
+            rod.option_total_price
+        FROM
+            reward_order_detail AS rod
+        WHERE
+            rod.order_code = #{orderCode};
+    </select>
 
 </mapper>

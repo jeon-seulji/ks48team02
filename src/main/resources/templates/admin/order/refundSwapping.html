@@ -51,74 +51,10 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-  <div class="admin-content-wrapper form-table">
-    <form id="amYearChartForm" method="get">
-      <table class="partition-select">
-        <tbody>
-          <tr>
-            <td>
-              기간
-            </td>
-            <td>
-              <input type="date" name="amDateSettStartDate" value="">
-              <span> - </span>
-              <input type="date" name="amDateSettEndDate" value="">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              주문 상태
-            </td>
-            <td class="order-category-select">
-              <ul>
-                <li>
-                  <input id="swapping_r" type="checkbox" name="swapping_r">
-                  <label for="swapping_r">교환</label>
-                </li>
-                <li>
-                  <input id="refund_r" type="checkbox" name="refund_r">
-                  <label for="refund_r">환불</label>
-                </li>
-                <li>
-                  <input id="companion_r" type="checkbox" name="companion_r">
-                  <label for="companion_r">반려</label>
-                </li>
-                <li>
-                  <input id="progressing_r" type="checkbox" name="progressing_r">
-                  <label for="progressing_r">처리중</label>
-                </li>
-                <li>
-                  <input id="progressed_r" type="checkbox" name="progressed_r">
-                  <label for="progressed_r">처리완료</label>
-                </li>
+  <!-- search form fragments start -->
+  <th:block th:replace="~{common/fragments/searchFormFragments :: searchFormFragments}"></th:block>
+  <!-- search form fragments end -->
 
-                </li>
-
-              </ul>
-
-            </td>
-          </tr>
-          <tr>
-            <td>
-              검색 키워드
-            </td>
-            <td class="order-category-select">
-              <select name="searchKey">
-                <option value="total">전체</option>
-                <option value="settlementCode">공고코드</option>
-                <option value="settlementId">신청아이디</option>
-                <option value="projectName">공고명</option>
-              </select>
-              <input type="search" name="searchValue">
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="btn-area">
-        <button type="button" class="submitBtn">검색</button>
-      </div>
-    </form>
-  </div>
   <div class="title-wrap">
     <h4 class="admin-content-title">신청 목록</h4>
     <div class="btnArea">
