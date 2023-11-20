@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/user/account")
 public class MemberAccountController {
@@ -58,7 +60,7 @@ public class MemberAccountController {
         if(loginId == null) return "user/account/main"; else return "user/account/drop";
     }
 
-    // 회원 탈퇴 전 비밀번호 일치 확인
+    // 회원 탈퇴 전 비밀번호 일치 확인 단계
     @PostMapping( "/pwCheck")
     @ResponseBody
     public boolean pwCheck(@RequestParam(name="memberPw") String memberPw
@@ -68,17 +70,26 @@ public class MemberAccountController {
 
 
         return accountService.pwCheck(loginId, memberPw);
+
     }
+
+    // 비밀번호 인증 후 정말 탈퇴하시겠습니까 ? YES 👉 회원 비활성화
     @PostMapping("/inactivate")
     public String inactivate(HttpSession session, Model model, RedirectAttributes redirectAttributes){
         String loginId = (String) session.getAttribute("SID");
         model.addAttribute("loginId",loginId);
-        Integer result = accountService.inactivateMember(loginId);
+        int result = accountService.inactivateMember(loginId);
         if(result != 0) model.addAttribute("msg","탈퇴가 완료되었습니다.");
         session.invalidate();
 
-
-        return "user/account/inactivate"; //
+        return "redirect:/user"; // 메인페이지로 이동
     }
+
+    // 회원정보 완전 삭제는 회원 아이디를 참조하는 테이블이 너무 많은 관계로 안 하는 걸로...
+
+    // 회원 아이디로 회원정보 조회
+
+
+
 
 }

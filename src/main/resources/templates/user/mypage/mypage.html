@@ -46,9 +46,9 @@
 
         /*  tab의 내부 영역 시작 */
         .titleContainer{
-            display : flex;
+            /*display : flex;*/
             flex-direction: column;
-            height : 150px;
+            /*height : 150px;*/
             justify-content: start;
             padding: 30px 0 20px 30px;
 
@@ -165,6 +165,10 @@
 
         .hidden{
             display: none;
+        }
+
+        input::placeholder,.form-control {
+            font-size: 14px; /* 원하는 글꼴 크기로 조절 */
         }
 
 
@@ -375,7 +379,7 @@
 
                                     <div class="modal-footer" >
                                         <button type="button" class="submitBtn_white" data-dismiss="modal">취소</button>
-                                        <button type="button" class="submitBtn_black">확인</button>
+                                        <button type="button" class="submitBtn_black" >확인</button>
                                     </div>
                                 </div>
                             </div>
@@ -395,7 +399,7 @@
                         <div class="tabTitle">적립급/쿠폰</div>
                     </div>
                 </div>
-                <div id="menu6" class="container tab-pane" style=" height: 800px;" >
+                <div id="menu6" class="container tab-pane" style="" >
                     <div class="titleContainer" >
                         <div class="tabTitle">내 정보</div>
                         <div style=" display: flex; flex-direction: column;
@@ -409,58 +413,74 @@
                                     </div>
                                 </div>
                                 <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey" style="width: auto"></div>
-                                <!--  비밀번호 정보 -->
+                                <!-----  1️⃣ 비밀번호 정보 ----->
                                 <div class="mb-6" style="display: flex; justify-content: space-between;" >
                                     <p class="user-info-list">비밀번호</p>
-                                    <button id="edit-pw-btn" type="button" class="btn btn-secondary btn-sm">변경</button>
+                                    <button id="edit-pw-btn" type="button" data-target="edit-pw" class="btn btn-secondary btn-sm" style="background-color: darkgrey; border: 1px solid lightgrey;">변경</button>
                                 </div>
                                 <!-- 변경 버튼 클릭시 edit-pw div가 floating  -->
                                 <div id="edit-pw" class="info-box" style="margin: 10px 50px 0 50px; display: none;">
-                                    <input class="form-control" placeholder="비밀번호 입력" id="floating-input"
-                                           style="height: 10px; border: 1px solid black; margin: 15px;"/>
-                                    <label for="floating-input"></label>
+                                    <!--  기존 비밀번호   -->
+                                    <p>현재 비밀번호 확인</p>
+                                    <input class="form-control" type="password" placeholder="비밀번호 입력" id="floating-input"
+                                           style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
+                                    <button class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">확인</button>
+                                    <!--  새로운 비밀번호   -->
+                                    <p>새로운 비밀번호</p>
+                                    <input class="form-control" type="password" placeholder="새로운 비밀번호"
+                                           style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
+                                    <input class="form-control" type="password" placeholder="새로운 비밀번호 확인"
+                                           style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
+                                    <button class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">저장</button>
                                 </div>
 
-                                <!--  e-mail 정보 -->
+
                                 <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey" style="width: auto"></div>
+
+                                <!------ 2️ e-mail 정보 ----->
                                 <div class="mb-6">
                                     <div style="display: flex; justify-content: space-between;">
                                         <p class="user-info-list">e-mail</p>
-                                        <!-- 변경 버튼 클릭시 edit-pw div가 floating  -->
-                                        <button id="edit-eamil-btn" type="button" class="btn btn-secondary btn-sm">변경</button>
-
-                                        <div id="edit-email" class="info-box" style="margin: 10px 50px 0 50px;">
-                                            <input class="form-control" placeholder="이메일 입력"
-                                                   style="height: 10px; border: 1px solid black; margin: 15px;"/>
-                                            <label for="floating-input"></label>
+                                        <button id="edit-email-btn" type="button" data-target="edit-email" class="btn btn-secondary btn-sm" style="background-color: darkgrey; border: 1px solid lightgrey;">변경</button>
+                                    </div>
+                                    <div>
+                                        <div id="edit-email" class="info-box" style="margin: 10px 50px 0 50px; display:none;">
+                                            <input class="form-control" placeholder="이메일 입력" id="email-input"
+                                                   style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
+                                            <label for="email-input" ></label>
+                                            <button class="submitBtn_black" style="margin-left:11px; margin-bottom: 10px;">저장</button>
                                         </div>
                                     </div>
                                     <div class="user-info">
-                                        <div>email01@naver.com</div>
+                                        <div class="existing-value" th:text="${memberEmail}"></div>
                                     </div>
                                 </div>
 
-                                <!--  휴대폰 번호 정보 -->
+
                                 <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey" style="width: auto"></div>
+
+                                <!--  3️⃣ 휴대폰 번호 정보 -->
                                 <div class="mb-6">
                                     <div style="display: flex; justify-content: space-between;">
                                         <p class="user-info-list">휴대폰 번호</p>
                                         <!-- 변경 버튼 클릭시 edit-pw div가 floating  -->
-                                        <button id="edit-phone-btn" type="button" class="btn btn-secondary btn-sm">변경</button>
-
+                                        <button id="edit-phone-btn" type="button" data-target="edit-phone" class="btn btn-secondary btn-sm" style="background-color: darkgrey; border: 1px solid lightgrey;">변경</button>
+                                    </div>
+                                    <div>
                                         <div id="edit-phone" class="info-box" style="margin: 10px 50px 0 50px; display: none;">
-                                            <input class="form-control" placeholder="휴대폰 번호 입력"
-                                                   style="height: 10px; border: 1px solid black; margin: 15px;"/>
-                                            <label for="floating-input"></label>
+                                            <input class="form-control" placeholder="휴대폰 번호 입력" id="phone-input"
+                                                   style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
+                                            <label for="phone-input"></label>
+                                            <button class="submitBtn_black" style="margin-left:11px; margin-bottom: 10px;">저장</button>
                                         </div>
                                     </div>
                                     <div class="user-info">
-                                        <div>010-1111-1111</div>
+                                        <div class="existing-value" th:text="${memberContactInfo}"></div>
                                     </div>
                                 </div>
 
                                 <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey" style="width: auto"></div>
-                                <div class="mb-6">
+                                <div class="mb-6" style="padding-bottom:80px;">
                                     <a id="lead-drop-page" th:href="@{/user/account/drop}">회원탈퇴</a>
                                 </div>
                             </form>
@@ -481,7 +501,7 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-    <script>
+    <script th:inline="javascript">
       /* 선택한 select 항목별로 내용 나타나게  */
       /* 일단 모든 항목을 숨기고 나타나게 해야 할 듯 */
       $rewardTab = document.getElementById('rewardTab');
@@ -513,46 +533,45 @@
       document.getElementById('lead-drop-page').addEventListener('focus', ()=>{
       })
 
+
+
       /* 내 정보 tab 🔽 */
-      /*  수정 버튼 클릭시 edit-pw  div 보이게 */
+      /*  수정 버튼 클릭시 숨겨진 div 보이게 */
+      const $editBtns = document.querySelectorAll('.btn.btn-secondary.btn-sm');
 
-      // const $floatingInput = document.getElementById('floating-input')
-      // const $editPwBox = document.getElementById('edit-pw');
-      // const $editPwBtn = document.getElementById('edit-pw-btn');
-      //
-      // $editPwBtn.addEventListener('click', () => {
-      //     if($editPwBox.style.display === 'none'){
-      //         $editPwBox.style.display = 'block';
-      //        // $floatingInput.focus();
-      //         //$editPwBtn.textContent = '취소';
-      //     } else {
-      //         $editPwBox.style.display = 'none';
-      //         //$editPwBtn.textContent = '수정';
-      //     }
-      // })
+      $editBtns.forEach(function (button){
+          button.addEventListener('click',()=>{
+              /* data-target 속성 이용하여 특정 버튼과 연결된 숨겨진 div 식별*/
+              const $targetDivId = button.getAttribute('data-target');
+              const $targetDiv= document.getElementById($targetDivId);
 
-      // const $floatingInput = document.getElementById('floating-input')
-      // const $editPwBox = document.getElementById('edit-pw');
-      // const $infoBox = document.querySelector('.info-box');
-      // const $editPwBtn = document.getElementById('edit-pw-btn');
-      //
-      // $editPwBtn.addEventListener('click', () => {
-      //     $infoBox.classList.toggle('hidden'); // 토글을 통해 숨김/표시 전환
-      //     if (!$infoBox.classList.contains('hidden')) {
-      //         $floatingInput.focus();
-      //         $editPwBtn.textContent = '취소';
-      //     } else {
-      //         $editPwBtn.textContent = '수정';
-      //     }
-      // });
+              // $targetDiv의 부모로 가서 existing-value 찾기
+              const $existingDiv = $targetDiv.parentNode.nextSibling.nextSibling;
+
+              if($targetDiv.style.display === 'none'){
+                  $targetDiv.style.display = 'block';
+                  /* 기존 회원정보 가리기 */
+                  $existingDiv.style.display = 'none';
+                  const $targetInput = $targetDiv.querySelector('.form-control');
+
+                  $targetInput.focus();
+
+                  $targetInput.value=$existingDiv.textContent.replaceAll(' ','');
+                  button.textContent = '취소';
+                  button.style.backgroundColor = 'white';
+                  button.style.color = 'black';
+              }else{
+                  $existingDiv.style.display = 'block';
+                  $targetDiv.style.display = 'none';
+                  button.textContent = '변경';
+                  button.style.backgroundColor = 'grey';
+                  button.style.color = 'white';
+              }
+
+          })
+      })
 
 
-      const $editPwBox = document.getElementById('edit-pw');
-      const $editPwBtn = document.getElementById('edit-pw-btn');
-
-      $editPwBtn.addEventListener('click', () => {
-          $editPwBox.classList.toggle('info-box'); // 토글을 통해 숨김/표시 전환
-      });
 
     </script>
 </th:block>

@@ -168,9 +168,9 @@
                 <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey"></div>
                 <div class="agree-check">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault" >탈퇴 유의사항을 확인했습니다. </label>
-                        <div class="form-text" style="color:red; font-size:13px;">체크 안 하고 다음 누를 시 : 탈퇴 유의사항을 확인해 주세요</div>
+                        <input class="form-check-input" type="checkbox" value="" id="checkTerm">
+                        <label class="form-check-label" for="checkTerm" >탈퇴 유의사항을 확인했습니다. </label>
+                        <div id="check-alert" class="form-text" style="color:red; font-size:13px;"></div>
                     </div>
                 </div>
 
@@ -179,17 +179,20 @@
                     <h2>본인 확인</h2>
                     <div class="mb-3">
                         <label for="checkPassword" class="form-label">비밀번호 확인</label>
-                        <input type="password" class="form-control" id="checkPassword" >
+                        <input type="password" class="form-control" id="checkPassword" readonly="readonly">
                         <div id="pw-alert" class="form-text" style="color:red; font-size:13px;"></div>
 
                         <!-- 모달 트리거 버튼   -->
-                        <button
-                                type="button"
-                                id="drop-btn"
-                                class="submitBtn_black"
-                                data-toggle="modal"
-                                data-target="#exampleModal"
-                                style="margin-left:470px" disabled>탈퇴하기</button>
+                        <div style="display: flex; justify-content: flex-end;">
+                            <button
+                                    type="button"
+                                    id="drop-btn"
+                                    class="submitBtn_black"
+                                    data-toggle="modal"
+                                    data-target="#exampleModal"
+                                    style="" disabled >탈퇴하기</button>
+                        </div>
+
 
                     </div>
 
@@ -240,6 +243,7 @@
 
         const $pwAlert = document.getElementById('pw-alert');
 
+        // 비밀번호 입력란 input 이벤트 리스너
         $inputPw.addEventListener('input',()=>{
             $.ajax({
                 url : '/user/account/pwCheck',
@@ -262,6 +266,22 @@
                 })
         })
 
+        // 비밀번호 입력란 click 이벤트 리스너
+        $inputPw.addEventListener('focus', (event)=>{
+            // 체크박스 체크 여부에 따라 비밀번호 입력란 readonly 설정/해제 + 경고문구 설정/해제
+            if(document.getElementById('checkTerm').checked){
+                event.target.readOnly = false;
+                $pwAlert.textContent = '';
+            }else{
+                $pwAlert.textContent = '탈퇴 유의사항에 먼저 동의해 주세요.';
+            }
+        })
+
+
+        // 탈퇴하기 클릭이벤트 리스너
+        document.getElementById('drop-btn').addEventListener('click',()=>{
+
+        })
 
         /* 모달에서 확인 클릭 이벤트리스너 설정 */
 
