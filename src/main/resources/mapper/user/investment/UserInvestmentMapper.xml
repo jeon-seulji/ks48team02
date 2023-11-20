@@ -55,47 +55,19 @@
         </association>
     </resultMap>
 
-    <insert id="addInvestmentContent" parameterType="investmentInfo">
-        /* 투자 프로젝트 상세내용 등록 */
-        <selectKey keyProperty="investmentContentCode" resultType="String" order="BEFORE">
-            SELECT
-                (CASE
-                WHEN COUNT(ic.registration_date) = 0 THEN CONCAT('inv_con_', CURDATE()+0, '_0001')
-                WHEN COUNT(ic.registration_date) > 9999 THEN CONCAT('inv_con_', CURDATE()+0, '_', COUNT(ic.registration_date)+1)
-                ELSE CONCAT('inv_con_', CURDATE()+0, '_', LPAD(COUNT(ic.registration_date)+1, 4, '0'))
-                END) AS investmentContentCode
-            FROM
-                investment_content AS ic
-            WHERE
-                DATE_FORMAT(ic.registration_date, '%Y-%m-%d') = CURDATE();
-        </selectKey>
-        INSERT INTO InvestmentContent
-            (investment_content_code, member_id, investment_code, member_id_admin, project_introduction,
-            investment_introduction_image, market_analysis, market_analysis_image, major_financial_information,
-            major_financial_information_image, risk, risk_image, major_manpower, major_manpower_image,
-            patent_award_details, patent_award_details_image, etc_invest_content, etc_invest_content_image,
-            registration_date)
-        VALUES
-            (#{investmentContentCode}, 'id002', #{investmentCode}, 'id001', #{projectIntroduction},
-            #{investmentIntroductionImage}, #{marketAnalysis}, #{marketAnalysisImage}, #{majorFinancialInformation},
-            #{majorFinancialInformationImage}, #{risk}, #{riskImage}, #{majorManpower}, #{majorManpowerImage},
-            #{patentAwardDetails}, #{patentAwardDetailsImage}, #{etcInvestContent}, #{etcInvestContentImage},
-            #{registrationDate})
-    </insert>
-
     <insert id="addInvestment" parameterType="InvestmentInfo">
         /* 투자 프로젝트 등록 */
         <selectKey keyProperty="investmentCode" resultType="String" order="BEFORE">
             SELECT
                 (CASE
-                WHEN COUNT(i.investment_reg_date) = 0 THEN CONCAT('inv_', CURDATE()+0, '_0001')
-                WHEN COUNT(i.investment_reg_date) > 9999 THEN CONCAT('inv_', CURDATE()+0, '_', COUNT(i.investment_reg_date)+1)
-                ELSE CONCAT('don_', CURDATE()+0, '_', LPAD(COUNT(i.investment_reg_date)+1, 4, '0'))
+                WHEN COUNT(i.investment_code) = 0 THEN CONCAT('inv_', CURDATE()+0, '_0001')
+                WHEN COUNT(i.investment_code) > 9999 THEN CONCAT('inv_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.investment_code,'_',-1) AS UNSIGNED))+1)
+                ELSE CONCAT('inv_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(i.investment_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
                 END) AS investmentCode
             FROM
                 investment AS i
             WHERE
-                DATE_FORMAT(i.investment_reg_date, '%Y-%m-%d') = CURDATE();
+                SUBSTRING_INDEX(SUBSTRING_INDEX(i.investment_code, '_', 2), '_', -1) = CURDATE()+0;
         </selectKey>
         INSERT INTO investment
             (investment_code, member_id, store_code, investment_request_judge_code, total_category_code, member_id_seller, investment_subject,
@@ -106,6 +78,34 @@
             (#{investmentCode},'id001', 'sto004', #{investmentRequestJudgeCode}, #{totalCategoryCode}, 'id002', #{investmentSubject},
             #{investmentImage}, '0', '0', '0', '0', #{investmentCompany}, '0', '0', #{securitiesClassification}, CURDATE(), #{investmentRegDate}, #{investmentDeadline},
             #{investmentReport}, '3000000', 'null', #{contractFile}, '0');
+    </insert>
+
+    <insert id="addInvestmentContent" parameterType="investmentInfo">
+        /* 투자 프로젝트 상세내용 등록 */
+        <selectKey keyProperty="investmentContentCode" resultType="String" order="BEFORE">
+            SELECT
+            (CASE
+            WHEN COUNT(i.investment_content_code) = 0 THEN CONCAT('inv_con_', CURDATE()+0, '_0001')
+            WHEN COUNT(i.investment_content_code) > 9999 THEN CONCAT('inv_con_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.investment_content_code,'_',-1) AS UNSIGNED))+1)
+            ELSE CONCAT('inv_con_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(i.investment_content_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
+            END) AS investmentContentCode
+            FROM
+            investment_content AS i
+            WHERE
+            SUBSTRING_INDEX(SUBSTRING_INDEX(i.investment_content_code, '_', 3), '_', -1) = CURDATE()+0;
+        </selectKey>
+        INSERT INTO InvestmentContent
+        (investment_content_code, member_id, investment_code, member_id_admin, project_introduction,
+        investment_introduction_image, market_analysis, market_analysis_image, major_financial_information,
+        major_financial_information_image, risk, risk_image, major_manpower, major_manpower_image,
+        patent_award_details, patent_award_details_image, etc_invest_content, etc_invest_content_image,
+        registration_date)
+        VALUES
+        (#{investmentContentCode}, 'id002', #{investmentCode}, 'id001', #{projectIntroduction},
+        #{investmentIntroductionImage}, #{marketAnalysis}, #{marketAnalysisImage}, #{majorFinancialInformation},
+        #{majorFinancialInformationImage}, #{risk}, #{riskImage}, #{majorManpower}, #{majorManpowerImage},
+        #{patentAwardDetails}, #{patentAwardDetailsImage}, #{etcInvestContent}, #{etcInvestContentImage},
+        #{registrationDate})
     </insert>
 
     <select id="getInvestmentInfo" parameterType="String" resultMap="InvestmentInfoResultMap">
@@ -154,6 +154,11 @@
                 ORDER BY invest_achievement_percent DESC
             </otherwise>
         </choose>
+    </select>
+
+    <select id="getInvestmentContent" parameterType="String" resultType="InvestmentContent">
+        SELECT * FROM investment_content
+        WHERE investment_code = #{investmentCode}
     </select>
 
 

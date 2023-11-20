@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -88,7 +89,7 @@ public class PojectRegistrationContoller {
     @GetMapping("/reward/success")
     public String rewardProjectSuccessPage(){
 
-        return "user/projectRegistration/reward/reward_insert_success";
+        return "/user/projectRegistration/reward/reward_insert_success";
     }
 
 
@@ -184,11 +185,11 @@ public class PojectRegistrationContoller {
 
     public String getOsFileRootPath(){
         String os = System.getProperty("os.name").toLowerCase();
-        String rootPath = "/home/springboot/resources/summernote_image";
+        String rootPath = "/home/springboot/resources/summernote_image/";
         if (os.contains("win")) {
-            rootPath = "C:\\summernote_image";
+            rootPath = "C:\\summernote_image\\";
         } else if (os.contains("mac")) {
-            rootPath = "Users/Shared/summernote_image";
+            rootPath = "/Users/Shared/summernote_image/";
         }
 
         return rootPath;

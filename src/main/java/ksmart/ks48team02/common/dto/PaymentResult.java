@@ -1,5 +1,6 @@
 package ksmart.ks48team02.common.dto;
 
+import ksmart.ks48team02.user.dto.DeliveryMemberInfo;
 import ksmart.ks48team02.user.dto.RewardOption;
 import lombok.Data;
 
@@ -30,6 +31,8 @@ public class PaymentResult {
     private String couponIssueCode;
     private String couponUseLogCode;
     private String pointLogCode;
+    private String orderDeliveryCode;
 
+    private DeliveryMemberInfo deliveryMemberInfo;
     private List<RewardOption> rewardOptionList;
 }
