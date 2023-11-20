@@ -14,9 +14,12 @@ public interface CategoryMapper {
     // ajax 카테고리 등록
     public List<Category> getCategoryAdd();
 
-//    public List<Category> getCateAdd(String cateAdd);
-
     // ajax category depth 2
     public List<Category> getCategoryDepth2(String projectPatition);
 
+    // 특정 카테고리 조회
+    List<Category> getCategoryCodeById(String totalCategoryCode);
+
+    // 카테고리 수정 post
+    void updateCategory(Category category);
 }
