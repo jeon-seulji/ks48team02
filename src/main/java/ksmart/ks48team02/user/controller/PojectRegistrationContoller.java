@@ -109,6 +109,11 @@ public class PojectRegistrationContoller {
 
         return "user/projectRegistration/investment/invest_insert";
     }
+    //투자 프로젝트 등록 완료 페이지
+    @GetMapping(value = "investment/success")
+    public String investmentRegistrationSuccessPage(){
+        return "user/projectRegistration/investment/investment_insert_success";
+    }
 
 
     // 기부 프로젝트 완료 포스트맵핑으로 받기
@@ -180,7 +185,7 @@ public class PojectRegistrationContoller {
 
     public String getOsFileRootPath(){
         String os = System.getProperty("os.name").toLowerCase();
-        String rootPath = "file:////home/springboot/resource/summernote_image/";
+        String rootPath = "/home/springboot/resources/summernote_image/";
         if (os.contains("win")) {
             rootPath = "C:\\summernote_image\\";
         } else if (os.contains("mac")) {

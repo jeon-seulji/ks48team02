@@ -113,8 +113,6 @@
                     <th>주당가격</th>
                     <th>평가 결과</th>
                     <th>기업가치 평가일</th>
-                    <th>수정</th>
-                    <th>삭제</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -123,7 +121,7 @@
                     <td>
                         <input type="checkbox" name="selectList">
                     </td>
-                    <td colspan="11">기업가치 평가 목록이 없습니다.</td>
+                    <td colspan="10">기업가치 평가 목록이 없습니다.</td>
                 </tr>
                 <tr th:unless="${corporateValueEvaluationList == null}" th:each="l : ${corporateValueEvaluationList}">
                     <td>
@@ -155,12 +153,6 @@
                     <td th:if="${l.corpValueFulfill == 2}">심사 반려</td>
                     <td th:if="${l.corpValueEvaluateDay == null}">심사 대기중</td>
                     <td th:unless="${l.corpValueEvaluateDay == null}" th:text="${l.corpValueEvaluateDay}"></td>
-                    <td>
-                        <a th:href="@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}">수정</a>
-                    </td>
-                    <td>
-                        <a th:href="@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=${l.corporateValueEvaluationCode})}">삭제</a>
-                    </td>
                 </tr>
                 </tbody>
             </table>

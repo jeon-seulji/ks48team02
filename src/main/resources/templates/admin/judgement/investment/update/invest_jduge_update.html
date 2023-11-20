@@ -15,7 +15,7 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-
+    <script th:src="@{/user/js/jquery.min.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
@@ -330,15 +330,15 @@
                             <td id="investJudgeResult" colspan="5" class="progress-radio-area">
                                 <ul>
                                     <li>
-                                        <input id="preProgress" type="radio" name="investJudgeResult" value="0" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 0}">
+                                        <input id="preProgress" type="radio" name="investJudgeResult" value="0" th:checked="*{investJudgeResult == 0}">
                                         <label for="preProgress">심사 대기</label>
                                     </li>
                                     <li>
-                                        <input id="Progress" type="radio" name="investJudgeResult" value="1" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 1}">
+                                        <input id="Progress" type="radio" name="investJudgeResult" value="1" th:checked="*{investJudgeResult == 1}">
                                         <label for="Progress">심사 승인</label>
                                     </li>
                                     <li>
-                                        <input id="ProgressCompleted" type="radio" name="investJudgeResult" th:checked="${investmentRequestJudgeInfo.investJudgeResult == 2}"
+                                        <input id="ProgressCompleted" type="radio" name="investJudgeResult" th:checked="*{investJudgeResult == 2}"
                                                value="2">
                                         <label for="ProgressCompleted">심사 반려</label>
                                     </li>

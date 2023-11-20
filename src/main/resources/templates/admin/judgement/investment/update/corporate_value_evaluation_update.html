@@ -260,19 +260,19 @@
                                 <ul>
                                     <li>
                                         <input id="preProgress" type="radio" name="corpValueFulfill"
-                                               th:checked="${corporateValueEvaluationInfo.corpValueFulfill == 0}"
+                                               th:checked="*{corpValueFulfill == 0}"
                                                value="0">
                                         <label for="preProgress">심사 대기</label>
                                     </li>
                                     <li>
                                         <input id="Progress" type="radio" name="corpValueFulfill"
-                                               th:checked="${corporateValueEvaluationInfo.corpValueFulfill == 1}"
+                                               th:checked="*{corpValueFulfill == 1}"
                                                value="1">
                                         <label for="Progress">심사 승인</label>
                                     </li>
                                     <li>
                                         <input id="ProgressCompleted" type="radio" name="corpValueFulfill"
-                                               th:checked="${corporateValueEvaluationInfo.corpValueFulfill == 2}"
+                                               th:checked="*{corpValueFulfill == 2}"
                                                value="2">
                                         <label for="ProgressCompleted">심사 반려</label>
                                     </li>

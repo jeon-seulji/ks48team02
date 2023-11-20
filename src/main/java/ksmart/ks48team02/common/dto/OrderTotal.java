@@ -18,22 +18,23 @@ public class OrderTotal {
 
     @Override
     public String toString() {
-        return "OrderTotal{" +
-                "orderCode='" + orderCode + '\'' +
-                ", memberId='" + memberId + '\'' +
-                ", orderCategoryCode='" + orderCategoryCode + '\'' +
-                ", orderName='" + orderName + '\'' +
-                ", orderFundingName='" + orderFundingName + '\'' +
-                ", orderTotalPrice=" + orderTotalPrice +
-                ", orderCategoryDetail='" + orderCategoryDetail + '\'' +
-                ", goodsCode='" + goodsCode + '\'' +
-                ", goodsPartition='" + goodsPartition + '\'' +
-                ", orderApplicationDate='" + orderApplicationDate + '\'' +
-                ", orderConfirmDate='" + orderConfirmDate + '\'' +
-                ", orderCancellDate='" + orderCancellDate + '\'' +
-                ", rewardOrderDetailCode='" + rewardOrderDetailCode + '\'' +
-                ", rewardPaymentCode='" + rewardPaymentCode + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("OrderTotal{");
+        sb.append("orderCode='").append(orderCode).append('\'');
+        sb.append(", memberId='").append(memberId).append('\'');
+        sb.append(", orderCategoryCode='").append(orderCategoryCode).append('\'');
+        sb.append(", orderName='").append(orderName).append('\'');
+        sb.append(", orderFundingName='").append(orderFundingName).append('\'');
+        sb.append(", orderTotalPrice=").append(orderTotalPrice);
+        sb.append(", orderCategoryDetail='").append(orderCategoryDetail).append('\'');
+        sb.append(", goodsCode='").append(goodsCode).append('\'');
+        sb.append(", goodsPartition='").append(goodsPartition).append('\'');
+        sb.append(", orderApplicationDate='").append(orderApplicationDate).append('\'');
+        sb.append(", orderConfirmDate='").append(orderConfirmDate).append('\'');
+        sb.append(", orderCancellDate='").append(orderCancellDate).append('\'');
+        sb.append(", rewardOrderDetailCode='").append(rewardOrderDetailCode).append('\'');
+        sb.append(", rewardPaymentCode='").append(rewardPaymentCode).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     public String getRewardOrderDetailCode() {
@@ -146,7 +147,5 @@ public class OrderTotal {
     public void setOrderCancellDate(String orderCancellDate) {
         this.orderCancellDate = orderCancellDate;
     }
-
-
 
 }

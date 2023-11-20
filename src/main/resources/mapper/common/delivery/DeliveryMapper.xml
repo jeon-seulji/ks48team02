@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.ks48team02.common.mapper.delivery.DeliveryMapper">
+
+    <!-- delivery result Map -->
+    <resultMap type="OrderDelivery" id="orderDeliveryMap">
+        <id property="orderDeliveryCode" column="order_delivery_code"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="deliveryCategoryCode" column="delivery_category_code"/>
+        <result property="switchingCode" column="switching_code"/>
+        <result property="rewardRefundCode" column="reward_refund_code"/>
+        <result property="deliveryCategory" column="delivery_category"/>
+        <result property="deliveryName" column="delivery_name"/>
+        <result property="deliveryPhone" column="delivery_phone"/>
+        <result property="deliveryAddress" column="delivery_address"/>
+        <result property="deliveryMessage" column="delivery_message"/>
+        <result property="numberInvoice" column="numberInvoice"/>
+        <result property="deliveryCourier" column="delivery_courier"/>
+        <result property="deliveryState" column="delivery_state"/>
+        <result property="deliveryStartDate" column="delivery_start_date"/>
+        <result property="deliveryEndDate" column="delivery_end_date"/>
+    </resultMap>
+
+    <!-- delivery list  조회 -->
+    <select id="getDeliveryList" resultMap="orderDeliveryMap">
+        SELECT
+            od.order_delivery_code,
+            od.order_code,
+            od.delivery_category_code,
+            od.switching_code,
+            od.reward_refund_code,
+            od.delivery_category,
+            od.delivery_name,
+            od.delivery_phone,
+            od.delivery_address,
+            od.delivery_message,
+            od.numberInvoice,
+            od.delivery_courier,
+            od.delivery_state,
+            od.delivery_start_date,
+            od.delivery_end_date
+        FROM
+            order_delivery AS od;
+    </select>
+
+
+
+</mapper>
