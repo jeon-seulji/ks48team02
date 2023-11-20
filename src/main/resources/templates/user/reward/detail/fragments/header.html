@@ -3,8 +3,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 
-<th:block layout:fragment="customContents">
-    <nav class=" donation_nav navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar-detail" th:fragment="headerNavFragment" style="height: 50px;">
+
+    <nav class=" reward_nav navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar-detail" th:fragment="headerNavFragment" style="height: 50px;">
         <div class="container">
             <div class="top-left-conts">
 
@@ -25,7 +25,7 @@
                             <a th:href="@{/user/reward/detail/comment(rewardProjectCode=${rewardProject.rewardProjectCode})}" class="nav-link">댓글</a>
                         </li>
                         <li class="nav-item" id="policy">
-                            <a th:href="@{/user/reward/detail/refundPolicy}" class="nav-link">환불.정책</a>
+                            <a th:href="@{/user/reward/detail/refundPolicy(rewardProjectCode=${rewardProject.rewardProjectCode})}" class="nav-link">환불.정책</a>
                         </li>
                     </ul>
 
@@ -35,6 +35,4 @@
         </div>
     </nav>
 
-
-</th:block>
 </html>

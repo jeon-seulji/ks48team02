@@ -50,7 +50,7 @@
             overflow-x: hidden;
             height: 800px;
         }
-        #donationBtn {
+        #rewardBtn {
             width: 300px;
             height: 90px;
 
@@ -76,10 +76,23 @@
 
         }
         /*버튼 눌리는 효과*/
-        #donationBtn:active {
+        #rewardBtn:active {
             box-shadow: inset -.3rem -.1rem 1.4rem  #FBFBFB, inset .3rem .4rem .8rem #BEC5D0;
             cursor: pointer;
         }
+
+        ul.d-flex li:hover {
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #fdfdfe;
+            opacity: 90%;
+            transition: 0.1s;
+            color: #0b44d7;
+        }
+
+        donation-comments
 
     </style>
 
@@ -102,13 +115,13 @@
 
             </th:block>
         </div>
-        <div th:replace="~{user/reward/detail/fragments/aside :: }">
+        <div th:replace="~{user/reward/detail/fragments/aside :: asideFragments}">
 
         </div>
     </div>
 </div>
 
-<section id="donationProject" class="content-wrap">
+<section id="rewardProject" class="content-wrap">
     <div class="main-section container">
         <h3 class="main-title">리워드 추천 프로젝트</h3>
         <!-- Swiper -->
@@ -318,7 +331,7 @@
             $('#news').addClass('active');
         } else if (currentPath === '/user/reward/detail/comment') {
             $('#comments').addClass('active');
-        } else if (currentPath === '/user/reward/detail/policy') {
+        } else if (currentPath === '/user/reward/detail/refundPolicy') {
             $('#policy').addClass('active');
         }/* else if (/!* 다른 페이지의 경로 *!/) {
             // 다른 페이지에 해당하는 메뉴 항목을 활성화
@@ -329,9 +342,9 @@
     $(window).on('scroll', function(){
         let hasScrolledClass = $('.navbar').hasClass('scrolled');
         if(hasScrolledClass){
-            $('.navbar').not('.donation_nav').hide();
+            $('.navbar').not('.reward_nav').hide();
         } else {
-            $('.navbar').not('.donation_nav').show();
+            $('.navbar').not('.reward_nav').show();
         }
     });
 </script>
