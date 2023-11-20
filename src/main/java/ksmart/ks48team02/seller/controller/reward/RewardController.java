@@ -54,19 +54,6 @@ public class RewardController {
         return "seller/reward/news/main";
     }
 
-    //판매자 리워드 새소식 수정 페이지
-    @GetMapping("/news/modify")
-    public String newsModiftyPage(Model model) {
-
-        return "seller/reward/news/modify";
-    }
-
-    //판매자 리워드 새소식 추가 페이지
-    @GetMapping("/news/add")
-    public String newsAddPage(Model model) {
-
-        return"seller/reward/news/add";
-    }
 
     //판매자 댓글 관리
     @GetMapping("/products/comment")

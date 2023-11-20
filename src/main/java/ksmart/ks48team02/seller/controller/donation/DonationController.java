@@ -133,6 +133,7 @@ public class DonationController {
                               @RequestParam(name = "detailComent") String detailContent,
                               @RequestParam(name = "donationCode") String donationCode){
         sellerDonationService.addNews(detailSubject, detailContent, donationCode);
+
         String reAddr = "redirect:/seller/";
         if(donationCode.contains("don")) {
             reAddr = reAddr.concat("donation/news");
@@ -153,11 +154,15 @@ public class DonationController {
 
     @GetMapping("/news/modify")
     public String newsModifyPage(Model model,
-                                 @RequestParam(name = "newsCode") String newsCode){
+                                 @RequestParam(name = "newsCode") String newsCode,
+                                 @RequestParam(name = "projectCode", required = false) String projectCode){
+
             // newsCode로 select 해서 정보들 가져와서 수정 페이지로 넘기기
         List<NewsList> newsList = sellerDonationService.getNews();
         model.addAttribute("newsCode", newsCode);
         model.addAttribute("newsList",newsList);
+        model.addAttribute("projectCode",projectCode);
+
 
 
         return "seller/donation/news/modify";

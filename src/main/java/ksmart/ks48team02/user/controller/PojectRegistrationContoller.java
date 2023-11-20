@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -88,7 +89,7 @@ public class PojectRegistrationContoller {
     @GetMapping("/reward/success")
     public String rewardProjectSuccessPage(){
 
-        return "user/projectRegistration/reward/reward_insert_success";
+        return "/user/projectRegistration/reward/reward_insert_success";
     }
 
 
