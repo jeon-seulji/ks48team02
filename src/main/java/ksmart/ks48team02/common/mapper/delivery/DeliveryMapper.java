@@ -13,12 +13,12 @@ public interface DeliveryMapper {
     // 배송 목록 조회
     public List<OrderDelivery> getDeliveryList(Map<String, Object> paramMap);
 
-    // 전체 배송 목록 조회
+    // 전체 배송 목록 수 조회
     public int getDeliveryCnt(Map<String, Object> paramMap);
 
     // 특정 배송 목록 조회
-    public OrderDelivery getDeliveryByCode(String orderDeliveryCode);
+    public OrderDelivery getDeliveryByCode(String orderDeliveryCode, String orderCode);
 
     // 배송 택배사 카테고리 조회
-    public DeliveryCourierCategory getDeliveryCourierCategory();
+    public List<DeliveryCourierCategory> getDeliveryCourierCategory();
 }

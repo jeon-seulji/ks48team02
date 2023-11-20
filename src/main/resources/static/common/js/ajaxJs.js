@@ -53,3 +53,87 @@ $('#rankReload').on('click', function(){
     $('.tab-menu-btn li:first-child').addClass('active');
 });
 
+
+
+jQuery.fn.serializeObject = function() {
+    var obj = null;
+    try {
+        if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+            var arr = this.serializeArray();
+            if (arr) {
+                obj = {};
+                jQuery.each(arr, function() {
+                    obj[this.name] = this.value;
+                });
+            }//if ( arr ) {
+        }
+    } catch (e) {
+        alert(e.message);
+    } finally {
+    }
+
+    return obj;
+};
+
+// 검색 form queryString 반환 fn
+function searchObject(){
+    const $inputEls = $('.order-category-select input:checked');
+
+    const arr = [];
+    $($inputEls).each((idx, item) => {
+        let checkBoxValue = $(item).attr('name');
+        arr.push(checkBoxValue);
+    });
+    // console.log(arr, '<--arr');
+
+    let amDateSettStartDate = $('input[name="amDateSettStartDate"]').val();
+    let amDateSettEndDate = $('input[name="amDateSettEndDate"]').val();
+    let userSearchKey = $('select[name="userSearchKey"]').val();
+    let userSearchable = $('input[name="userSearchable"]').val();
+
+    console.log(userSearchable, '<-- userSearchable');
+
+    $('input[name="dateSettStartDate"]').val(amDateSettStartDate);
+    $('input[name="dateSettEndDate"]').val(amDateSettEndDate);
+    $('input[name="searchKey"]').val(userSearchKey);
+    $('input[name="searchValue"]').val(userSearchable);
+
+    let queryString = $('#searchForm').serializeObject();
+    queryString.projectPartition = arr;
+
+    return queryString;
+}
+
+
+// pager setting
+function setPagerData(arr, currentPage, list){
+    let lastPage = list.lastPage;
+    let startPageNum = list.startPageNum;
+    $('.list-btn-area button').removeClass('no-action');
+
+    if(currentPage == startPageNum) {
+        $('.prev-transfer').addClass('no-action');
+    }
+    if(currentPage == lastPage){
+        $('.next-transfer').addClass('no-action');
+    }
+
+    $('.order-list-pager li').remove();
+    $(arr).each((idx, item) => {
+        let classArr = [];
+        if(item == currentPage) {
+            classArr.push('link-active');
+            classArr.push('currentPage');
+        }
+        if(item == startPageNum) classArr.push('startPageNum');
+        if(item == lastPage) classArr.push('lastPage');
+
+        $('.order-list-pager').append(`<li class="${classArr.join(' ')}"><a data-value="${item}">${item}</a></li>`);
+    });
+}
+
+// admin orderby default setting
+function orderbyDefaultSet(){
+    $('select[name="orderby"] option, select[name="count-select"] option').prop('selected',false);
+    $('select[name="orderby"] option:first-child, select[name="count-select"] option:first-child').prop('selected', true);
+}

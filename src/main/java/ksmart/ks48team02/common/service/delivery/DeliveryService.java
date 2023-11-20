@@ -92,15 +92,19 @@ public class DeliveryService {
     }
 
     // 특정 배송 정보 조회
-    public OrderDelivery getDeliveryByCode(String orderDeliveryCode){
+    public OrderDelivery getDeliveryByCode(String orderDeliveryCode, String orderCode){
         OrderDelivery  getDeliveryByCode = null;
-        getDeliveryByCode = deliveryMapper.getDeliveryByCode(orderDeliveryCode);
+        if(orderDeliveryCode != null){
+            getDeliveryByCode = deliveryMapper.getDeliveryByCode(orderDeliveryCode, null);
+        } else if(orderCode != null){
+            getDeliveryByCode = deliveryMapper.getDeliveryByCode(null, orderCode);
+        }
         return getDeliveryByCode;
     };
 
     // 배송 택배사 카테고리 조회
-    public DeliveryCourierCategory getDeliveryCourierCategory(){
-        DeliveryCourierCategory DeliveryCourierCt = null;
+    public List<DeliveryCourierCategory> getDeliveryCourierCategory(){
+        List<DeliveryCourierCategory> DeliveryCourierCt = null;
         DeliveryCourierCt = deliveryMapper.getDeliveryCourierCategory();
         return DeliveryCourierCt;
     };

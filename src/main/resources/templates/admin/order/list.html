@@ -11,32 +11,13 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-    <script th:src="@{/admin/js/settlement/settlementJs.js}"></script>
+    <script th:src="@{/common/js/ajaxJs.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script type="text/javascript">
 
-        jQuery.fn.serializeObject = function() {
-            var obj = null;
-            try {
-                if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
-                    var arr = this.serializeArray();
-                    if (arr) {
-                        obj = {};
-                        jQuery.each(arr, function() {
-                            obj[this.name] = this.value;
-                        });
-                    }//if ( arr ) {
-                }
-            } catch (e) {
-                alert(e.message);
-            } finally {
-            }
-
-            return obj;
-        };
 
 
         // 기간 선택 min value setting
@@ -71,10 +52,10 @@
 
 
         /* ajax */
+        const queryString = {};
 
         // admin orderList ajax
         function adminOrderListAjax(queryString, callback){
-
             const request = $.ajax({
                 url: '/admin/order/list/ajax',
                 method : 'POST',
@@ -172,10 +153,17 @@
             let currentPage = 1;
             let rowPerPage = $('select[name="count-select"]').val();
 
-            const queryString = searchObject();
+            const searchObjectArr = searchObject();
+
+            queryString.dateSettStartDate = searchObjectArr.dateSettStartDate;
+            queryString.dateSettEndDate = searchObjectArr.dateSettEndDate;
+            queryString.searchKey = searchObjectArr.searchKey;
+            queryString.searchValue = searchObjectArr.searchValue;
+            queryString.projectPartition = searchObjectArr.projectPartition;
             queryString.orderby = orderbyValue;
             queryString.currentPage = currentPage;
             queryString.rowPerPage = rowPerPage;
+
 
             //ajax 호출
             adminOrderListAjax(queryString, function(list) {
@@ -197,7 +185,7 @@
             let orderbyValue = $('select[name="orderby"]').val();
             let rowPerPage = $('select[name="count-select"]').val();
 
-            const queryString = searchObject();
+            // const queryString = searchObject();
             queryString.orderby = orderbyValue;
             queryString.currentPage = pageNumber;
             queryString.rowPerPage = rowPerPage;
@@ -245,6 +233,7 @@
             const numberArr = $.map($orderListLi, function(element, idx){
                 return $(element).find('a').text();
             });
+
             const queryString = searchObject();
 
             queryString.orderby = orderbyValue;
@@ -272,15 +261,24 @@
 
         // 검색 버튼 조회
         $('.orderSearchBtn').on('click', function(){
+            // orderby 초기화
+            orderbyDefaultSet();
 
             let orderbyValue = $('select[name="orderby"]').val();
             let rowPerPage = $('select[name="count-select"]').val();
             let currentPage = 1;
 
-            const queryString = searchObject();
+            const searchObjectArr = searchObject();
+
+            queryString.dateSettStartDate = searchObjectArr.dateSettStartDate;
+            queryString.dateSettEndDate = searchObjectArr.dateSettEndDate;
+            queryString.searchKey = searchObjectArr.searchKey;
+            queryString.searchValue = searchObjectArr.searchValue;
+            queryString.projectPartition = searchObjectArr.projectPartition;
             queryString.orderby = orderbyValue;
             queryString.currentPage = currentPage;
             queryString.rowPerPage = rowPerPage;
+
 
             adminOrderListAjax(queryString, function(list){
 
@@ -412,23 +410,12 @@
                         </th:block>
                     </ul>
                     <div class="list-btn-area">
-                        <th:block th:if="${startPageNum == currentPage}">
-                            <button class="prev-transfer no-action">
-                                <span>prev</span>
-                            </button>
-                            <button class="next-transfer">
-                                <span>next</span>
-                            </button>
-                        </th:block>
-                        <th:block th:if="${lastPage == currentPage}">
-                            <button class="prev-transfer">
-                                <span>prev</span>
-                            </button>
-                            <button class="next-transfer no-action">
-                                <span>next</span>
-                            </button>
-                        </th:block>
-
+                        <button th:attr="class=${(startPageNum == currentPage) ? 'prev-transfer no-action' : 'prev-transfer'}">
+                            <span>prev</span>
+                        </button>
+                        <button th:attr="class=${(lastPage == currentPage) ? 'next-transfer no-action' : 'next-transfer'}">
+                            <span>next</span>
+                        </button>
                     </div>
                 </div>
 

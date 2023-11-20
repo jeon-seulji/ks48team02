@@ -1,5 +1,6 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
+import jakarta.servlet.http.HttpServletRequest;
 import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.service.delivery.DeliveryService;
 import ksmart.ks48team02.common.service.order.OrderService;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller("adminOrderManagement")
@@ -120,12 +122,16 @@ public class OrderManagementController {
         log.info("orderPartition {}", orderPartition);
         model.addAttribute("orderPartition", orderPartition);
 
-        // 특정 결제 정보 조회
+        // 특정 결제 정보 및 배송 정보조회
         switch(goodsPartition){
             case "rwd":
+                // 결제 정보
                 RewardPayments getRewardPaymentsById = paymentsService.getRewardPaymentsById(orderCode);
                 log.info("paymentsInfo {}", getRewardPaymentsById);
                 model.addAttribute("paymentsInfo", getRewardPaymentsById);
+                // 배송 정보
+                OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(null, orderCode);
+                model.addAttribute("getDeliveryByCode", getDeliveryByCode);
                 break;
             case "don":
                 DonationPayments getDonationPaymentsById = paymentsService.getDonationPaymentsById(orderCode);
@@ -138,6 +144,7 @@ public class OrderManagementController {
                 model.addAttribute("paymentsInfo", getInvestPaymentsById);
                 break;
         }
+
 
         model.addAttribute("title","관리자 : 주문 상세");
         model.addAttribute("contentsTitle","주문 상세");
@@ -152,11 +159,12 @@ public class OrderManagementController {
         model.addAttribute("title","관리자 : 배송 관리");
         model.addAttribute("contentsTitle","배송 관리");
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
+        model.addAttribute("paramActive","noActive");
 
         Map<String, Object> paramMap = null;
         paramMap = new HashMap<String, Object>();
 
-        String orderby = "orderby";
+        String orderby = "delived_d";
         int currentPage = 1;
         int rowPerPage = 15;
 
@@ -181,6 +189,7 @@ public class OrderManagementController {
 
     // 배송관리 ajax
     @PostMapping(value = "/delivery/ajax")
+    @ResponseBody
     public Map<String, Object> adminOrderDeliveryAjax(@RequestBody Map<String, Object> paramMap){
         log.info("param {}", paramMap);
         log.info("currentPage {}", paramMap.get("currentPage"));
@@ -190,7 +199,8 @@ public class OrderManagementController {
 
         return list;
     };
-    // 배송 정보
+
+    // 특정 배송 정보 조회
     @GetMapping( "/delivery/detail")
     public String adminOrderDeliveryInfo(Model model,
                                          @RequestParam(name="orderDeliveryCode") String orderDeliveryCode){
@@ -198,15 +208,16 @@ public class OrderManagementController {
         model.addAttribute("contentsTitle","배송 정보");
         model.addAttribute("contentsSubTitle","관리자 배송 정보");
 
+
         // 특정 배송 정보 조회
-        OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(orderDeliveryCode);
+        OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(orderDeliveryCode, null);
 
         log.info("getDeliveryByCode : {}", getDeliveryByCode);
 
         model.addAttribute("getDeliveryByCode", getDeliveryByCode);
 
         // 배송 카테고리 조회
-        DeliveryCourierCategory deliveryCourierCategory = deliveryService.getDeliveryCourierCategory();
+        List<DeliveryCourierCategory> deliveryCourierCategory = deliveryService.getDeliveryCourierCategory();
 
         log.info("DeliveryCourierCategory : {}", deliveryCourierCategory);
 
