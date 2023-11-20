@@ -120,9 +120,9 @@
             <when test="orderby == 'orderCompleted'">
                 ORDER BY ot.order_application_date ASC
             </when>
-<!--            <otherwise>-->
-<!--                ORDER BY ot.order_application_date DESC-->
-<!--            </otherwise>-->
+            <otherwise>
+                ORDER BY ot.order_application_date DESC
+            </otherwise>
         </choose>
 
 

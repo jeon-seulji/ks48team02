@@ -8,15 +8,21 @@ public class OrderDelivery {
     private String switchingCode;
     private String rewardRefundCode;
     private String deliveryCategory;
+    private String memberId;
     private String deliveryName;
     private String deliveryPhone;
     private String deliveryAddress;
+    private String deliveryMessageCode;
     private String deliveryMessage;
     private String numberInvoice;
     private String deliveryCourier;
     private String deliveryState;
     private String deliveryStartDate;
     private String deliveryEndDate;
+
+
+    private String dueDateArrival;
+
 
     @Override
     public String toString() {
@@ -27,15 +33,18 @@ public class OrderDelivery {
                 ", switchingCode='" + switchingCode + '\'' +
                 ", rewardRefundCode='" + rewardRefundCode + '\'' +
                 ", deliveryCategory='" + deliveryCategory + '\'' +
+                ", memberId='" + memberId + '\'' +
                 ", deliveryName='" + deliveryName + '\'' +
                 ", deliveryPhone='" + deliveryPhone + '\'' +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", deliveryMessageCode='" + deliveryMessageCode + '\'' +
                 ", deliveryMessage='" + deliveryMessage + '\'' +
                 ", numberInvoice='" + numberInvoice + '\'' +
                 ", deliveryCourier='" + deliveryCourier + '\'' +
                 ", deliveryState='" + deliveryState + '\'' +
                 ", deliveryStartDate='" + deliveryStartDate + '\'' +
                 ", deliveryEndDate='" + deliveryEndDate + '\'' +
+                ", dueDateArrival='" + dueDateArrival + '\'' +
                 '}';
     }
 
@@ -87,6 +96,14 @@ public class OrderDelivery {
         this.deliveryCategory = deliveryCategory;
     }
 
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
     public String getDeliveryName() {
         return deliveryName;
     }
@@ -101,6 +118,14 @@ public class OrderDelivery {
 
     public void setDeliveryPhone(String deliveryPhone) {
         this.deliveryPhone = deliveryPhone;
+    }
+
+    public String getDeliveryMessageCode() {
+        return deliveryMessageCode;
+    }
+
+    public void setDeliveryMessageCode(String deliveryMessageCode) {
+        this.deliveryMessageCode = deliveryMessageCode;
     }
 
     public String getDeliveryAddress() {
@@ -158,4 +183,13 @@ public class OrderDelivery {
     public void setDeliveryEndDate(String deliveryEndDate) {
         this.deliveryEndDate = deliveryEndDate;
     }
+
+    public String getDueDateArrival() {
+        return dueDateArrival;
+    }
+
+    public void setDueDateArrival(String dueDateArrival) {
+        this.dueDateArrival = dueDateArrival;
+    }
+
 }

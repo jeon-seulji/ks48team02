@@ -34,7 +34,7 @@ public class OrderService {
         Map<String, Object> resultMap = null;
 
         if(paramMap != null){
-            String orderby = (String) paramMap.get("orderbyValue");
+            String orderby = (String) paramMap.get("orderby");
             Object currentPageObj = paramMap.get("currentPage");
             Object rowPerPageObj = paramMap.get("rowPerPage");
 

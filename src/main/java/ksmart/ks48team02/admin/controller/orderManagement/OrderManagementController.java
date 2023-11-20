@@ -1,5 +1,6 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
+import jakarta.servlet.http.HttpServletRequest;
 import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.service.delivery.DeliveryService;
 import ksmart.ks48team02.common.service.order.OrderService;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller("adminOrderManagement")
@@ -75,6 +77,7 @@ public class OrderManagementController {
         paramMap.put("rowPerPage", rowPerPage);
 
         log.info("paramMap : {}", paramMap);
+
         // 주문 목록 진열
         Map<String, Object> resultMap = orderService.getOrderList(paramMap);
         log.info("주문 목록 : {}", resultMap.get("orderList"));
@@ -88,7 +91,7 @@ public class OrderManagementController {
     }
 
     // 주문 목록 정렬 ajax
-    @PostMapping(value="/ajax/list")
+    @PostMapping(value="/list/ajax")
     @ResponseBody
     public Map<String, Object> getOrderListOrderBy(Model model,
                                                     @RequestBody Map<String, Object> paramMap){
@@ -119,12 +122,16 @@ public class OrderManagementController {
         log.info("orderPartition {}", orderPartition);
         model.addAttribute("orderPartition", orderPartition);
 
-        // 특정 결제 정보 조회
+        // 특정 결제 정보 및 배송 정보조회
         switch(goodsPartition){
             case "rwd":
+                // 결제 정보
                 RewardPayments getRewardPaymentsById = paymentsService.getRewardPaymentsById(orderCode);
                 log.info("paymentsInfo {}", getRewardPaymentsById);
                 model.addAttribute("paymentsInfo", getRewardPaymentsById);
+                // 배송 정보
+                OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(null, orderCode);
+                model.addAttribute("getDeliveryByCode", getDeliveryByCode);
                 break;
             case "don":
                 DonationPayments getDonationPaymentsById = paymentsService.getDonationPaymentsById(orderCode);
@@ -137,6 +144,7 @@ public class OrderManagementController {
                 model.addAttribute("paymentsInfo", getInvestPaymentsById);
                 break;
         }
+
 
         model.addAttribute("title","관리자 : 주문 상세");
         model.addAttribute("contentsTitle","주문 상세");
@@ -151,17 +159,70 @@ public class OrderManagementController {
         model.addAttribute("title","관리자 : 배송 관리");
         model.addAttribute("contentsTitle","배송 관리");
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
+        model.addAttribute("paramActive","noActive");
 
+        Map<String, Object> paramMap = null;
+        paramMap = new HashMap<String, Object>();
+
+        String orderby = "delived_d";
+        int currentPage = 1;
+        int rowPerPage = 15;
+
+        paramMap.put("orderby", orderby);
+        paramMap.put("currentPage", currentPage);
+        paramMap.put("rowPerPage", rowPerPage);
+
+        // 배송 정보 목록 조회
+        Map<String, Object> resultMap = deliveryService.getDeliveryList(paramMap);
+
+        log.info("배송 목록 : {}", resultMap);
+        log.info("배송 목록 : {}", resultMap.get("deliveryList"));
+
+        model.addAttribute("deliveryList", resultMap.get("deliveryList"));
+        model.addAttribute("lastPage",resultMap.get("lastPage"));
+        model.addAttribute("startPageNum",resultMap.get("startPageNum"));
+        model.addAttribute("endPageNum",resultMap.get("endPageNum"));
+        model.addAttribute("currentPage",resultMap.get("currentPage"));
 
         return "admin/order/delivery";
     }
 
-    // 배송 정보
+    // 배송관리 ajax
+    @PostMapping(value = "/delivery/ajax")
+    @ResponseBody
+    public Map<String, Object> adminOrderDeliveryAjax(@RequestBody Map<String, Object> paramMap){
+        log.info("param {}", paramMap);
+        log.info("currentPage {}", paramMap.get("currentPage"));
+        log.info("rowPerPage {}", paramMap.get("rowPerPage"));
+        Map<String, Object> list = deliveryService.getDeliveryList(paramMap);
+        log.info("ajax list {}", list);
+
+        return list;
+    };
+
+    // 특정 배송 정보 조회
     @GetMapping( "/delivery/detail")
-    public String adminOrderDeliveryInfo(Model model){
+    public String adminOrderDeliveryInfo(Model model,
+                                         @RequestParam(name="orderDeliveryCode") String orderDeliveryCode){
         model.addAttribute("title","관리자 : 배송 정보");
         model.addAttribute("contentsTitle","배송 정보");
         model.addAttribute("contentsSubTitle","관리자 배송 정보");
+
+
+        // 특정 배송 정보 조회
+        OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(orderDeliveryCode, null);
+
+        log.info("getDeliveryByCode : {}", getDeliveryByCode);
+
+        model.addAttribute("getDeliveryByCode", getDeliveryByCode);
+
+        // 배송 카테고리 조회
+        List<DeliveryCourierCategory> deliveryCourierCategory = deliveryService.getDeliveryCourierCategory();
+
+        log.info("DeliveryCourierCategory : {}", deliveryCourierCategory);
+
+        model.addAttribute("deliveryCourierCategory", deliveryCourierCategory);
+
         return "admin/order/deliveryDetailInfo";
     }
 
