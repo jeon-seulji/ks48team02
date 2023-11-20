@@ -31,10 +31,11 @@
             color: #fff;
             line-height: 38px;
             background-color: #3971ff;
+            margin-top: 30px;
         }
         .radio-btn-area label {
             font-weight: 300 !important;
-            font-size: 15px;
+            font-size: 13px;
             color: #8c8c8c;
         }
         .radio-btn-area input[name="displayStatus"]:checked ~ label {
@@ -162,6 +163,12 @@
                         <div class="boardTable">
                             <table border="1">
                                 <tr>
+                                    <th class="categoryCode">카테고리 코드</th>
+                                    <td>
+                                        <input type="text" name="categoryCode" id="categoryCode">
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th class="category">분류명</th>
                                     <td>
                                         <input type="text" id="g_name" name="g_name" placeholder="예시 : 시민 문화 입니다."  onclick="this.placeholder=''" maxlength="250" oninput="productNameCount($(this))">
@@ -175,18 +182,18 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="category">표시상태</th>
+                                    <th class="category">사용 여부</th>
                                     <td class="radio-btn-area">
                                         <span>
                                             <input id="displayStatus" type="radio" name="displayStatus" checked>
                                             <label for="displayStatus" class="radioBtn">
-                                                표시함
+                                                1 ( 사용함 )
                                             </label>
                                         </span>
                                         <span>
                                             <input id="nonDisplayStatus" type="radio" name="displayStatus">
                                             <label for="nonDisplayStatus" class="radioBtn">
-                                            표시안함
+                                            0 ( 사용 안함 )
                                         </label>
                                         </span>
                                     </td>
@@ -194,9 +201,9 @@
                             </table>
                         </div>
                         <div class="btnCenter">
-                            <a th:href="@{#}" class="registratioBtn">
-                                <span>확인</span>
-                            </a>
+                            <button type="submit" class="registratioBtn">
+                                <span>등록</span>
+                            </button>
                         </div>
                     </form>
                 </section>
@@ -225,6 +232,14 @@
                 })
             })
         })
+        $(document).on('click', '.category-depth-2 li', function(e) {
+            let categoryName = $(e.target).text();
+
+            $('.category_title').text(categoryName);
+
+            $('.category-depth-2 li').removeClass('active');
+            $(this).addClass('active');
+        });
 
         //        $('.depth-1 ul').on('click', 'li', function(){
         //            var clickDataTab = $(this).attr('data-tab');
@@ -277,19 +292,33 @@
                     $('.category-depth-2').append(`<li data-value="${idx+1}">(중분류) ${tc.categoryName}</li>`);
                 })
             })
-
         })
+        let selectedCategory = ""; // 선택된 카테고리를 저장할 변수
+
+        $(document).on('click', '.category-depth-1 li', function(e) {
+            let categoryName = $(e.target).text();
+
+            // 대분류 선택시 중분류 정보를 초기화합니다.
+            selectedCategory = categoryName;
+
+            $('.category_title').text(selectedCategory);
+
+            $('.category-depth-1 li').removeClass('active');
+            $(this).addClass('active');
+        })
+
+        $(document).on('click', '.category-depth-2 li', function(e) {
+            let categoryName = $(e.target).text();
+
+            // 중분류를 선택하면 대분류 -> 중분류 형태로 텍스트를 저장합니다.
+            selectedCategory = selectedCategory.split(" -> ")[0] + " -> " + categoryName;
+
+            $('.category_title').text(selectedCategory);
+
+            $('.category-depth-2 li').removeClass('active');
+            $(this).addClass('active');
+        });
     </script>
 </th:block>
 </body>
-<!--                                                <div id="donation-category" class="category-list" style="display:none;">-->
-<!--                                                    <ul depth="2">-->
-<!--                                                        <li value="001">(소분류) 환경</li>-->
-<!--                                                        <li value="002">(소분류) 다문화</li>-->
-<!--                                                        <li value="003">(소분류) 지구촌</li>-->
-<!--                                                        <li value="004">(소분류) 시민사회</li>-->
-<!--                                                        <li value="005">(소분류) 동물</li>-->
-<!--                                                    </ul>-->
-<!--                                                </div>-->
-
 </html>

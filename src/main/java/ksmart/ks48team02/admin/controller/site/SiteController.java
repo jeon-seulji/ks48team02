@@ -106,7 +106,7 @@ public class SiteController {
 
         List<Category> categoryAdd = categoryService.getCategoryAdd();
 
-        model.addAttribute("title", "categoryAdd");
+        model.addAttribute("title", "카테고리 등록");
         log.info("나오냐 {}", categoryAdd);
         model.addAttribute("categoryAdd", categoryAdd);
 
