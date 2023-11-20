@@ -202,6 +202,13 @@ public class InvestmentController {
         return "admin/judgement/investment/insert/incongruity_sectors_insert";
     }
 
+    @PostMapping("/insert/incongruity-sectors")
+    public String addIncongruitySectors(AdminIncongruitySectors adminIncongruitySectors) {
+
+        investmentService.addIncogruitySector(adminIncongruitySectors);
+        return "redirect:/admin/investment/search/incongruity-sectors";
+    }
+
     @GetMapping("/insert/corporate-value")
     public String addCorporateValueEvaluation(Model model){
 
@@ -325,30 +332,69 @@ public class InvestmentController {
     }
 
     @GetMapping("/delete/law-satistify")
-    public String removeLawSatistify(Model model) {
+    public String removeLawSatistify(@RequestParam(value = "lawSatistifyCode") String lawSatistifyCode, Model model) {
+
+        investmentService.removeLawSatistify(lawSatistifyCode);
 
         model.addAttribute("title", "관리자 : 자본시장법 범위충족기준 삭제");
         model.addAttribute("contentsTitle", "자본시장법 범위충족기준 삭제");
+        model.addAttribute("lawSatistifyCode", lawSatistifyCode);
 
-        return "admin/judgement/investment/delete/law_satistify_delete";
+        return "redirect:/admin/investment/search/law-satistify";
+    }
+
+    @PostMapping("/delete/law-satistify")
+    public String removeLawSatistify(@RequestParam(value = "lawSatistifyCode") String lawSatistifyCode, RedirectAttributes redirectAttributes) {
+
+        investmentService.removeLawSatistify(lawSatistifyCode);
+
+        redirectAttributes.addAttribute("lawSatistifyCode", lawSatistifyCode);
+
+        return "redirect:/admin/investment/search/law-satistify";
     }
 
     @GetMapping("/delete/incongruity-sectors")
-    public String removeIncongruitySectors(Model model) {
+    public String removeIncongruitySectors(@RequestParam(value = "incongruitySectorsCode") String incongruitySectorsCode, Model model) {
+
+        investmentService.removeIncogruitySectors(incongruitySectorsCode);
 
         model.addAttribute("title", "관리자 : 부적합 업종 삭제");
         model.addAttribute("contentsTitle","부적합 업종 삭제");
+        model.addAttribute("incongruitySectorsCode", incongruitySectorsCode);
 
-        return "admin/judgement/investment/delete/incongruity_sectors_delete";
+        return "redirect:/admin/investment/search/incongruity-sectors";
+    }
+
+    @PostMapping("/delete/incongruity-sectors")
+    public String removeIncongruitySectors(@RequestParam(value = "incongruitySectorsCode") String incongruitySectorsCode, RedirectAttributes redirectAttributes) {
+
+        investmentService.removeIncogruitySectors(incongruitySectorsCode);
+
+        redirectAttributes.addAttribute("incongruitySectorsCode", incongruitySectorsCode);
+
+        return "redirect:/admin/investment/search/incongruity-sectors";
     }
 
     @GetMapping("/delete/corporate-value")
-    public String removeCorporateValueEvaluation(Model model) {
+    public String removeCorporateValueEvaluation(@RequestParam(value = "corporateValueEvaluationCode") String corporateValueEvaluationCode, Model model) {
+
+        investmentService.removeCorporateValueEvaluation(corporateValueEvaluationCode);
 
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 삭제");
         model.addAttribute("contentsTitle","기업가치 평가 결과 삭제");
+        model.addAttribute("corporateValueEvaluationCode", corporateValueEvaluationCode);
 
-        return "admin/judgement/investment/delete/corporate_value_evaluation_delete";
+        return "redirect:/admin/investment/search/corporate-value";
+    }
+
+    @PostMapping("/delete/corporate-value")
+    public String removeCorporateValueEvaluation(@RequestParam(value = "corporateValueEvaluationCode") String corporateValueEvaluationCode, RedirectAttributes redirectAttributes) {
+
+        investmentService.removeCorporateValueEvaluation(corporateValueEvaluationCode);
+
+        redirectAttributes.addAttribute("corporateValueEvaluationCode", corporateValueEvaluationCode);
+
+        return "redirect:/admin/investment/search/corporate-value";
     }
 
     @GetMapping("/check/{investmentRequestJudgeCode}")

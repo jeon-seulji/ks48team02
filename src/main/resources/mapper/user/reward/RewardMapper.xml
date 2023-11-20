@@ -80,6 +80,34 @@
         </association>
     </resultMap>
 
+    <!--리워드 댓글 resultMap-->
+    <resultMap id="rewardCommentResultMap" type="RewardComment">
+
+        <id property="rewardCommentCode" column="reward_comment_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="rewardProjectCode" column="reward_project_code"/>
+        <result property="memberName" column="member_name"/>
+        <result property="commentContent" column="comment_content"/>
+        <result property="commentDatetime" column="comment_datetime"/>
+        <result property="commentModifyDatetime" column="comment_modify_datetime"/>
+        <result property="commentDeleteDatetime" column="comment_delete_datetime"/>
+        <result property="commentPostNum" column="comment_postnum"/>
+        <result property="commentClass" column="comment_class"/>
+
+        <collection property="rewardReplyList" javaType="list" ofType="RewardComment">
+            <id property="rewardCommentCode" column="rewardReplyCode"/>
+            <result property="memberId" column="replyMemberId"/>
+            <result property="rewardProjectCode" column="replyRewardProjectCode"/>
+            <result property="memberName" column="replyMemberName"/>
+            <result property="commentContent" column="replyCommentContent"/>
+            <result property="commentDatetime" column="replyCommentDatetime"/>
+            <result property="commentModifyDatetime" column="replyCommentModifyDatetime"/>
+            <result property="commentDeleteDatetime" column="replyCommentDeleteDatetime"/>
+            <result property="commentPostNum" column="replyCommentPostNum"/>
+            <result property="commentClass" column="replyCommentClass"/>
+        </collection>
+    </resultMap>
+
     <!--주문 회원 정보 조회-->
     <select id="getOrderMemberInfo" parameterType="String" resultMap="memberResultMap">
 
@@ -88,31 +116,34 @@
             m.member_name,
             m.member_email,
             m.contact_info,
-            c.customer_gender,
-            c.customer_birth,
-            c.customer_addr,
-            c.customer_addr_detail,
-            c.customer_point,
-            cr.rank_name,
-            cr.discount_rate,
-            cr.point_saving_rate
+            IFNULL(c.customer_addr,'')AS customer_addr,
+            IFNULL(c.customer_addr_detail,'')AS customer_addr_detail,
+            IFNULL(c.customer_point,0)AS customer_point,
+            IFNULL(cr.discount_rate,0)AS discount_rate,
+            IFNULL(cr.point_saving_rate,0)AS point_saving_rate
         FROM
             member AS m
-        INNER JOIN
+        LEFT JOIN
             customer AS c
         ON
             m.member_id= c.member_id
-        INNER JOIN
+        LEFT JOIN
             reward_customer_rank AS cr
         ON
             c.reward_rank_code = cr.reward_rank_code
-        INNER JOIN
-            donation_customer_rank AS dr
-        ON
-            c.donation_rank_code = dr.donation_rank_code
         WHERE
             m.member_id = #{memberId};
     </select>
+
+    <!--배송 요청사항 메세지 조회-->
+    <select id="deliveryMessage" resultType="DeliveryMessage">
+        SELECT
+            d.delivery_message_code AS deliveryMessageCode,
+            d.delivery_message_content AS deliveryMessageContect
+        FROM
+            delivery_message as d
+    </select>
+
     <!--리워드 프로젝트 등록-->
     <insert id="addRewardProject" parameterType="RewardProject">
         <selectKey keyProperty="rewardProjectCode,storeCode,regCompany" resultType="hashmap" order="BEFORE">
@@ -156,9 +187,9 @@
             SELECT
                 (CASE
                     WHEN
-                        COUNT(o.reward_option_code) = 0  THEN CONCAT('RDO_', CURDATE()+0, '_1')
+                        COUNT(o.reward_option_code) = 0  THEN CONCAT('RWDO_', CURDATE()+0, '_1')
                     ELSE
-                        CONCAT('RDO_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(o.reward_option_code,'_',-1)AS UNSIGNED )+1))
+                        CONCAT('RWDO_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(o.reward_option_code,'_',-1)AS UNSIGNED )+1))
                 END) AS rewardOptionCode
             FROM
                 reward_option as o
@@ -198,6 +229,10 @@
             r.project_condition
         FROM
             reward_project AS r
+        WHERE
+            r.project_end_date >= now()
+        ORDER BY
+            r.project_reg_date DESC
     </select>
 
     <!--리워드 상세 페이지-->
@@ -247,6 +282,32 @@
             s.member_id = m.member_id
         WHERE
             r.reward_project_code = #{rewardProjectCode};
+    </select>
+
+    <!--리워드 옵션 별 총 주문개수 조회-->
+    <select id="optionTotalOrderQuantity" parameterType="String" resultType="int">
+        SELECT
+            IFNULL(SUM(o.order_option_amount),0)
+        FROM
+            reward_option as r
+            LEFT JOIN
+                reward_order_detail as o
+            ON
+                r.reward_option_code = o.reward_option_code
+        WHERE
+            r.reward_option_code = #{rewardOptionCode}
+        GROUP BY
+            r.reward_option_code
+    </select>
+
+    <!--리워드 프로젝트 총 참여자 수 조회-->
+    <select id="rewardProjectJoinNumber" parameterType="String" resultType="int">
+        SELECT
+            COUNT(o.order_code)
+        FROM
+            order_table AS o
+        WHERE
+            o.goods_code = #{rewardProjectCode}
     </select>
 
     <!--주문번호, 결제번호 생성-->
@@ -312,17 +373,19 @@
             SELECT
                 (CASE
                     WHEN
-                        COUNT(r.use_reserve_code) = 0  THEN CONCAT('USRC_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                        COUNT(r.use_reserve_code) = 0  THEN CONCAT('RWDP_', CURDATE()+0, '_1')
                     ELSE
-                        CONCAT('USRC_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(r.use_reserve_code,'_',-1)AS UNSIGNED )+1))
+                     CONCAT('RWDP_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(r.use_reserve_code,'_',-1)AS UNSIGNED )+1))
                 END) AS useReserveCode
             FROM
-            reward_payment as r;
+                reward_payment AS r
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(r.use_reserve_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
         INSERT INTO reward_payment
-        (reward_payment_code, order_code, member_id, reward_refund_code, switching_code, order_price, delivery_price, order_total_price, use_reserve_price, use_reserve_code, discount_rank_price, discount_coupon_price, payment_scheduled_price, payment_method, deposit_name, deposit_account, refund_account, deposit_price, payment_state, payment_deadline_date, payment_completed_date)
+            (reward_payment_code, order_code, member_id, reward_refund_code, switching_code, order_price, delivery_price, order_total_price, use_reserve_price, use_reserve_code, discount_rank_price, discount_coupon_price, payment_scheduled_price, payment_method, deposit_name, deposit_account, refund_account, deposit_price, payment_state, payment_deadline_date, payment_completed_date)
         VALUES
-        (#{paymentCode}, #{orderCode}, #{orderMemberId}, null, null, #{orderPrice}, #{deliveryPrice}, #{totalPayPrice}, #{usePoint},
+            (#{paymentCode}, #{orderCode}, #{orderMemberId}, null, null, #{orderPrice}, #{deliveryPrice}, #{totalPayPrice}, #{usePoint},
         <choose>
             <when test="usePoint lte 0">
                 null
@@ -335,6 +398,17 @@
 
     </insert>
 
+    <!--프로젝트 달성 금액, 달성률 업데이트-->
+    <update id="projectAchievementMoney" parameterType="PaymentResult">
+        UPDATE
+            reward_project
+        SET
+            project_achievement_money = project_achievement_money + #{orderPrice},
+            project_achievement_percent = ROUND(project_achievement_money / project_goal_money * 100)
+        WHERE
+            reward_project_code = #{rewardProjectcode};
+    </update>
+
     <!--포인트 적립 내역 인서트-->
     <insert id="savePointLogInsert" parameterType="PaymentResult">
 
@@ -342,12 +416,14 @@
             SELECT
                 (CASE
                     WHEN
-                        COUNT(p.point_log_code) = 0  THEN CONCAT('PL_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                        COUNT(p.point_log_code) = 0  THEN CONCAT('PL_', CURDATE()+0, '_1')
                     ELSE
-                        CONCAT('PL_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(p.point_log_code,'_',-1)AS UNSIGNED )+1))
+                        CONCAT('PL_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(p.point_log_code,'_',-1)AS UNSIGNED )+1))
                 END) AS pointLogCode
             FROM
-            point_log as p;
+                point_log AS p
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(p.point_log_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
         INSERT INTO point_log
         (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
@@ -362,12 +438,14 @@
             SELECT
                 (CASE
                     WHEN
-                        COUNT(p.point_log_code) = 0  THEN CONCAT('PL_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                        COUNT(p.point_log_code) = 0  THEN CONCAT('PL_', CURDATE()+0, '_1')
                     ELSE
-                        CONCAT('PL_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(p.point_log_code,'_',-1)AS UNSIGNED )+1))
+                        CONCAT('PL_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(p.point_log_code,'_',-1)AS UNSIGNED )+1))
                 END) AS pointLogCode
             FROM
-            point_log as p;
+                point_log AS p
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(p.point_log_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
         INSERT INTO point_log
         (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
@@ -385,18 +463,30 @@
             member_id = #{orderMemberId};
     </update>
 
+    <!--포인트 적립-->
+    <update id="customerSavePoint" parameterType="PaymentResult">
+        UPDATE
+        customer
+        SET
+        customer_point = customer_point + #{memberSavePoint}
+        WHERE
+        member_id = #{orderMemberId};
+    </update>
+
     <!--쿠폰 사용 로그 insert-->
     <insert id="useCouponLogInsert" parameterType="PaymentResult">
         <selectKey keyProperty="couponUseLogCode" resultType="String" order="BEFORE">
             SELECT
                 (CASE
                     WHEN
-                        COUNT(cl.coupon_use_log_code) = 0  THEN CONCAT('CUL_', DATE_FORMAT(NOW(), '%Y%m%d'), '_1')
+                        COUNT(cl.coupon_use_log_code) = 0  THEN CONCAT('RCL', CURDATE()+0, '_1')
                     ELSE
-                        CONCAT('CUL_', DATE_FORMAT(NOW(), '%Y%m%d') ,'_' ,MAX(CAST(substring_index(cl.coupon_use_log_code,'_',-1)AS UNSIGNED )+1))
+                        CONCAT('RCL', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(cl.coupon_use_log_code,'_',-1)AS UNSIGNED )+1))
                 END) AS couponUseLogCode
             FROM
-                use_coupon_log as cl;
+                use_coupon_log AS cl
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(cl.coupon_use_log_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
         INSERT INTO use_coupon_log
             (coupon_use_log_code, reward_payment_code, coupon_issue_code, coupon_use_date)
@@ -404,8 +494,36 @@
             (#{couponUseLogCode}, #{paymentCode}, #{couponIssueCode}, NOW());
     </insert>
 
+    <!--리워드 주문 배송 테이블 insert-->
+    <insert id="orderDeliveryInsert" parameterType="PaymentResult">
+        <selectKey keyProperty="orderDeliveryCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(o.order_delivery_code) = 0  THEN CONCAT('RODC_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('RODC_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(o.order_delivery_code,'_',-1)AS UNSIGNED )+1))
+                END) AS orderDeliveryCode
+            FROM
+                order_delivery AS o
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(o.order_delivery_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+
+        INSERT INTO order_delivery
+            (order_delivery_code, order_code, delivery_category_code, switching_code, reward_refund_code,
+            delivery_category, member_id, delivery_name, delivery_phone, delivery_address,
+            delivery_message, delivery_message_code, numberInvoice, delivery_courier, delivery_state,
+            delivery_start_date, delivery_end_date, due_date_arrival)
+        VALUES
+            (#{orderDeliveryCode},#{orderCode},null,null, null,'일반 주문 배송', #{orderMemberId},
+            #{deliveryMemberInfo.deliveryMemberName}, #{deliveryMemberInfo.deliveryMemberMobile},
+            #{deliveryMemberInfo.deliveryMemberAddr}, #{deliveryMemberInfo.deliveryMessage},
+            #{deliveryMemberInfo.deliveryMessageCode}, null, null, '1', null, null, null);
+    </insert>
+
     <!--사용한 쿠폰 사용함으로 update-->
-    <update id="usedCouponUpdate" parameterType="PaymentResult">
+    <update id="usedCouponUpdate" parameterType="String">
         UPDATE
             member_coupon
         SET
@@ -413,6 +531,97 @@
         WHERE
             coupon_issue_code = #{couponIssueCode};
     </update>
+
+    <!--댓글 등록-->
+    <insert id="addRewardComment" parameterType="String">
+
+        <selectKey keyProperty="rewardCommentCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(r.reward_comment_code) = 0  THEN CONCAT('RC_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('RC_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(r.reward_comment_code,'_',-1)AS UNSIGNED )+1))
+                END) AS rewardCommentCode
+            FROM
+                reward_comment AS r
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(r.reward_comment_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO reward_comment
+            (reward_comment_code, member_id, reward_project_code, member_name, comment_content, comment_datetime, comment_modify_datetime,
+            comment_delete_datetime, comment_postnum, comment_class)
+        VALUES
+            (#{rewardCommentCode}, #{memberId}, #{rewardProjectCode}, #{memberName}, #{commentContent}, NOW(), NULL, NULL, NULL, 'comment');
+    </insert>
+
+    <!--댓글 삭제-->
+    <delete id="commentDelete" parameterType="String">
+        DELETE
+        FROM
+            reward_comment
+        WHERE
+            reward_comment_code = #{rewardCommentCode}
+    </delete>
+
+
+    <!--댓글 조회-->
+    <select id="getCommentList" parameterType="String" resultMap="rewardCommentResultMap">
+        SELECT
+            r.reward_comment_code,
+            r.member_id,
+            r.reward_project_code,
+            r.member_name,
+            r.comment_content,
+            r.comment_datetime,
+            r.comment_modify_datetime,
+            r.comment_delete_datetime,
+            r.comment_postnum,
+            r.comment_class,
+            r2.reward_comment_code AS rewardReplyCode,
+            r2.member_id AS replyMemberId,
+            r2.reward_project_code AS replyRewardProjectCode,
+            r2.member_name AS replyMemberName,
+            r2.comment_content AS replyCommentContent,
+            r2.comment_datetime AS replyCommentDatetime,
+            r2.comment_modify_datetime AS replyCommentModifyDatetime,
+            r2.comment_delete_datetime AS replyCommentDeleteDatetime,
+            r2.comment_postnum AS replyCommentPostNum,
+            r2.comment_class AS replyCommentClass
+        FROM
+            reward_comment AS r
+        LEFT JOIN
+            reward_comment AS r2
+        ON
+            r.reward_comment_code = r2.comment_postnum
+        WHERE
+            r.reward_project_code = #{rewardProjectCode} AND r.comment_class ='comment'
+        ORDER BY
+            r.comment_datetime DESC ,r2.comment_datetime DESC;
+    </select>
+
+    <!--대댓글 등록-->
+    <insert id="addReplyComment" parameterType="String">
+
+        <selectKey keyProperty="rewardCommentCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(r.reward_comment_code) = 0  THEN CONCAT('RC_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('RC_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(r.reward_comment_code,'_',-1)AS UNSIGNED )+1))
+                END) AS rewardCommentCode
+            FROM
+                reward_comment AS r
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(r.reward_comment_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO reward_comment
+            (reward_comment_code, member_id, reward_project_code, member_name, comment_content, comment_datetime, comment_modify_datetime,
+            comment_delete_datetime, comment_postnum, comment_class)
+        VALUES
+            (#{rewardCommentCode}, #{memberId}, #{rewardProjectCode}, #{memberName}, #{reply}, NOW(), NULL, NULL, #{parentCommentCode}, 'reply');
+    </insert>
 
 
 

@@ -65,8 +65,6 @@
                 <th>자본시장법 범위충족 사유</th>
                 <th>등록자 아이디</th>
                 <th>등록일시</th>
-                <th>수정</th>
-                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
@@ -74,7 +72,7 @@
                 <td>
                     <input type="checkbox" name="selectList">
                 </td>
-                <td colspan="6">자본시장법 범위충족 목록이 없습니다.</td>
+                <td colspan="5">자본시장법 범위충족 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${lawSatistifyReasonList == null}" th:each="l : ${lawSatistifyReasonList}">
                 <td>
@@ -88,12 +86,6 @@
                 <td th:text="${l.lawSatistifyReason}"></td>
                 <td th:text="${l.memberId}"></td>
                 <td th:text="${l.codeRegDay}"></td>
-                <td>
-                    <a th:href="@{/admin/investment/update/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}">수정</a>
-                </td>
-                <td>
-                    <a th:href="@{/admin/investment/delete/law-satistify(lawSatistifyCode=${l.lawSatistifyCode})}">삭제</a>
-                </td>
             </tr>
             </tbody>
         </table>

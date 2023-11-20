@@ -6,110 +6,19 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <title th:text="${title}"></title>
-    <!-- Link Swiper's CSS -->
     <style>
-        .category-button {
-            border: none;
-            border-radius: 25px; /* 라운드 처리 반경을 조정합니다. */
+        .table-data-center-modify{
             text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .category-li{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-left: 20px;
-        }
-        .selected {
-            font-weight: bold;
-            color: black;
-        }
-        ul.d-flex li:hover {
-            cursor: pointer;
-        }
-        .donation-item-box{
-            width: 350px;
-            height: 300px;
-            margin: 10px;
-        }
-        .donation-item-first-child{
-            background: grey;
-            width: 350px;
-            height: 200px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .donation-item-first-child img{
-            width: 100%;
-            height: 100%;
-            border-radius: 5px;
-        }
-        .donation-item-second-child{
-            width: 350px;
-            height: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .donation-item-third-child{
-            width: 350px;
-            height: auto;
-            font-weight: bolder;
-            color: black;
-            font-size: 15px;
-        }
-        .donation-item-fourth-child{
-            width: 350px;
-            height: auto;
-        }
-        .donation-item-span-first{
-            font-weight: bold;
-            font-size: 20px;
-            color: #235FD9;
-        }
-        .donation-item-span-second{
-            margin-left: 5px;
-        }
-        .donation-item-span-third{
-            margin-left: auto;
-            color: #235FD9;
-            background: #cce5ff;
-            font-size: 12px;
-            padding: 2px;
-            border-radius: 5px;
-        }
-        .donation-item-third-child a:link{
-            text-decoration: none;
-        }
-        .donation-item-third-child a:visited{
-            color: black;
-            text-decoration: none;
-        }
-        .donation-item-third-child a:hover{
-            color: blue; text-decoration: underline;
+            color: blue;
+            text-decoration: underline;
         }
     </style>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
 </head>
 
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <!-- 	  	<script th:src="@{user/js/swiper-slide-event.js}"></script> -->
+
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
@@ -135,63 +44,277 @@
             element.classList.add("selected");
         }
 
+        // 심사 여부에 따른 추가 기능들
+        $('tr').each(function() {
+            const judgeText = $(this).find('.table-data-center-judge').text().trim();
+            const $judgeCon = $(this).find('.table-data-center-judge');
+            const $curGoalMoney = $(this).find('.current-goal-money');
+
+            // "진행중"인 경우
+            if (judgeText === '3') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
+                const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
+                const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
+                $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $judgeCon.text('진행중');
+                $modifyImpossible.remove();
+            }
+
+            // "심사완료"인 경우
+            if (judgeText === '1') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
+                const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
+                const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
+                $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $modifyImpossible.remove();
+
+                // 공고 시작 버튼 + 시작 누를 시 진행중으로 변경 +  TODO 공고 시작일자 (DB에 값 넣기) 설정하기
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('');
+                $startProjectDate.children();
+                const $startButton = $('<button type="button" class="startBtn" style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>');
+
+                // 시작 버튼을 요소에 추가합니다.
+                $startProjectDate.append($startButton);
+
+                // 시작 버튼에 클릭 이벤트 리스너를 추가.
+                $startButton.click(function() {
+                    let rewardProjectCode = $(this).parent('td').parent('tr').children('td:eq(0)').text();
+                    $.ajax({
+                        method : "POST",
+                        url: "/seller/reward/products/startProject",
+                        data : {rewardProjectCode : rewardProjectCode},
+                        dataType : "text",
+                        success: function (){
+                            $startButton.remove();
+                            location.reload();
+                        },
+                        error: function (error){
+                            console.log("AJAX 요청 실패")
+                        }
+                    });
+                });
+                $judgeCon.text('심사완료');
+            }
+
+            // "심사반려"인 경우
+            if (judgeText === '2') {
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('-');
+                $judgeCon.text('심사반려');
+            }
+
+            // "심사중"인 경우
+            if (judgeText === '0') {
+                const $startProjectDate = $(this).find('.table-data-center.start-project-date');
+                $startProjectDate.text('-');
+                $judgeCon.text('심사중');
+            }
+
+            // "프로젝트 성공"인 경우
+            if (judgeText === '4') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
+                const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
+                const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
+                $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $modifyImpossible.remove();
+                $judgeCon.text('성공');
+            }
+
+            // "프로젝트 실패"인 경우
+            if (judgeText === '5') {
+                // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
+                const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
+                const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
+                $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
+                $modifyImpossible.remove();
+                $judgeCon.text('실패');
+            }
+        });
+
+        /*        $('button').click(function (){
+                    if($(this).attr('class') == 'startBtn'){
+                        let donationCode = $(this).parent('td').parent('tr').children('td:eq(0)').text();
+                        window.location.href = "@{/product(donationCode=${donationCode})}";
+                    }
+                });*/
+
+        function isProject(judgeReason){
+            if($(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').length == 0){
+                $('table.settlement-log tbody tr.not-contents').show();
+            }else{
+                $(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').show();
+                projectTotal = $(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').length;
+            }
+        }
+
+        let projectTotal = 0;
+
+        // 심사 완료 프로젝트, 심사중 프로젝트 셀렉트 박스 기능 구현
+        $('.project-select').on('change', function() {
+            const selectedValue = $(this).val();
+
+            // 모든 <tr> 요소를 숨깁니다.
+            $('table.settlement-log tbody tr').hide();
+
+            if (selectedValue === '0') {
+                // "전체 프로젝트"를 선택한 경우, 모든 행을 표시합니다.
+                $('table.settlement-log tbody tr').show();
+                projectTotal = $('table.settlement-log tbody tr').length -1;
+
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                if($('table.settlement-log tbody tr').length == 1){
+                    $('table.settlement-log tbody tr.not-contents').show();
+                    projectTotal = 0;
+                }else{
+                    $('table.settlement-log tbody tr.not-contents').hide();
+                }
+
+            } else if (selectedValue === '1') {
+                // "심사완료된 프로젝트"를 선택한 경우, "심사완료"인 행을 표시합니다.
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject("심사완료");
+
+            } else if (selectedValue === '2') {
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject("심사반려");
+            } else if (selectedValue === '3') {
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject("심사중");
+            }
+            else if (selectedValue === '4') {
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject("진행중");
+            }
+            else if (selectedValue === '5') {
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject("성공");
+            }
+            else if (selectedValue === '6') {
+                // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
+                isProject("실패");
+            }
+            $('.total-list').text(projectTotal);
+
+        });
+
+        // 목록 진입 시 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주기 위해 설정 (초기화)
+        if($('table.settlement-log tbody tr').length == 1){
+            $('table.settlement-log tbody tr.not-contents').show();
+        }else{
+            $('table.settlement-log tbody tr.not-contents').hide();
+        }
+
+        // 총 프로젝트 개수 띄우기 초기화
+        $('.total-list').text($('table.settlement-log tbody tr').length -1);
+
     </script>
 </th:block>
 
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child" th:onclick="|location.href='@{/user/donation/detail}'|">
-                    <img class="donation-item-third-child-image" src="https://50plus.or.kr/upload/im/2018/09/17473716-08b5-4c55-8709-380ededad91c.png">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">34% 달성</span>
-                    <span class="donation-item-span-second">480,200원</span>
-                    <span class="donation-item-span-third">11일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    <a th:href="@{/user/donation/detail}">시설 퇴소를 앞둔, 음악으로 세상에 서고 싶은 사랑이</a>
-                </div>
-                <div class="donation-item-fourth-child">
-                    파주시문산종합사회복지관
-                </div>
+    <div class="title-wrap">
+        <h4 class="admin-content-title">현재 프로젝트 목록</h4>
+    </div>
+    <div class="admin-content-wrapper">
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>프로젝트 목록 총 <span class="count-data total-list">0</span>건</li>
+                </ul>
             </div>
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">2% 달성</span>
-                    <span class="donation-item-span-second">130,800원</span>
-                    <span class="donation-item-span-third">11일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    어르신께 행복을 전하는 주민나눔 단체 해피CELL
-                </div>
-                <div class="donation-item-fourth-child">
-                    월곡종합사회복지관
-                </div>
+            <div class="list-count-selector">
+                <select class="project-select">
+                    <option value="0">전체 프로젝트</option>
+                    <option value="1">심사승인된 프로젝트</option>
+                    <option value="2">심사반려된 프로젝트</option>
+                    <option value="3">심사중인 프로젝트</option>
+                    <option value="4">진행중인 프로젝트</option>
+                    <option value="5">성공한 프로젝트</option>
+                    <option value="6">실패한 프로젝트</option>
+                </select>
             </div>
-            <div class="col-lg-3 donation-item-box">
-                <div class="donation-item-first-child">
-                </div>
-                <div class="donation-item-second-child">
-                    <span class="donation-item-span-first">18% 달성</span>
-                    <span class="donation-item-span-second">1,798,700원</span>
-                    <span class="donation-item-span-third">14일 남음</span>
-                </div>
-                <div class="donation-item-third-child">
-                    연이은 강진, 고통 속에 놓인 아프가니스탄을 도와주세요..
-                </div>
-                <div class="donation-item-fourth-child">
-                    유엔난민기구
+        </div>
+        <form>
+
+            <table class="settlement-log">
+                <thead>
+                <tr>
+                    <th style="width:8%;">프로젝트코드</th>
+                    <th style="width:8%;">프로젝트</br>현황</th>
+                    <th style="width:20%;">프로젝트 명</th>
+                    <th style="width:15%;">
+                        프로젝트 현재 달성 금액
+                    </th>
+                    <th style="width:15%;">
+                        프로젝트 목표 금액
+                    </th>
+                    <th style="width:10%;">공고 등록일자</th>
+                    <th style="width:10%;">공고 마감일자</th>
+                    <th style="width:10%;">공고 시작일자</th>
+                    <th>프로젝트</br>수정</th>
+                    <th style="width:10%;">심사사유</th>
+                    <th>담당자</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <!-- not contents -->
+                <tr class="not-contents">
+                    <td colspan="11" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                </tr>
+                <!-- contents -->
+                <th:block th:each="l : ${projectList}">
+                    <tr>
+                        <td class="table-data-center" th:text="${l.rewardProjectCode}"></td>
+                        <td class="table-data-center-judge" th:text="${l.projectCondition}"></td>
+                        <td th:text="${l.projectSubject}"></td>
+                        <td>
+                            <div style="float:left;"><span class="current-goal-money" th:text="${l.projectAchievementMoney}"></span> 원</div>
+                        </td>
+                        <td>
+                            <div style="float:left;"><span class="goal-money" th:text="${l.projectGoalMoney}"></span> 원</div>
+                        </td>
+                        <td class="table-data-center" th:text="${l.projectRegDate}"></td>
+                        <td class="table-data-center" th:text="${l.projectEndDate}"></td>
+                        <td class="table-data-center start-project-date" th:text="${l.projectStartDate}"></td>
+                        <td class="table-data-center-modify">
+                            <a th:href="@{/seller/reward/products/modify}">수정</a>
+                        </td>
+                        <td class="table-data-center judgement-reason">
+                            -
+                        </td>
+                        <td class="table-data-center" th:text="${l.adminMemberId}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </form>
+
+
+        <!-- list pager -->
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li class="link-active"><a th:href="@{#}">1</a></li>
+                    <li><a th:href="@{#}">2</a></li>
+                    <li><a th:href="@{#}">3</a></li>
+                    <li><a th:href="@{#}">4</a></li>
+                    <li><a th:href="@{#}">5</a></li>
+                    <li><a th:href="@{#}">6</a></li>
+                </ul>
+                <div class="list-btn-area">
+                    <button class="prev-transfer">
+                        <span>prev</span>
+                    </button>
+                    <button class="next-transfer">
+                        <span>next</span>
+                    </button>
                 </div>
             </div>
 
         </div>
-    </div>
 </th:block>
 </body>
 </html>

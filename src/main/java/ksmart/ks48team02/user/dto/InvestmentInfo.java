@@ -25,6 +25,15 @@ public class InvestmentInfo {
     private String contractFile;
     private int investJudgeSituation;
     private int investmentDeadlineCnt;
+    private InvestmentContent investmentContent;
+
+    public InvestmentContent getInvestmentContent() {
+        return investmentContent;
+    }
+
+    public void setInvestmentContent(InvestmentContent investmentContent) {
+        this.investmentContent = investmentContent;
+    }
 
     public int getInvestmentDeadlineCnt() {
         return investmentDeadlineCnt;
@@ -248,4 +257,5 @@ public class InvestmentInfo {
         sb.append('}');
         return sb.toString();
     }
+
 }
