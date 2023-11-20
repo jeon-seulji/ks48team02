@@ -2,10 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ksmart.ks48team02.user.mapper.member.UserMemberMapper">
-
+<mapper namespace="ksmart.ks48team02.user.mapper.mypage.MypageMapper">
     <!--회원 resultMap-->
-    <resultMap type="Member" id="memberResultMap">
+    <resultMap type="MypageDto" id="memberResultMap">
         <id property="memberId" column="member_id"/>
         <result property ="memberTypeCode" column="member_type_code"/>
         <result property="memberName" column="member_name"/>
@@ -16,7 +15,6 @@
         <result property="unRegDate" column="unreg_date"/>
         <result property="unRegStatus" column="unreg_status"/>
     </resultMap>
-
 
     <!--회원 아이디로 특정회원 정보 조회-->
     <select id="getMemberInfoById" parameterType="String" resultMap="memberResultMap">

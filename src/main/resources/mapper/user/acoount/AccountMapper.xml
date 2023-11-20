@@ -23,21 +23,62 @@
         INSERT INTO member
             (member_id, member_type_code, member_name, member_pw, member_reg_date, member_email, contact_info)
         VALUES
-            (#{memberId},#{memberTypeCode}, #{memberName}, #{memberPw}, CURDATE(), #{memberEmail}, #{memberContactInfo});
+            (#{memberId},#{memberTypeCode}, #{memberName}, #{memberPw}, SYSDATE(), #{memberEmail}, #{memberContactInfo});
     </insert>
 
     <!-- 회원아이디 중복체크 -->
     <select id="idCheck" parameterType="String" resultType="boolean">
         /* 회원아이디 중복체크 */
         SELECT
-            count(m.member_id)
+        count(m.member_id)
+        FROM
+        member AS m
+        WHERE
+        m.member_id = #{memberId};
+    </select>
+
+    <!-- ✅ 회원 아이디로 회원정보 가져오기  -->
+    <select id="getMemberInfoById" parameterType="String" resultMap="memberResultMap">
+        SELECT
+            m.member_id,
+            m.member_type_code,
+            m.member_name,
+            m.member_pw,
+            m.member_reg_date,
+            m.member_email,
+            m.contact_info,
+            m.unreg_date,
+            m.unreg_status
         FROM
             member AS m
         WHERE
             m.member_id = #{memberId};
     </select>
 
+    <!-- 회원 비밀번호 일치 확인   -->
+    <select id="pwCheck" parameterType="Member" resultType="boolean">
+        /* 회원 비밀번호 일치 확인 */
+        SELECT
+            COUNT(member_id)
+        FROM
+            member
+        WHERE
+            member_id = #{loginId} AND member_pw = #{memberPw};
+    </select>
 
+    <!-- 회원 탈퇴 : unreg_status를 active로 변경-->
+    <update id="inactivateMember" parameterType="String" >
+        /* 회원 비활성화 */
+        UPDATE
+            member
+        SET
+            unreg_status = 'active',
+            unreg_date = SYSDATE()
+        WHERE
+            member_id = #{loginId};
+    </update>
+
+    <!--    -->
 </mapper>
 
 
