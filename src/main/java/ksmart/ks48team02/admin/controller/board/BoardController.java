@@ -1,14 +1,17 @@
 package ksmart.ks48team02.admin.controller.board;
 
 import ksmart.ks48team02.admin.dto.Coupon;
+
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -19,6 +22,7 @@ public class BoardController {
 
     private final AdminCouponService adminCouponService;
 
+    @Autowired
     public BoardController(AdminCouponService adminCouponService) {
         this.adminCouponService = adminCouponService;
     }
@@ -63,6 +67,19 @@ public class BoardController {
         return "admin/board/eventAdd";
     }
 
+    // 쿠폰 삭제
+
+    /***
+     *
+     * @param couponCode
+     * @PathVariable : 스프링에서 URL의 경로에서 특정 값을 추출하여 사용할 때 사용한다.
+     * @return
+     */
+    @DeleteMapping("/coupon/{couponCode}") // Delete 핸들러 메소드
+    public ResponseEntity<Void> deleteCoupon(@PathVariable String couponCode) {
+        adminCouponService.deleteCoupon(couponCode);
+        return ResponseEntity.noContent().build();  // 204 No Content 응답을 반환
+    }
 
     // 쿠폰 관리
     @GetMapping("/coupon")
@@ -75,7 +92,16 @@ public class BoardController {
         return "admin/board/coupon";
     }
 
-     //쿠폰 수정
+    // 쿠폰 수정 post
+    @PostMapping("/couponAdd")
+    public String couponAddPost(Model model, Coupon coupon){
+        adminCouponService.updateCoupon(coupon);
+        model.addAttribute("title", " 쿠폰 수정");
+
+        return "redirect:/admin/board/couponAdd";
+    }
+
+    //쿠폰 수정
     @GetMapping("/couponAdd")
     public String couponAddPage(@RequestParam(name = "couponCode", required = false) String couponCode,
                                 Model model){
@@ -88,9 +114,19 @@ public class BoardController {
         return "admin/board/couponAdd";
     }
 
+    // 쿠폰 등록 post
+    @PostMapping("/couponCreate")
+    public String couponCreatePost(@ModelAttribute Coupon coupon){
+
+        adminCouponService.insertCoupon(coupon);
+
+        return "redirect:/admin/board/couponCreate";
+    }
+
     // 쿠폰 등록
     @GetMapping("/couponCreate")
-    public String couponCreate(){
+    public String couponCreate(Model model){
+        model.addAttribute("title", "쿠폰 등록");
 
         return "admin/board/couponCreate";
     }

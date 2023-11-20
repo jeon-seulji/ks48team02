@@ -54,7 +54,7 @@
         .comments-reply{
             display: none;
         }
-        .donation-comments{
+        .reward-comments{
             color: black;
             white-space: pre-line;
             overflow: hidden;
@@ -62,6 +62,7 @@
             text-align: left;
             padding-left: 5px;
         }
+
     </style>
 </head>
 
@@ -74,7 +75,11 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
 
-    <script>
+    <script th:inline="javascript">
+
+        //현재 로그인 한 아이디
+        const  loginMemberId = [[${memberId}]];
+
         var swiper = new Swiper(".mySwiper", {
             spaceBetween: 30,    // 슬라이드 사이 여백
             slidesPerView : 'auto', // 한 슬라이드에 보여줄 갯수
@@ -95,12 +100,12 @@
                 prevEl: ".swiper-button-prev",
             },
         });
-        let donationContentsSwiperSlide = new Swiper("#donationProject .contents-area", {
+        let rewardProjectSwiperSlide = new Swiper("#rewardProject .contents-area", {
             slidesPerView: 3,
             spaceBetween: 12,
             navigation: {
-                nextEl: "#donationProject .swiper-button-next",
-                prevEl: "#donationProject .swiper-button-prev",
+                nextEl: "#rewardProject .swiper-button-next",
+                prevEl: "#rewardProject .swiper-button-prev",
             },
         });
 
@@ -109,12 +114,19 @@
         const $commentBoxClose = document.getElementById('commentBoxClose');
 
         $writeButton.addEventListener('click', function (){
-            $commentBox.style.display = 'block'; // 버튼 클릭 시 댓글 창 열림
+
+            if (loginMemberId == '' || loginMemberId == null || typeof loginMemberId == 'undefined'){
+                alert('글쓰기 기능은 로그인을 해야합니다!');
+                return false;
+            }else{
+                $commentBox.style.display = 'block'; // 버튼 클릭 시 댓글 창 열림
+            }
+
         });
 
         $commentBoxClose.addEventListener('click', function (){
             $commentBox.style.display = 'none'; // 버튼 클릭 시 댓글 창 종료
-        })
+        });
 
         $('.comment-text-box').keyup(function (e){
             const content = $(this).val();
@@ -126,9 +138,12 @@
         });
 
         $('.reply').on('click', function (){
-            const $clickedReply = $(this);
-            const $replyArrow = $clickedReply.find('.replyArrow');
-            const $commentsReply = $clickedReply.siblings('.comments-reply');
+
+
+
+            const $replyArrow = $(this).find('.replyArrow');
+            const $commentsReply = $(this).siblings('.comments-reply');
+
             if ($replyArrow.text() == '▽') {
                 $replyArrow.text("△");
                 $commentsReply.css('display', 'inline-block');
@@ -136,8 +151,99 @@
                 $replyArrow.text("▽");
                 $commentsReply.css('display', 'none');
             }
+
+            $('.replyArrow').not($(this).find('.replyArrow')).text("▽");
+            $('.comments-reply').not($(this).siblings('.comments-reply')).css('display', 'none');
+
         });
 
+
+
+
+
+
+        // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 코드
+        let rewardProjectCode = '[[${rewardProject.rewardProjectCode}]]';
+        // 썸네일 이미지 경로 지정
+        let thumbNailImageSrc = $('#thumbNailImage').attr('src');
+        $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${rewardProject.projectThumbnailImage}]]');
+
+        // 스토리에서 앞에 부분만 잘라서 공백포함 155글자만 가져옴 그뒤는 ... 으로 다자름
+        let storyBodyText = $('#storyBody').children('p:eq(0)').text();
+        $('#subContens').text(storyBodyText);
+        if (storyBodyText.length > 155) {
+            storyBodyText = storyBodyText.substring(0, 155) + '...';
+        }
+        // 가져온 텍스트를 subContens에 설정
+        $('#subContens').text(storyBodyText);
+
+        let currentDate = new Date();
+        // 비교 대상 날짜 설정
+        let targetDate = new Date($('#projectEndDate').val());
+        // 두 날짜 간의 차이 계산 (밀리초 단위)
+        let timeDifference = targetDate - currentDate;
+        // 차이를 일(day) 단위로 변환
+        let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        // 남은 일 수
+        $('#deadLine').text(daysRemaining + '일남음');
+
+        // 달성 금액 설정
+        $('#achievementMoney').text(`[[${rewardProject.projectAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+
+        $('#commentAddBtn').click(function (){
+            if($('.comment-text-box').val().length < 10){
+                alert('10글자 이상만 등록이 가능합니다!');
+                return false;
+            }else{
+                $('#commentAddForm').submit();
+            }
+            //
+        });
+
+        $('.replyBtn').click(function (){
+
+            if (loginMemberId == '' || loginMemberId == null || typeof loginMemberId == 'undefined'){
+                alert('글쓰기 기능은 로그인을 해야합니다!');
+                return false;
+            }else{
+                const parentCommentCode = $(this).next().val();
+                const reply = $(this).prev().val();
+                const rewardProjectCode = [[${rewardProject.rewardProjectCode}]];
+
+                if (reply.length < 5) {
+                    alert('다섯글자 이상 입력해 주세요.');
+                    return false;
+                }
+
+
+                $.ajax({
+                    type: "post",
+                    url: "/user/reward/detail/reply",
+                    data: {
+                        parentCommentCode : parentCommentCode,
+                        reply : reply,
+                        rewardProjectCode : rewardProjectCode},
+                    success: function (){
+                        console.log("ajxa성공");
+                    },
+                    error:function (){
+                        console.log("ajax실패");
+                    }
+                });
+                location.reload();
+            }
+        });
+
+        const replyArr = [];
+        $('.replyCnt').each(function (index) {
+            if (index !== 0) { // 첫 번째 요소가 아닐 때만 실행
+                replyArr.push($(this).text());
+            }
+        });
+
+        $('.comment-count').each(function (idx){
+            $(this).text(replyArr[idx]);
+        });
     </script>
 
 </th:block>
@@ -147,12 +253,13 @@
 <th:block layout:fragment="customContents">
     <div class="col-lg-12" style="height: 40px"></div>
     <div class="container">
-        <div class="row">
+        <div>
             <div class="col-lg-12">
+                <br>
                 <span style="font-weight: bold; font-size: 20px; color: black">댓글</span>
-                <span style="color: #235FD9; font-weight: bold; margin-left: 5px;">1</span>
+                <span id="reviewSize" style="color: #235FD9; font-weight: bold; margin-left: 5px;" th:text="${#lists.size(rewardCommentList)}"></span>
                 <span style="float: right">
-                    <button id="commentBtn" type="button" style="background: #235FD9; width: 100%; height: 40px; color: white; font-size: 15px; outline-color: #235FD9; outline-width: 1px">글쓰기</button>
+                    <button id="commentBtn" type="button" style="background: #235FD9; width: 100%; height: 40px; color: white; font-size: 15px; outline-color: #235FD9; outline-width: 1px">댓글 쓰기</button>
                 </span>
             </div>
         </div>
@@ -160,193 +267,95 @@
     <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 comments-review">
+            <div class="col-lg-12 comments-review my-lg-3"  th:each="l : ${rewardCommentList}">
                 <div class="user-comments-profile">
                     <div style="display: inline-block;">
                         <img src="https://picpac.kr/common/img/default_profile.png" style="width: 50px; height: 50px; border-radius: 30px;">
                     </div>
-                    <div style="display: inline-block; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
-                        <p>김시원숭이</p>
+                    <div style="display: inline; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
+                        <span  th:text="${l.memberId}"></span>
+                        <span class="float-right">
+                            <a th:if="${memberId == l.memberId}" onclick='return confirm("댓글을 삭제하시겠습니까?");' class="delCommentBtn btn btn-sm btn-danger btn rounded-pill justify-content-end" th:href="@{/user/reward/detail/commentDelete(rewardProjectCode=${rewardProject.rewardProjectCode},rewardCommentCode=${l.rewardCommentCode})}">삭제</a>
+                        </span>
                     </div>
                 </div>
                 <div class="col-lg-12" style="height: 10px"></div>
-                <div style="background: #f9fafb; border-radius: 5px; padding: 10px">
-                    <div>
-                        <div class="donation-comments">꼭 건강해지고 행복하길 기도 드립니다.
-                            희망은 항상 옆에 있습니다.
-                            빠른 겅강 회복으로 건강한 어른으로 성장하길 바랍니다.
-                        </div>
+                <div style="background: #f9fafb; border-radius: 5px; padding: 10px" class=" mb-lg-2">
+                    <div >
+                        <div class="reward-comments" th:text="${l.commentContent}"></div>
                     </div>
                 </div>
                 <div class="reply" style="display: inline-block; cursor: pointer">
                     <span>💬</span>
-                    <span class="comment-count">1</span>
-                    <span class="replyArrow" style="margin-left: 3px">▽</span>
+                    <span class="comment-count" th:text="${#lists.size(l.rewardReplyList)}"></span>
+                    <span class="replyArrow" style="margin-left: 3px">▽</span><span></span>
                 </div>
                 <div class="comments-reply" style="width: 100%">
                     <div style="display: flex; margin-bottom: 10px">
-                        <div style="display: inline-block; top: 0; margin-right: 5px;">
-                            <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
-                        </div>
-                        <div>
-                            <textarea style="width: 500px; height: 60px; resize: none; outline-color: #235FD9; outline-width: 1px; padding: 10px;" minlength="10" maxlength="200" placeholder="댓글을 입력해주세요!"></textarea>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary my-2" type="button" style="background-color: #235FD9; margin-left: 5px;">입력</button>
-                        </div>
+                        <form id="replyForm" th:action="@{/user/reward/detail/reply}" method="post"> <!-- form 반복문 해결-->
+                            <div style="display: inline-block; top: 0; margin-right: 5px; margin-bottom: 5px;">
+                                <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
+                                <span th:text="${memberId}" style="color: black; margin-left: 5px; font-weight: bold"></span>
+                            </div>
+                            <div style="display: flex">
+                                <textarea class="replyContents" style="width: 540px; height: 60px; resize: none; outline-color: #235FD9; outline-width: 1px; padding: 10px;" minlength="10" maxlength="200" placeholder="댓글을 입력해주세요!"></textarea>
+                                <button class="replyBtn btn btn-primary my-2" type="button" style="background-color: #235FD9; margin-left: 5px; width: 60px">입력</button>
+                                <input class="parentCommentCode" hidden="hidden" th:value="${l.rewardCommentCode}">
+                                <input class="rewardProjectCode" hidden="hidden" th:value="${l.rewardProjectCode}">
+                            </div>
+                        </form>
                     </div>
-                    <div style="display: flex">
+                    <div class="replyContents" style="display: flex; margin-bottom: 15px" th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardReplyList}">
                         <div style="top: 0; margin-right: 5px;">
                             <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
                         </div>
-                        <div style="background: #f9fafb; border-radius: 5px; padding: 10px; width: 100%">
+                        <div  style="background: #f9fafb; border-radius: 5px; padding: 10px; width: 100%">
                             <div>
-                                <div class="reply-user-id" style="font-weight: bold; color: black;">
-                                    id001
-                                </div>
-                                <div class="donation-comments">저도 같이 기도 드릴게요.
-                                    모두 희망을 잃지말고 살았으면 좋겠네요!
-                                </div>
+                                <div class="replyMemberId" style="font-weight: bold; color: black;" th:text="${rl.memberId}"></div>
+                                <span th:text="${rl.commentContent}"></span>
+                                <span style="float: right">
+                                    <a th:if="${memberId == rl.memberId}" onclick='return confirm("댓글을 삭제하시겠습니까?");' class="delReplyBtn btn-sm btn-danger btn rounded-pill" th:href="@{/user/reward/detail/commentDelete(rewardProjectCode=${rewardProject.rewardProjectCode},rewardCommentCode=${rl.rewardCommentCode})}">삭제</a>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12" style="height: 20px"></div>
-            </div>
+                <hr>
 
-            <div class="col-lg-12 comments-review">
-                <div class="user-comments-profile">
-                    <div style="display: inline-block;">
-                        <img src="https://picpac.kr/common/img/default_profile.png" style="width: 50px; height: 50px; border-radius: 30px;">
-                    </div>
-                    <div style="display: inline-block; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
-                        <p>김시원해</p>
-                    </div>
-                </div>
-                <div class="col-lg-12" style="height: 10px"></div>
-                <div style="background: #f9fafb; border-radius: 5px; padding: 10px">
-                    <div>
-                        <div class="donation-comments">꼭 건강해지고 행복하길 기도 드립니다.
-                            희망은 항상 옆에 있습니다.
-                            빠른 겅강 회복으로 건강한 어른으로 성장하길 바랍니다.
-                        </div>
-                    </div>
-                </div>
-                <div class="reply" style="display: inline-block; cursor: pointer">
-                    <span>💬</span>
-                    <span class="comment-count">1</span>
-                    <span class="replyArrow" style="margin-left: 3px">▽</span>
-                </div>
-                <div class="comments-reply" style="width: 100%">
-                    <div style="display: flex; margin-bottom: 10px">
-                        <div style="display: inline-block; top: 0; margin-right: 5px;">
-                            <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
-                        </div>
-                        <div>
-                            <textarea style="width: 500px; height: 60px; resize: none; outline-color: #235FD9; outline-width: 1px; padding: 10px;" minlength="10" maxlength="200" placeholder="댓글을 입력해주세요!"></textarea>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary my-2" type="button" style="background-color: #235FD9; margin-left: 5px">입력</button>
-                        </div>
-                    </div>
-                    <div style="display: flex">
-                        <div style="top: 0; margin-right: 5px;">
-                            <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
-                        </div>
-                        <div style="background: #f9fafb; border-radius: 5px; padding: 10px; width: 100%">
-                            <div>
-                                <div class="reply-user-id" style="font-weight: bold; color: black;">
-                                    id002
-                                </div>
-                                <div class="donation-comments">저도 같이 기도 드릴게요.
-                                    모두 희망을 잃지말고 살았으면 좋겠네요!
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12" style="height: 20px"></div>
             </div>
-
-            <div class="col-lg-12 comments-review">
-                <div class="user-comments-profile">
-                    <div style="display: inline-block;">
-                        <img src="https://picpac.kr/common/img/default_profile.png" style="width: 50px; height: 50px; border-radius: 30px;">
-                    </div>
-                    <div style="display: inline-block; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
-                        <p>김시원시인</p>
-                    </div>
-                </div>
-                <div class="col-lg-12" style="height: 10px"></div>
-                <div style="background: #f9fafb; border-radius: 5px; padding: 10px">
-                    <div>
-                        <div class="donation-comments">꼭 건강해지고 행복하길 기도 드립니다.
-                            희망은 항상 옆에 있습니다.
-                            빠른 겅강 회복으로 건강한 어른으로 성장하길 바랍니다.
-                        </div>
-                    </div>
-                </div>
-                <div class="reply" style="display: inline-block; cursor: pointer">
-                    <span>💬</span>
-                    <span class="comment-count">1</span>
-                    <span class="replyArrow" style="margin-left: 3px">▽</span>
-                </div>
-                <div class="comments-reply" style="width: 100%">
-                    <div style="display: flex; margin-bottom: 10px">
-                        <div style="display: inline-block; top: 0; margin-right: 5px;">
-                            <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
-                        </div>
-                        <div>
-                            <textarea style="width: 500px; height: 60px; resize: none; outline-color: #235FD9; outline-width: 1px; padding: 10px;" minlength="10" maxlength="200" placeholder="댓글을 입력해주세요!"></textarea>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary my-2" type="button" style="background-color: #235FD9; margin-left: 5px">입력</button>
-                        </div>
-                    </div>
-                    <div style="display: flex">
-                        <div style="top: 0; margin-right: 5px;">
-                            <img src="https://picpac.kr/common/img/default_profile.png" style="width: 40px; height: 40px; border-radius: 30px;">
-                        </div>
-                        <div style="background: #f9fafb; border-radius: 5px; padding: 10px; width: 100%">
-                            <div>
-                                <div class="reply-user-id" style="font-weight: bold; color: black;">
-                                    id003
-                                </div>
-                                <div class="donation-comments">저도 같이 기도 드릴게요.
-                                    모두 희망을 잃지말고 살았으면 좋겠네요!
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12" style="height: 20px"></div>
-            </div>
-
+            <div class="col-lg-12" style="height: 20px"></div>
         </div>
+
     </div>
+
 
 
     <!-- popup -->
     <div id="commentBox">
         <div class="comment-box-content">
-            <div style="display: inline-block; font-size: 25px; color: black; font-weight: bold; margin-top: 10px;">응원</div>
-            <div id="commentBoxClose" style="display: inline-block; float: right; font-size: 30px; cursor: pointer">
-                ⨉
-            </div>
-            <div style="margin-top: 10px">
-                <textarea class="comment-text-box" style="width: 100%; height: 200px; resize: none; outline-color: #235FD9; outline-width: 1px; padding: 10px;" minlength="10" maxlength="2000" placeholder="응원의 댓글을 입력해주세요!"></textarea>
-            </div>
-            <span id="commentCounter" style="color: black">(0 / 최소 10글자 이상만 등록 가능합니다.)</span>
-            <div style="background: #fff1f1; border-radius: 5px; padding: 20px; font-size: 12px">
-                <p>
-                    ⚠️최근 메이커 또는 제3자에 대한 허위사실 유포, 비방 목적의 댓글로 인해 당사자간 법적분쟁이 발생한 사례가 증가하고 있습니다.
-                    악의적 댓글 작성자는 명예훼손, 모욕 등으로 법적 책임을 부담하게 될 수 있다는 점을 유의하여 주시기 바랍니다.
-                </p>
-            </div>
-            <div style="margin-top: 10px">
-                <button id="commentAddBtn" type="button" style="background: #235FD9; width: 100%; height: 40px; color: white; font-size: 15px; outline-color: #235FD9; outline-width: 1px">글쓰기</button>
-            </div>
+            <form id="commentAddForm" th:action="@{/user/reward/detail/comment}" method="post">
+                <div style="display: inline-block; font-size: 25px; color: black; font-weight: bold; margin-top: 10px;">응원</div>
+                <div id="commentBoxClose" style="display: inline-block; float: right; font-size: 30px; cursor: pointer">
+                    ⨉
+                </div>
+                <div style="margin-top: 10px">
+                    <textarea name="commentContent" class="comment-text-box" style="width: 100%; height: 200px; resize: none; outline-color: #235FD9; outline-width: 1px; padding: 10px;" minlength="10" maxlength="2000" placeholder="응원의 댓글을 입력해주세요!"></textarea>
+                </div>
+                <span id="commentCounter" style="color: black">(0 / 최소 10글자 이상만 등록 가능합니다.)</span>
+                <div style="background: #fff1f1; border-radius: 5px; padding: 20px; font-size: 12px">
+                    <p>
+                        ⚠️최근 메이커 또는 제3자에 대한 허위사실 유포, 비방 목적의 댓글로 인해 당사자간 법적분쟁이 발생한 사례가 증가하고 있습니다.
+                        악의적 댓글 작성자는 명예훼손, 모욕 등으로 법적 책임을 부담하게 될 수 있다는 점을 유의하여 주시기 바랍니다.
+                    </p>
+                </div>
+                <div style="margin-top: 10px">
+                    <button id="commentAddBtn" type="button" style="background: #235FD9; width: 100%; height: 40px; color: white; font-size: 15px; outline-color: #235FD9; outline-width: 1px">글쓰기</button>
+                </div>
+                <input hidden="hidden" name="rewardProjectCode" th:value="${rewardProject.rewardProjectCode}">
+            </form>
         </div>
+        <!-- 부가설명을 위한 데이터 -->
+        <div hidden="hidden" id="storyBody" th:utext="${rewardProject.projectContents}" style="color: black; white-space: pre-line"></div>
     </div>
 
 </th:block>

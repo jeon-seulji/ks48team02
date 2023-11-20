@@ -67,7 +67,9 @@
 						<a class="header-menu-icon myPage-icon"></a>
 						<ul class="header-menu-submenu" style="--variable-index: 4;">
 							<li th:if="${session.STYPECODE == 'mem_type_05'}"><a th:href="@{#}">마이페이지</a></li>
-							<li th:unless="${session.STYPECODE == 'mem_type_05'}"><a th:href="@{#}">관리자페이지</a></li>
+							<li th:unless="${session.STYPECODE == 'mem_type_05'}">
+								<a th:href="@{${(session.STYPECODE == 'mem_type_01')?'/admin':'/seller'}}">관리자페이지</a>
+							</li>
 							<li><a th:href="@{#}">1:1문의</a></li>
 							<li><a th:href="@{/user/account/logout}">로그아웃</a></li>
 						</ul>

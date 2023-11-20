@@ -60,6 +60,39 @@
                 $('#allCheck').prop('checked', false);
             }
         });
+
+        // 쿠폰 삭제 기능
+        $('.delete').on('click', function(e) {
+            e.preventDefault();
+
+            var checkedItems = $('input[name="admin_board"]:checked');
+            if (checkedItems.length > 0) {
+                var confirmation = confirm('삭제하시겠습니까?');
+                if (confirmation) {
+                    checkedItems.each(function() {
+                        var couponCode = $(this).data('id');
+                        console.log(couponCode);
+
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/admin/board/coupon/' + couponCode,
+                            success: function(response){
+                                console.log(response);
+                                alert('쿠폰이 성공적으로 삭제되었습니다.');
+                                location.reload();  // 페이지를 새로고침하여 삭제된 쿠폰을 화면에서 제거
+                            },
+                            error: function(error) {
+                                console.log(error);
+                                alert('쿠폰 삭제에 실패하였습니다. 다시 시도해주세요.');
+                            }
+                        });
+                    });
+                }
+            } else {
+                alert('삭제할 쿠폰을 선택해주세요.');
+            }
+        });
+
     </script>
 </th:block>
 
@@ -98,11 +131,9 @@
 <!--                <tr th:if="${couponList == null}">-->
 <!--                    <td colspan="12">쿠폰의 목록이 없습니다.</td>-->
 <!--                </tr>-->
-                <th>
 
-                </th>
                 <tr th:unless="${couponList == null}" th:each="c : ${couponList}">
-                    <td><input type="checkbox" name="admin_board"></td>
+                    <td><input type="checkbox" name="admin_board" th:data-id="${c.couponCode}"></td>
                     <td th:text="${c.couponCode}"></td>
                     <td th:text="${c.couponSerialNumber}"></td>
                     <td th:text="${c.couponName}"></td>
@@ -115,7 +146,7 @@
                     <td>id001</td>
                     <td>
                         <a th:href="@{/admin/board/couponAdd(couponCode=${c.couponCode})}" class="modify">수정</a>
-                        <a th:href="@{#}" class="delete">삭제</a>
+                        <a th:href="@{#}" class="delete" id="deleteCouponButton">삭제</a>
                     </td>
                 </tr>
 

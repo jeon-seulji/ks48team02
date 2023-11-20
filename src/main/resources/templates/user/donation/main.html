@@ -261,14 +261,14 @@
 
                 <div class="container" style="width: 100%; height: 100%">
                     <div class="row">
-                        <div class="col donation-item-box col-lg-4" th:if="${allDonationInfo != null}" th:each="l : ${allDonationInfo}"
+                        <div class="col donation-item-box col-lg-4" th:if="${l.donationCondition == 3}" th:each="l : ${allDonationInfo}"
                             th:onclick="|location.href='@{/user/donation/detail(donationCode=${l.donationCode})}'|">
                             <div class="donation-item-first-child">
                                 <img class="donation-item-third-child-image" th:src="|@{/summernoteImage/}${l.donationImage}|">
                             </div>
                             <div class="donation-item-second-child">
                                 <span class="donation-item-span-first"></span>
-                                <input class="donatio-item-goalMoney" th:value="${l.donationGoalMoney}" hidden="hidden"/>
+                                <input class="donation-item-goalMoney" th:value="${l.donationGoalMoney}" hidden="hidden"/>
                                 <span class="donation-item-span-second" th:text="${l.donationAchievementMoney}"></span>
                                 <span class="donation-item-span-third" th:text="${l.donationEndDate}"></span>
                             </div>

@@ -94,12 +94,12 @@
                 prevEl: ".swiper-button-prev",
             },
         });
-        let donationContentsSwiperSlide = new Swiper("#donationProject .contents-area", {
+        let rewardProjectSwiperSlide = new Swiper("#rewardProject .contents-area", {
             slidesPerView: 3,
             spaceBetween: 12,
             navigation: {
-                nextEl: "#donationProject .swiper-button-next",
-                prevEl: "#donationProject .swiper-button-prev",
+                nextEl: "#rewardProject .swiper-button-next",
+                prevEl: "#rewardProject .swiper-button-prev",
             },
         });
 
@@ -136,7 +136,38 @@
                 $('.comments-reply').css('display', 'none');
             }
         });
+    </script>
 
+    <script>
+        // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 코드
+        let rewardProjectCode = '[[${rewardProject.rewardProjectCode}]]';
+        // 썸네일 이미지 경로 지정
+        let thumbNailImageSrc = $('#thumbNailImage').attr('src');
+        $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${rewardProject.projectThumbnailImage}]]');
+
+        // 스토리에서 앞에 부분만 잘라서 공백포함 155글자만 가져옴 그뒤는 ... 으로 다자름
+        let storyBodyText = $('#storyBody').children('p:eq(0)').text();
+        $('#subContens').text(storyBodyText);
+        if (storyBodyText.length > 155) {
+            storyBodyText = storyBodyText.substring(0, 155) + '...';
+        }
+        // 가져온 텍스트를 subContens에 설정
+        $('#subContens').text(storyBodyText);
+
+        let currentDate = new Date();
+        // 비교 대상 날짜 설정
+        let targetDate = new Date($('#projectEndDate').val());
+        // 두 날짜 간의 차이 계산 (밀리초 단위)
+        let timeDifference = targetDate - currentDate;
+        // 차이를 일(day) 단위로 변환
+        let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        // 남은 일 수
+        $('#deadLine').text(daysRemaining + '일남음');
+
+        // 회사 이름 설정
+        $('#company').text('[[${rewardProject.regCompany}]]');
+        // 달성 금액 설정
+        $('#achievementMoney').text(`[[${rewardProject.projectAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
     </script>
 
 </th:block>
@@ -153,7 +184,7 @@
         <div>
             <dl class="FundingRefundContent_explanation__215qf">
                 <dt class="FundingRefundContent_endDate__2Kv0F">종료일 <strong id="rewardEndDate"
-                                                                            class="text-primary">2023-11-09</strong>
+                                                                            class="text-primary" th:text="${rewardProject.projectEndDate}"></strong>
                     까지
                 </dt>
                 <dd>

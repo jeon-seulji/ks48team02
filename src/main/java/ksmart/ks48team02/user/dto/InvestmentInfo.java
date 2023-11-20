@@ -1,6 +1,6 @@
 package ksmart.ks48team02.user.dto;
 
-public class InvestmentRegistration {
+public class InvestmentInfo {
     private String investmentCode;
     private String memberId;
     private String storeCode;
@@ -24,6 +24,24 @@ public class InvestmentRegistration {
     private double contractFeeRate;
     private String contractFile;
     private int investJudgeSituation;
+    private int investmentDeadlineCnt;
+    private InvestmentContent investmentContent;
+
+    public InvestmentContent getInvestmentContent() {
+        return investmentContent;
+    }
+
+    public void setInvestmentContent(InvestmentContent investmentContent) {
+        this.investmentContent = investmentContent;
+    }
+
+    public int getInvestmentDeadlineCnt() {
+        return investmentDeadlineCnt;
+    }
+
+    public void setInvestmentDeadlineCnt(int investmentDeadlineCnt) {
+        this.investmentDeadlineCnt = investmentDeadlineCnt;
+    }
 
     public String getInvestmentCode() {
         return investmentCode;
@@ -211,7 +229,7 @@ public class InvestmentRegistration {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("InvestmentRegistration{");
+        final StringBuilder sb = new StringBuilder("InvestmentInfo{");
         sb.append("investmentCode='").append(investmentCode).append('\'');
         sb.append(", memberId='").append(memberId).append('\'');
         sb.append(", storeCode='").append(storeCode).append('\'');
@@ -235,7 +253,9 @@ public class InvestmentRegistration {
         sb.append(", contractFeeRate=").append(contractFeeRate);
         sb.append(", contractFile='").append(contractFile).append('\'');
         sb.append(", investJudgeSituation=").append(investJudgeSituation);
+        sb.append(", investmentDeadlineCnt=").append(investmentDeadlineCnt);
         sb.append('}');
         return sb.toString();
     }
+
 }

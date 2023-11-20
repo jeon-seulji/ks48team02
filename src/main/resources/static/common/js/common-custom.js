@@ -164,7 +164,7 @@ function confirmBtnFn(e){
 }
 
 // input [type='date'] min setting
-$('input[type="date"]').prop('min',nowDateFomat);
+// $('input[type="date"]').prop('min',nowDateFomat);
 
 // 배송 메세지 직접 입력
 $('select[name="deliveryMessage"]').on('change', function(){
@@ -305,3 +305,4 @@ function payFormat($els){
     });
 
 }
+

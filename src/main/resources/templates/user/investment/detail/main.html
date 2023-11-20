@@ -62,6 +62,10 @@
             },
         });
     </script>
+    <script type="text/javascript">
+        // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 투자코드
+        let investmentCode = '[[${investmentContentCode}}]]';
+    </script>
 
 </th:block>
 
@@ -96,7 +100,7 @@
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
             <div class="col-lg-12 story-header" style="padding: 0px">
-                <p style="color: black; font-weight: bold; font-size: 20px">증권 발행 조건</p>
+                <h4 style="color: black; font-weight: bold;">증권 발행 조건</h4>
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
             <div class="col-lg-12 story-body" style="color: black">
@@ -235,7 +239,7 @@
 
             <div class="col-lg-12" style="height: 20px"></div>
             <div class="col-lg-12 story-header" style="padding: 0px">
-                <p style="color: black; font-weight: bold; font-size: 20px">기본정보</p>
+                <h4 style="color: black; font-weight: bold;">기본 정보</h4>
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
             <div class="col-lg-12 story-body" style="color: black">
@@ -303,8 +307,9 @@
             <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
             <div class="col-lg-12" style="height: 20px"></div>
-            <div class="col-lg-12 story-header" style="padding: 0px">
-                <p style="color: black; font-weight: bold; font-size: 20px">투자개요</p>
+
+            <div id="projectIntroduction" class="col-lg-12 story-header" style="padding: 0px">
+                <h4 style="color: black; font-weight: bold;">프로젝트 소개</h4>
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
             <div class="col-lg-12 story-body" style="padding: 0px">
@@ -343,8 +348,8 @@
             <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
 
             <div class="col-lg-12" style="height: 20px"></div>
-            <div class="col-lg-12 story-header" style="padding: 0px">
-                <p style="color: black; font-weight: bold; font-size: 20px">사업소개</p>
+            <div id="marketAnalysis" class="col-lg-12 story-header" style="padding: 0px">
+                <h4 style="color: black; font-weight: bold;">시장 분석</h4>
             </div>
             <div class="col-lg-12" style="height: 40px"></div>
             <div class="col-lg-12 story-body" style="padding: 0px">

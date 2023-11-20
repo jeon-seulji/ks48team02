@@ -16,8 +16,7 @@ function rankAjax(param, callback){
 // reload button click ajax
 $('#rankReload').on('click', function(){
     rankAjax('achievementPercent', function(list){
-        console.log(list);
-        // 여기에서 작업
+        // console.log(list);
         $(`.main-rank-area`).addClass('active');
         $(`.main-rank-area ul li`).remove();
 
@@ -55,94 +54,86 @@ $('#rankReload').on('click', function(){
 });
 
 
-// admin orderList ajax
-function adminOrderListAjax(param, callback){
-    const request = $.ajax({
-        url: '/admin/order/ajax/list',
-        method : 'POST',
-        data : {"orderby" : param},
-        dataType: 'json'
-    })
-    request.done(function(list){
-        callback(list);
+
+jQuery.fn.serializeObject = function() {
+    var obj = null;
+    try {
+        if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+            var arr = this.serializeArray();
+            if (arr) {
+                obj = {};
+                jQuery.each(arr, function() {
+                    obj[this.name] = this.value;
+                });
+            }//if ( arr ) {
+        }
+    } catch (e) {
+        alert(e.message);
+    } finally {
+    }
+
+    return obj;
+};
+
+// 검색 form queryString 반환 fn
+function searchObject(){
+    const $inputEls = $('.order-category-select input:checked');
+
+    const arr = [];
+    $($inputEls).each((idx, item) => {
+        let checkBoxValue = $(item).attr('name');
+        arr.push(checkBoxValue);
     });
-    request.fail(function(err){
-        console.log(err);
-    })
+    // console.log(arr, '<--arr');
+
+    let amDateSettStartDate = $('input[name="amDateSettStartDate"]').val();
+    let amDateSettEndDate = $('input[name="amDateSettEndDate"]').val();
+    let userSearchKey = $('select[name="userSearchKey"]').val();
+    let userSearchable = $('input[name="userSearchable"]').val();
+
+    console.log(userSearchable, '<-- userSearchable');
+
+    $('input[name="dateSettStartDate"]').val(amDateSettStartDate);
+    $('input[name="dateSettEndDate"]').val(amDateSettEndDate);
+    $('input[name="searchKey"]').val(userSearchKey);
+    $('input[name="searchValue"]').val(userSearchable);
+
+    let queryString = $('#searchForm').serializeObject();
+    queryString.projectPartition = arr;
+
+    return queryString;
 }
 
-$('select[name="orderby"]').on('change',function(){
-    $('#allSelectBtn').prop('checked', false);
-    let value = $(this).val();
-    $('.select-list-count').text('0');
-    adminOrderListAjax(value, function(list) {
-        $('#orderListForm tbody').remove();
-        $('#orderListForm table').append('<tbody></tbody>');
-        if (list.length == 0) {
-            $('#orderListForm tbody').append(`<tr>
-                                                 <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
-                                              </tr>`);
+
+// pager setting
+function setPagerData(arr, currentPage, list){
+    let lastPage = list.lastPage;
+    let startPageNum = list.startPageNum;
+    $('.list-btn-area button').removeClass('no-action');
+
+    if(currentPage == startPageNum) {
+        $('.prev-transfer').addClass('no-action');
+    }
+    if(currentPage == lastPage){
+        $('.next-transfer').addClass('no-action');
+    }
+
+    $('.order-list-pager li').remove();
+    $(arr).each((idx, item) => {
+        let classArr = [];
+        if(item == currentPage) {
+            classArr.push('link-active');
+            classArr.push('currentPage');
         }
-        $(list).each((idx, l) => {
-            $('#orderListForm tbody').append(`<tr></tr>`)
-                                     .append(
-                                         `<td class="table-data-center">
-                                            <input type="checkbox" name="selectList">
-                                         </td>`
-                                     )
-                                     .append(
-                                         `<td class="table-data-center">
-                                            <a title="${l.orderCode}" class="detail-link" href="/admin/order/detail?orderCode=${l.orderCode}&goodsPartition=${l.goodsPartition}">${l.orderCode}</a>
-                                         </td>`
-                                     )
-                                     .append(
-                                         `<td title="${l.orderApplicationDate}" class="table-data-center">
-                                            ${l.orderApplicationDate}
-                                         </td>`
-                                     )
-                                    .append(
-                                        `<td class="table-data-center">
-                                            <span>${l.goodsPartition === 'rwd' ? '리워드' : (l.goodsPartition === 'don' ? '기부' : '투자')}</span>
-                                        </td>`
-                                    )
-                                    .append(
-                                        `<td title="${l.orderFundingName}" class="table-data-center">
-                                            ${l.orderFundingName}
-                                        </td>`
-                                    )
-                                    .append(
-                                        `<td title="${l.orderCategoryDetail}">
-                                            ${l.orderCategoryDetail}
-                                        </td>`
-                                    )
-                                    .append(
-                                        `<td class="table-data-center">
-                                            ${l.orderName}
-                                        </td>`
-                                    )
-                                    .append(
-                                        `<td  class="table-data-center">
-                                                    <input type="hidden" name="orderPrice" value="${l.orderTotalPrice}">
-                                                    <span class="order-pay">0</span> 원
-                                        </td>`
-                                    )
-                                    .append(
-                                        `<td class="table-data-center">
-                                            ${l.orderConfirmDate == null? '-':l.orderConfirmDate}
-                                        </td>`
-                                    )
-                                    .append(
-                                        `<td class="table-data-center">
-                                            ${l.orderCancellDate == null? '-':l.orderCancellDate}
-                                        </td>`
-                                    )
+        if(item == startPageNum) classArr.push('startPageNum');
+        if(item == lastPage) classArr.push('lastPage');
 
-        });
-
-
-        let priceEls = $('input[name="orderPrice"]');
-        payFormat(priceEls);
-
-
+        $('.order-list-pager').append(`<li class="${classArr.join(' ')}"><a data-value="${item}">${item}</a></li>`);
     });
-});
+}
+
+// admin orderby default setting
+function orderbyDefaultSet(){
+    $('select[name="orderby"] option, select[name="count-select"] option').prop('selected',false);
+    $('select[name="orderby"] option:first-child, select[name="count-select"] option:first-child').prop('selected', true);
+}
