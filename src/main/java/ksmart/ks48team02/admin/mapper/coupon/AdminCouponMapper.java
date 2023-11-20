@@ -11,7 +11,6 @@ public interface AdminCouponMapper {
     // 쿠폰 삭제
     void deleteCoupon(String couponCode);
 
-
     // 쿠폰 수정
     void updateCoupon(Coupon coupon);
 

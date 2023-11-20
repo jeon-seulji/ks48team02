@@ -18,4 +18,5 @@ public interface CategoryMapper {
 
     // ajax category depth 2
     public List<Category> getCategoryDepth2(String projectPatition);
+
 }

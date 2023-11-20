@@ -4,6 +4,7 @@ import ksmart.ks48team02.admin.dto.Category;
 import ksmart.ks48team02.admin.service.category.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,10 @@ import java.util.List;
 @RequestMapping("/admin/site")
 public class SiteController {
 
+    @Autowired
+    private CategoryService categoryService;
     private static final Logger log = LoggerFactory.getLogger(SiteController.class);
 
-    public final CategoryService categoryService;
 
     public SiteController( CategoryService categoryService){
         this.categoryService = categoryService;
@@ -33,6 +35,7 @@ public class SiteController {
 
         return "admin/site/category";
     }
+
 
     // 카테고리 목록 ajax
     @PostMapping("/ajaxCategory")
