@@ -108,6 +108,7 @@ public class OrderManagementController {
 
         return list;
     }
+
     // 주문 상세
     @GetMapping( "/detail")
     public String adminOrderDetail(Model model,
@@ -152,12 +153,14 @@ public class OrderManagementController {
                 break;
 
             case "don":
+                // 결제 정보
                 DonationPayments getDonationPaymentsById = paymentsService.getDonationPaymentsById(orderCode);
                 log.info("paymentsInfo {}", getDonationPaymentsById);
                 model.addAttribute("paymentsInfo", getDonationPaymentsById);
                 break;
 
             case "inv":
+                // 결제 정보
                 InvestPayments getInvestPaymentsById = paymentsService.getInvestPaymentsById(orderCode);
                 log.info("paymentsInfo {}", getInvestPaymentsById);
                 model.addAttribute("paymentsInfo", getInvestPaymentsById);
@@ -246,13 +249,50 @@ public class OrderManagementController {
     }
 
 
-    // 교환 환불 신청 관리
+    // 교환 환불 신청 관리 main
     @GetMapping( "/refundSwapping")
     public String adminOrderRefundSwapping(Model model){
         model.addAttribute("title","관리자 : 교환 환불 관리");
         model.addAttribute("contentsTitle","교환/환불 관리");
         model.addAttribute("contentsSubTitle","관리자 교환/환불 관리");
+
+        Map<String, Object> paramMap = null;
+        paramMap = new HashMap<String, Object>();
+
+        String orderby = "application_d";
+        int currentPage = 1;
+        int rowPerPage = 15;
+        String pageValue = "refund";
+
+        paramMap.put("orderby", orderby);
+        paramMap.put("currentPage", currentPage);
+        paramMap.put("rowPerPage", rowPerPage);
+        paramMap.put("pageValue",  pageValue);
+
+        Map<String, Object> resultMap = orderService.getApplicationList(paramMap);
+        log.info("RefundApplicationList {}", resultMap.get("list"));
+
+        model.addAttribute("RefundApplicationList", resultMap.get("list"));
+        model.addAttribute("lastPage",resultMap.get("lastPage"));
+        model.addAttribute("startPageNum",resultMap.get("startPageNum"));
+        model.addAttribute("endPageNum",resultMap.get("endPageNum"));
+        model.addAttribute("currentPage",resultMap.get("currentPage"));
+
         return "admin/order/refundSwapping";
+    }
+
+    // 교환 환불 신청 관리 ajax
+    @PostMapping(value = "/rfndSwap/ajax")
+    @ResponseBody
+    public Map<String, Object> admRefdSwapAjax(Model model,
+                                               @RequestBody Map<String, Object> paramMap){
+
+        log.info("param {}", paramMap);
+
+        Map<String, Object> list = null;
+        list = orderService.getApplicationList(paramMap);
+        log.info("refund swapping list {}", list);
+        return list;
     }
 
     // 주문 확정 목록 조회

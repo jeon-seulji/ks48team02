@@ -1,5 +1,6 @@
 package ksmart.ks48team02.common.dto;
 
+import ksmart.ks48team02.user.dto.Member;
 import lombok.Data;
 
 @Data
@@ -18,6 +19,7 @@ public class OrderTotal {
     private String orderCancellDate;
     private String rewardOrderDetailCode;
     private String rewardPaymentCode;
+
 
     @Override
     public String toString() {
