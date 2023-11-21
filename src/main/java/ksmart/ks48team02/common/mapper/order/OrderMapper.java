@@ -2,10 +2,9 @@ package ksmart.ks48team02.common.mapper.order;
 
 
 import ksmart.ks48team02.common.dto.*;
-import ksmart.ks48team02.user.dto.RewardOption;
 import ksmart.ks48team02.common.dto.RewardOrderDetail;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+
 
 import java.util.List;
 import java.util.Map;

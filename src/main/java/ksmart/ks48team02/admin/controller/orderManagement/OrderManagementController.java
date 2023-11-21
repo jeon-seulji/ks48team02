@@ -43,8 +43,7 @@ public class OrderManagementController {
     // 주문 검색 ajax
     @PostMapping(value="/ajax/search")
     @ResponseBody
-    public Map<String, Object> adminOrderSearchAjax(Model model,
-                                                 @RequestBody Map<String, Object> searchForm){
+    public Map<String, Object> adminOrderSearchAjax(@RequestBody Map<String, Object> searchForm){
         log.info("searchForm : {}", searchForm);
         Map<String, Object> list = orderService.getOrderList(searchForm);
         log.info("검색 결과 목록 : {}", list);
@@ -220,7 +219,7 @@ public class OrderManagementController {
         log.info("ajax list {}", list);
 
         return list;
-    };
+    }
 
     // 특정 배송 정보 조회
     @GetMapping( "/delivery/detail")
@@ -256,8 +255,7 @@ public class OrderManagementController {
         model.addAttribute("contentsTitle","교환/환불 관리");
         model.addAttribute("contentsSubTitle","관리자 교환/환불 관리");
 
-        Map<String, Object> paramMap = null;
-        paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
 
         String orderby = "application_d";
         int currentPage = 1;
@@ -284,13 +282,11 @@ public class OrderManagementController {
     // 교환 환불 신청 관리 ajax
     @PostMapping(value = "/rfndSwap/ajax")
     @ResponseBody
-    public Map<String, Object> admRefdSwapAjax(Model model,
-                                               @RequestBody Map<String, Object> paramMap){
+    public Map<String, Object> admRefdSwapAjax(@RequestBody Map<String, Object> paramMap){
 
         log.info("param {}", paramMap);
 
-        Map<String, Object> list = null;
-        list = orderService.getApplicationList(paramMap);
+        Map<String, Object> list = orderService.getApplicationList(paramMap);
         log.info("refund swapping list {}", list);
         return list;
     }
