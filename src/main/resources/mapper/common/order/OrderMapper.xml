@@ -248,9 +248,21 @@
                 ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
                 )
             </if>
-            <if test="searchKey != null and searchKey != 'total' and searchKey != ''">
+            <if test="searchKey != null and searchKey == 'memberId'">
                 AND
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+                ot.member_id LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderCode'">
+                AND
+                ot.order_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderName'">
+                AND
+                ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderFundingName'">
+                AND
+                ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
             </if>
 
         </where>
