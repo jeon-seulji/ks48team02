@@ -1,12 +1,8 @@
 package ksmart.ks48team02.common.service.order;
 
 import ksmart.ks48team02.admin.controller.orderManagement.OrderManagementController;
-import ksmart.ks48team02.common.dto.OrderTotal;
-import ksmart.ks48team02.common.dto.RefundApplication;
-import ksmart.ks48team02.common.dto.RewardOrderDetail;
-import ksmart.ks48team02.common.dto.SwappingApplication;
+import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.mapper.order.OrderMapper;
-import ksmart.ks48team02.user.dto.RewardOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -53,7 +49,7 @@ public class OrderService {
                     rowPerPage = (int) rowPerPageDouble;
                 } catch (NumberFormatException e) {
                     // currentPageObj가 숫자로 변환될 수 없는 경우의 예외 처리
-                    System.out.println(e);
+
                 }
             }
 
@@ -81,8 +77,7 @@ public class OrderService {
 
             resultMap = new HashMap<String, Object>();
 
-            List<OrderTotal> orderList = null;
-            orderList = orderMapper.getOrderList(paramMap);
+            List<OrderTotal> orderList = orderMapper.getOrderList(paramMap);
 
             resultMap.put("orderList", orderList); // 조회 객체
             resultMap.put("lastPage", lastPage); // 마지막 페이지
@@ -95,22 +90,20 @@ public class OrderService {
 
     // 특정 주문 조회
     public OrderTotal getOrderInfoById(String orderCode){
-        OrderTotal OrderInfoById = null;
-        OrderInfoById = orderMapper.getOrderInfoById(orderCode);
+        OrderTotal OrderInfoById = orderMapper.getOrderInfoById(orderCode);
         return OrderInfoById;
     }
 
     // 주문 코드에 따른 주문 상세 조회
     public List<RewardOrderDetail> getRewardOptionByOrderCode(String orderCode){
-        List<RewardOrderDetail> getRewardOptionByOrderCode = null;
-        getRewardOptionByOrderCode = orderMapper.getRewardOptionByOrderCode(orderCode);
+        List<RewardOrderDetail> getRewardOptionByOrderCode = orderMapper.getRewardOptionByOrderCode(orderCode);
         return getRewardOptionByOrderCode;
     }
 
     /**
      * 환불 목록 조회
-     * @param paramMap
-     * @return
+     * @param paramMap 검색 조건 객체
+     * @return 환불 목록 조회 Map<String, Object> resultMap return
      */
     public Map<String, Object> getApplicationList(Map<String, Object> paramMap){
         Map<String, Object> resultMap = null;
@@ -131,7 +124,7 @@ public class OrderService {
                     rowPerPage = (int) rowPerPageDouble;
                 } catch (NumberFormatException e) {
                     // currentPageObj가 숫자로 변환될 수 없는 경우의 예외 처리
-                    System.out.println(e);
+
                 }
             }
 
@@ -166,14 +159,12 @@ public class OrderService {
 
             if(pageValue.equals("refund")){
 
-                List<RefundApplication> list = null;
-                list = orderMapper.getRefundApplicationList(paramMap);
+                List<RefundApplication> list = orderMapper.getRefundApplicationList(paramMap);
                 resultMap.put("list", list); // 조회 객체
 
             } else if(pageValue.equals("swapping")){
 
-                List<SwappingApplication> list = null;
-                list = orderMapper.getSwapApplicationList(paramMap);
+                List<SwappingApplication> list = orderMapper.getSwapApplicationList(paramMap);
                 log.info("list {}", list);
                 resultMap.put("list", list); // 조회 객체
 
@@ -190,5 +181,16 @@ public class OrderService {
 
     }
 
+    public Map<String, Object> getOrderConfLogList(){
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        List<OrderConfirmationLog> confLogList = orderMapper.getOrderConfLogList();
+
+
+        log.info("confLogList {}", confLogList);
+
+        resultMap.put("confLogList", confLogList);
+        return resultMap;
+    }
 
 }

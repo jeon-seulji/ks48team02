@@ -1,6 +1,5 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
-import jakarta.servlet.http.HttpServletRequest;
 import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.service.delivery.DeliveryService;
 import ksmart.ks48team02.common.service.order.OrderService;
@@ -43,8 +42,7 @@ public class OrderManagementController {
     // 주문 검색 ajax
     @PostMapping(value="/ajax/search")
     @ResponseBody
-    public Map<String, Object> adminOrderSearchAjax(Model model,
-                                                 @RequestBody Map<String, Object> searchForm){
+    public Map<String, Object> adminOrderSearchAjax(@RequestBody Map<String, Object> searchForm){
         log.info("searchForm : {}", searchForm);
         Map<String, Object> list = orderService.getOrderList(searchForm);
         log.info("검색 결과 목록 : {}", list);
@@ -58,7 +56,7 @@ public class OrderManagementController {
         model.addAttribute("title","관리자 : 주문 대시보드");
         model.addAttribute("contentsTitle","주문 대시보드");
         model.addAttribute("contentsSubTitle","관리자 주문 대시보드");
-        return "";
+        return null;
     }
 
     // 주문 목록
@@ -74,8 +72,7 @@ public class OrderManagementController {
         int currentPage = 1;
         int rowPerPage = 15;
 
-        Map<String, Object> paramMap = null;
-        paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
 
         paramMap.put("orderby", orderby);
         paramMap.put("currentPage", currentPage);
@@ -98,8 +95,7 @@ public class OrderManagementController {
     // 주문 목록 정렬 ajax
     @PostMapping(value="/list/ajax")
     @ResponseBody
-    public Map<String, Object> getOrderListOrderBy(Model model,
-                                                    @RequestBody Map<String, Object> paramMap){
+    public Map<String, Object> getOrderListOrderBy(@RequestBody Map<String, Object> paramMap){
         log.info("param {}", paramMap);
         log.info("currentPage {}", paramMap.get("currentPage"));
         log.info("rowPerPage {}", paramMap.get("rowPerPage"));
@@ -183,8 +179,7 @@ public class OrderManagementController {
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
         model.addAttribute("paramActive","noActive");
 
-        Map<String, Object> paramMap = null;
-        paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
 
         String orderby = "delived_d";
         int currentPage = 1;
@@ -220,7 +215,7 @@ public class OrderManagementController {
         log.info("ajax list {}", list);
 
         return list;
-    };
+    }
 
     // 특정 배송 정보 조회
     @GetMapping( "/delivery/detail")
@@ -256,8 +251,7 @@ public class OrderManagementController {
         model.addAttribute("contentsTitle","교환/환불 관리");
         model.addAttribute("contentsSubTitle","관리자 교환/환불 관리");
 
-        Map<String, Object> paramMap = null;
-        paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
 
         String orderby = "application_d";
         int currentPage = 1;
@@ -284,13 +278,11 @@ public class OrderManagementController {
     // 교환 환불 신청 관리 ajax
     @PostMapping(value = "/rfndSwap/ajax")
     @ResponseBody
-    public Map<String, Object> admRefdSwapAjax(Model model,
-                                               @RequestBody Map<String, Object> paramMap){
+    public Map<String, Object> admRefdSwapAjax(@RequestBody Map<String, Object> paramMap){
 
         log.info("param {}", paramMap);
 
-        Map<String, Object> list = null;
-        list = orderService.getApplicationList(paramMap);
+        Map<String, Object> list = orderService.getApplicationList(paramMap);
         log.info("refund swapping list {}", list);
         return list;
     }
@@ -301,6 +293,10 @@ public class OrderManagementController {
         model.addAttribute("title","관리자 : 주문 확정 목록");
         model.addAttribute("contentsTitle","주문 확정 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 확정 목록");
+
+        Map<String, Object> resultMap = orderService.getOrderConfLogList();
+        model.addAttribute("confLogList", resultMap.get("confLogList"));
+
         return "admin/order/orderCompletedList";
     }
 
