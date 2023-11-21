@@ -59,13 +59,13 @@
                     <input type="checkbox" name="selectList">
                   </td>
                   <td class="table-data-center">
-                    <a class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}, goodsPartition=${l.orderPartition})}">
-                      ${l.orderCode}
+                    <a class="detail-link" th:href="@{/seller/reword/order/refund/detail?orderCode=${l.apcCode}}">
+                      ${l.apcCode}
                     </a>
                   </td>
                   <td class="table-data-center">
-                    <a class="detail-link" th:href="@{/seller/reword/order/refund/detail?orderCode=${l.apcCode}}">
-                      ${l.apcCode}
+                    <a class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}, goodsPartition=${l.orderPartition})}">
+                      ${l.orderCode}
                     </a>
                   </td>
                   <td class="table-data-center">
@@ -379,10 +379,10 @@
           <th style="width:5%;">
             <input type="checkbox" name="allSelect" id="allSelectBtn">
           </th>
-          <th style="width:10%;">주문 코드</th>
           <th style="width:10%;">
             [[${(#ks.request.requestURI == '/admin/order/refundSwapping')? '환불':'교환'}]] 신청 코드
           </th>
+          <th style="width:10%;">주문 코드</th>
           <th style="width:5%;">주문 아이디</th>
           <th style="width:8%;">신청 사유</th>
           <th style="width:8%;">
@@ -407,13 +407,13 @@
               <input type="checkbox" name="selectList">
             </td>
             <td class="table-data-center">
-              <a class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}, goodsPartition=${l.orderPartition})}">
-                [[${l.orderCode}]]
+              <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">
+                [[${l.apcCode}]]
               </a>
             </td>
             <td class="table-data-center">
-              <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">
-                [[${l.apcCode}]]
+              <a class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}, goodsPartition=${l.orderPartition})}">
+                [[${l.orderCode}]]
               </a>
             </td>
             <td class="table-data-center">

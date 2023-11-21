@@ -151,6 +151,8 @@
                     OR
                     ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
                     OR
+                    apc_code LIKE CONCAT('%', #{searchValue}, '%')
+                    OR
                     ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
                 )
             </if>
