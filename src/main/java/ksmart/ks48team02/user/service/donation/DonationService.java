@@ -7,9 +7,7 @@ import ksmart.ks48team02.user.mapper.donation.DonationUserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Transactional
@@ -65,5 +63,20 @@ public class DonationService{
         donationUserMapper.replyAdd(reply, donationCode, parentCommentCode, memberId, memberName);
     }
 
+    public int getFlover(String memberId){
+        return donationUserMapper.getFlover(memberId);
+    }
+
+    public void deductFlover(Map<String,Object> deductData){
+        donationUserMapper.deductFlover(deductData);
+    }
+
+    public void addOrderTable(String memberId, String donationCode, String orderTotalPrice){
+        donationUserMapper.addOrderTable(memberId, donationCode, orderTotalPrice);
+    }
+
+    public void addDonationPayemnt(String donationCode, String floverAmount, String floverToMoney){
+        donationUserMapper.addDonationPayemnt(donationCode, floverAmount, floverToMoney);
+    }
 
 }

@@ -62,6 +62,22 @@
                 $(this).val('0');
             }
         });
+        $('.order-donation-btn').click(function (){
+            const sessionId = '[[${SID}]]';
+            const floverCount = $('#floverCount').val();
+            const curMyFlover = parseInt($('#curMyFlover').text());
+            console.log(sessionId);
+            if (sessionId == null || sessionId == '' || typeof sessionId == 'undefined'){
+                alert('결제하려면 로그인을 해주세요!');
+            }else{
+                if (floverCount > curMyFlover){
+                    alert('현재 가지고 있는 금액보다 많습니다.');
+                }else {
+                    $('#floverForm').submit();
+                }
+            }
+
+        });
     </script>
 </th:block>
 
@@ -76,8 +92,15 @@
                 <div style="border-top: 2px solid darkgrey; width: 80%;"></div>
             </div>
             <div class="d-flex col-lg-12 justify-content-center">
+                <strong style="color: black">현재 나의 Flover [<strong id="curMyFlover" style="color: #235FD9;" th:text="${myFlover}"></strong>] 개</strong>
+            </div>
+            <br>
+            <div class="d-flex col-lg-12 justify-content-center">
                 <strong style="color: #235FD9">결제할 Flover</strong>
-                <input id="floverCount" type="number" value="0" style="margin-left: 5px; margin-right: 5px; text-align: right; padding-right: 5px; color: #235FD9; font-weight: bold; width: 150px; height: 30px">
+                <form id="floverForm" th:action="@{/user/donation/payment}" method="post">
+                    <input id="floverCount" name="floverCount" type="number" value="0" style="margin-left: 5px; margin-right: 5px; text-align: right; padding-right: 5px; color: #235FD9; font-weight: bold; width: 150px; height: 30px">
+                    <input th:value="${donationCode}" name="donationCode" hidden="hidden">
+                </form>
                 <span>개</span>
             </div>
             <div class="d-flex col-lg-12 justify-content-center">
@@ -87,8 +110,8 @@
                 </div>
             </div>
             <div class="d-flex col-lg-12 justify-content-center" style="margin-top: 10px;">
-                <button type="button" th:onclick="|location.href='@{/user/donation/payment/confirm}'|" class="order-donation-btn" style="margin-right: 10px">기부하기</button>
-                <button type="button" onclick="history.go(-1)" class="order-donation-btn" style="background-color: grey; color: ghostwhite">모금함으로 돌아가기</button>
+                <button type="button" class="order-donation-btn" style="margin-right: 10px">기부하기</button>
+                <button type="button" onclick="history.go(-1)" class="order-donation-btn" style="background-color: grey; color: ghostwhite">스토리로 돌아가기</button>
             </div>
 
         </div>

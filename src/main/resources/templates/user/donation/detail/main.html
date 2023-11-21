@@ -92,6 +92,12 @@
         let percent = (achievementMoney / goalMoney) * 100;
         $('#achievementPercent').text(parseInt(percent) + '%');
 
+        // 기부버튼 눌렀을 시 작동
+        $('#donationBtn').click(function (){
+            const SID = '[[${SID}]]';
+            console.log(SID)
+        });
+
     </script>
 
 </th:block>
