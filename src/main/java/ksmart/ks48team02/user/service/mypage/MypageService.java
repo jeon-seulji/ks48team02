@@ -59,4 +59,13 @@ public class MypageService {
         return mypageMapper.pwModify(loginId,memberPw);
     }
 
+    // 이메일 변경
+    public int emailModify(String loginId, String memberEmail){
+        return mypageMapper.emailModify(loginId,memberEmail);
+    }
+
+    // 연락처 변경
+    public int memberContactModify(String loginId, String memberEmail){
+        return mypageMapper.memberContactModify(loginId,memberEmail);
+    }
 }
