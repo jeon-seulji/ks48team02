@@ -93,6 +93,20 @@
         </association>
     </resultMap>
 
+    <!-- OrderConfirmationLog resultMap-->
+    <resultMap id="orderConfLogListMap" type="OrderConfirmationLog">
+        <id property="orderConfirmationLogCode" column="order_confirmation_log_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="projectPartition" column="project_partition"/>
+        <result property="projectCode" column="project_code"/>
+        <result property="orderConfirmationDate" column="order_confirmation_date"/>
+        <result property="orderPriceTotal" column="order_price_total"/>
+        <result property="addReservePrice" column="add_reserve_price"/>
+        <result property="addFlover" column="add_flover"/>
+        <result property="addReserveCode" column="add_reserve_code"/>
+        <result property="addFloverCode" column="add_flover_code"/>
+    </resultMap>
+
     <!-- 주문 목록 공통 조회 조건 sql -->
     <sql id="orderListWhere">
         <where>
@@ -150,8 +164,6 @@
                     ot.member_id LIKE CONCAT('%', #{searchValue}, '%')
                     OR
                     ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
-                    OR
-                    apc_code LIKE CONCAT('%', #{searchValue}, '%')
                     OR
                     ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
                 )
@@ -247,6 +259,8 @@
                 OR
                 ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
                 OR
+                apc_code LIKE CONCAT('%', #{searchValue}, '%')
+                OR
                 ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
                 )
             </if>
@@ -266,7 +280,10 @@
                 AND
                 ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
             </if>
-
+            <if test="searchKey != null and searchKey == 'apcCode'">
+                AND
+                apc_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
         </where>
         <!-- ORDER BY -->
         <choose>
@@ -507,5 +524,22 @@
             order_table AS ot
             ON ra.order_code = ot.order_code
         <include refid="rfndSwapListWhere"></include>
+    </select>
+
+    <!-- 주문 확정 목록 조회 -->
+    <select id="getOrderConfLogList" resultMap="orderConfLogListMap">
+        SELECT
+            ocl.order_confirmation_log_code,
+            ocl.member_id,
+            ocl.project_partition,
+            ocl.project_code,
+            ocl.order_confirmation_date,
+            ocl.order_price_total,
+            ocl.add_reserve_price,
+            ocl.add_flover,
+            ocl.add_reserve_code,
+            ocl.add_flover_code
+        FROM
+            order_confirmation_log AS ocl;
     </select>
 </mapper>

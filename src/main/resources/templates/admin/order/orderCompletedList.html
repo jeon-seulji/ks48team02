@@ -84,8 +84,8 @@
                 </div>
             </div>
             <!-- contents area -->
-            <form id="orderListForm">
-                <table class="settlement-log">
+
+            <table class="settlement-log">
                     <thead>
                         <tr>
                         <th style="width:5%;">
@@ -102,40 +102,40 @@
                     </thead>
                     <tbody>
                         <!-- 조회 결과 없음 -->
-                        <tr style="display:none;">
+                        <tr th:if="${confLogList == null}">
                             <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                         </tr>
                         <!-- 조회 결과 contents -->
-                        <tr>
+                        <tr th:unless="${confLogList == null}" th:each="l : ${confLogList}">
                             <td class="table-data-center">
                                 <input type="checkbox" name="selectList">
                             </td>
                             <td class="table-data-center">
-                               ORD_20230922_000001
+                               [[${l.orderConfirmationLogCode}]]
                             </td>
                             <td class="table-data-center">
-                                id020
+                                [[${l.memberId}]]
                             </td>
                             <td class="table-data-center">
-                                <a class="detail-link" th:href="@{/admin/order/detail}">ORD_20230922_000001</a>
+                                <a class="detail-link" th:href="@{#}">[[${l.projectCode}]]</a>
                             </td>
                             <td  class="table-data-center">
-                                2023-10-20 00:00
+                                [[${l.orderConfirmationDate}]]
                             </td>
                             <td >
-                                <span>351,000</span>원
+                                <span>[[${l.orderPriceTotal}]]</span>원
                             </td>
                             <td >
-                                <span>35</span>원
+                                <span>[[${l.addReservePrice}]]</span>원
                             </td>
                             <td >
-                                <span>15</span>개
+                                <span>[[${l.addFlover}]]</span>개
                             </td>
                         </tr>
 
                     </tbody>
                 </table>
-            </form>
+
             <!-- list pager -->
             <!-- pagenation start -->
 <!--            <th:block th:replace="~{common/fragments/adminPagenation :: adminPagenation}"></th:block>-->

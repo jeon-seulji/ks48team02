@@ -1,10 +1,7 @@
 package ksmart.ks48team02.common.service.order;
 
 import ksmart.ks48team02.admin.controller.orderManagement.OrderManagementController;
-import ksmart.ks48team02.common.dto.OrderTotal;
-import ksmart.ks48team02.common.dto.RefundApplication;
-import ksmart.ks48team02.common.dto.RewardOrderDetail;
-import ksmart.ks48team02.common.dto.SwappingApplication;
+import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.mapper.order.OrderMapper;
 import ksmart.ks48team02.user.dto.RewardOption;
 import org.slf4j.Logger;
@@ -190,5 +187,16 @@ public class OrderService {
 
     }
 
+    public Map<String, Object> getOrderConfLogList(){
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        List<OrderConfirmationLog> confLogList = orderMapper.getOrderConfLogList();
+
+
+        log.info("confLogList {}", confLogList);
+
+        resultMap.put("confLogList", confLogList);
+        return resultMap;
+    };
 
 }

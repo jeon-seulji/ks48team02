@@ -1,10 +1,7 @@
 package ksmart.ks48team02.common.mapper.order;
 
 
-import ksmart.ks48team02.common.dto.OrderTotal;
-import ksmart.ks48team02.common.dto.RefundApplication;
-import ksmart.ks48team02.common.dto.RewardOrderDetail;
-import ksmart.ks48team02.common.dto.SwappingApplication;
+import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.user.dto.RewardOption;
 import ksmart.ks48team02.common.dto.RewardOrderDetail;
 import org.apache.ibatis.annotations.Mapper;
@@ -44,4 +41,7 @@ public interface OrderMapper {
 
     // 교환 신청 행 수 조회
     public int getSwapCnt(Map<String, Object> paramMap);
+
+    // 주문 확정 목록 조회
+    public List<OrderConfirmationLog> getOrderConfLogList();
 }

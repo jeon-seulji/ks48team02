@@ -301,6 +301,10 @@ public class OrderManagementController {
         model.addAttribute("title","관리자 : 주문 확정 목록");
         model.addAttribute("contentsTitle","주문 확정 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 확정 목록");
+
+        Map<String, Object> resultMap = orderService.getOrderConfLogList();
+        model.addAttribute("confLogList", resultMap.get("confLogList"));
+
         return "admin/order/orderCompletedList";
     }
 
