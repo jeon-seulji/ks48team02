@@ -3,12 +3,19 @@
 
 <th:block th:fragment="searchFormFragments">
     <div class="admin-content-wrapper form-table">
+        <div th:if="${#ks.request.requestURI == '/admin/order/refundSwapping'}" class="refund-tab-area">
+            <ul>
+                <li class="tab-btn active" data-value="refund"><span>환불 신청 목록</span></li>
+                <li class="tab-btn" data-value="swapping"><span>교환 신청 목록</span></li>
+            </ul>
+        </div>
         <form id="searchForm" name="searchForm">
             <input type="hidden" name="dateSettStartDate">
             <input type="hidden" name="dateSettEndDate">
             <input type="hidden" name="searchKey">
             <input type="hidden" name="searchValue">
         </form>
+
         <table class="partition-select">
             <tbody>
             <tr>
