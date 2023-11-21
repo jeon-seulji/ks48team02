@@ -19,11 +19,21 @@ public class AdminCouponService {
         this.adminCouponMapper = adminCouponMapper;
     }
 
-    // 쿠폰 등록
-    public List<Coupon> getCouponCreate(){
-        List<Coupon> getCouponCreate = adminCouponMapper.getCouponCreate();
+    // 쿠폰 삭제
+    public void deleteCoupon(String couponCode){
+        adminCouponMapper.deleteCoupon(couponCode);
+    }
 
-        return getCouponCreate;
+
+    // 쿠폰 수정
+    public void updateCoupon(Coupon coupon){
+        System.out.println(coupon);
+        adminCouponMapper.updateCoupon(coupon);
+    }
+
+    // 쿠폰 등록
+    public void insertCoupon(Coupon coupon) {
+        adminCouponMapper.insertCoupon(coupon);
     }
 
     // 쿠폰 목록

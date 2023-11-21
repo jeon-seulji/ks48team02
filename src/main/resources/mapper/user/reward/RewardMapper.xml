@@ -216,7 +216,7 @@
 
 
     <!--리워드프로젝트 전체 조회-->
-    <select id="rewardProjectList" resultMap="RewardResultMap">
+    <select id="rewardProjectList" resultMap="RewardResultMap" parameterType="String">
         SELECT
             r.reward_project_code,
             r.total_cagegory_code,
@@ -241,10 +241,33 @@
             r.project_condition
         FROM
             reward_project AS r
-        WHERE
-            r.project_end_date >= now()
-        ORDER BY
-            r.project_reg_date DESC
+                <where>
+                    <if test="projectStatus == 'ing'">
+                        <![CDATA[ AND r.project_end_date >= now() ]]>
+                    </if>
+                    <if test="projectStatus == 'end'">
+                        <![CDATA[ AND r.project_end_date < now() ]]>
+                    </if>
+                    <if test="category != 'allCategory'">
+                        AND r.total_cagegory_code = #{category}
+                    </if>
+                </where>
+                ORDER BY
+                <if test="projectArrange == 'like'">
+                    r.search_count DESC
+                </if>
+                <if test="projectArrange == 'latest'">
+                    r.project_reg_date DESC
+                </if>
+                <if test="projectArrange == 'popularity'">
+                    r.search_count DESC
+                </if>
+                <if test="projectArrange == 'achieveMoney'">
+                    r.project_achievement_money DESC
+                </if>
+                <if test="projectArrange == 'endDate'">
+                    r.project_end_date
+                </if>
     </select>
 
     <!--리워드 상세 페이지-->
@@ -263,6 +286,7 @@
             r.project_start_date,
             r.project_end_date,
             r.project_condition,
+            r.total_cagegory_code,
             o.reward_option_code,
             o.option_contents,
             o.option_price,
@@ -295,6 +319,16 @@
         WHERE
             r.reward_project_code = #{rewardProjectCode};
     </select>
+
+    <!--리워드 프로젝트 클릭 시 조회수 증가-->
+    <update id="searchCnt" parameterType="String">
+        UPDATE
+            reward_project
+        SET
+            search_count = search_count + 1
+        WHERE
+            reward_project_code = #{rewardProjectCode};
+    </update>
 
     <!--리워드 옵션 별 총 주문개수 조회-->
     <select id="optionTotalOrderQuantity" parameterType="String" resultType="int">

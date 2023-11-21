@@ -20,6 +20,17 @@
         <result property="orderCancellDate" column="order_cancell_date"/>
     </resultMap>
 
+    <resultMap id="orderDetailMap" type="RewardOrderDetail">
+        <id property="rewardOrderDetailCode" column="rd_order_detail_code"/>
+        <result property="rewardOptionCode" column="reward_option_code"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="orderOptionAmount" column="order_option_amount"/>
+        <result property="optionPrice" column="option_price"/>
+        <result property="optionTotalPrice" column="option_total_price"/>
+    </resultMap>
+
+
+
     <!-- reward_option_detail resultMap -->
     <resultMap id="rewardOptionMap" type="RewardOrderDetail">
         <id property="rewardOrderDetailCode" column="rd_order_detail_code"/>
@@ -299,7 +310,6 @@
             COUNT(1)
         FROM
             order_table AS ot
-
         <include refid="orderListWhere"></include>
     </select>
 
@@ -324,6 +334,60 @@
             ot.order_code = #{orderCode};
     </select>
 
+    <!--마이페이지 내 주문 내역 조회-->
+    <select id="mypageOrderList" parameterType="String" resultMap="orderMap">
+        SELECT
+            o.goods_code,
+            o.member_id,
+            o.order_code,
+            o.order_application_date,
+            o.order_cancell_date,
+            o.order_category_code,
+            o.order_category_detail,
+            o.order_confirm_date,
+            o.order_funding_name,
+            o.order_name,
+            o.order_total_price,
+            r.project_thumbnail_image AS projectThumbnailImage,
+            d.donation_image AS projectThumbnailImage,
+            i.investment_image AS projectThumbnailImage
+        FROM
+            order_table AS o
+        LEFT JOIN
+            reward_project AS r
+        ON
+            o.goods_code = r.reward_project_code
+        LEFT JOIN
+            donation AS d
+        ON
+            o.goods_code = d.donation_code
+        LEFT JOIN
+            investment AS i
+        ON
+            o.goods_code = i.investment_code
+        WHERE
+            o.member_id = #{memberId};
+    </select>
+
+    <!--마이 페이지 주문 상세 조회-->
+    <select id="mypageOrderDetailList" resultMap="orderDetailMap" parameterType="String">
+        SELECT
+            r.option_price,
+            r.rd_order_detail_code,
+            r.option_total_price,
+            r.order_option_amount,
+            r.reward_option_code,
+            r.order_code,
+            o.option_name AS optionName
+        FROM
+            reward_order_detail AS r
+        INNER JOIN
+            reward_option as o
+        ON
+            r.reward_option_code = o.reward_option_code
+        WHERE
+            r.order_code = #{orderCode}
+    </select>
     <!-- 주문 코드에 따른 주문 상세 조회 -->
     <select id="getRewardOptionByOrderCode" parameterType="String" resultMap="rewardOptionMap">
         SELECT
