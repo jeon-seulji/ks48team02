@@ -324,7 +324,7 @@
             ot.order_cancell_date
         FROM
             order_table AS ot
-        <include refid="orderListWhere"></include>
+        <include refid="orderListWhere"/>
 
         <if test="startRowNum > -1">
             LIMIT ${startRowNum}, ${rowPerPage};
@@ -341,7 +341,7 @@
             COUNT(1)
         FROM
             order_table AS ot
-        <include refid="orderListWhere"></include>
+        <include refid="orderListWhere"/>
     </select>
 
     <!-- 특정 주문 조회 -->

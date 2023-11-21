@@ -1,6 +1,5 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
-import jakarta.servlet.http.HttpServletRequest;
 import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.service.delivery.DeliveryService;
 import ksmart.ks48team02.common.service.order.OrderService;
@@ -57,7 +56,7 @@ public class OrderManagementController {
         model.addAttribute("title","관리자 : 주문 대시보드");
         model.addAttribute("contentsTitle","주문 대시보드");
         model.addAttribute("contentsSubTitle","관리자 주문 대시보드");
-        return "";
+        return null;
     }
 
     // 주문 목록
@@ -73,8 +72,7 @@ public class OrderManagementController {
         int currentPage = 1;
         int rowPerPage = 15;
 
-        Map<String, Object> paramMap = null;
-        paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
 
         paramMap.put("orderby", orderby);
         paramMap.put("currentPage", currentPage);
@@ -97,8 +95,7 @@ public class OrderManagementController {
     // 주문 목록 정렬 ajax
     @PostMapping(value="/list/ajax")
     @ResponseBody
-    public Map<String, Object> getOrderListOrderBy(Model model,
-                                                    @RequestBody Map<String, Object> paramMap){
+    public Map<String, Object> getOrderListOrderBy(@RequestBody Map<String, Object> paramMap){
         log.info("param {}", paramMap);
         log.info("currentPage {}", paramMap.get("currentPage"));
         log.info("rowPerPage {}", paramMap.get("rowPerPage"));
@@ -182,8 +179,7 @@ public class OrderManagementController {
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
         model.addAttribute("paramActive","noActive");
 
-        Map<String, Object> paramMap = null;
-        paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
 
         String orderby = "delived_d";
         int currentPage = 1;
