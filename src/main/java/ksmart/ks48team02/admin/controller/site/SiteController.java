@@ -99,6 +99,15 @@ public class SiteController {
         return list;
 }
 
+    // 카테고리 등록 post
+    @PostMapping("/categoryAdd")
+    public String categoryAddPost(@ModelAttribute Category category, Model model){
+
+        model.addAttribute("title", "카테고리 등록");
+        categoryService.createCategory(category);
+
+        return "redirect:/admin/site/categoryAdd";
+    }
 
     // 카테고리 등록
     @GetMapping("/categoryAdd")
@@ -107,7 +116,6 @@ public class SiteController {
         List<Category> categoryAdd = categoryService.getCategoryAdd();
 
         model.addAttribute("title", "카테고리 등록");
-        log.info("나오냐 {}", categoryAdd);
         model.addAttribute("categoryAdd", categoryAdd);
 
         return "admin/site/categoryAdd";

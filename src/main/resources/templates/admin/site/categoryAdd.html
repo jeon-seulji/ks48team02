@@ -64,6 +64,11 @@
             line-height: 28px;
             background-color: #3971ff;
         }
+        .category-list li.active {
+            background: #fff !important;
+            color: var(--maincolor) !important;
+            box-shadow: rgba(96 99 104 / 10%) 0 1px 8px, inset rgba(255, 255, 255, 0.4) 0 1px 0;
+        }
     </style>
     <!--    <link rel="stylesheet" href="./css/font/font.css">-->
     <!-- css -->
@@ -80,14 +85,14 @@
         <h3>카테고리 등록</h3>
     </div>
 
-    <form>
+    <form th:action="@{/admin/site/categoryAdd}" method="post">
         <section class="admin-right-area">
 
             <!-- add goods module-->
             <section class="admin-right-bt">
                 <section class="admin-addgoods-area">
                     <h3 class="admin-title">카테고리 등록하기</h3>
-                    <form id="add-goods-frm" method="post">
+                    <form id="add-goods-frm">
                         <table class="admin-table">
                             <caption>카테고리 분류 표시설정</caption>
                             <colgroup>
@@ -162,23 +167,23 @@
 
                         <div class="boardTable">
                             <table border="1">
+<!--                                <tr>-->
+<!--                                    <th class="category">카테고리 코드</th>-->
+<!--                                    <td>-->
+<!--                                        <input type="text" name="categoryCode" id="categoryCode">-->
+<!--                                    </td>-->
+<!--                                </tr>-->
                                 <tr>
-                                    <th class="categoryCode">카테고리 코드</th>
+                                    <th class="category">카테고리 이름</th>
                                     <td>
-                                        <input type="text" name="categoryCode" id="categoryCode">
+                                        <input type="text" id="g_name" name="g_name" placeholder="예시 : 시민 문화"  onclick="this.placeholder=''" maxlength="50" oninput="productNameCount($(this))">
+                                        <span>[<em class="typing-length">0</em>/ 50 ]</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="category">분류명</th>
+                                    <th class="category" name="categoryComment">카테고리 설명</th>
                                     <td>
-                                        <input type="text" id="g_name" name="g_name" placeholder="예시 : 시민 문화 입니다."  onclick="this.placeholder=''" maxlength="250" oninput="productNameCount($(this))">
-                                        <span>[<em class="typing-length">0</em>/ 250 ]</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="category" name="categoryComment">분류설명</th>
-                                    <td>
-                                        <textarea class="textArea"></textarea>
+                                        <textarea class="textArea" placeholder="카테고리 설명을 적어주세요."></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -197,6 +202,10 @@
                                         </label>
                                         </span>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th class="category">등록 일시</th>
+                                    <td><input type="date"></td>
                                 </tr>
                             </table>
                         </div>
@@ -303,7 +312,7 @@
 
             $('.category_title').text(selectedCategory);
 
-            $('.category-depth-1 li').removeClass('active');
+            $('.category-depth-1 li').removeClass('active').css({'background':'#eee','color':'#bdbdbd'});
             $(this).addClass('active');
         })
 
@@ -315,7 +324,7 @@
 
             $('.category_title').text(selectedCategory);
 
-            $('.category-depth-2 li').removeClass('active');
+            $('.category-depth-2 li').removeClass('active').css({'background':'#eee','color':'#bdbdbd'});
             $(this).addClass('active');
         });
     </script>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.ks48team02.admin.mapper.inquiry.InquiryMapper">
+
+    <resultMap id="inquiryResultMap" type="Inquiry">
+        <id property="contactAnswerCode" column="contact_answer_code" />
+        <result property="inquireCode" column="inquire_code" />
+        <result property="memberId" column="member_id" />
+        <result property="iqSubject" column="iq_subject" />
+        <result property="iqContent" column="iq_content" />
+        <result property="iqDatetime" column="iq_datetime" />
+    </resultMap>
+
+<!--    문의 관리 목록-->
+    <select id="getInquiryList" resultMap="inquiryResultMap">
+        select
+        hp.contact_answer_code,
+        hp.inquire_code,
+        hp.member_id,
+        hp.iq_subject,
+        hp.iq_content,
+        hp.iq_datetime
+        from
+        home_pageinquiry_answer_management as hp
+
+    </select>
+
+
+</mapper>
