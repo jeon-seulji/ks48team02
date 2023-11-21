@@ -134,14 +134,14 @@
                     let judgeRejectReason = $('#donationJudgementSelect option:selected').val();
                     let judgeRejectReasonDetail = $('.comment-text-box').val();
                     let sessionId = $('#sessionId').val();
-                    window.location.href = `http://localhost:8088/admin/donation/judgement?judgeReject=${donationCode}&judgeRejectReason=${judgeRejectReason}&judgeRejectReasonDetail=${judgeRejectReasonDetail}&adminId=${sessionId}`;
+                    window.location.href = `http://144.24.83.112/admin/donation/judgement?judgeReject=${donationCode}&judgeRejectReason=${judgeRejectReason}&judgeRejectReasonDetail=${judgeRejectReasonDetail}&adminId=${sessionId}`;
                 }
             }
             // 심사 승인 눌렀을 시
             if($clickedButton.prop('class') == 'judgement-approve-btn'){
                 donationCode = $clickedButton.parent('td').parent('tr').children('td:eq(0)').text();
                 alert('심사가 승인 되었습니다.');
-                window.location.href = `http://localhost:8088/admin/donation/judgement?judgeApprove=${donationCode}`;
+                window.location.href = `http://144.24.83.112/admin/donation/judgement?judgeApprove=${donationCode}`;
             }
 
         });

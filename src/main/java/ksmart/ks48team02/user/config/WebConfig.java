@@ -74,8 +74,21 @@ public class WebConfig implements WebMvcConfigurer{
     //로 접속하면 C:/summernote_image/1234.jpg 파일을 불러온다.
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String rootPath = getOsFileRootPath();
         registry.addResourceHandler("/summernoteImage/**")
-                .addResourceLocations("file:///C:/summernote_image/");
+                .addResourceLocations(rootPath);
+    }
+
+    public String getOsFileRootPath(){
+        String os = System.getProperty("os.name").toLowerCase();
+        String rootPath = "file:////home/springboot/resources/summernote_image/";
+        if (os.contains("win")) {
+            rootPath = "file:///C:/summernote_image/";
+        } else if (os.contains("mac")) {
+            rootPath = "file:////Users/Shared/summernote_image/";
+        }
+
+        return rootPath;
     }
 
 }

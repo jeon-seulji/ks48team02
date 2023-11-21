@@ -41,7 +41,7 @@
           </li>
           <li><a><i class="fa fa-edit"></i> #리워드 프로젝트 관리 (상민) <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="form.html">프로젝트 목록#</a></li>
+              <li><a th:href="@{/seller/reward/products}">프로젝트 목록#</a></li>
               <li>
                 <a >!주문 관리(슬지)</a>
                 <!-- 3 depth -->
@@ -62,10 +62,10 @@
                     <a th:href="@{/seller/reword/order/autoReFund}">!자동 환불 목록(슬지)</a>
                   </li>
                 </ul>
-              <li><a href="form_validation.html">새소식#</a></li>
-              <li><a href="form_wizards.html">사전체험단#</a></li>
-              <li><a href="form_upload.html">태그 관리#</a></li>
-              <li><a href="form_buttons.html">댓글 관리#</a></li>
+              <li><a th:href="@{/seller/reward/news}">새소식#</a></li>
+              <li><a th:href="@{/seller/reward/products/preExperienceRecruit}">사전체험단#</a></li>
+              <li><a th:href="@{/seller/reward/products/searchTagModify}">태그 관리#</a></li>
+              <li><a th:href="@{/seller/reward/products/comment}">댓글 관리#</a></li>
             </ul>
           </li>
           <li><a><i class="fa fa-edit"></i> !기부 프로젝트 관리(정민)<span class="fa fa-chevron-down"></span></a>
@@ -74,7 +74,7 @@
               <li><a th:href="@{/seller/donation/news}">!새소식 관리(정민)</a></li>
               <li><a th:href="@{/seller/donation/condition}">!기부 진행현황 관리(정민)</a></li>
               <!--<li><a th:href="@{/seller/donation/comments}">!댓글 관리(정민)</a></li>-->
-              <li><a th:href="@{/seller/donation/products/searchTagModify}">!태그 관리(정민)</a></li>
+<!--              <li><a th:href="@{/seller/donation/products/searchTagModify}">!태그 관리(정민)</a></li>-->
               <li>
                 <a >!주문 관리(슬지)</a>
                 <!-- 3 depth -->
