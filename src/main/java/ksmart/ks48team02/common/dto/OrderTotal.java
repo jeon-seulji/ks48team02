@@ -1,5 +1,7 @@
 package ksmart.ks48team02.common.dto;
 
+import java.util.List;
+
 public class OrderTotal {
     private String orderCode;
     private String memberId;
@@ -15,6 +17,24 @@ public class OrderTotal {
     private String orderCancellDate;
     private String rewardOrderDetailCode;
     private String rewardPaymentCode;
+    private String projectThumbnailImage;
+    List<RewardOrderDetail> rewardOrderDetailList;
+
+    public List<RewardOrderDetail> getRewardOrderDetailList() {
+        return rewardOrderDetailList;
+    }
+
+    public void setRewardOrderDetailList(List<RewardOrderDetail> rewardOrderDetailList) {
+        this.rewardOrderDetailList = rewardOrderDetailList;
+    }
+
+    public String getProjectThumbnailImage() {
+        return projectThumbnailImage;
+    }
+
+    public void setProjectThumbnailImage(String projectThumbnailImage) {
+        this.projectThumbnailImage = projectThumbnailImage;
+    }
 
     @Override
     public String toString() {
