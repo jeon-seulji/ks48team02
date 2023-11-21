@@ -22,4 +22,5 @@ public interface MypageMapper {
 
     // 자기소개 변경
 
+
 }

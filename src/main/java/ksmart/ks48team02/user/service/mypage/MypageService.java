@@ -38,4 +38,7 @@ public class MypageService {
         return mypageMapper.pwModify(loginId,memberPw);
     }
 
+    // 이메일 변경
+
+    // 연락처 변경
 }

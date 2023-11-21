@@ -15,7 +15,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user/mypage")
 public class MypageController {
-    private static final Logger Log = LoggerFactory.getLogger(AccountService.class);
+    private static final Logger Log = LoggerFactory.getLogger(MypageService.class);
 
     final MypageService mypageService;
 
@@ -61,5 +61,8 @@ public class MypageController {
 
         return modifyResponse;
     }
+
+    /*============================================================================================*/
+
 
 }
