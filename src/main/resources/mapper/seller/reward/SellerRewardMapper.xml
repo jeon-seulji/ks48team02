@@ -44,7 +44,7 @@
     </resultMap>
 
     <!--판매자 회원 등록 프로젝트 리스트-->
-    <select id="projectListBySellerID" resultMap="RewardResultMap" parameterType="String">
+    <select id="projectListBySellerID" resultMap="RewardResultMap" parameterType="hashmap">
         SELECT
             r.reward_project_code,
             r.total_cagegory_code,
@@ -69,8 +69,35 @@
             r.project_condition
         FROM
             reward_project AS r
-        WHERE
-            r.member_id = #{sellerId}
+        <where>
+            <if test="sellerID != null">
+                AND r.member_id = #{sellerID}
+            </if>
+            <if test="projectCondition != null and !projectCondition.equals('')">
+                AND r.project_condition = #{projectCondition}
+            </if>
+        </where>
+        ORDER BY
+            r.project_reg_date DESC
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
+    </select>
+
+    <!-- 프로젝트 전체 행의 갯수 -->
+    <select id="projectPageCnt" resultType="int" parameterType="hashmap">
+        SELECT
+            COUNT(1)
+        FROM
+            reward_project as r
+        <where>
+            <if test="sellerID != null">
+                AND r.member_id = #{sellerID}
+            </if>
+            <if test="projectCondition != null and !projectCondition.equals('')">
+                AND r.project_condition = #{projectCondition}
+            </if>
+        </where>
     </select>
 
     <!--판매자 회원 프로젝트 당 새소식 리스트 조회-->
@@ -113,4 +140,15 @@
         WHERE
             r.member_id = #{sellerId};
     </select>
+
+    <!--프로젝트 시작-->
+    <update id="startProject" parameterType="String">
+        UPDATE
+            reward_project
+        SET
+            project_start_date = NOW(),
+            project_condition = 3
+        WHERE
+            reward_project_code = #{rewardProjectCode};
+    </update>
 </mapper>
