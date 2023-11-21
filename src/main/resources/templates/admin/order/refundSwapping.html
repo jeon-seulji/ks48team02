@@ -126,12 +126,26 @@
 
       $('.select-list-count').text('0');
 
+      // orderby 초기화
+      orderbyDefaultSet();
+      $('input[name="amDateSettStartDate"]').val(startDateValue);
+      $('input[name="amDateSettEndDate"]').val(endDateValue);
+
+      $('select[name="userSearchKey"] option[value="total"]').prop('selected', true);
+      $('input[name="userSearchable"]').val('');
+      $('.order-category-select input').prop('checked', true);
+
       // page value
       let currentPage = 1;
       let rowPerPage = $('select[name="count-select"]').val();
 
       const searchObjectArr = searchObject();
 
+      queryString.dateSettStartDate = searchObjectArr.dateSettStartDate;
+      queryString.dateSettEndDate = searchObjectArr.dateSettEndDate;
+      queryString.searchKey = searchObjectArr.searchKey;
+      queryString.searchValue = searchObjectArr.searchValue;
+      queryString.projectPartition = searchObjectArr.projectPartition;
       queryString.orderby = orderbyValue;
       queryString.currentPage = currentPage;
       queryString.rowPerPage = rowPerPage;
