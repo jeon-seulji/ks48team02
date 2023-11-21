@@ -236,34 +236,37 @@
                     </div >
                     <!--  리워드 펀딩 선택시 나타날 페이지  -->
                     <!--  tab 내부 본문 영역 -->
-                    <div class="bodyContainer" id="rewardTab">
-
+                    <div class="bodyContainer" id="orderProject">
                         <!--  내역 리스트 항목 -->
-                        <div class="contentsContainer">
+                        <div class="contentsContainer mb-lg-5" th:each="l : ${mypageOrderList}">
                             <div class="card" style="width: 48rem;">
                                 <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header">결제 완료 </h5>
+                                <h5 class="card-header" th:text="${l.orderCategoryDetail}">결제 완료</h5>
                                 <!-- 내역 내용 -->
                                 <div class="card-body" style="display: flex">
                                     <!-- 이미지  -->
                                     <div>
-                                        <img class="card-img-top" style="width: 160px; height: 160px;" src="https://contents.lotteon.com/itemimage/_v150640/LO/19/98/02/00/32/_1/99/80/20/03/3/LO1998020032_1998020033_1.jpg/dims/optimize/dims/resizemc/400x400"
-                                             alt="...">
+                                        <img class="card-img-top" style="width: 160px; height: 160px;" alt="..." th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                                             onerror="this.src = 'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg';">
                                     </div>
 
                                     <!-- 설명 / 버튼 -->
                                     <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                            <p class="card-text">2023.10.30 결제</p>
-                                            <h5 class="card-title">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
-                                            <p class="card-text">누젠 모래시계 가열식 가습기(화이트)</p>
-                                            <div style="display: flex; justify-content: end; margin:0;">
-                                                <a href="#" class="submitBtn_white"
-                                                   data-toggle="modal"
-                                                   data-target="#exampleModal3"
-                                                   data-what="hello"
-                                                   >주문취소</a>
-                                                <a href="#" class="submitBtn_black" >결제상세</a>
-                                            </div>
+                                        <p class="orderApplicationDate" th:text="${l.orderApplicationDate}">2023.10.30 결제</p>
+                                        <h5 class="orderName" th:text="${l.orderName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
+                                        <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
+                                            <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
+                                            <span th:text="|주문 수량 : ${rl.orderOptionAmount} 개|"></span>
+                                        </th:block>
+
+                                        <div style="display: flex; justify-content: end; margin:0;">
+                                            <a href="#" class="submitBtn_white"
+                                               data-toggle="modal"
+                                               data-target="#exampleModal3"
+                                               data-what="hello"
+                                            >주문취소</a>
+                                            <a href="#" class="submitBtn_black" >결제상세</a>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -286,115 +289,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-
-                    <!--  투자 펀딩 선택시 나타날 페이지  -->
-                    <!--  내역 리스트 항목 -->
-                    <!--  tab 내부 본문 영역 -->
-                    <div class="bodyContainer" id="investmentTab">
-
-                        <!--  내역 리스트 항목 -->
-                        <div class="contentsContainer">
-                            <div class="card" style="width: 48rem;">
-                                <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header">결제 완료 </h5>
-                                <!-- 내역 내용 -->
-                                <div class="card-body" style="display: flex">
-                                    <!-- 이미지  -->
-                                    <div>
-                                        <img class="card-img-top" style="width: 160px; height: 160px;" src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA2MjdfMjY5%2FMDAxNjU2MzIyNDkxNTAw.MyuSHCloNL5z2mgJhRk1Z4u__TYNKf-OqxW-jKEtDIQg.6WbKNtW5efJE2zbANoWbmq0B-raZae4wKy1_TsyS5WQg.JPEG.bammango0106%2Ffile1_16371338044gozwo2u45.jpg&type=a340"
-                                             alt="...">
-                                    </div>
-
-                                    <!-- 설명 / 버튼 -->
-                                    <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                        <p class="card-text">2023.10.20 결제</p>
-                                        <h5 class="card-title">고흐 전시회</h5>
-                                        <p class="card-text">투자 옵션 1</p>
-                                        <div style="display: flex; justify-content: end; margin:0;">
-                                            <a href="#" class="submitBtn_white"
-                                               data-toggle="modal"
-                                               data-target="#exampleModal2"
-                                               data-what="hello"
-                                            >주문취소</a>
-                                            <a href="" class="submitBtn_black" >결제상세</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 모달팝업 -->
-                        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-
-                                    <!-- 팝업창 내용 -->
-                                    <div class="modal-body detail">
-                                        <p>정말로 취소하시겠습니까?</p>
-                                    </div>
-
-                                    <div class="modal-footer" >
-                                        <button type="button" class="submitBtn_white" data-dismiss="modal">취소</button>
-                                        <button type="button" class="submitBtn_black">확인</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--  기부 펀딩 선택시 나타날 페이지  -->
-                    <!--  tab 내부 본문 영역 -->
-                    <div class="bodyContainer" id="donationTab">
-
-                        <!--  내역 리스트 항목 -->
-                        <div class="contentsContainer">
-                            <div class="card" style="width: 48rem;">
-                                <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header">결제 완료 </h5>
-                                <!-- 내역 내용 -->
-                                <div class="card-body" style="display: flex">
-                                    <!-- 이미지  -->
-                                    <div>
-                                        <img class="card-img-top" style="width: 160px; height: 160px;" src="https://contents.lotteon.com/itemimage/_v150640/LO/19/98/02/00/32/_1/99/80/20/03/3/LO1998020032_1998020033_1.jpg/dims/optimize/dims/resizemc/400x400"
-                                             alt="...">
-                                    </div>
-
-                                    <!-- 설명 / 버튼 -->
-                                    <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                        <p class="card-text">2023.10.30 결제</p>
-                                        <h5 class="card-title">길고양이들을 도와주세요</h5>
-                                        <p class="card-text">사료 1포대 </p>
-                                        <div style="display: flex; justify-content: end; margin:0;">
-                                            <a href="#" class="submitBtn_white"
-                                               data-toggle="modal"
-                                               data-target="#exampleModal"
-                                               data-what="hello"
-                                            >주문취소</a>
-                                            <a href="#" class="submitBtn_black" >결제상세</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 모달팝업 -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <!-- 팝업창 내용 -->
-                                    <div class="modal-body detail">
-                                        <p>정말로 취소하시겠습니까?</p>
-                                    </div>
-
-                                    <div class="modal-footer" >
-                                        <button type="button" class="submitBtn_white" data-dismiss="modal">취소</button>
-                                        <button type="button" class="submitBtn_black" >확인</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -523,25 +418,7 @@
       $donationTab = document.getElementById('donationTab');
       $bodyContainer = document.querySelectorAll('.bodyContainer');
 
-      $selectFund.addEventListener('change', function(){
-          $bodyContainer.forEach((element) => {
-              element.style.display = 'none';
-          })
 
-          let selectedValue = $selectFund.value;
-          switch (selectedValue) {
-              case "reward"     : $rewardTab.style.display = 'block';
-                        break;
-              case "investment" : $investmentTab.style.display = 'block';
-                        break;
-              case "donation"   : $donationTab.style.display = 'block';
-                        break;
-              default           :
-                  for(let i=0; i<$bodyContainer.length; i++){
-                      $bodyContainer[i].style.display = 'block';
-                  }
-          }
-      })
 
       document.getElementById('lead-drop-page').addEventListener('focus', ()=>{
       })
