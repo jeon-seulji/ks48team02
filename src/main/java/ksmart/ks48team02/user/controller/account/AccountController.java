@@ -23,8 +23,6 @@ public class AccountController {
         this.userMemberService = userMemberService;
     }
 
-
-
     //로그인 페이지
     @GetMapping("/login")
     public String login(Model model, @RequestParam(name="msg", required = false) String msg) {
