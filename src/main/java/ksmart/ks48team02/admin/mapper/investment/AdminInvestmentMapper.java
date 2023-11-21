@@ -21,7 +21,7 @@ public interface AdminInvestmentMapper {
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
     public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue, int startRowNum, int rowPerPage);
 
-    // 코드에 따른 특정 투자펀딩 심사요청 조회
+    // 특정 투자펀딩 심사요청 조회
     public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String investmentRequestJudgeCode);
 
     // 심사결과에 따른 특정 투자펀딩 심사요청 조회

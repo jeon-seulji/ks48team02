@@ -4,7 +4,6 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.admin.mapper.investment.AdminInvestmentMapper">
 
-
     <resultMap type="AdminInvestment" id="adminInvestmentListMap">
         <id property="investmentCode" column="investment_code"/>
         <result property="memberId" column="member_id"/>
@@ -26,7 +25,7 @@
         <result property="investmentDisplayDate" column="investment_display_date"/>
         <result property="investmentRegDate" column="investment_reg_date"/>
         <result property="investmentDeadline" column="investment_deadline"/>
-        <result property="investment_report" column="investmentReport"/>
+        <result property="investmentReport" column="investment_report"/>
         <result property="basicFee" column="basic_fee"/>
         <result property="contractFeeRate" column="contract_fee_rate"/>
         <result property="contractFile" column="contract_file"/>
@@ -85,7 +84,7 @@
             <result property="investmentDisplayDate" column="investment_display_date"/>
             <result property="investmentRegDate" column="investment_reg_date"/>
             <result property="investmentDeadline" column="investment_deadline"/>
-            <result property="investment_report" column="investmentReport"/>
+            <result property="investmentReport" column="investment_report"/>
             <result property="basicFee" column="basic_fee"/>
             <result property="contractFeeRate" column="contract_fee_rate"/>
             <result property="contractFile" column="contract_file"/>
@@ -154,6 +153,29 @@
             <result property="cbtBusinessType" column="cbtBusinessType"/>
         </association>
     </resultMap>
+
+    <resultMap type="SellerInvestmentContent" id="sellerInvestmentContentList">
+        <id property="investmentContentCode" column="investment_content_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="investmentCode" column="investment_code"/>
+        <result property="memberIdAdmin" column="member_id_admin"/>
+        <result property="projectIntroduction" column="project_introduction"/>
+        <result property="investmentIntroductionImage" column="investment_introduction_image"/>
+        <result property="marketAnalysis" column="market_analysis"/>
+        <result property="marketAnalysisImage" column="market_analysis_image"/>
+        <result property="majorFinancialInformation" column="major_financial_information"/>
+        <result property="majorFinancialInformationImage" column="major_financial_information_image"/>
+        <result property="risk" column="risk"/>
+        <result property="riskImage" column="risk_image"/>
+        <result property="majorManpower" column="major_manpower"/>
+        <result property="majorManpowerImage" column="major_manpower_image"/>
+        <result property="patentAwardDetails" column="patent_award_details"/>
+        <result property="patentAwardDetailsImage" column="patent_award_details_image"/>
+        <result property="etcInvestContent" column="etc_invest_content"/>
+        <result property="etcInvestContentImage" column="etc_invest_content_image"/>
+        <result property="registrationDate" column="registration_date"/>
+    </resultMap>
+
 
     <!-- 투자펀딩 심사요청 목록 조회 -->
     <select id="getInvestmentRequestJudgeList" resultMap="adminInvestmentRequestJudgeListMap">
@@ -285,11 +307,13 @@
             </if>
             <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != ''">
                 ${searchKey} = #{searchSelectValue}
+                AND
             </if>
-            <if test="searchKey != null and searchKey != '' and searchSelectValue == null or searchSelectValue == ''">
+            <if test="searchKey != null and searchKey != ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
             </if>
         </where>
+        ORDER BY i.investment_request_judge_code DESC
         <if test="startRowNum > -1">
             LIMIT #{startRowNum}, #{rowPerPage};
         </if>

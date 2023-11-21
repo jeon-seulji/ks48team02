@@ -1,28 +1,81 @@
 package ksmart.ks48team02.seller.controller.investment;
 
+import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.service.investment.InvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller("sellerInvestmentController")
 @RequestMapping("/seller/investment")
 public class InvestmentController {
 
-    @GetMapping("/invest-main")
-    public String getInvestMain(Model model) {
+    // DI(의존성 주입)
+    private final InvestmentService investmentService;
 
-        model.addAttribute("title", "투자 프로젝트 목록");
+    // 생성자메소드를 통한 DI
+    public InvestmentController(InvestmentService investmentService) {
+
+        this.investmentService = investmentService;
+    }
+
+    @GetMapping("/invest-main")
+    public String getInvestMain(Model model, String memberIdSeller, HttpSession session) {
+
+        String loginId = (String) session.getAttribute("SID");
+
+        List<AdminInvestment> adminInvestmentList = investmentService.getInvestmentList(loginId);
+
+        model.addAttribute("title", "판매자 : 투자 프로젝트 목록");
         model.addAttribute("contentsTitle","투자 프로젝트 목록");
+        model.addAttribute("adminInvestmentList",adminInvestmentList);
 
         return "seller/investment/invest_main";
     }
 
     @GetMapping("/search/judge")
-    public String getInvestmentJudgeList(Model model) {
+    public String getInvestmentJudgeList(Model model
+                                        ,@RequestParam(name = "searchKey", required = false) String searchKey
+                                        ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
+                                        ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
+                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                        ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
+                                        ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage
+                                        ,HttpSession session) {
 
-        model.addAttribute("title", "투자펀딩 심사 요청 목록");
-        model.addAttribute("contentsTitle","투자펀딩 심사 요청 목록");
+        String loginId = (String) session.getAttribute("SID");
+
+        Map<String, Object> resultMap = null;
+
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
+
+        if(searchKey != null) {
+            resultMap = investmentService.getInvestmentRequestJudgeList(loginId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue, currentPage);
+            investmentRequestJudgeList = (List<AdminInvestmentRequestJudge>) resultMap.get("investmentRequestJudgeList");
+        }else {
+            resultMap = investmentService.getInvestmentRequestJudgeList(loginId, currentPage);
+            investmentRequestJudgeList = (List<AdminInvestmentRequestJudge>) resultMap.get("investmentRequestJudgeList");
+        }
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
+
+        model.addAttribute("title", "판매자 : 투자 펀딩 심사 요청");
+        model.addAttribute("contentsTitle","투자 펀딩 심사 요청");
+        model.addAttribute("contentsSubTitle","투자 펀딩 심사 요청을 조회합니다");
+        model.addAttribute("investmentRequestJudgeList", investmentRequestJudgeList);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
 
         return "seller/investment/list/invest_judge_list";
     }
@@ -63,11 +116,30 @@ public class InvestmentController {
         return "seller/investment/list/after_invest_division_list";
     }
 
-    @GetMapping("/view/judge")
-    public String getInvestmentJudge(Model model) {
+    @GetMapping("/view/investment")
+    public String getInvestementByCode(Model model, String investmentCode) {
 
-        model.addAttribute("title", "투자펀딩 심사 요청");
-        model.addAttribute("contentsTitle","투자펀딩 심사 요청");
+        AdminInvestment investmentInfo = investmentService.getInvestementByCode(investmentCode);
+
+        model.addAttribute("title", "판매자 : 투자펀딩 공고 상세");
+        model.addAttribute("contentsTitle","투자펀딩 공고 상세");
+        model.addAttribute("contentsSubTitle","투자펀딩 공고 상세 내용을 확인합니다");
+        model.addAttribute("investmentInfo", investmentInfo);
+
+        return "seller/investment/view/investment_view";
+    }
+
+    @GetMapping("/view/judge")
+    public String getInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode,Model model, HttpSession session){
+
+        String loginId = (String) session.getAttribute("SID");
+
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+
+        model.addAttribute("title", "판매자 : 투자 펀딩 심사 요청 상세");
+        model.addAttribute("contentsTitle","투자 펀딩 심사 요청 상세");
+        model.addAttribute("contentsSubTitle","투자 펀딩 심사 요청 상세 내용을 확인 및 관리합니다");
+        model.addAttribute("investmentRequestJudgeInfo", investmentRequestJudgeInfo);
 
         return "seller/investment/view/invest_judge_view";
     }
@@ -108,6 +180,18 @@ public class InvestmentController {
         return "seller/investment/view/after_invest_division_view";
     }
 
+    @GetMapping("/view/corporate-value")
+    public String getCorporateValueEvaluation(@RequestParam(name = "corporateValueEvaluationCode") String corporateValueEvaluationCode, Model model){
+
+        AdminCorporateValueEvaluation corporateValueEvaluationInfo = investmentService.getCorporateValueEvaluationByCode(corporateValueEvaluationCode);
+
+        model.addAttribute("title", "판매자 : 기업가치 평가 결과 상세");
+        model.addAttribute("contentsTitle","기업가치 평가 결과 상세");
+        model.addAttribute("contentsSubTitle","기업가치 평가 결과 상세 내용을 확인합니다");
+        model.addAttribute("corporateValueEvaluationInfo", corporateValueEvaluationInfo);
+
+        return "seller/investment/view/corporate_value_evaluation_view";
+    }
 
     @GetMapping("/insert/after-process")
     public String addInvestAfterProcess(Model model) {
@@ -155,12 +239,26 @@ public class InvestmentController {
     }
 
     @GetMapping("/update/judge")
-    public String modifyInvestmentJudge(Model model) {
+    public String modifyInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model){
 
-        model.addAttribute("title", "투자펀딩 심사 요청 수정");
-        model.addAttribute("contentsTitle","투자펀딩 심사 요청 수정");
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+        List<AdminLawSatistifyReason> lawSatistifyReasonList = investmentService.getLawSatistifyList();
+        List<AdminIncongruitySectors> incongruitySectorsList = investmentService.getIncogruitySectorsList();
+
+        model.addAttribute("title", "관리자 : 투자펀딩 심사요청 수정");
+        model.addAttribute("contentsTitle","투자펀딩 심사요청 수정");
+        model.addAttribute("investmentRequestJudgeInfo", investmentRequestJudgeInfo);
+        model.addAttribute("lawSatistifyReasonList", lawSatistifyReasonList);
+        model.addAttribute("incongruitySectorsList", incongruitySectorsList);
 
         return "seller/investment/update/invest_judge_update";
+    }
+
+    @PostMapping("/update/judge")
+    public String modifyInvestmentJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+
+        investmentService.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
+        return "redirect:/seller/investment/search/judge";
     }
 
     @GetMapping("/update/after-process")
@@ -215,6 +313,28 @@ public class InvestmentController {
         model.addAttribute("contentsTitle", "투자 댓글관리");
 
         return "seller/investment/comment/main";
+    }
+
+    @GetMapping("/delete/judge")
+    public String reomveInvestmentJudge(@RequestParam(value = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model) {
+
+        investmentService.reomveInvestmentJudge(investmentRequestJudgeCode);
+
+        model.addAttribute("title", "판매자 : 투자펀딩 심사요청 삭제");
+        model.addAttribute("contentsTitle","투자펀딩 심사요청 삭제");
+        model.addAttribute("investmentRequestJudgeCode", investmentRequestJudgeCode);
+
+        return "redirect:/seller/investment/search/judge";
+    }
+
+    @PostMapping("/delete/judge")
+    public String reomveInvestmentJudge(@RequestParam(value = "investmentRequestJudgeCode") String investmentRequestJudgeCode, RedirectAttributes redirectAttributes) {
+
+        investmentService.reomveInvestmentJudge(investmentRequestJudgeCode);
+
+        redirectAttributes.addAttribute("investmentRequestJudgeCode", investmentRequestJudgeCode);
+
+        return "redirect:/seller/investment/search/judge";
     }
 
 }

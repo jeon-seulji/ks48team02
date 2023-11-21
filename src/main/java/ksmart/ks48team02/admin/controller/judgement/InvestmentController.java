@@ -3,6 +3,7 @@ package ksmart.ks48team02.admin.controller.judgement;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
 import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
 import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
@@ -38,13 +39,20 @@ public class InvestmentController {
 
     @GetMapping("/search/judge")
     public String getInvestmentJudgeList(Model model
-                                        ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                        ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
-                                        ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
-                                        ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
-                                        ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage) {
+                                        , @RequestParam(name = "searchKey", required = false) String searchKey
+                                        , @RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
+                                        , @RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
+                                        , @RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                        , @RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
+                                        , @RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage
+                                        , HttpSession session) {
 
+        session.setAttribute("searchKey", searchKey);
+        session.setAttribute("searchValue", searchValue);
+        session.setAttribute("amDateSettStartDate", amDateSettStartDate);
+        session.setAttribute("amDateSettEndDate", amDateSettEndDate);
+        session.setAttribute("searchSelectValue", searchSelectValue);
+        
         Map<String, Object> resultMap = null;
 
         List<AdminInvestmentRequestJudge> investmentRequestJudgeList = null;
@@ -64,6 +72,11 @@ public class InvestmentController {
         model.addAttribute("contentsTitle","투자 펀딩 심사 요청");
         model.addAttribute("contentsSubTitle","투자 펀딩 심사 요청을 관리합니다");
         model.addAttribute("investmentRequestJudgeList", investmentRequestJudgeList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("searchSelectValue", searchSelectValue);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("lastPage", lastPage);
         model.addAttribute("startPageNum", startPageNum);

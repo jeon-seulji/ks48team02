@@ -31,7 +31,7 @@ public class InvestmentService {
     public Map<String, Object> getInvestmentRequestJudgeList(int currentPage) {
 
         // 보여줄 행의 갯수
-        int rowPerpage = 15;
+        int rowPerpage = 5;
 
         // 보여줄 행의 시작점
         int startRowNum = (currentPage - 1) * rowPerpage;
@@ -97,7 +97,7 @@ public class InvestmentService {
                 break;
         }
         // 보여줄 행의 갯수
-        int rowPerpage = 15;
+        int rowPerpage = 5;
 
         // 보여줄 행의 시작점
         int startRowNum = (currentPage - 1) * rowPerpage;
