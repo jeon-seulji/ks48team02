@@ -85,6 +85,16 @@
         $('#company').text('[[${rewardProject.regCompany}]]');
         // 달성 금액 설정
         $('#achievementMoney').text(`[[${rewardProject.projectAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+
+        $('#likeBtn').click(function(){
+            let fill = $(this).find('svg').attr('fill');
+            if(fill === 'currentColor') {
+                $(this).find('svg').attr('fill','lightGrey');
+            } else {
+                $(this).find('svg').attr('fill','currentColor');
+            }
+        })
+
     </script>
 
 

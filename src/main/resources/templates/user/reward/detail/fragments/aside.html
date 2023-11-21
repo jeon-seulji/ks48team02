@@ -9,7 +9,7 @@
     <div class="container" style="position: sticky; top: 100px; scroll-behavior: smooth;">
         <div>
             <span style="display: inline-block;">
-                <a id="category" th:href="@{#}" style="text-decoration: none; color: grey" th:text="|${rewardProject.categoryName} >|"></a>
+                <a id="category" th:href="@{/user/reward(category=${rewardProject.rewardCategoryCode})}" style="text-decoration: none; color: grey" th:text="|# ${rewardProject.categoryName}|"></a>
             </span>
 
         </div>
@@ -28,7 +28,17 @@
                 <span id="achievementMoney" style="font-size: 20px; color: black; font-weight: bold;">480,200</span>
                 <span style="color: black">원 달성</span>
                 <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" th:text="|${rewardProject.projectAchievementPercent}% 달성|"></span>
+
+                    <button id="likeBtn" type="button" class="btn btn-small btn-outline-danger float-lg-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="lightGrey" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                        </svg> 찜
+                    </button>
+
             </div>
+
+
+
         </div>
         <div style="border: 0.3px solid #f3f4f5; margin: 10px; width: 100%"></div>
 
