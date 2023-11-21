@@ -31,8 +31,27 @@
         FROM
             member AS m
         WHERE
-            m.member_id = #{memberId};
+            m.member_id = #{loginId};
     </select>
 
+    <!-- 비밀번호 수정 전 일치 확인  -->
+    <select id="pwCheck" parameterType="MypageDto" resultType="boolean">
+        /* 회원 비밀번호 일치 확인 */
+        SELECT
+            COUNT(member_id)
+        FROM
+            member
+        WHERE
+            member_id = #{loginId} AND member_pw = #{memberPw};
+    </select>
 
+    <!-- 비밀번호 수정  -->
+    <update id="pwModify" parameterType="MypageDto">
+        UPDATE
+            member
+        SET
+            member_pw = #{memberPw}
+        WHERE
+            member_id = #{loginId};
+    </update>
 </mapper>

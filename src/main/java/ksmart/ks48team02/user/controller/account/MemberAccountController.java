@@ -68,9 +68,7 @@ public class MemberAccountController {
                           ,Model model){
         String loginId = (String) session.getAttribute("SID");
 
-
         return accountService.pwCheck(loginId, memberPw);
-
     }
 
     // 비밀번호 인증 후 정말 탈퇴하시겠습니까 ? YES 👉 회원 비활성화

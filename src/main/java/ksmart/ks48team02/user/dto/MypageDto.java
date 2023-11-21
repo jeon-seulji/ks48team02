@@ -24,4 +24,15 @@ public class MypageDto {
 
     private List<Coupon> couponList;
     private List<MemberCoupon> memberCouponList;
+
+    private String profileCode;
+    private int rewardGreatCount;
+    private int donationGreatCount;
+    private int investmentGreatCount;
+    private int follower;
+    private int following;
+    private String profileImage;
+    private String memberCompany;
+    private String memberSchool;
+    private String memberIntroduction;
 }

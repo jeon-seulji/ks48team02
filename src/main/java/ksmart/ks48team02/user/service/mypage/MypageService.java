@@ -18,13 +18,24 @@ public class MypageService {
         this.mypageMapper = mypageMapper;
     }
 
-    public Map<String, Object> getMemberInfoById(String memberId){
+    public Map<String, Object> getMemberInfoById(String loginId){
         Map<String, Object> resultMap = new HashMap<>();
-        MypageDto memberInfo = mypageMapper.getMemberInfoById(memberId);
+        MypageDto memberInfo = mypageMapper.getMemberInfoById(loginId);
         if(memberInfo != null){
             resultMap.put("memberEmail",memberInfo.getMemberEmail());
             resultMap.put("memberContactInfo", memberInfo.getMemberContactInfo());
         }
         return resultMap;
     }
+
+    // 비밀번호 변경 전 인증
+    public boolean pwCheck(String loginId, String memberPw){
+       return mypageMapper.pwCheck(loginId, memberPw);
+    }
+
+    // 비밀번호 변경
+    public int pwModify(String loginId, String memberPw){
+        return mypageMapper.pwModify(loginId,memberPw);
+    }
+
 }
