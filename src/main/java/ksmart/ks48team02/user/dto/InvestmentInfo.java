@@ -17,6 +17,49 @@ public class InvestmentInfo {
     private int searchCount;
     private int investCount;
     private String securitiesClassification;
+    private String investmentDisplayDate;
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("InvestmentInfo{");
+        sb.append("investmentCode='").append(investmentCode).append('\'');
+        sb.append(", memberId='").append(memberId).append('\'');
+        sb.append(", storeCode='").append(storeCode).append('\'');
+        sb.append(", investmentRequestJudgeCode='").append(investmentRequestJudgeCode).append('\'');
+        sb.append(", totalCategoryCode='").append(totalCategoryCode).append('\'');
+        sb.append(", memberIdSeller='").append(memberIdSeller).append('\'');
+        sb.append(", investmentSubject='").append(investmentSubject).append('\'');
+        sb.append(", investmentImage='").append(investmentImage).append('\'');
+        sb.append(", investmentLike=").append(investmentLike);
+        sb.append(", investmentAmount=").append(investmentAmount);
+        sb.append(", investmentAchievementMoney=").append(investmentAchievementMoney);
+        sb.append(", investAchievementPercent=").append(investAchievementPercent);
+        sb.append(", investmentCompany='").append(investmentCompany).append('\'');
+        sb.append(", searchCount=").append(searchCount);
+        sb.append(", investCount=").append(investCount);
+        sb.append(", securitiesClassification='").append(securitiesClassification).append('\'');
+        sb.append(", investmentDisplayDate='").append(investmentDisplayDate).append('\'');
+        sb.append(", investmentRegDate='").append(investmentRegDate).append('\'');
+        sb.append(", investmentDeadline='").append(investmentDeadline).append('\'');
+        sb.append(", investmentReport='").append(investmentReport).append('\'');
+        sb.append(", basicFee=").append(basicFee);
+        sb.append(", contractFeeRate=").append(contractFeeRate);
+        sb.append(", contractFile='").append(contractFile).append('\'');
+        sb.append(", investJudgeSituation=").append(investJudgeSituation);
+        sb.append(", investmentDeadlineCnt=").append(investmentDeadlineCnt);
+        sb.append(", investmentContent=").append(investmentContent);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public String getInvestmentDisplayDate() {
+        return investmentDisplayDate;
+    }
+
+    public void setInvestmentDisplayDate(String investmentDisplayDate) {
+        this.investmentDisplayDate = investmentDisplayDate;
+    }
+
     private String investmentRegDate;
     private String investmentDeadline;
     private String investmentReport;
@@ -225,37 +268,6 @@ public class InvestmentInfo {
 
     public void setInvestJudgeSituation(int investJudgeSituation) {
         this.investJudgeSituation = investJudgeSituation;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("InvestmentInfo{");
-        sb.append("investmentCode='").append(investmentCode).append('\'');
-        sb.append(", memberId='").append(memberId).append('\'');
-        sb.append(", storeCode='").append(storeCode).append('\'');
-        sb.append(", investmentRequestJudgeCode='").append(investmentRequestJudgeCode).append('\'');
-        sb.append(", totalCategoryCode='").append(totalCategoryCode).append('\'');
-        sb.append(", memberIdSeller='").append(memberIdSeller).append('\'');
-        sb.append(", investmentSubject='").append(investmentSubject).append('\'');
-        sb.append(", investmentImage='").append(investmentImage).append('\'');
-        sb.append(", investmentLike=").append(investmentLike);
-        sb.append(", investmentAmount=").append(investmentAmount);
-        sb.append(", investmentAchievementMoney=").append(investmentAchievementMoney);
-        sb.append(", investAchievementPercent=").append(investAchievementPercent);
-        sb.append(", investmentCompany='").append(investmentCompany).append('\'');
-        sb.append(", searchCount=").append(searchCount);
-        sb.append(", investCount=").append(investCount);
-        sb.append(", securitiesClassification='").append(securitiesClassification).append('\'');
-        sb.append(", investmentRegDate='").append(investmentRegDate).append('\'');
-        sb.append(", investmentDeadline='").append(investmentDeadline).append('\'');
-        sb.append(", investmentReport='").append(investmentReport).append('\'');
-        sb.append(", basicFee=").append(basicFee);
-        sb.append(", contractFeeRate=").append(contractFeeRate);
-        sb.append(", contractFile='").append(contractFile).append('\'');
-        sb.append(", investJudgeSituation=").append(investJudgeSituation);
-        sb.append(", investmentDeadlineCnt=").append(investmentDeadlineCnt);
-        sb.append('}');
-        return sb.toString();
     }
 
 }
