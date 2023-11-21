@@ -19,6 +19,7 @@ import java.util.Map;
 public class MypageService {
 
     private final OrderMapper orderMapper;
+    private final MypageMapper mypageMapper;
 
     // 마이페이지 내 주문 내역 조회
     public List<OrderTotal> mypageOrderList (String memberId) {
@@ -34,7 +35,6 @@ public class MypageService {
             }
         });
 
-
         return mypageOrderList;
     }
 
@@ -47,6 +47,16 @@ public class MypageService {
             resultMap.put("memberContactInfo", memberInfo.getMemberContactInfo());
         }
         return resultMap;
+    }
+
+    // 비밀번호 변경 전 인증
+    public boolean pwCheck(String loginId, String memberPw){
+        return mypageMapper.pwCheck(loginId, memberPw);
+    }
+
+    // 비밀번호 변경
+    public int pwModify(String loginId, String memberPw){
+        return mypageMapper.pwModify(loginId,memberPw);
     }
 
 }
