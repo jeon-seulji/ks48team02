@@ -1,7 +1,7 @@
-package ksmart.ks48team02.seller.service.reward;
+package ksmart.ks48team02.admin.service.reward;
 
-
-import ksmart.ks48team02.seller.mapper.reward.SellerRewardMapper;
+import ksmart.ks48team02.admin.dto.RewardJudegmentReson;
+import ksmart.ks48team02.admin.mapper.reward.AdminRewardMapper;
 import ksmart.ks48team02.user.dto.RewardProject;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,12 +14,11 @@ import java.util.Map;
 @Service
 @Transactional
 @AllArgsConstructor
-public class SellerRewardService {
+public class AdminRewardService {
 
-    SellerRewardMapper sellerRewardMapper;
+    private final AdminRewardMapper adminRewardMapper;
 
-    //로그인한 회원 아이디 별 프로젝트 조회
-    public Map<String,Object> projectListBySellerID (Map<String,Object> inquirMap){
+    public Map<String,Object> rewardProjectListNotJudge (Map<String,Object> inquirMap){
 
         // 보여줄 행의 갯수
         int rowPerPage = 10;
@@ -28,10 +27,9 @@ public class SellerRewardService {
         // 보여줄 행의 시작점
         int startRowNum = (currentPage - 1) * rowPerPage;
         // 전체 행의 갯수
-        double rowCnt = sellerRewardMapper.projectPageCnt(inquirMap);
+        double rowCnt = adminRewardMapper.projectPageCnt();
         // 마지막페이지: (전체 행의 갯수/보여줄 행의 갯수) 올림
         int lastPage = (int) Math.ceil(rowCnt/rowPerPage);
-
         // 보여줄 페이지 번호 초기값:1
         int startPageNum = 1;
         // 마지막 페이지 번호 초기값:10
@@ -48,30 +46,24 @@ public class SellerRewardService {
         }
         inquirMap.put("startRowNum",startRowNum);
         inquirMap.put("rowPerPage",rowPerPage);
-        List<RewardProject> projectList = sellerRewardMapper.projectListBySellerID(inquirMap);
+        List<RewardProject> projectList = adminRewardMapper.rewardProjectListNotJudge(inquirMap);
+        List<RewardJudegmentReson> rewardJudegmentResonList = adminRewardMapper.judegmentReson();
 
         Map<String,Object> resultMap = new HashMap<String, Object>();
         resultMap.put("projectList",projectList);
         resultMap.put("lastPage", lastPage);
         resultMap.put("startPageNum", startPageNum);
         resultMap.put("endPageNum", endPageNum);
-        resultMap.put("rowCnt", rowCnt);
+        resultMap.put("rewardJudegmentResonList",rewardJudegmentResonList);
+        resultMap.put("rowCnt",rowCnt);
 
 
         return resultMap;
     }
 
-    //프로젝트 시작하기.
-    public void startProject(String rewardProjectCode){
-        sellerRewardMapper.startProject(rewardProjectCode);
-    }
-
-    //로그인 한 회원 아이디별 새소식 조회
-    public List<RewardProject> getNewsListBySellerId (String sellerId) {
-
-        List<RewardProject> newsListPerProject = sellerRewardMapper.getNewsListBySellerId(sellerId);
-        System.out.println(newsListPerProject);
-
-        return newsListPerProject;
-    }
+    //심사 승인
+    public void rewardProjectConfirmAndReject(String rewardProjectCode, String judgement, String adminMemberId,
+                                              String judgeRejectReasonCode, String judgeRejectReasonDetail){
+        adminRewardMapper.rewardProjectConfirmAndReject(rewardProjectCode, judgement, adminMemberId, judgeRejectReasonCode, judgeRejectReasonDetail);
+    };
 }
