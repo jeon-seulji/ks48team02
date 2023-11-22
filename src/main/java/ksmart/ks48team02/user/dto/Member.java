@@ -18,7 +18,6 @@ public class Member {
     private String memberContactInfo;
     private String unRegDate;
     private String unRegStatus;
-
     private RewardCustomerRank rewardCustomerRank;
     private Customer customer;
 

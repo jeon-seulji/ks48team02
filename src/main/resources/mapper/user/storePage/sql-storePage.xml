@@ -31,4 +31,6 @@
 	            store_news_display = 1;
         ]]>
     </select>
+
+
 </mapper>

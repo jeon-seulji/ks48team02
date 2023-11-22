@@ -12,37 +12,37 @@
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-    <script th:src="@{/admin/js/settlement/adminCustomJs.js}"></script>
+    <script th:src="@{/common/js/admin-commonJs.js}"></script>
+    <script th:src="@{/common/js/ajaxJs.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script type="text/javascript">
-        // 기간 선택 min value setting
-        $('input[name="amDateSettStartDate"]').on('change', function(){
-            let startDate = $(this).val();
-            $('input[name="amDateSettEndDate"]').prop('min',startDate);
-        });
 
 
 
 
-        let startDateValue = startDate(nowDateSet);
-        let endDateValue = `${nowDateSet.getFullYear()}-${String(nowDateSet.getMonth() + 1).padStart(2, '0')}-${String(nowDateSet.getDate()).padStart(2, '0')}`;
+        /* ajax */
+        const queryString = {};
 
-        console.log(startDateValue, '<-- start value');
-        console.log(endDateValue, '<-- end value');
+        function admOrderCmplListAjax(queryString, callback){
+            const request = $.ajax({
+                url : '',
+                method : 'POST',
+                contentType : 'application/json',
+                data : JSON.stringify(queryString),
+                dataType : 'json'
+            });
+            request.done(function(list){
+               callback(list);
+            });
+            request.fail(function(err){
+                console.log(err);
+            });
+        }
 
-        $('input[name="amDateSettStartDate"]').val(startDateValue);
-        $('input[name="amDateSettEndDate"]').val(endDateValue);
 
-
-
-
-
-        // loaded category checkbox all checked
-        const $categoryEls = $('.order-category-select input');
-        $($categoryEls).prop('checked', true);
     </script>
 </th:block>
 
@@ -91,13 +91,16 @@
                         <th style="width:5%;">
                             <input type="checkbox" name="allSelect" id="allSelectBtn">
                         </th>
-                        <th style="width:12%;">주문 로그코드</th>
-                        <th style="width:10%;">구매자 아이디</th>
-                        <th style="width:12%;">공고 코드</th>
-                        <th style="width:10%;">주문 확정 일시</th>
-                        <th style="width:20%;">최종 주문 금액</th>
-                        <th style="width:13%;">적립금액</th>
-                        <th style="width:13%;">획득 기부재화</th>
+                        <th style="width:11%;">주문 로그코드</th>
+                        <th style="width:7%;">구매자 아이디</th>
+                        <th style="width:11%;">공고 코드</th>
+                        <th style="width:11%;">공고명</th>
+                        <th style="width:5%;">공고 분류</th>
+                        <th style="width:11%;">주문 코드</th>
+                        <th style="width:11%;">최종 주문 금액</th>
+                        <th style="width:8%;">적립금액</th>
+                        <th style="width:8%;">획득 기부재화</th>
+                        <th style="width:12%;">주문 확정 일시</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -116,11 +119,19 @@
                             <td class="table-data-center">
                                 [[${l.memberId}]]
                             </td>
-                            <td class="table-data-center">
-                                <a class="detail-link" th:href="@{#}">[[${l.projectCode}]]</a>
+                            <td class="table-data-center" th:switch="${l.projectPartition}">
+                                <a class="detail-link" th:case="rwd" target="_blank" th:href="@{/user/reward/detail(rewardProjectCode=${l.projectCode})}">[[${l.projectCode}]]</a>
+                                <a class="detail-link" th:case="don" target="_blank" th:href="@{/user/donation/detail(donationCode=${l.projectCode})}">[[${l.projectCode}]]</a>
+                                <a class="detail-link" th:case="inv" target="_blank" th:href="@{/user/investment/detail/main(investmentCode=${l.projectCode})}">[[${l.projectCode}]]</a>
                             </td>
-                            <td  class="table-data-center">
-                                [[${l.orderConfirmationDate}]]
+                            <td class="table-data-center">
+                                [[${l.orderTotal.orderFundingName}]]
+                            </td>
+                            <td class="table-data-center">
+                                [[${l.projectPartition}]]
+                            </td>
+                            <td class="table-data-center">
+                                <a class="detail-link" th:href="@{/admin/order/detail(orderCode=${l.orderCode}, goodsPartition=${l.projectPartition})}">[[${l.orderCode}]]</a>
                             </td>
                             <td >
                                 <span>[[${l.orderPriceTotal}]]</span>원
@@ -130,6 +141,9 @@
                             </td>
                             <td >
                                 <span>[[${l.addFlover}]]</span>개
+                            </td>
+                            <td  class="table-data-center">
+                                [[${l.orderConfirmationDate}]]
                             </td>
                         </tr>
 

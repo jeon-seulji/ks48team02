@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/default}">
+
+<head>
+  <!--  사용자별 css file 추가 부분 -->
+  <title th:text="${title}"></title>
+</head>
+
+
+<!-- 사용자 페이지별 javascript file -->
+<th:block layout:fragment="customJsFile">
+  <script th:src="@{/common/js/ajaxJs.js}"></script>
+  <script th:src="@{/common/js/admin-commonJs.js}"></script>
+</th:block>
+
+<!-- 사용자별 스크립트 작성 -->
+<th:block layout:fragment="customJsCode">
+  <script>
+
+
+
+    // ajax
+    const queryString = {};
+
+
+  </script>
+
+</th:block>
+
+
+<!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
+<th:block layout:fragment="customContents">
+  <!-- search form fragments start -->
+  <th:block th:replace="~{common/fragments/searchFormFragments :: searchFormFragments}"></th:block>
+  <!-- search form fragments end -->
+
+  <div class="title-wrap">
+    <h4 class="admin-content-title">신청 목록</h4>
+    <div class="btnArea">
+      <button type="button" class="printBtn"><span>액셀 다운로드</span></button>
+    </div>
+  </div>
+  <div class="admin-content-wrapper" style="overflow-x: hidden;">
+    <div>
+      <!-- select are -->
+      <div class="data-info">
+        <div class="list-count-area">
+          <ul>
+            <li>신청 정보 총 <span class="count-data total-list">0</span>건</li>
+            <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+          </ul>
+        </div>
+        <div class="list-count-selector">
+          <select name="orderby">
+            <option value="application_d">신청일 역순</option>
+            <option value="application_a">신청일 순</option>
+            <option>-----------------</option>
+            <option value="order_name_d">주문자 역순</option>
+            <option value="order_name_a">주문자 순</option>
+            <option>-----------------</option>
+            <option value="progressing">처리중</option>
+            <option value="error">반려</option>
+            <option value="completed">처리완료</option>
+          </select>
+          <select name="count-select">
+            <option value="15">15개씩 보기</option>
+            <option value="20">20개씩 보기</option>
+            <option value="30">30개씩 보기</option>
+          </select>
+        </div>
+      </div>
+      <!-- contents area -->
+      <table class="settlement-log">
+        <thead>
+        <tr>
+          <th style="width:5%;">
+            <input type="checkbox" name="allSelect" id="allSelectBtn">
+          </th>
+          <th style="width:10%;">
+           환불 코드
+          </th>
+          <th style="width:10%;">주문 코드</th>
+          <th style="width:5%;">주문 아이디</th>
+          <th style="width:8%;">신청 사유</th>
+          <th style="width:8%;">
+            신청 제목
+          </th>
+          <th style="width:20%;">신청 내용</th>
+
+          <th style="width:7%;">신청 시간</th>
+          <th style="width:7%;">처리 현황</th>
+          <th style="width:5%;">담당자 아이디</th>
+          <th style="width:7%;">처리 완료일</th>
+        </tr>
+        </thead>
+        <tbody>
+          <!-- 조회 결과 없음 -->
+          <tr style="display: none;">
+            <td colspan="11" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+          </tr>
+          <!-- 조회 결과 contents -->
+          <tr>
+            <td class="table-data-center">
+              <input type="checkbox" name="selectList">
+            </td>
+            <td class="table-data-center">
+              <a class="detail-link">
+
+              </a>
+            </td>
+            <td class="table-data-center">
+              <a class="detail-link" th:href="@{#}">
+                dd
+              </a>
+            </td>
+            <td class="table-data-center">
+              dd
+            </td>
+
+            <td class="table-data-center">
+              dd
+            </td>
+            <td class="table-data-center">
+              dd
+            </td>
+
+            <td  class="table-data-center">
+              dd
+            </td>
+
+            <td class="table-data-center">
+              dd
+            </td>
+            <td class="table-data-center">
+              dd
+            </td>
+            <td class="table-data-center">
+              dd
+            </td>
+            <td class="table-data-center">
+              dd
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- pagenation start -->
+<!--      <th:block th:replace="~{common/fragments/adminPagenation :: adminPagenation}"></th:block>-->
+      <!-- pagenation end -->
+    </div>
+
+  </div>
+</th:block>
+</html>

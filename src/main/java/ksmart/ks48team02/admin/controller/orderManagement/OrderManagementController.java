@@ -1,5 +1,6 @@
 package ksmart.ks48team02.admin.controller.orderManagement;
 
+import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.common.dto.*;
 import ksmart.ks48team02.common.service.delivery.DeliveryService;
 import ksmart.ks48team02.common.service.order.OrderService;
@@ -42,8 +43,24 @@ public class OrderManagementController {
     // 주문 검색 ajax
     @PostMapping(value="/ajax/search")
     @ResponseBody
-    public Map<String, Object> adminOrderSearchAjax(@RequestBody Map<String, Object> searchForm){
+    public Map<String, Object> adminOrderSearchAjax(@RequestBody Map<String, Object> searchForm,
+                                                    HttpSession session){
+
+        String sid = (String)session.getAttribute("SID");
+        String stypecode = (String)session.getAttribute("STYPECODE");
+        String sstorecode = (String)session.getAttribute("SSTORECODE");
+
+        searchForm.put("sid", sid);
+        searchForm.put("stypecode", stypecode);
+
+        if(sstorecode == null){
+            searchForm.put("sstorecode", "empty");
+        } else {
+            searchForm.put("sstorecode", sstorecode);
+        }
+
         log.info("searchForm : {}", searchForm);
+
         Map<String, Object> list = orderService.getOrderList(searchForm);
         log.info("검색 결과 목록 : {}", list);
 
@@ -61,7 +78,12 @@ public class OrderManagementController {
 
     // 주문 목록
     @GetMapping( "/list")
-    public String adminOrderList(Model model){
+    public String adminOrderList(Model model,
+                                 @RequestParam(name="sid") String sid,
+                                 @RequestParam(name="stypecode") String stypecode,
+                                 @RequestParam(name="sstorecode",
+                                                required = false, defaultValue = "empty") String sstorecode){
+
         // default param setting
         model.addAttribute("title","관리자 : 주문 목록");
         model.addAttribute("contentsTitle","주문 목록");
@@ -77,6 +99,9 @@ public class OrderManagementController {
         paramMap.put("orderby", orderby);
         paramMap.put("currentPage", currentPage);
         paramMap.put("rowPerPage", rowPerPage);
+        paramMap.put("sid", sid);
+        paramMap.put("stypecode", stypecode);
+        paramMap.put("sstorecode", sstorecode);
 
         log.info("paramMap : {}", paramMap);
 
@@ -95,10 +120,26 @@ public class OrderManagementController {
     // 주문 목록 정렬 ajax
     @PostMapping(value="/list/ajax")
     @ResponseBody
-    public Map<String, Object> getOrderListOrderBy(@RequestBody Map<String, Object> paramMap){
-        log.info("param {}", paramMap);
+    public Map<String, Object> getOrderListOrderBy(@RequestBody Map<String, Object> paramMap,
+                                                   HttpSession session){
         log.info("currentPage {}", paramMap.get("currentPage"));
         log.info("rowPerPage {}", paramMap.get("rowPerPage"));
+
+        String sid = (String)session.getAttribute("SID");
+        String stypecode = (String)session.getAttribute("STYPECODE");
+        String sstorecode = (String)session.getAttribute("SSTORECODE");
+
+        paramMap.put("sid", sid);
+        paramMap.put("stypecode", stypecode);
+
+        if(sstorecode == null){
+            paramMap.put("sstorecode", "empty");
+        } else {
+            paramMap.put("sstorecode", sstorecode);
+        };
+
+        log.info("searchForm : {}", paramMap);
+
         Map<String, Object> list = orderService.getOrderList(paramMap);
         log.info("ajax list {}", list);
 
@@ -143,6 +184,13 @@ public class OrderManagementController {
                 log.info("paymentsInfo {}", getRewardPaymentsById);
                 model.addAttribute("paymentsInfo", getRewardPaymentsById);
 
+                // 배송 카테고리 조회
+                List<DeliveryCourierCategory> deliveryCourierCategory = deliveryService.getDeliveryCourierCategory();
+
+                log.info("DeliveryCourierCategory : {}", deliveryCourierCategory);
+
+                model.addAttribute("deliveryCourierCategory", deliveryCourierCategory);
+
                 // 배송 정보
                 OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(null, orderCode);
                 model.addAttribute("getDeliveryByCode", getDeliveryByCode);
@@ -173,7 +221,11 @@ public class OrderManagementController {
 
     // 배송 관리
     @GetMapping( "/delivery")
-    public String adminOrderDelivery(Model model){
+    public String adminOrderDelivery(Model model,
+                                     @RequestParam(name="sid") String sid,
+                                     @RequestParam(name="stypecode") String stypecode,
+                                     @RequestParam(name="sstorecode",
+                                             required = false, defaultValue = "empty") String sstorecode){
         model.addAttribute("title","관리자 : 배송 관리");
         model.addAttribute("contentsTitle","배송 관리");
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
@@ -188,6 +240,11 @@ public class OrderManagementController {
         paramMap.put("orderby", orderby);
         paramMap.put("currentPage", currentPage);
         paramMap.put("rowPerPage", rowPerPage);
+        paramMap.put("sid", sid);
+        paramMap.put("stypecode", stypecode);
+        paramMap.put("sstorecode", sstorecode);
+
+
 
         // 배송 정보 목록 조회
         Map<String, Object> resultMap = deliveryService.getDeliveryList(paramMap);
@@ -287,6 +344,17 @@ public class OrderManagementController {
         return list;
     }
 
+    // 교환 환불 신청 관리 ajax
+    @GetMapping("/autorfnd")
+    public String admAutoRefdList(Model model){
+        model.addAttribute("title","관리자 : 자동 환불 관리");
+        model.addAttribute("contentsTitle","자동 환불 관리");
+        model.addAttribute("contentsSubTitle","프로젝트 실패 자동 환불 관리");
+
+        return "admin/order/autoRefund";
+    }
+
+
     // 주문 확정 목록 조회
     @GetMapping( "/completedList")
     public String adminOrderCompletedList(Model model){
@@ -299,6 +367,7 @@ public class OrderManagementController {
 
         return "admin/order/orderCompletedList";
     }
+
 
 }
 
