@@ -25,7 +25,6 @@
     <link rel="stylesheet" th:href="@{/user/css/main_style.css}" />
 
     <link rel="stylesheet" href="//t1.daumcdn.net/postcode/cssjs/guide/1695281969613/guide.v2.min.css">
-    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 </head>
 
 
@@ -41,6 +40,9 @@
     <!-- common js -->
     <script src="/common/js/common-custom.js"></script>
 
+    <!-- 토스페이 -->
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
+
 
 </th:block>
 
@@ -48,7 +50,12 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
 
-    <script>
+    <script th:inline="javascript">
+        // 토스페이에 담을 투자 상품 정보
+        const products = [];
+        // 주문자 회원 정보
+
+
         // 주소입력
         function sample6_execDaumPostcode() {
             new daum.Postcode({
@@ -119,6 +126,10 @@
                 $(this).parents('.info-contents-area').hide();
                 $(this).parents('.info-contents-area').next().show();
 
+
+                const iframe = $(`iframe[title="토스페이먼츠 결제위젯"]`);
+                const btns = iframe.contents();
+                console.log(iframe);
 
 
             });
@@ -201,6 +212,7 @@
         const paymentMethods = paymentWidget.renderPaymentMethods('#payment-method', {
             value: 10000,
         })
+
         /*$('#payment-button').on("click", function () {
             paymentWidget.requestPayment({
                 orderId: "ZnMXcbHhAnrQHkkyFvZj8",
