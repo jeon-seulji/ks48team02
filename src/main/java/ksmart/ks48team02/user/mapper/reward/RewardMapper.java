@@ -35,6 +35,8 @@ public interface RewardMapper {
     //리워드 프로젝트 상세 페이지
     public RewardProject rewardProjectDetail(String rewardProjectCode);
 
+    // 리워드 공고 옵션 조회
+    public List<RewardOption> getRewardOptionByCode(String rewardProjectCode);
     //상세 페이지 진입 시 조회수 증가
     public int searchCnt(String rewardProjectCode);
 

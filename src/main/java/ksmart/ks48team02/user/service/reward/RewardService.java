@@ -164,4 +164,13 @@ public class RewardService {
     public void addReplyComment (String reply, String rewardProjectCode, String parentCommentCode,  String memberId, String memberName){
         rewardMapper.addReplyComment(reply, rewardProjectCode, parentCommentCode, memberId, memberName);
     }
+
+    // 리워드 공고 옵션 조회
+    public List<RewardOption> getRewardOptionByCode(String rewardProjectCode){
+
+        List<RewardOption> getRewardOptionByCode = null;
+        getRewardOptionByCode = rewardMapper.getRewardOptionByCode(rewardProjectCode);
+        return getRewardOptionByCode;
+
+    }
 }
