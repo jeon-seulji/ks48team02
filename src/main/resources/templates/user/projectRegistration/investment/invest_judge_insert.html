@@ -227,9 +227,7 @@
               <div class="input-group mb-3">
                 <select class="custom-select" id="businessType">
                   <option value="" disabled="disabled" selected="selected">업종 선택</option>
-                  <option value="1">복권 발행 및 판매업</option>
-                  <option value="2">기원 운영업</option>
-                  <option value="3">공연 기획업</option>
+                  <option th:each="l : ${userCompanyBusinessType}" th:text="${l.businessType}"></option>
                 </select>
               </div>
             </div>
@@ -239,9 +237,7 @@
               <div class="input-group mb-3">
                 <select class="custom-select" id="capitalMarketsLawSatisfactionCriteria">
                   <option value="" disabled="disabled" selected="selected">자본시장법 충족 기준 선택</option>
-                  <option value="1">창업 후 7년 이내 비상장</option>
-                  <option value="2">비상장 벤처기업</option>
-                  <option value="3">이노비즈 기업</option>
+                  <option th:each="l : ${userLawSatistifyReason}" th:text="${l.lawSatistifyReason}"></option>
                 </select>
               </div>
             </div>
