@@ -48,6 +48,7 @@
         </association>
     </resultMap>
 
+
     <insert id="addInvestment" parameterType="InvestmentInfo">
         /* 투자 프로젝트 등록 */
         <selectKey keyProperty="investmentCode" resultType="String" order="BEFORE">
@@ -185,8 +186,6 @@
             i.investment_code = #{investmentCode};
     </select>
 
-
-
     <select id="getSortedList" parameterType="String" resultMap="InvestmentInfoResultMap">
         /* 추천순, 최신순, 인기순, 모집금액순, 마감임박순 정렬 */
         SELECT
@@ -224,6 +223,30 @@
     <select id="getInvestmentContent" parameterType="String" resultType="InvestmentContent">
         SELECT * FROM investment_content
         WHERE investment_code = #{investmentCode}
+    </select>
+
+    <!--업종 조회-->
+    <select id="getUserCompanyBusinessType" parameterType="String">
+        /* 업종 조회 */
+        SELECT
+            c.company_business_type_code AS companyBusinessTypeCode,
+            c.member_id AS memberId,
+            c.business_type AS businessType
+        FROM
+            company_business_type AS c
+    </select>
+
+    <!--자본시장법 범위충족기준 조회-->
+    <select id="getUserLawSatistifyReason" parameterType="String">
+        /* 자본시장법 범위충족기준 조회 */
+        SELECT
+            l.law_satistify_code AS lawSatistifyCode,
+            l.member_id AS memberId,
+            l.law_satistify_reason AS lawSatistifyReason,
+            l.law_satistify_whether AS lawSatistifyWhether,
+            l.code_reg_day AS codeRegDay
+        FROM
+            law_satistify_reason AS l
     </select>
 
 

@@ -1,8 +1,6 @@
 package ksmart.ks48team02.user.service.investment;
 
-import ksmart.ks48team02.user.dto.InvestmentContent;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.InvestmentJudge;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.mapper.investment.UserInvestmentMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +26,18 @@ public class UserInvestmentService {
         return investmentContent;
     }
 
-
     public List<InvestmentInfo> getSortedList(String orderBy) {
         return userInvestmentMapper.getSortedList(orderBy);
+    }
+
+    public List<UserCompanyBusinessType> getUserCompanyBusinessType(){
+        List<UserCompanyBusinessType> userCompanyBusinessType = userInvestmentMapper.getUserCompanyBusinessType();
+        return userCompanyBusinessType;
+    }
+
+    public List<UserLawSatistifyReason> getUserLawSatistifyReason(){
+        List<UserLawSatistifyReason> userLawSatistifyReason = userInvestmentMapper.getUserLawSatistifyReason();
+        return userLawSatistifyReason;
     }
 
 

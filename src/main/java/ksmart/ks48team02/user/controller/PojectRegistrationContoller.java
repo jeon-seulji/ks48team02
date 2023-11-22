@@ -8,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
-import ksmart.ks48team02.user.dto.DonationRegistration;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import ksmart.ks48team02.user.service.reward.RewardService;
@@ -96,6 +94,12 @@ public class PojectRegistrationContoller {
     //투자 프로젝트 심사 요청 페이지
     @GetMapping(value = {"/investment/judge"})
     public String investmentJudgePage(Model model) {
+
+        List<UserCompanyBusinessType> userCompanyBusinessType = userInvestmentService.getUserCompanyBusinessType();
+        List<UserLawSatistifyReason> userLawSatistifyReason = userInvestmentService.getUserLawSatistifyReason();
+
+        model.addAttribute("userCompanyBusinessType", userCompanyBusinessType);
+        model.addAttribute("userLawSatistifyReason", userLawSatistifyReason);
 
         model.addAttribute("title", "투자펀딩 심사 요청 페이지");
 

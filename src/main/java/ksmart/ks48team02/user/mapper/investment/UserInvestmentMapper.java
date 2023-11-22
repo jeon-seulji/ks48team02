@@ -1,8 +1,6 @@
 package ksmart.ks48team02.user.mapper.investment;
 
-import ksmart.ks48team02.user.dto.InvestmentContent;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.InvestmentJudge;
+import ksmart.ks48team02.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -24,5 +22,11 @@ public interface UserInvestmentMapper {
 
     // 투자 심사요청 등록
     public int addInvestmentJudge(InvestmentJudge investmentJudge);
+
+    // 투자 업종 조회
+    public List<UserCompanyBusinessType> getUserCompanyBusinessType();
+
+    // 자본시장법 범위충족기준 조회
+    public List<UserLawSatistifyReason> getUserLawSatistifyReason();
 
 }
