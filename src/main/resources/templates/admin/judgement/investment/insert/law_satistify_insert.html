@@ -9,58 +9,55 @@
         input {
             width: 100%;
         }
+
         select {
             width: 100%;
         }
     </style>
 </head>
 
-
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-    <script th:src="@{/user/js/jquery.min.js}"></script>
+
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        $(function () {
-            // 유효성 검사
-            function validationCheck(data){
-                let isValid = true;
-                if(typeof data == 'object'){
+        // 유효성 검사
+        function validationCheck(data) {
+            let isValid = true;
+            if (typeof data == 'object') {
 
-                    $.each(data, function(){
-                        let checkValue = $(this).val();
-                        if(checkValue == null || checkValue == '' || typeof checkValue == 'undefined'){
-                            isValid = false;
-                            let eleId = $(this).attr('id');
-                            let cate = $(`label[for="${eleId}"]`).text();
-                            alert(`${cate} 필수 입력 항목입니다.`);
-                            $(this).focus();
-                            return isValid;
-                        }
-                    });
-
-                }else{
-                    if(data == null || data == '' || typeof data == 'undefined'){
+                $.each(data, function () {
+                    let checkValue = $(this).val();
+                    if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
                         isValid = false;
+                        let eleId = $(this).attr('id');
+                        let cate = $(`label[for="${eleId}"]`).text();
+                        alert(`${cate} 필수 입력 항목입니다.`);
+                        $(this).focus();
+                        return isValid;
                     }
-                }
+                });
 
-                return isValid;
+            } else {
+                if (data == null || data == '' || typeof data == 'undefined') {
+                    isValid = false;
+                }
             }
 
-            $('#settAddBtn').click(function () {
+            return isValid;
+        }
 
-                const formEles = $('#addLawSatistifyForm input, #addLawSatistifyForm select');
+        $('#settAddBtn').click(function () {
 
-                let isValid = validationCheck(formEles);
+            const formEles = $('#addLawSatistifyForm input, #addLawSatistifyForm select');
 
-                if (isValid) $('#addLawSatistifyForm').submit();
-            });
+            let isValid = validationCheck(formEles);
 
-        })
+            if (isValid) $('#addLawSatistifyForm').submit();
+        });
     </script>
 </th:block>
 
