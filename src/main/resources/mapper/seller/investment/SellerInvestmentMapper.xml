@@ -230,8 +230,9 @@
         <result property="registrationDate" column="registration_date"/>
     </resultMap>
 
-    <!-- 투자펀딩 공고 목록 조회 -->
+    <!-- 판매자 투자펀딩 공고 목록 조회 -->
     <select id="getInvestmentList" resultMap="adminInvestmentListMap">
+        /* 판매자 투자펀딩 공고 목록 조회 */
         SELECT
             i.investment_code,
             i.investment_request_judge_code,
@@ -246,19 +247,85 @@
             i.invest_count,
             i.securities_classification,
             i.investment_display_date,
-            i.investment_deadline
+            i.investment_deadline,
+            i.invest_judge_situation
         FROM
             investment AS i
         WHERE
             i.member_id_seller = #{memberIdSeller}
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
     </select>
 
-    <!-- 특정 투자펀딩 공고 조회 -->
-    <select id="getInvestementByCode" resultMap="adminInvestmentListMap">
-        /* 특정 투자펀딩 공고 조회 */
+    <!-- 판매자 투자펀딩 공고 전체 행의 갯수 -->
+    <select id="getInvestment" resultType="int">
+        /* 판매자 투자펀딩 공고 전체 행의 갯수 */
+        SELECT
+            COUNT(1)
+        FROM
+            investment
+    </select>
+
+    <!-- 판매자 검색조건에 따른 투자펀딩 공고 목록 조회 -->
+    <select id="getInvestmentListBySearch" resultMap="adminInvestmentListMap">
+        /* 판매자 검색조건에 따른 투자펀딩 공고 목록 조회 */
         SELECT
             i.investment_code,
             i.investment_request_judge_code,
+            i.member_id_seller,
+            i.investment_subject,
+            i.investment_like,
+            i.investment_amount,
+            i.investment_achievement_money AS invInvestmentAchievementMoney,
+            i.invest_achievement_percent,
+            i.investment_company,
+            i.search_count,
+            i.invest_count,
+            i.securities_classification,
+            i.investment_display_date,
+            i.investment_deadline,
+            i.invest_judge_situation
+        FROM
+            investment AS i
+        <where>
+            <if test="amDateSettStartDate != null and amDateSettStartDate != ''">
+                DATE_FORMAT(i.investment_request_date, '%Y-%m-%d') >= #{amDateSettStartDate}
+                AND
+            </if>
+            <if test="amDateSettEndDate != null and amDateSettEndDate != ''">
+                #{amDateSettEndDate} >= DATE_FORMAT(i.investment_request_date, '%Y-%m-%d')
+                AND
+            </if>
+            <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != ''">
+                ${searchKey} = #{searchSelectValue}
+                AND
+            </if>
+            <if test="searchKey != null and searchKey != ''">
+                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+                AND
+            </if>
+            i.member_id_seller = #{memberIdSeller}
+        </where>
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
+    </select>
+
+    <!-- 판매자 특정 투자펀딩 공고 조회 -->
+    <select id="getInvestementByCode" resultMap="adminInvestmentListMap">
+        /* 판매자 특정 투자펀딩 공고 조회 */
+        SELECT
+            i.investment_request_judge_code,
+            ir.investment_request_subject,
+            ir.investment_request_content,
+            ir.investment_request_date,
+            ir.investment_achievement_money,
+            ir.business_profits,
+            ir.depreciation,
+            ir.net_debt,
+            ir.issue_stock_number,
+            i.investment_code,
             i.investment_subject,
             i.store_code,
             s.store_name,
@@ -290,13 +357,17 @@
             investment_content AS ic
             ON
             i.investment_code = ic.investment_code
+            INNER JOIN
+            investment_request_judge AS ir
+            ON
+            i.investment_request_judge_code = ir.investment_request_judge_code
         WHERE
             i.investment_code = #{investmentCode};
     </select>
 
-    <!-- 투자펀딩 심사요청 목록 조회 -->
+    <!-- 판매자 투자펀딩 심사요청 목록 조회 -->
     <select id="getInvestmentRequestJudgeList" resultMap="adminInvestmentRequestJudgeListMap">
-        /* 투자펀딩 심사요청 목록 조회 */
+        /* 판매자 투자펀딩 심사요청 목록 조회 */
         SELECT
             i.investment_request_judge_code,
             i.investment_request_subject,
@@ -324,37 +395,37 @@
         </if>
     </select>
 
-    <!-- 투자펀딩 심사요청 전체 행의 갯수 -->
+    <!-- 판매자 투자펀딩 심사요청 전체 행의 갯수 -->
     <select id="getInvestmentRequestJudgeCnt" resultType="int">
-        /* 투자펀딩 심사요청 전체 행의 갯수 */
+        /* 판매자 투자펀딩 심사요청 전체 행의 갯수 */
         SELECT
-        COUNT(1)
+            COUNT(1)
         FROM
-        investment_request_judge
+            investment_request_judge
     </select>
 
-    <!-- 검색조건에 따른 투자펀딩 심사요청 목록 조회 -->
+    <!-- 판매자 검색조건에 따른 투자펀딩 심사요청 목록 조회 -->
     <select id="getInvestmentRequestJudgeListBySearch" parameterType="String" resultMap="adminInvestmentRequestJudgeListMap">
         /* 검색조건에 따른 투자펀딩 심사요청 목록 조회 */
         SELECT
-        i.investment_request_judge_code,
-        i.investment_request_subject,
-        i.member_id_seller,
-        s.store_name,
-        s.corporate_name AS corporateName,
-        i.investment_company,
-        s.representative_name,
-        i.investment_achievement_money,
-        i.investment_request_date,
-        i.invest_judge_date,
-        i.member_id,
-        i.invest_judge_result
+            i.investment_request_judge_code,
+            i.investment_request_subject,
+            i.member_id_seller,
+            s.store_name,
+            s.corporate_name AS corporateName,
+            i.investment_company,
+            s.representative_name,
+            i.investment_achievement_money,
+            i.investment_request_date,
+            i.invest_judge_date,
+            i.member_id,
+            i.invest_judge_result
         FROM
-        investment_request_judge AS i
-        INNER JOIN
-        store AS s
-        ON
-        i.store_code = s.store_code
+            investment_request_judge AS i
+            INNER JOIN
+            store AS s
+            ON
+            i.store_code = s.store_code
         <where>
             <if test="amDateSettStartDate != null and amDateSettStartDate != ''">
                 DATE_FORMAT(i.investment_request_date, '%Y-%m-%d') >= #{amDateSettStartDate}
@@ -368,7 +439,7 @@
                 ${searchKey} = #{searchSelectValue}
                 AND
             </if>
-            <if test="searchKey != null and searchKey != '' and searchSelectValue == null or searchSelectValue == ''">
+            <if test="searchKey != null and searchKey != ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
                 AND
             </if>
@@ -379,125 +450,125 @@
         </if>
     </select>
 
-    <!-- 특정 투자펀딩 심사요청 조회 -->
+    <!-- 판매자 특정 투자펀딩 심사요청 조회 -->
     <select id="getInvestmentRequestJudgeByCode" parameterType="String" resultMap="adminInvestmentRequestJudgeListMap">
         /* 특정 투자펀딩 심사요청 조회 */
         SELECT
-        inv.investment_code,
-        inv.investment_subject,
-        inv.investment_achievement_money AS invInvestmentAchievementMoney,
-        inv.investment_amount,
-        inv.invest_achievement_percent,
-        inv.investment_deadline,
-        i.investment_request_judge_code,
-        i.law_satistify_code,
-        l.law_satistify_reason,
-        i.incongruity_sectors_code,
-        i.company_business_type_code,
-        i.corporate_value_evaluation_code,
-        i.store_code,
-        i.investment_request_subject,
-        i.member_id_seller,
-        s.store_name,
-        s.corporate_name AS corporateName,
-        i.investment_company,
-        s.representative_name,
-        c.business_type AS cbtBusinessType,
-        i.business_type,
-        i.investment_request_content,
-        i.investment_achievement_money,
-        i.business_profits,
-        i.depreciation,
-        i.net_debt,
-        i.stock_number,
-        i.issue_stock_number,
-        i.investment_request_date,
-        i.invest_judge_date,
-        i.member_id,
-        i.invest_judge_result
+            inv.investment_code,
+            inv.investment_subject,
+            inv.investment_achievement_money AS invInvestmentAchievementMoney,
+            inv.investment_amount,
+            inv.invest_achievement_percent,
+            inv.investment_deadline,
+            i.investment_request_judge_code,
+            i.law_satistify_code,
+            l.law_satistify_reason,
+            i.incongruity_sectors_code,
+            i.company_business_type_code,
+            i.corporate_value_evaluation_code,
+            i.store_code,
+            i.investment_request_subject,
+            i.member_id_seller,
+            s.store_name,
+            s.corporate_name AS corporateName,
+            i.investment_company,
+            s.representative_name,
+            c.business_type AS cbtBusinessType,
+            i.business_type,
+            i.investment_request_content,
+            i.investment_achievement_money,
+            i.business_profits,
+            i.depreciation,
+            i.net_debt,
+            i.stock_number,
+            i.issue_stock_number,
+            i.investment_request_date,
+            i.invest_judge_date,
+            i.member_id,
+            i.invest_judge_result
         FROM
-        investment_request_judge AS i
-        LEFT JOIN
-        investment AS inv
-        ON
-        i.investment_request_judge_code = inv.investment_request_judge_code
-        INNER JOIN
-        store AS s
-        ON
-        i.store_code = s.store_code
-        INNER JOIN
-        company_business_type AS c
-        ON
-        i.company_business_type_code = c.company_business_type_code
-        LEFT JOIN
-        law_satistify_reason AS l
-        ON
-        i.law_satistify_code = l.law_satistify_code
+            investment_request_judge AS i
+            LEFT JOIN
+            investment AS inv
+            ON
+            i.investment_request_judge_code = inv.investment_request_judge_code
+            INNER JOIN
+            store AS s
+            ON
+            i.store_code = s.store_code
+            INNER JOIN
+            company_business_type AS c
+            ON
+            i.company_business_type_code = c.company_business_type_code
+            LEFT JOIN
+            law_satistify_reason AS l
+            ON
+            i.law_satistify_code = l.law_satistify_code
         WHERE
-        i.investment_request_judge_code = #{investmentRequestJudgeCode};
+            i.investment_request_judge_code = #{investmentRequestJudgeCode};
     </select>
 
-    <!-- 자본시장법 범위충족기준 목록 조회 -->
+    <!-- 판매자 자본시장법 범위충족기준 목록 조회 -->
     <select id="getLawSatistifyList" resultMap="adminLawSatistifyReasonListMap">
         /* 자본시장법 범위충족기준 목록 조회 */
         SELECT
-        l.law_satistify_code,
-        l.law_satistify_reason,
-        l.member_id,
-        l.law_satistify_whether,
-        l.code_reg_day
+            l.law_satistify_code,
+            l.law_satistify_reason,
+            l.member_id,
+            l.law_satistify_whether,
+            l.code_reg_day
         FROM
-        law_satistify_reason AS l
+            law_satistify_reason AS l
     </select>
 
-    <!-- 부적합 업종 목록 조회 -->
+    <!-- 판매자 부적합 업종 목록 조회 -->
     <select id="getIncogruitySectorsList" resultMap="adminIncongruitySectorsListMap">
         /* 부적합 업종 목록 조회 */
         SELECT
-        i.incongruity_sectors_code,
-        i.incongruity_sectors_business,
-        i.member_id,
-        i.incongruity_sectors_whether,
-        i.code_reg_day
+            i.incongruity_sectors_code,
+            i.incongruity_sectors_business,
+            i.member_id,
+            i.incongruity_sectors_whether,
+            i.code_reg_day
         FROM
-        incongruity_sectors AS i;
+            incongruity_sectors AS i;
     </select>
 
-    <!-- 특정 기업가치 평가결과 조회 -->
+    <!-- 판매자 특정 기업가치 평가결과 조회 -->
     <select id="getCorporateValueEvaluationByCode" resultMap="adminCorporateValueEvaluationListMap">
         /* 특정 기업가치 평가결과 조회 */
         SELECT
-        i.investment_request_judge_code,
-        i.investment_request_subject,
-        i.investment_request_content,
-        i.investment_request_date,
-        i.member_id_seller,
-        i.investment_achievement_money,
-        i.issue_stock_number,
-        c.corporate_value_evaluation_code,
-        c.member_id,
-        c.operating_profit,
-        c.depreciation,
-        c.ebitda,
-        c.ev_ebitda,
-        c.convert_ev,
-        c.net_debt,
-        c.evaluated_corp_value,
-        c.stock_number,
-        c.stock_price,
-        c.corp_value_fulfill,
-        c.corp_value_evaluate_day
+            i.investment_request_judge_code,
+            i.investment_request_subject,
+            i.investment_request_content,
+            i.investment_request_date,
+            i.member_id_seller,
+            i.investment_achievement_money,
+            i.issue_stock_number,
+            c.corporate_value_evaluation_code,
+            c.member_id,
+            c.operating_profit,
+            c.depreciation,
+            c.ebitda,
+            c.ev_ebitda,
+            c.convert_ev,
+            c.net_debt,
+            c.evaluated_corp_value,
+            c.stock_number,
+            c.stock_price,
+            c.corp_value_fulfill,
+            c.corp_value_evaluate_day
         FROM
-        corporate_value_evaluation AS c
-        INNER JOIN
-        investment_request_judge AS i
-        ON
-        c.corporate_value_evaluation_code = i.corporate_value_evaluation_code
+            corporate_value_evaluation AS c
+            INNER JOIN
+            investment_request_judge AS i
+            ON
+            c.corporate_value_evaluation_code = i.corporate_value_evaluation_code
         WHERE
-        c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
+            c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </select>
 
-    <!-- 투자펀딩 심사요청 수정 -->
+    <!-- 판매자 투자펀딩 심사요청 수정 -->
     <update id="modifyInvestmentRequestJudge" parameterType="AdminInvestmentRequestJudge">
         /* 투자펀딩 심사요청 수정 */
         UPDATE investment_request_judge
@@ -564,17 +635,17 @@
             </if>
         </set>
         WHERE
-        investment_request_judge_code = #{investmentRequestJudgeCode};
+            investment_request_judge_code = #{investmentRequestJudgeCode};
     </update>
 
-    <!-- 투자펀딩 심사요청 삭제 -->
+    <!-- 판매자 투자펀딩 심사요청 삭제 -->
     <delete id="removeInvestmentRequestJudge" parameterType="String">
         /* 투자펀딩 심사요청 삭제 */
         DELETE
         FROM
-        investment_request_judge
+            investment_request_judge
         WHERE
-        investment_request_judge_code = #{investmentRequestJudgeCode};
+            investment_request_judge_code = #{investmentRequestJudgeCode};
     </delete>
 
 </mapper>

@@ -26,7 +26,7 @@
             let searchInput = document.getElementById('inputSearchValue');
             let searchSelect = document.getElementById('selectSearchValue');
 
-            if (selectElement.value === 'investJudgeResult') {
+            if (selectElement.value === 'investJudgeSituation') {
                 searchInput.classList.add('hidden');
                 searchSelect.classList.remove('hidden');
                 searchInput.value = '';
@@ -43,10 +43,10 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
-    <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div>
+    <div th:include="~{seller/investment/search/investment_search :: searchFragment}"></div>
     <br>
 
-    <h4 class="admin-content-title">투자 심사요청 목록</h4>
+    <h4 class="admin-content-title">투자 공고 목록</h4>
 
     <div class="admin-content-wrapper">
 
@@ -99,13 +99,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${adminInvestmentList == null}">
+            <tr th:if="${investmentList == null}">
                 <td>
                     <input type="checkbox" name="selectList">
                 </td>
-                <td colspan="12">투자 심사요청 목록이 없습니다.</td>
+                <td colspan="14">투자 공고 목록이 없습니다.</td>
             </tr>
-            <tr th:unless="${adminInvestmentList == null}" th:each="l : ${adminInvestmentList}">
+            <tr th:unless="${investmentList == null}" th:each="l : ${investmentList}">
                 <td>
                     <input type="checkbox" name="selectList">
                 </td>
@@ -134,21 +134,21 @@
         <div class="board-page-area">
             <div class="list-controller-inner">
                 <ul>
-                    <li><a th:href="@{/seller/investment/invest-main}">[맨처음으로]</a></li>
+                    <li><a th:href="@{/seller/investment/invest-main(searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[맨처음으로]</a></li>
                     <li><a th:if="${currentPage > 1}"
-                           th:href="@{/seller/investment/invest-main(currentPage=${currentPage - 1})}">[이전]</a>
+                           th:href="@{/seller/investment/invest-main(currentPage=${currentPage - 1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[이전]</a>
                         <span th:unless="${currentPage > 1}">[이전]</span>
                     </li>
                     <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
                         <a th:if="${num != currentPage}"
-                           th:href="@{/seller/investment/invest-main(currentPage=${num})}">[[${'[' + num + ']'}]]</a>
+                           th:href="@{/seller/investment/invest-main(currentPage=${num}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[[${'[' + num + ']'}]]</a>
                         <span th:unless="${num != currentPage}" th:text="|[${num}]|"></span>
                     </th:block>
                     <li><a th:if="${currentPage < lastPage}"
-                           th:href="@{/seller/investment/invest-main(currentPage=${currentPage +1})}">[다음]</a>
+                           th:href="@{/seller/investment/invest-main(currentPage=${currentPage +1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[다음]</a>
                         <span th:unless="${currentPage < lastPage}">[다음]</span>
                     </li>
-                    <li><a th:href="@{/seller/investment/invest-main(currentPage=${lastPage})}">[맨마지막]</a></li>
+                    <li><a th:href="@{/seller/investment/invest-main(currentPage=${lastPage}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[맨마지막]</a></li>
                 </ul>
             </div>
         </div>

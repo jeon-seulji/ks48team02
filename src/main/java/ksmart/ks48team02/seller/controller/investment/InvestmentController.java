@@ -28,15 +28,43 @@ public class InvestmentController {
     }
 
     @GetMapping("/invest-main")
-    public String getInvestMain(Model model, String memberIdSeller, HttpSession session) {
+    public String getInvestMain(Model model, HttpSession session
+                               ,@RequestParam(name = "searchKey", required = false) String searchKey
+                               ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
+                               ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
+                               ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                               ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
+                               ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage) {
 
         String loginId = (String) session.getAttribute("SID");
 
-        List<AdminInvestment> adminInvestmentList = investmentService.getInvestmentList(loginId);
+        Map<String, Object> resultMap = null;
 
-        model.addAttribute("title", "판매자 : 투자 프로젝트 목록");
-        model.addAttribute("contentsTitle","투자 프로젝트 목록");
-        model.addAttribute("adminInvestmentList",adminInvestmentList);
+        List<AdminInvestment> investmentList = null;
+
+        if(searchKey != null) {
+            resultMap = investmentService.getInvestmentList(loginId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue, currentPage);
+            investmentList = (List<AdminInvestment>) resultMap.get("investmentList");
+        }else {
+            resultMap = investmentService.getInvestmentList(loginId, currentPage);
+            investmentList = (List<AdminInvestment>) resultMap.get("investmentList");
+        }
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
+
+        model.addAttribute("title", "판매자 : 투자 프로젝트");
+        model.addAttribute("contentsTitle","투자 프로젝트");
+        model.addAttribute("investmentList",investmentList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("searchSelectValue", searchSelectValue);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
 
         return "seller/investment/invest_main";
     }
@@ -72,6 +100,11 @@ public class InvestmentController {
         model.addAttribute("contentsTitle","투자 펀딩 심사 요청");
         model.addAttribute("contentsSubTitle","투자 펀딩 심사 요청을 조회합니다");
         model.addAttribute("investmentRequestJudgeList", investmentRequestJudgeList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("searchSelectValue", searchSelectValue);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("lastPage", lastPage);
         model.addAttribute("startPageNum", startPageNum);
@@ -229,13 +262,16 @@ public class InvestmentController {
         return "seller/investment/insert/after_invest_division_insert";
     }
 
-    @GetMapping("/update/update")
-    public String modifyInvestment(Model model) {
+    @GetMapping("/update/investment")
+    public String modifyInvestment(Model model, String investmentCode) {
+
+        AdminInvestment investmentInfo = investmentService.getInvestementByCode(investmentCode);
 
         model.addAttribute("title", "투자펀딩 공고 수정");
         model.addAttribute("contentsTitle","투자펀딩 공고 수정");
+        model.addAttribute("investmentInfo", investmentInfo);
 
-        return "seller/investment/update/invest_update";
+        return "seller/investment/update/investment_update";
     }
 
     @GetMapping("/update/judge")

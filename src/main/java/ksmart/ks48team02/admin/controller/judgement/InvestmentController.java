@@ -39,13 +39,13 @@ public class InvestmentController {
 
     @GetMapping("/search/judge")
     public String getInvestmentJudgeList(Model model
-                                        , @RequestParam(name = "searchKey", required = false) String searchKey
-                                        , @RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
-                                        , @RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                        , @RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
-                                        , @RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
-                                        , @RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage
-                                        , HttpSession session) {
+                                        ,@RequestParam(name = "searchKey", required = false) String searchKey
+                                        ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
+                                        ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
+                                        ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                        ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
+                                        ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage
+                                        ,HttpSession session) {
 
         session.setAttribute("searchKey", searchKey);
         session.setAttribute("searchValue", searchValue);
@@ -88,21 +88,38 @@ public class InvestmentController {
     @GetMapping("/search/law-satistify")
     public String getLawSatistifyList(Model model
                                      ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                     ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue
+                                     ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                      ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                     ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate){
+                                     ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                     ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage){
+
+        Map<String, Object> resultMap = null;
 
         List<AdminLawSatistifyReason> lawSatistifyReasonList = null;
+
         if(searchKey != null) {
-            lawSatistifyReasonList = investmentService.getLawSatistifyList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+            resultMap = investmentService.getLawSatistifyList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, currentPage);
+            lawSatistifyReasonList = (List<AdminLawSatistifyReason>) resultMap.get("lawSatistifyReasonList");
         }else {
-            lawSatistifyReasonList = investmentService.getLawSatistifyList();
+            resultMap = investmentService.getLawSatistifyList(currentPage);
+            lawSatistifyReasonList = (List<AdminLawSatistifyReason>) resultMap.get("lawSatistifyReasonList");
         }
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
 
         model.addAttribute("title", "관리자 : 자본시장법 범위충족기준");
         model.addAttribute("contentsTitle","자본시장법 범위충족기준");
         model.addAttribute("contentsSubTitle","자본시장법 범위충족기준을 관리합니다");
         model.addAttribute("lawSatistifyReasonList", lawSatistifyReasonList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
 
         return "admin/judgement/investment/list/law_satistify_list";
     }
@@ -110,21 +127,38 @@ public class InvestmentController {
     @GetMapping("/search/incongruity-sectors")
     public String getIncongruitySectorsList(Model model
                                            ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                           ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue
+                                           ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                            ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
-                                           ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate){
+                                           ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                           ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage){
+
+        Map<String, Object> resultMap = null;
 
         List<AdminIncongruitySectors> incongruitySectorsList = null;
+
         if(searchKey != null) {
-            incongruitySectorsList = investmentService.getIncogruitySectorsList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
+            resultMap = investmentService.getIncogruitySectorsList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, currentPage);
+            incongruitySectorsList = (List<AdminIncongruitySectors>) resultMap.get("incongruitySectorsList");
         }else {
-            incongruitySectorsList = investmentService.getIncogruitySectorsList();
+            resultMap = investmentService.getIncogruitySectorsList(currentPage);
+            incongruitySectorsList = (List<AdminIncongruitySectors>) resultMap.get("incongruitySectorsList");
         }
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
 
         model.addAttribute("title", "관리자 : 부적합 업종");
         model.addAttribute("contentsTitle","부적합 업종");
         model.addAttribute("contentsSubTitle","부적합 업종을 관리합니다");
         model.addAttribute("incongruitySectorsList", incongruitySectorsList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
 
         return "admin/judgement/investment/list/incongruity_sectors_list";
     }
@@ -132,22 +166,40 @@ public class InvestmentController {
     @GetMapping("/search/corporate-value")
     public String getCorporateValueEvaluationList(Model model
                                                  ,@RequestParam(name = "searchKey", required = false) String searchKey
-                                                 ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String  searchValue
+                                                 ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                                  ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
                                                  ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
-                                                 ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue) {
+                                                 ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
+                                                 ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage) {
+
+        Map<String, Object> resultMap = null;
 
         List<AdminCorporateValueEvaluation> corporateValueEvaluationList = null;
+
         if(searchKey != null) {
-            corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
+            resultMap = investmentService.getCorporateValueEvaluationList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue, currentPage);
+            corporateValueEvaluationList = (List<AdminCorporateValueEvaluation>) resultMap.get("corporateValueEvaluationList");
         }else {
-            corporateValueEvaluationList = investmentService.getCorporateValueEvaluationList();
+            resultMap = investmentService.getCorporateValueEvaluationList(currentPage);
+            corporateValueEvaluationList = (List<AdminCorporateValueEvaluation>) resultMap.get("corporateValueEvaluationList");
         }
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
 
         model.addAttribute("title", "관리자 : 기업가치 평가");
         model.addAttribute("contentsTitle","기업가치 평가");
         model.addAttribute("contentsSubTitle","기업가치 평가를 관리합니다");
         model.addAttribute("corporateValueEvaluationList", corporateValueEvaluationList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("searchSelectValue", searchSelectValue);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
 
         return "admin/judgement/investment/list/corporate_value_evaluation_list";
     }
@@ -259,11 +311,14 @@ public class InvestmentController {
     }
 
     @GetMapping("/update/judge")
-    public String modifyInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model){
+    public String modifyInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model, @RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage){
 
         AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
-        List<AdminLawSatistifyReason> lawSatistifyReasonList = investmentService.getLawSatistifyList();
-        List<AdminIncongruitySectors> incongruitySectorsList = investmentService.getIncogruitySectorsList();
+
+        Map<String, Object> resultMap = investmentService.getInvestmentRequestJudgeList(currentPage);
+
+        List<AdminLawSatistifyReason> lawSatistifyReasonList = (List<AdminLawSatistifyReason>) resultMap.get("lawSatistifyReasonList");
+        List<AdminIncongruitySectors> incongruitySectorsList = (List<AdminIncongruitySectors>) resultMap.get("incongruitySectorsList");
 
         model.addAttribute("title", "관리자 : 투자펀딩 심사요청 수정");
         model.addAttribute("contentsTitle","투자펀딩 심사요청 수정");

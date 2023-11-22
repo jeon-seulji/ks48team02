@@ -5,11 +5,6 @@
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
-    <style>
-        #settDeleteBtn {
-            background-color: red;
-        }
-    </style>
 </head>
 
 
@@ -20,17 +15,7 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-    <script>
-        $('#settDeleteBtn').click(function () {
-            let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
-            if (deleteConfirm) {
-                window.location.href = `[[@{/seller/investment/delete/judge(investmentRequestJudgeCode=${investmentInfo.investmentCode})}]]`;
-                alert('삭제되었습니다');
-            } else {
-                alert('취소되었습니다');
-            }
-        });
-    </script>
+
 </th:block>
 
 
@@ -342,15 +327,8 @@
                             </button>
                         </li>
                         <li>
-                            <button id="settUpdateBtn" class="submitBtn" type="button"
-                                    th:onclick="|location.href='@{/seller/investment/update/investment(investmentCode=*{investmentCode})}'|">
-                                수정
-                            </button>
-                        </li>
-                        <li>
-                            <button id="settDeleteBtn" name="settDeleteBtn" class="submitBtn" type="button"
-                                    th:onclick="return false">
-                                삭제
+                            <button id="settUpdateBtn" class="submitBtn" type="submit">
+                                확인
                             </button>
                         </li>
                     </ul>
