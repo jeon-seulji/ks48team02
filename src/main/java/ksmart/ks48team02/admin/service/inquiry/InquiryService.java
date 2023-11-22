@@ -4,6 +4,7 @@ import ksmart.ks48team02.admin.dto.Inquiry;
 import ksmart.ks48team02.admin.mapper.inquiry.InquiryMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,5 +27,17 @@ public class InquiryService {
 
         return inquiryMapper.getInquiryList();
     }
+
+    // 문의 관리 답변
+    public List<Inquiry> getInquiryModifyList(){
+
+        return inquiryMapper.getInquiryModifyList();
+    }
+
+    // 문의 관리 답변 post
+    public void inquiryModiPost(Inquiry inquiry){
+        inquiryMapper.inquiryModiPost(inquiry);
+    }
+
 
 }

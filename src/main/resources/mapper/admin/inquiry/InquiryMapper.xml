@@ -27,5 +27,19 @@
 
     </select>
 
+<!--    문의 관리 답변페이지 목록-->
+    <select id="getInquiryModifyList" resultMap="inquiryResultMap">
+        select
+        hp.contact_answer_code,
+        hp.inquire_code,
+        hp.member_id,
+        hp.iq_subject,
+        hp.iq_content,
+        hp.iq_datetime
+        from
+        home_pageinquiry_answer_management as hp
+
+    </select>
+
 
 </mapper>

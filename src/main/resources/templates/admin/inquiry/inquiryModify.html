@@ -4,7 +4,7 @@
 <!-- 사용자별 스크립트 작성 -->
 <head>
     <!--  사용자별 css file 추가 부분 -->
-    <title th:text="${title}"></title>
+    <title>관리자 1:1 문의</title>
     <link rel="stylesheet" th:href="@{/admin/css/adminBoardModify.css}">
     <link rel="stylesheet" th:href="@{/admin/css/contents_style.css}">
     <link rel="stylesheet" th:href="@{/common/css/common-css.css}">
@@ -28,58 +28,61 @@
 <!--} else {-->
 <!--// 취소 누르면 실행될 내용 작성-->
 <!--}-->
-<!-- 사용자 페이지별 javascript file -->
+
 <body>
-<div class="pop_modify">
-    <div class="ui-header">
-        <table border="1">
-            <tbody>
-            <h1 class="title">문의</h1>
-            <tr>
-                <td class="sidebar">문의 코드</td>
-                <td>iq_20230601_001</td>
-            </tr>
-            <tr>
-                <td class="sidebar">문의 제목</td>
-                <td>아이디가 이상해요</td>
-            </tr>
-            <tr>
-                <td class="sidebar">문의 등록자 아이디</td>
-                <td>id005</td>
-            </tr>
-            <tr>
-                <td class="sidebar">문의 내용</td>
-                <td>
-                    <div id="summernote">
-                    </div>
-                    <script>
-                        $('#summernote').summernote({
-                            placeholder: '공지사항을 입력 해주세요.',
-                            tabsize: 2,
-                            height: 300,
-                            width: 600
-                        });
-                    </script>
-                </td>
+<form th:action="@{/admin/inquiry/inquiryModify}" method="post">
+    <div class="pop_modify">
+        <div class="ui-header">
+            <table border="1">
+                <tbody th:unless="${inquiryModifyList == null}" th:each="hp : ${inquiryModifyList}">
+                <h2 class="title">문의</h2>
+                <tr>
+                    <td class="sidebar">문의 코드</td>
+                    <td th:text="${hp.inquireCode}"></td>
+                </tr>
+                <tr>
+                    <td class="sidebar">문의 제목</td>
+                    <td th:text="${hp.iqSubject}"></td>
+                </tr>
+                <tr>
+                    <td class="sidebar">문의 등록자 아이디</td>
+                    <td>id005</td>
+                </tr>
+                <tr>
+                    <td class="sidebar">문의 내용</td>
+                    <td>
+                        <div id="summernote">
+                        </div>
+                        <script>
+                            $('#summernote').summernote({
+                                placeholder: '공지사항을 입력 해주세요.',
+                                tabsize: 2,
+                                height: 300,
+                                width: 600
+                            });
+                        </script>
+                    </td>
 
-            </tr>
-            <tr>
-                <td class="sidebar">문의 날짜</td>
-                <td>2023-06-01</td>
-            </tr>
-            <tr>
-                <td class="sidebar">관리자 ID</td>
-                <td>id001</td>
-            </tr>
-            </tbody>
-        </table>
+                </tr>
+                <tr>
+                    <td class="sidebar">문의 날짜</td>
+                    <td th:text="${hp.iqDatetime}"></td>
+                </tr>
+                <tr>
+                    <td class="sidebar">관리자 ID</td>
+                    <td th:text="${hp.memberId}"></td>
+                </tr>
+                </tbody>
+            </table>
 
-        <div class="option">
-            <a th:href="@{#}" class="cancel submitBtn">취소</a>
-            <a th:href="@{#}" class="edit submitBtn">등록</a>
+            <div class="option">
+                <a th:href="@{#}" class="cancel submitBtn">취소</a>
+                <a th:href="@{#}" class="edit submitBtn">등록</a>
+            </div>
         </div>
     </div>
-</div>
+</form>
+
 
 
 <script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
@@ -93,6 +96,7 @@
             window.close();
         }
     })
+
 </script>
 
 

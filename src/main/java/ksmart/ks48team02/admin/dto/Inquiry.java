@@ -6,6 +6,8 @@ public class Inquiry {
     private String memberId;
     private String iqSubject;
     private String iqContent;
+    private String iqDatetime;
+
 
     public String getIqDatetime() {
         return iqDatetime;
@@ -15,8 +17,6 @@ public class Inquiry {
         this.iqDatetime = iqDatetime;
         return this;
     }
-
-    private String iqDatetime;
 
     @Override
     public String toString() {
