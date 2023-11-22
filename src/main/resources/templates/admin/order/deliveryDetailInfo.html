@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{seller/layout/default}">
+      layout:decorate="~{admin/layout/default}">
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
@@ -31,7 +31,7 @@
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
     <script th:src="@{/common/js/submenuJs.js}"></script>
-    <script th:src="@{/admin/js/settlement/settlementJs.js}"></script>
+    <script th:src="@{/admin/js/settlement/adminCustomJs.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->

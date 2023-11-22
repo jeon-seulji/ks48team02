@@ -84,15 +84,15 @@
         /* 투자 프로젝트 상세내용 등록 */
         <selectKey keyProperty="investmentContentCode" resultType="String" order="BEFORE">
             SELECT
-            (CASE
-            WHEN COUNT(i.investment_content_code) = 0 THEN CONCAT('inv_con_', CURDATE()+0, '_0001')
-            WHEN COUNT(i.investment_content_code) > 9999 THEN CONCAT('inv_con_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.investment_content_code,'_',-1) AS UNSIGNED))+1)
-            ELSE CONCAT('inv_con_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(i.investment_content_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
-            END) AS investmentContentCode
+                (CASE
+                WHEN COUNT(i.investment_content_code) = 0 THEN CONCAT('inv_con_', CURDATE()+0, '_0001')
+                WHEN COUNT(i.investment_content_code) > 9999 THEN CONCAT('inv_con_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.investment_content_code,'_',-1) AS UNSIGNED))+1)
+                ELSE CONCAT('inv_con_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(i.investment_content_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
+                END) AS investmentContentCode
             FROM
-            investment_content AS i
+                investment_content AS i
             WHERE
-            SUBSTRING_INDEX(SUBSTRING_INDEX(i.investment_content_code, '_', 3), '_', -1) = CURDATE()+0;
+                SUBSTRING_INDEX(SUBSTRING_INDEX(i.investment_content_code, '_', 3), '_', -1) = CURDATE()+0;
         </selectKey>
         INSERT INTO InvestmentContent
         (investment_content_code, member_id, investment_code, member_id_admin, project_introduction,
@@ -110,15 +110,90 @@
 
     <select id="getInvestmentInfo" parameterType="String" resultMap="InvestmentInfoResultMap">
         SELECT
-            investment_code,
-            invest_achievement_percent,
-            investment_subject,
-            investment_amount,
+            i.investment_code,
+            i.member_id,
+            i.store_code,
+            i.investment_request_judge_code,
+            i.total_category_code,
+            i.member_id_seller,
+            i.investment_image,
+            i.investment_like,
+            i.investment_achievement_money,
+            i.search_count,
+            i.invest_count,
+            i.securities_classification,
+            i.investment_display_date,
+            i.investment_reg_date,
+            i.investment_report,
+            i.basic_fee,
+            i.contract_fee_rate,
+            i.contract_file,
+            i.invest_judge_situation,
+            i.invest_achievement_percent,
+            i.investment_subject,
+            i.investment_amount,
             DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
-            investment_image,
-            investment_company
+            i.investment_image,
+            i.investment_company
         FROM
-            investment
+            investment AS i
+    </select>
+
+    <select id="investmentProjectDetail" parameterType="String" resultMap="InvestmentInfoResultMap">
+        SELECT
+            i.investment_code,
+            i.member_id,
+            i.store_code,
+            i.investment_request_judge_code,
+            i.total_category_code,
+            i.member_id_seller,
+            i.investment_image,
+            i.investment_like,
+            i.investment_achievement_money,
+            i.search_count,
+            i.invest_count,
+            i.securities_classification,
+            i.investment_display_date,
+            i.investment_reg_date,
+            i.investment_report,
+            i.basic_fee,
+            i.contract_fee_rate,
+            i.contract_file,
+            i.invest_judge_situation,
+            i.invest_achievement_percent,
+            i.investment_subject,
+            i.investment_amount,
+            i.investment_deadline,
+            DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+            i.investment_image,
+            i.investment_company,
+            ic.investment_content_code,
+            ic.member_id,
+            ic.investment_code,
+            ic.member_id_admin,
+            ic.project_introduction,
+            ic.investment_introduction_image,
+            ic.market_analysis,
+            ic.market_analysis_image,
+            ic.major_financial_information,
+            ic.major_financial_information_image,
+            ic.risk,
+            ic.risk_image,
+            ic.major_manpower,
+            ic.major_manpower_image,
+            ic.patent_award_details,
+            ic.patent_award_details_image,
+            ic.etc_invest_content,
+            ic.etc_invest_content_image,
+            ic.registration_date
+        FROM
+            investment AS i
+        INNER JOIN
+            investment_content AS ic
+        ON
+            i.member_id_seller = ic.member_id
+        WHERE
+            i.investment_code = #{investmentCode};
     </select>
 
 

@@ -675,13 +675,13 @@ if (typeof NProgress != 'undefined') {
 	   
 	   
 	function init_chart_doughnut(){
-				
+
 		if( typeof (Chart) === 'undefined'){ return; }
-		
+
 		console.log('init_chart_doughnut');
-	 
+
 		if ($('.canvasDoughnut').length){
-			
+
 		var chart_doughnut_settings = {
 				type: 'doughnut',
 				tooltipFillColor: "rgba(51, 51, 51, 0.55)",
@@ -711,23 +711,23 @@ if (typeof NProgress != 'undefined') {
 						]
 					}]
 				},
-				options: { 
-					legend: false, 
-					responsive: false 
+				options: {
+					legend: false,
+					responsive: false
 				}
 			}
-		
+
 			$('.canvasDoughnut').each(function(){
-				
+
 				var chart_element = $(this);
 				var chart_doughnut = new Chart( chart_element, chart_doughnut_settings);
-				
-			});			
-		
-		}  
-	   
+
+			});
+
+		}
+
 	}
-	   
+
 	function init_gauge() {
 			
 		if( typeof (Gauge) === 'undefined'){ return; }
@@ -1863,7 +1863,7 @@ if (typeof NProgress != 'undefined') {
 			
 		function init_CustomNotification() {
 			
-			console.log('run_customtabs');
+			// console.log('run_customtabs');
 			
 			if( typeof (CustomTabs) === 'undefined'){ return; }
 			console.log('init_CustomTabs');
@@ -2384,7 +2384,7 @@ if (typeof NProgress != 'undefined') {
 		function init_compose() {
 		
 			if( typeof ($.fn.slideToggle) === 'undefined'){ return; }
-			console.log('init_compose');
+			// console.log('init_compose');
 		
 			$('#compose, .compose-close').click(function(){
 				$('.compose').slideToggle();
@@ -2499,7 +2499,7 @@ if (typeof NProgress != 'undefined') {
 			
 			function init_DataTables() {
 				
-				console.log('run_datatables');
+				// console.log('run_datatables');
 				
 				if( typeof ($.fn.DataTable) === 'undefined'){ return; }
 				console.log('init_DataTables');
@@ -5039,14 +5039,14 @@ if (typeof NProgress != 'undefined') {
 		init_daterangepicker_reservation();
 		init_SmartWizard();
 		init_EasyPieChart();
-		init_charts();
+		// init_charts();
 		init_echarts();
 		init_morris_charts();
 		init_skycons();
 		init_select2();
 		init_validator();
 		init_DataTables();
-		init_chart_doughnut();
+		// init_chart_doughnut();
 		init_gauge();
 		init_PNotify();
 		init_starrr();

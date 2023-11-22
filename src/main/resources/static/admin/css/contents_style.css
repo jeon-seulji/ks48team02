@@ -160,6 +160,7 @@ button {
 }
 .admin-content-wrapper.form-table {
     min-height: auto;
+    position: relative;
 }
 .btn-area {
     margin-top: 20px;
@@ -809,4 +810,34 @@ select[name="searchKey"] ~ input {
 }
 .list-btn-area button.no-action{
     opacity: 0.25;
+}
+
+.refund-tab-area {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(-100%);
+}
+.refund-tab-area ul {
+    display: flex;
+    margin: 0 !important;
+}
+.refund-tab-area ul li {
+    padding: 10px 35px;
+    background: #E7EBF3;
+    cursor: pointer;
+}
+.refund-tab-area ul li span {
+    color: #A7A7A7;
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 400;
+}
+.refund-tab-area ul li.active {
+    background: var(--maincolor);
+
+}
+.refund-tab-area ul li.active span {
+    color: #fff;
+    font-weight: 600;
 }

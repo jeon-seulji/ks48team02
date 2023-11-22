@@ -38,4 +38,16 @@ public class CategoryService {
     public List<Category> getCategoryDepth2(String projectPatition){
         return categoryMapper.getCategoryDepth2(projectPatition);
     }
+
+    // 카테고리 수정 post
+    public void updateCategory(Category category){
+        categoryMapper.updateCategory(category);
+    }
+
+    // 특정 카테고리 조회
+    public List<Category> getCategoryCodeById(String totalCategoryCode){
+        List<Category> getCategoryCodeById = categoryMapper.getCategoryCodeById(totalCategoryCode);
+
+        return getCategoryCodeById;
+    }
 }

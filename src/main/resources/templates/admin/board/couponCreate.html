@@ -62,6 +62,31 @@
                 }
             };
         };
+
+        // 쿠폰 등록 기능
+        $(document).ready(function() {
+            $('#modifyCouponForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();  // 폼 데이터를 serialize
+                console.log(formData);  // 콘솔에 출력하여 확인
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/board/couponCreate',
+                    data: formData,
+                    success: function(response){
+                        console.log(response);  // 서버에서 온 응답 출력
+                        alert('쿠폰이 성공적으로 등록되었습니다.');
+                        window.location.href = '/admin/board/coupon';
+                    },
+                    error: function(error) {
+                        console.log(error);  // 에러 정보 출력
+                        alert('쿠폰 등록에 실패하였습니다. 다시 시도해주세요.');
+                    }
+                });
+            });
+        });
     </script>
 </head>
 <body>
@@ -69,7 +94,7 @@
     <div class="couponAdd">
         <h1>쿠폰</h1>
     </div>
-    <form id="modifyCouponForm" th:action="@{/admin/board/couponAdd}" method="post">
+    <form id="modifyCouponForm" th:action="@{/admin/board/couponCreate}" method="post">
         <div class="section">
             <div class="title">
                 <h3>쿠폰 정보</h3>
@@ -83,51 +108,49 @@
                 <tbody class="contentForm">
                 <tr class="row-1">
                     <th class="banner" th:name="couponCode" scope="row" >쿠폰코드 <i class="bi bi-patch-check-fill"></i></th>
-                    <td><input type="text" class="comment"/></td>
+                    <td><input type="text" class="comment" name="couponCode"/></td>
                 </tr>
                 <tr class="row-2">
                     <th class="banner" th:name="couponSerialNumber" scope="row" >쿠폰고유번호 <i class="bi bi-patch-check-fill"></i></th>
-                    <td><input type="text" class="comment"/></td>
+                    <td><input type="text" class="comment" name="couponSerialNumber"/></td>
                 </tr>
                 <tr class="row-3">
                     <th class="banner" th:name="couponName" scope="row" >쿠폰이름 <i class="bi bi-patch-check-fill"></i></th>
-                    <td><input type="text" class="comment"/></td>
+                    <td><input type="text" class="comment" name="couponName"/></td>
                 </tr>
                 <tr class="row-4">
                     <th class="banner" scope="row" >할인율</th>
-                    <td><input type="number" class="discountRate"/> %</td>
+                    <td><input type="number" class="discountRate" name="couponDiscountRate"/> %</td>
                 </tr>
                 <tr class="row-5">
                     <th class="banner" scope="row" >할인금액</th>
-                    <td><input type="number" class="discountAmount"/> 원</td>
+                    <td><input type="number" class="discountAmount" name="couponDiscountAmount"/> 원</td>
                 </tr>
                 <tr class="row-6">
                     <th class="banner" th:name="couponStock" scope="row" >쿠폰 제한 수량</th>
-                    <td><input class="count" type="number" placeholder="쿠폰의 제한 수량을 입력해주세요."> 개</td>
+                    <td><input class="count" type="number" placeholder="쿠폰의 제한 수량을 입력해주세요." name="couponStock"> 개</td>
                 </tr>
 
                 <tr class="row-7">
                     <th class="banner" th:name="numberCouponRemaining" scope="row" >남은 쿠폰 갯수</th>
                     <td>
-                        <input class="count" type="number"> 개
+                        <input class="count" type="number" name="numberCouponsRemaining"> 개
                     </td>
                 </tr>
 
                 <tr class="row-8">
                     <th class="banner" th:name="couponValidPeriod" scope="row">쿠폰 사용 가능 기간</th>
-                    <td><input type="date" class="commentDate1"/>
-                        -
-                        <input type="date" class="commentDate2">
+                    <td><input type="text" class="commentDate1" name="couponValidPeriod"/> 일
                     </td>
                 </tr>
 
                 <tr class="row-9">
                     <th class="banner" th:name="couponTermsUse" scope="row">쿠폰 사용 조건</th>
-                    <td><input type="text" class="comment"/></td>
+                    <td><input type="text" class="comment" name="couponTermsUse"/></td>
                 </tr>
                 <tr class="row-10">
                     <th class="banner" scope="row">관리자 ID</th>
-                    <td><input type="text" class="comment"/></td>
+                    <td><input type="text" class="comment" name="couponCode"/></td>
                 </tr>
 
 

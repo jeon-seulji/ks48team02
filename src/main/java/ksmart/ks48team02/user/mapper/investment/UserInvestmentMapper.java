@@ -2,6 +2,7 @@ package ksmart.ks48team02.user.mapper.investment;
 
 import ksmart.ks48team02.user.dto.InvestmentContent;
 import ksmart.ks48team02.user.dto.InvestmentInfo;
+import ksmart.ks48team02.user.dto.InvestmentJudge;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface UserInvestmentMapper {
 
     public List<InvestmentContent> getInvestmentContent();
 
-    List<InvestmentInfo> getSortedList(String orderBy);
+    public List<InvestmentInfo> getSortedList(String orderBy);
+
+    public int addInvestmentJudge(InvestmentJudge investmentJudge);
 
 }

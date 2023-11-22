@@ -63,11 +63,11 @@
                     <option value="noBank">무통장입금</option>
                 </select>
             </td>
-            <td><input id="depositAccount" type="text" style="width:150px;"  name="depositAccount" th:value="${paymentsInfo.depositAccount}"></td>
-            <td><input type="text" name="depositName" style="width:100px;" th:value="${paymentsInfo.depositName}"></td>
-            <td><input id="refundAccount" type="text" style="width:150px;" name="refundAccount" th:value="${paymentsInfo.refundAccount}"></td>
+            <td><input id="depositAccount" type="text" style="width:150px;"  name="depositAccount" th:value="${paymentsInfo.depositAccount}" th:disabled="${paymentsInfo.depositAccount == null}"></td>
+            <td><input type="text" name="depositName" style="width:100px;" th:value="${paymentsInfo.depositName}" th:disabled="${paymentsInfo.depositName == null}"></td>
+            <td><input id="refundAccount" type="text" style="width:150px;" name="refundAccount" th:value="${paymentsInfo.refundAccount}" th:disabled="${paymentsInfo.refundAccount == null}"></td>
             <td><span th:text="${paymentsInfo.depositPrice}"></span> 원</td>
-            <td><span th:text="${paymentsInfo.paymentDeadlineDate}"></span></td>
+            <td><span th:text="${(paymentsInfo.paymentDeadlineDate == null)? '-':paymentsInfo.paymentDeadlineDate}"></span></td>
             <td><span th:text="${paymentsInfo.paymentCompletedDate}"></span></td>
             <td th:text="${paymentsInfo.paymentState}"></td>
         </tr>
