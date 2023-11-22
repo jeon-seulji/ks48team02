@@ -89,7 +89,7 @@
                 <div class="row justify-content-center">
                     <div class="ProfileImage"
                          style="width: 40px; height: 40px; background: #EEE; margin-right: 3%;"></div>
-                    <div class="" style="color: black; font-weight: bold; font-size: 20px;" th:text="${rewardProject.regCompany}"></div>
+                    <a th:href="@{/user/storePage/{storeCode}(storeCode=${rewardProject.storeCode})}"><div class="" style="color: black; font-weight: bold; font-size: 20px;" th:text="${rewardProject.regCompany}"></div></a>
                 </div>
                 <div style="color: #002a80; font-weight: bold; font-size: 15px;">2320명이 팔로우 중</div>
                 <div><a th:href="@{#}" class="btn btn-secondary" id="goInquiryBtn">문의하기</a>

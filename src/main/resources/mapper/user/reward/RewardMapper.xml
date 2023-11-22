@@ -294,6 +294,7 @@
             o.option_name,
             o.option_delivery_price,
             o.option_estimated_delivery_date,
+            s.store_code,
             s.store_image,
             s.like_count,
             m.contact_info,
