@@ -7,6 +7,7 @@
     <!--쿠폰 resultMap-->
     <resultMap id="CouponResultMap" type="Coupon">
         <id property="couponCode" column="coupon_code"/>
+        <result property="memberId" column="member_id"/>
         <result property="couponSerialNumber" column="coupon_serial_number"/>
         <result property="couponName" column="coupon_name"/>
         <result property="couponDiscountRate" column="coupon_discount_rate"/>
@@ -55,32 +56,40 @@
 
 <!--    쿠폰 등록-->
     <insert id="insertCoupon" parameterType="Coupon">
-        INSERT INTO
-        coupon_details
-        (coupon_code,
-        coupon_serial_number,
-        coupon_name,
-        coupon_discount_rate,
-        coupon_discount_amount,
-        coupon_stock,
-        number_coupons_remaining,
-        coupon_valid_period,
-        coupon_terms_use)
-        VALUES (#{couponCode},
-        #{couponSerialNumber},
-        #{couponName},
-        #{couponDiscountRate},
-        #{couponDiscountAmount},
-        #{couponStock},
-        #{numberCouponsRemaining},
-        #{couponValidPeriod},
-        #{couponTermsUse});
+        INSERT INTO coupon_details
+        (
+            coupon_code,
+            member_id,
+            coupon_serial_number,
+            coupon_name,
+            coupon_discount_rate,
+            coupon_discount_amount,
+            coupon_stock,
+            number_coupons_remaining,
+            coupon_valid_period,
+            coupon_terms_use
+        )
+        SELECT
+            CONCAT('coup_',LPAD(COUNT(coupon_code) + 1, 4, '0')),
+            #{memberId},
+            #{couponSerialNumber},
+            #{couponName},
+            #{couponDiscountRate},
+            #{couponDiscountAmount},
+            #{couponStock},
+            #{numberCouponsRemaining},
+            #{couponValidPeriod},
+            #{couponTermsUse},
+
+        FROM
+        coupon_details;
     </insert>
 
     <!--전체 쿠폰 조회-->
     <select id="getCouponList" resultType="Coupon">
         select
             c.coupon_code as couponCode,
+            c.member_id as memberId,
             c.coupon_serial_number as couponSerialNumber,
             c.coupon_name as couponName,
             c.coupon_discount_rate as couponDiscountRate,
@@ -118,9 +127,9 @@
             m.member_id = #{memberId} AND mc.coupon_end_date >= CURDATE() AND mc.coupon_used = 0;
     </select>
 
-    <!--쿠폰 정보 쿠폰 코드로 조회-->
+    <!--수정 쿠폰 정보 쿠폰 코드로 조회-->
     <select id="getCouponCodeById" parameterType="String" resultMap="CouponResultMap" >
-        /*  특정 쿠폰 조회*/
+        /*  수정 특정 쿠폰 조회*/
         select
             c.coupon_code,
             c.coupon_serial_number,

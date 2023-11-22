@@ -106,10 +106,6 @@
                 <caption>발급 정보</caption>
 
                 <tbody class="contentForm">
-                <tr class="row-1">
-                    <th class="banner" th:name="couponCode" scope="row" >쿠폰코드 <i class="bi bi-patch-check-fill"></i></th>
-                    <td><input type="text" class="comment" name="couponCode"/></td>
-                </tr>
                 <tr class="row-2">
                     <th class="banner" th:name="couponSerialNumber" scope="row" >쿠폰고유번호 <i class="bi bi-patch-check-fill"></i></th>
                     <td><input type="text" class="comment" name="couponSerialNumber"/></td>
@@ -148,10 +144,8 @@
                     <th class="banner" th:name="couponTermsUse" scope="row">쿠폰 사용 조건</th>
                     <td><input type="text" class="comment" name="couponTermsUse"/></td>
                 </tr>
-                <tr class="row-10">
-                    <th class="banner" scope="row">관리자 ID</th>
-                    <td><input type="text" class="comment" name="couponCode"/></td>
-                </tr>
+
+               <input type="hidden" class="comment" name="memberId" th:value="${session.SID}"/>
 
 
                 </tbody>

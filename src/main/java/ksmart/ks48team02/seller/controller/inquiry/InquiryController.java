@@ -16,4 +16,12 @@ public class InquiryController {
         
         return "seller/inquiry/main";
     }
+
+    @GetMapping("/inquiryModify")
+    public String inquiryModify(Model model){
+        model.addAttribute("title", "판매자 문의");
+
+        return "admin/inquiry/inquiryModify";
+    }
+
 }
