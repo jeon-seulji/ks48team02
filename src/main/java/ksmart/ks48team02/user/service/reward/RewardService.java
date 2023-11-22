@@ -53,8 +53,8 @@ public class RewardService {
     }
 
     //리워드프로젝트 전체 조회.
-    public List<RewardProject> rewardProjectList (){
-        List<RewardProject> projectList = rewardMapper.rewardProjectList();
+    public List<RewardProject> rewardProjectList (String projectStatus, String projectArrange, String category){
+        List<RewardProject> projectList = rewardMapper.rewardProjectList(projectStatus, projectArrange, category);
 
         return projectList;
     }
@@ -75,6 +75,11 @@ public class RewardService {
         });
         return rewardProject;
      }
+
+    //상세 페이지 진입 시 조회수 증가
+    public void searchCnt(String rewardProjectCode){
+        rewardMapper.searchCnt(rewardProjectCode);
+    };
 
      //주문번호, 주문상세번호, 결제번호 생성
     public OrderTotal getOrderAndPaymentCode(){
@@ -158,5 +163,14 @@ public class RewardService {
     //대댓글 달기
     public void addReplyComment (String reply, String rewardProjectCode, String parentCommentCode,  String memberId, String memberName){
         rewardMapper.addReplyComment(reply, rewardProjectCode, parentCommentCode, memberId, memberName);
+    }
+
+    // 리워드 공고 옵션 조회
+    public List<RewardOption> getRewardOptionByCode(String rewardProjectCode){
+
+        List<RewardOption> getRewardOptionByCode = null;
+        getRewardOptionByCode = rewardMapper.getRewardOptionByCode(rewardProjectCode);
+        return getRewardOptionByCode;
+
     }
 }

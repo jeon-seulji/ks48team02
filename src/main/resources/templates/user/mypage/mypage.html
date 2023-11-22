@@ -113,6 +113,11 @@
             border: 1px solid var(--maincolor);
         }
 
+        .submitBtn_black:disabled{
+            background-color: lightgrey;
+            border: 1px solid lightgrey;
+        }
+
         /* 흰 버튼 */
         .submitBtn_white {
             background: #fff;
@@ -167,8 +172,14 @@
             display: none;
         }
 
+        .btn.btn-secondary.btn-sm{
+            background-color: lightgrey;
+            border: 1px solid white;
+            border-radius: 5px;
+        }
         input::placeholder,.form-control {
             font-size: 14px; /* 원하는 글꼴 크기로 조절 */
+            color: lightgrey;
         }
 
 
@@ -225,34 +236,37 @@
                     </div >
                     <!--  리워드 펀딩 선택시 나타날 페이지  -->
                     <!--  tab 내부 본문 영역 -->
-                    <div class="bodyContainer" id="rewardTab">
-
+                    <div class="bodyContainer" id="orderProject">
                         <!--  내역 리스트 항목 -->
-                        <div class="contentsContainer">
+                        <div class="contentsContainer mb-lg-5" th:each="l : ${mypageOrderList}">
                             <div class="card" style="width: 48rem;">
                                 <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header">결제 완료 </h5>
+                                <h5 class="card-header" th:text="${l.orderCategoryDetail}">결제 완료</h5>
                                 <!-- 내역 내용 -->
                                 <div class="card-body" style="display: flex">
                                     <!-- 이미지  -->
                                     <div>
-                                        <img class="card-img-top" style="width: 160px; height: 160px;" src="https://contents.lotteon.com/itemimage/_v150640/LO/19/98/02/00/32/_1/99/80/20/03/3/LO1998020032_1998020033_1.jpg/dims/optimize/dims/resizemc/400x400"
-                                             alt="...">
+                                        <img class="card-img-top" style="width: 160px; height: 160px;" alt="..." th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                                             onerror="this.src = 'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg';">
                                     </div>
 
                                     <!-- 설명 / 버튼 -->
                                     <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                            <p class="card-text">2023.10.30 결제</p>
-                                            <h5 class="card-title">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
-                                            <p class="card-text">누젠 모래시계 가열식 가습기(화이트)</p>
-                                            <div style="display: flex; justify-content: end; margin:0;">
-                                                <a href="#" class="submitBtn_white"
-                                                   data-toggle="modal"
-                                                   data-target="#exampleModal3"
-                                                   data-what="hello"
-                                                   >주문취소</a>
-                                                <a href="#" class="submitBtn_black" >결제상세</a>
-                                            </div>
+                                        <p class="orderApplicationDate" th:text="${l.orderApplicationDate}">2023.10.30 결제</p>
+                                        <h5 class="orderName" th:text="${l.orderName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
+                                        <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
+                                            <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
+                                            <span th:text="|주문 수량 : ${rl.orderOptionAmount} 개|"></span>
+                                        </th:block>
+
+                                        <div style="display: flex; justify-content: end; margin:0;">
+                                            <a href="#" class="submitBtn_white"
+                                               data-toggle="modal"
+                                               data-target="#exampleModal3"
+                                               data-what="hello"
+                                            >주문취소</a>
+                                            <a href="#" class="submitBtn_black" >결제상세</a>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -275,115 +289,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-
-                    <!--  투자 펀딩 선택시 나타날 페이지  -->
-                    <!--  내역 리스트 항목 -->
-                    <!--  tab 내부 본문 영역 -->
-                    <div class="bodyContainer" id="investmentTab">
-
-                        <!--  내역 리스트 항목 -->
-                        <div class="contentsContainer">
-                            <div class="card" style="width: 48rem;">
-                                <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header">결제 완료 </h5>
-                                <!-- 내역 내용 -->
-                                <div class="card-body" style="display: flex">
-                                    <!-- 이미지  -->
-                                    <div>
-                                        <img class="card-img-top" style="width: 160px; height: 160px;" src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA2MjdfMjY5%2FMDAxNjU2MzIyNDkxNTAw.MyuSHCloNL5z2mgJhRk1Z4u__TYNKf-OqxW-jKEtDIQg.6WbKNtW5efJE2zbANoWbmq0B-raZae4wKy1_TsyS5WQg.JPEG.bammango0106%2Ffile1_16371338044gozwo2u45.jpg&type=a340"
-                                             alt="...">
-                                    </div>
-
-                                    <!-- 설명 / 버튼 -->
-                                    <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                        <p class="card-text">2023.10.20 결제</p>
-                                        <h5 class="card-title">고흐 전시회</h5>
-                                        <p class="card-text">투자 옵션 1</p>
-                                        <div style="display: flex; justify-content: end; margin:0;">
-                                            <a href="#" class="submitBtn_white"
-                                               data-toggle="modal"
-                                               data-target="#exampleModal2"
-                                               data-what="hello"
-                                            >주문취소</a>
-                                            <a href="" class="submitBtn_black" >결제상세</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 모달팝업 -->
-                        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-
-                                    <!-- 팝업창 내용 -->
-                                    <div class="modal-body detail">
-                                        <p>정말로 취소하시겠습니까?</p>
-                                    </div>
-
-                                    <div class="modal-footer" >
-                                        <button type="button" class="submitBtn_white" data-dismiss="modal">취소</button>
-                                        <button type="button" class="submitBtn_black">확인</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--  기부 펀딩 선택시 나타날 페이지  -->
-                    <!--  tab 내부 본문 영역 -->
-                    <div class="bodyContainer" id="donationTab">
-
-                        <!--  내역 리스트 항목 -->
-                        <div class="contentsContainer">
-                            <div class="card" style="width: 48rem;">
-                                <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header">결제 완료 </h5>
-                                <!-- 내역 내용 -->
-                                <div class="card-body" style="display: flex">
-                                    <!-- 이미지  -->
-                                    <div>
-                                        <img class="card-img-top" style="width: 160px; height: 160px;" src="https://contents.lotteon.com/itemimage/_v150640/LO/19/98/02/00/32/_1/99/80/20/03/3/LO1998020032_1998020033_1.jpg/dims/optimize/dims/resizemc/400x400"
-                                             alt="...">
-                                    </div>
-
-                                    <!-- 설명 / 버튼 -->
-                                    <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                        <p class="card-text">2023.10.30 결제</p>
-                                        <h5 class="card-title">길고양이들을 도와주세요</h5>
-                                        <p class="card-text">사료 1포대 </p>
-                                        <div style="display: flex; justify-content: end; margin:0;">
-                                            <a href="#" class="submitBtn_white"
-                                               data-toggle="modal"
-                                               data-target="#exampleModal"
-                                               data-what="hello"
-                                            >주문취소</a>
-                                            <a href="#" class="submitBtn_black" >결제상세</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 모달팝업 -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <!-- 팝업창 내용 -->
-                                    <div class="modal-body detail">
-                                        <p>정말로 취소하시겠습니까?</p>
-                                    </div>
-
-                                    <div class="modal-footer" >
-                                        <button type="button" class="submitBtn_white" data-dismiss="modal">취소</button>
-                                        <button type="button" class="submitBtn_black" >확인</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -416,22 +322,24 @@
                                 <!-----  1️⃣ 비밀번호 정보 ----->
                                 <div class="mb-6" style="display: flex; justify-content: space-between;" >
                                     <p class="user-info-list">비밀번호</p>
-                                    <button id="edit-pw-btn" type="button" data-target="edit-pw" class="btn btn-secondary btn-sm" style="background-color: darkgrey; border: 1px solid lightgrey;">변경</button>
+                                    <button id="edit-pw-btn" type="button" data-target="edit-pw" class="btn btn-secondary btn-sm">변경</button>
                                 </div>
-                                <!-- 변경 버튼 클릭시 edit-pw div가 floating  -->
+                                <!-- 변경 버튼의 target (변경 버튼 클릭시 edit-pw div가 floating)  -->
                                 <div id="edit-pw" class="info-box" style="margin: 10px 50px 0 50px; display: none;">
                                     <!--  기존 비밀번호   -->
                                     <p>현재 비밀번호 확인</p>
                                     <input class="form-control" type="password" placeholder="비밀번호 입력" id="floating-input"
-                                           style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
-                                    <button class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">확인</button>
+                                           style="height: 10px; border: 1px solid black; margin: 15px 40px 10px 15px;"/>
+                                    <div id="pw-auth-alert" class="form-text" style="color:red; font-size:13px; margin: 0 0 5px 15px;"></div>
+                                    <button id="pw-check-btn" type="button" class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">확인</button>
                                     <!--  새로운 비밀번호   -->
                                     <p>새로운 비밀번호</p>
-                                    <input class="form-control" type="password" placeholder="새로운 비밀번호"
+                                    <input class="form-control" type="password" placeholder="새로운 비밀번호" id="new-pw"
                                            style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
-                                    <input class="form-control" type="password" placeholder="새로운 비밀번호 확인"
-                                           style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
-                                    <button class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">저장</button>
+                                    <input class="form-control" type="password" placeholder="새로운 비밀번호 확인" id="new-pw-check"
+                                           style="height: 10px; border: 1px solid black; margin: 15px 40px 10px 15px;"/>
+                                    <div id="pw-check-alert" class="form-text" style="color:red; font-size:13px; margin: 0 0 5px 15px;" ></div>
+                                    <button id="pw-edit-btn" type="button" class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;" disabled>저장</button>
                                 </div>
 
 
@@ -441,14 +349,14 @@
                                 <div class="mb-6">
                                     <div style="display: flex; justify-content: space-between;">
                                         <p class="user-info-list">e-mail</p>
-                                        <button id="edit-email-btn" type="button" data-target="edit-email" class="btn btn-secondary btn-sm" style="background-color: darkgrey; border: 1px solid lightgrey;">변경</button>
+                                        <button id="edit-email-btn" type="button" data-target="edit-email" class="btn btn-secondary btn-sm edit" >변경</button>
                                     </div>
                                     <div>
                                         <div id="edit-email" class="info-box" style="margin: 10px 50px 0 50px; display:none;">
                                             <input class="form-control" placeholder="이메일 입력" id="email-input"
-                                                   style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
-                                            <label for="email-input" ></label>
-                                            <button class="submitBtn_black" style="margin-left:11px; margin-bottom: 10px;">저장</button>
+                                                   style="height: 10px; border: 1px solid black; margin: 15px 40px 10px 15px;"/>
+                                            <div id="email-alert" class="form-text" style="color:red; font-size:13px; margin: 0 0 5px 15px;"></div>
+                                            <button id="email-edit-btn" type="button" class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">저장</button>
                                         </div>
                                     </div>
                                     <div class="user-info">
@@ -464,14 +372,14 @@
                                     <div style="display: flex; justify-content: space-between;">
                                         <p class="user-info-list">휴대폰 번호</p>
                                         <!-- 변경 버튼 클릭시 edit-pw div가 floating  -->
-                                        <button id="edit-phone-btn" type="button" data-target="edit-phone" class="btn btn-secondary btn-sm" style="background-color: darkgrey; border: 1px solid lightgrey;">변경</button>
+                                        <button id="edit-phone-btn" type="button" data-target="edit-phone" class="btn btn-secondary btn-sm edit">변경</button>
                                     </div>
                                     <div>
                                         <div id="edit-phone" class="info-box" style="margin: 10px 50px 0 50px; display: none;">
                                             <input class="form-control" placeholder="휴대폰 번호 입력" id="phone-input"
-                                                   style="height: 10px; border: 1px solid black; margin: 15px 40px 15px 15px;"/>
-                                            <label for="phone-input"></label>
-                                            <button class="submitBtn_black" style="margin-left:11px; margin-bottom: 10px;">저장</button>
+                                                   style="height: 10px; border: 1px solid black; margin: 15px 40px 10px 15px;"/>
+                                            <div id="phone-alert" class="form-text" style="color:red; font-size:13px; margin: 0 0 5px 15px;"></div>
+                                            <button id="phone-edit-btn" type="button" class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">저장</button>
                                         </div>
                                     </div>
                                     <div class="user-info">
@@ -501,7 +409,7 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-    <script th:inline="javascript">
+    <script type="text/javascript" th:inline="javascript">
       /* 선택한 select 항목별로 내용 나타나게  */
       /* 일단 모든 항목을 숨기고 나타나게 해야 할 듯 */
       $rewardTab = document.getElementById('rewardTab');
@@ -510,35 +418,32 @@
       $donationTab = document.getElementById('donationTab');
       $bodyContainer = document.querySelectorAll('.bodyContainer');
 
-      $selectFund.addEventListener('change', function(){
-          $bodyContainer.forEach((element) => {
-              element.style.display = 'none';
-          })
 
-          let selectedValue = $selectFund.value;
-          switch (selectedValue) {
-              case "reward"     : $rewardTab.style.display = 'block';
-                        break;
-              case "investment" : $investmentTab.style.display = 'block';
-                        break;
-              case "donation"   : $donationTab.style.display = 'block';
-                        break;
-              default           :
-                  for(let i=0; i<$bodyContainer.length; i++){
-                      $bodyContainer[i].style.display = 'block';
-                  }
-          }
-      })
 
       document.getElementById('lead-drop-page').addEventListener('focus', ()=>{
       })
 
 
-
       /* 내 정보 tab 🔽 */
-      /*  수정 버튼 클릭시 숨겨진 div 보이게 */
-      const $editBtns = document.querySelectorAll('.btn.btn-secondary.btn-sm');
+      /* 비밀번호 변경 버튼 클릭시 div 보이게 */
+      const $editPwBtn = document.getElementById('edit-pw-btn');
+      const $pwEditDiv = document.getElementById('edit-pw')
+      $editPwBtn.addEventListener('click',function(){
+          if($pwEditDiv.style.display === 'none'){
+              $pwEditDiv.style.display = 'block';
+              this.style.backgroundColor = 'white';
+              this.style.color ='black';
+              this.textContent = '취소';
+          }else{
+              $pwEditDiv.style.display = 'none';
+              this.style.backgroundColor = 'lightgrey';
+              this.style.color ='white';
+              this.textContent = '변경';
+          }
+      })
 
+      /*  이메일 + 연락처 변경 버튼 클릭시 숨겨진 div 보이게 */
+      const $editBtns = document.querySelectorAll('.btn.btn-secondary.btn-sm.edit');
       $editBtns.forEach(function (button){
           button.addEventListener('click',()=>{
               /* data-target 속성 이용하여 특정 버튼과 연결된 숨겨진 div 식별*/
@@ -550,7 +455,7 @@
 
               if($targetDiv.style.display === 'none'){
                   $targetDiv.style.display = 'block';
-                  /* 기존 회원정보 가리기 */
+                  /* 숨겨진 div 나타나면 기존 회원정보 가리기 */
                   $existingDiv.style.display = 'none';
                   const $targetInput = $targetDiv.querySelector('.form-control');
 
@@ -561,17 +466,110 @@
                   button.style.backgroundColor = 'white';
                   button.style.color = 'black';
               }else{
+                  /* div 숨겨지면 기존 회원정보 나타나게 하기 */
                   $existingDiv.style.display = 'block';
                   $targetDiv.style.display = 'none';
                   button.textContent = '변경';
-                  button.style.backgroundColor = 'grey';
+                  button.style.backgroundColor = 'lightgrey';
                   button.style.color = 'white';
               }
-
           })
       })
 
+      /* 저장 버튼 클릭 이벤트 리스너 */
+      const $pwEditBtn = document.getElementById('pw-edit-btn');
+      const $emailEditBtn = document.getElementById('email-edit-btn');
+      const $phoneEditBtn = document.getElementById('phone-edit-btn');
 
+
+      /* 기존 비밀번호 인증 */
+      const $pwInput = document.getElementById('floating-input');
+      document.getElementById('pw-check-btn').addEventListener('click',()=>{
+          $.ajax({
+              url : '/user/mypage/pwCheck',
+              method : 'POST',
+              data : {'memberPw' : $pwInput.value },
+              dataType : 'json'
+          })
+              .done(function(response){
+                  if(!response){
+                      document.getElementById('pw-auth-alert').textContent = '비밀번호가 일치하지 않습니다';
+                      $pwEditBtn.disabled = true;
+                  }else{
+                      document.getElementById('pw-auth-alert').textContent = '';
+                      $pwEditBtn.disabled = false;
+                  }
+              })
+
+              .fail(function (jqXHR, textStatus){
+                  alert('통신 중 오류가 발생하였습니다');
+                  console.log(`Request failed: ${textStatus}`);
+              })
+
+      })
+
+      /* 새로운 비밀번호 저장 버튼 클릭시 : 유효성 검사 + 새 비밀번호 일치 확인 모두 만족시 비밀번호 update */
+      let $newPw = document.getElementById('new-pw');
+      $pwEditBtn.addEventListener('click',function(){
+          const $pwCheckAlert = document.getElementById('pw-check-alert');
+          // 1. 유효성 검사 통과 못 한 경우
+          const $inputEles = $pwEditDiv.querySelectorAll('.form-control');
+          let isValid = Array.from($inputEles).every(inputEle => validationCheck(inputEle));
+          console.log(isValid);
+          if(!isValid){
+              $pwCheckAlert.textContent = '유효한 값을 입력해 주세요';
+          } else{
+              // 2. 기존 비밀번호와 동일하진 않은지 확인
+              if($pwInput.value === $newPw.value){
+                  $pwCheckAlert.textContent = '기존 비밀번호와 다른 값을 입력해 주세요';
+                  $newPw.focus();
+              } else {
+                  $pwCheckAlert.textContent = '';
+                  // 3. 유효성 검사 통과하면 새 비밀번호 일치 여부 확인
+                  if($newPw.value === document.getElementById('new-pw-check').value){
+                      $pwCheckAlert.textContent = '';
+                      // 비밀번호 UPDATE
+                      $.ajax({
+                          url : '/user/mypage/pwModify',
+                          method : 'POST',
+                          data : { 'memberPw': document.getElementById('new-pw').value },
+                          dataType : 'json'
+                      })
+                          .done(function(response){
+                              if(response.result == 1) alert('비밀번호가 정상적으로 변경되었습니다.'); else alert('비밀번호 변경에 실패하였습니다');
+                          })
+
+                          .fail(function(jqXHR, textStatus){
+                              alert('통신 중 오류가 발생하였습니다');
+                              console.log(`Request failed: ${textStatus}`);
+                          })
+                  } else {
+                      $pwCheckAlert.textContent = '비밀번호가 서로 일치하지 않습니다.';
+                      document.getElementById('new-pw-check').focus();
+
+                  }
+              }
+
+          }
+
+      })
+
+
+
+      /* 이메일 저장 버튼 클릭시 update */
+
+
+      /* 휴대폰번호 저장 버튼 클릭시 update */
+
+      /* 입력란 유효성 검사 함수 */
+      function validationCheck(input){
+          let isValid = true;
+          if( input.value.trim() === '' || typeof input === 'undefined' || input.value == null ){
+              isValid = false;
+              input.nextElementSibling.textContent = '유효한 값이 아닙니다';
+          }
+          return isValid;
+      }
 
     </script>
 </th:block>

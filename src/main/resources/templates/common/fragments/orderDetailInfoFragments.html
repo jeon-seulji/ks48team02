@@ -86,140 +86,24 @@
             <td class="title-td" style="height: 35px; width: 20%">총 금액</td>
         </tr>
         <!-- option contents -->
-        <tr class="option-info-tr">
+        <tr class="option-info-tr" th:each="l : ${getRewardOptionByOrderCode}">
             <td style="height: 35px; background: #fff; width: 20px;">
                 <input type="checkbox" name="selectList">
             </td>
             <td style="height: 35px; text-align: left !important;">
-                <select name="orderOption">
-
-                    <option value="1">
-                        [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                    </option>
-                    <option value="2">
-                        옵션 2
-                    </option>
-                    <option value="3">
-                        옵션 3
-                    </option>
-                    <option value="4">
-                        옵션 4
-                    </option>
+                <select name="orderOption" style="width: 90%;">
+                    <th:block th:each="ol : ${getRewardOptionByCode}">
+                        <option th:value="${ol.rewardOptionCode}" th:selected="${ol.rewardOptionCode} == ${l.rewardOptionCode}">
+                            [[${ol.optionName}]]
+                        </option>
+                    </th:block>
                 </select>
             </td>
             <td style="height: 35px; ">
-                <input type="number" min="1" max="9999" value="2">
+                <input type="number" min="1" max="9999" th:value="${l.orderOptionAmount}">
             </td>
-            <td style="height: 35px; "><span>17,500</span>원</td>
-            <td style="height: 35px; "><span>35,000</span>원</td>
-        </tr>
-        <tr class="option-info-tr">
-            <td style="height: 35px; background: #fff; width: 20px;">
-                <input type="checkbox" name="selectList">
-            </td>
-            <td style="height: 35px; text-align: left !important;">
-                <select name="orderOption">
-
-                    <option value="1">
-                        [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                    </option>
-                    <option value="2">
-                        옵션 2
-                    </option>
-                    <option value="3">
-                        옵션 3
-                    </option>
-                    <option value="4">
-                        옵션 4
-                    </option>
-                </select>
-            </td>
-            <td style="height: 35px; ">
-                <input type="number" min="1" max="9999" value="2">
-            </td>
-            <td style="height: 35px; "><span>17,500</span>원</td>
-            <td style="height: 35px; "><span>35,000</span>원</td>
-        </tr>
-        <tr class="option-info-tr">
-            <td style="height: 35px; background: #fff; width: 20px;">
-                <input type="checkbox" name="selectList">
-            </td>
-            <td style="height: 35px; text-align: left !important;">
-                <select name="orderOption">
-
-                    <option value="1">
-                        [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                    </option>
-                    <option value="2">
-                        옵션 2
-                    </option>
-                    <option value="3">
-                        옵션 3
-                    </option>
-                    <option value="4">
-                        옵션 4
-                    </option>
-                </select>
-            </td>
-            <td style="height: 35px; ">
-                <input type="number" min="1" max="9999" value="2">
-            </td>
-            <td style="height: 35px; "><span>17,500</span>원</td>
-            <td style="height: 35px; "><span>35,000</span>원</td>
-        </tr>
-        <tr class="option-info-tr">
-            <td style="height: 35px; background: #fff; width: 20px;">
-                <input type="checkbox" name="selectList">
-            </td>
-            <td style="height: 35px; text-align: left !important;">
-                <select name="orderOption">
-
-                    <option value="1">
-                        [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                    </option>
-                    <option value="2">
-                        옵션 2
-                    </option>
-                    <option value="3">
-                        옵션 3
-                    </option>
-                    <option value="4">
-                        옵션 4
-                    </option>
-                </select>
-            </td>
-            <td style="height: 35px; ">
-                <input type="number" min="1" max="9999" value="2">
-            </td>
-            <td style="height: 35px; "><span>17,500</span>원</td>
-            <td style="height: 35px; "><span>35,000</span>원</td>
-        </tr>
-        <tr class="option-info-tr">
-            <td style="height: 35px; background: #fff; width: 20px;">
-                <input type="checkbox" name="selectList">
-            </td>
-            <td style="height: 35px; text-align: left !important;">
-                <select name="orderOption">
-
-                    <option value="1">
-                        [얼리버드 한정] 휴대용 무선 키보드 위에 터치패드 + 스마트 케이스까지! 한층 더 세련된 화이트 에디션으로 돌아왔어요.
-                    </option>
-                    <option value="2">
-                        옵션 2
-                    </option>
-                    <option value="3">
-                        옵션 3
-                    </option>
-                    <option value="4">
-                        옵션 4
-                    </option>
-                </select>
-            </td>
-            <td style="height: 35px; ">
-                <input type="number" min="1" max="9999" value="2">
-            </td>
-            <td style="height: 35px; "><span>17,500</span>원</td>
-            <td style="height: 35px; "><span>35,000</span>원</td>
+            <td style="height: 35px; "><span>[[${l.optionPrice}]]</span>원</td>
+            <td style="height: 35px; "><span>[[${l.orderOptionAmount * l.optionPrice}]]</span>원</td>
         </tr>
 
 

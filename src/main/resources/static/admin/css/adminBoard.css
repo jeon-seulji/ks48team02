@@ -23,7 +23,7 @@ form{
     background-color: black;
     color: #EEE;
     transition: background-color 0.3s;
-    margin-right: 20px;
+    /*margin-right: 20px;*/
 
 }
 .modify:hover{
