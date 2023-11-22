@@ -36,8 +36,6 @@
     </resultMap>
 
 
-
-    <!-- 여기부터 작업 -->
     <sql id="deliveryListWhere">
         <where>
             <!-- 기간 선택 -->

@@ -50,6 +50,8 @@ public class WebConfig implements WebMvcConfigurer{
                 .excludePathPatterns("/user/js/**")
                 .excludePathPatterns("/success")
                 .excludePathPatterns("/fail")
+                .excludePathPatterns("/error")
+                .excludePathPatterns("/summernoteImage/**")
                 .excludePathPatterns("/favicon.ico");
 
 		/*

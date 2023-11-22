@@ -68,23 +68,29 @@
             background-color: white;
             list-style: none;
             justify-content: space-evenly;
-
+            width: 430px;
+            height: 60px;
             padding-left: 0;
 
         }
 
         .user-type-menu li {
+
             text-align: center;
         }
 
         #customer-user {
             text-align: center;
+            padding-top: 40px;
             padding-bottom: 40px;
+
 
             padding-left: 65px;
             padding-right: 65px;
             background-color: white;
             border-radius: 2px;
+
+
         }
 
         .btn btn-primary{
@@ -186,13 +192,13 @@
             <ul class="user-type-menu">
                 <li class="user-type normal">
                     <input type="radio" class="btn-check btn btn-primary" name="memberType" value="mem_type_02" id="customer-user"
-                           autocomplete="off" checked style="padding: 10px 30px;">
-                    <label class="btn btn-outline-primary btn-lg" for="customer-user">구매자 회원</label>
+                           autocomplete="off" checked style="padding: 10px 30px; border-radius: 0;" >
+                    <label class="btn btn-outline-primary btn-lg" for="customer-user" style="border-radius: 0;">구매자 회원</label>
                 </li>
 
                 <li class="user-type seller">
                     <input type="radio" class="btn-check btn btn-primary" name="memberType" value="mem_type_05" id="seller-user"  autocomplete="off" >
-                    <label class="btn btn-outline-primary btn-lg" for="seller-user">판매자 회원</label>
+                    <label class="btn btn-outline-primary btn-lg" for="seller-user"style="border-radius: 0;">판매자 회원</label>
                 </li>
             </ul>
             <!--  회원가입 폼  -->
@@ -202,33 +208,37 @@
                     <label for="memberId" class="form-label">ID</label>
                     <div style="display: flex; gap:10px;">
                         <input type="text" name="memberId" class="form-control" id="memberId" placeholder="아이디 입력">
-                        <button id="duplicationBtn" type="submit" class="submitBtn_white" style="width:105px;" ; >중복확인</button>
+                        <button id="id-check-btn" type="button" class="submitBtn_white" style="width:105px;"; >중복확인</button>
+                        <button id="readonly-btn" type="button" class="submitBtn_black" style="background-color: lightgrey; color: white; border: 1px solid lightgray; width:105px; display: none">변경하기</button>
                     </div>
-                    <div class="form-text" style="color:red; font-size:13px;">해당 아이디가 이미 존재합니다 어쩌고저쩌고</div>
+                    <div id="id-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
-                <div id="emailHelp" class="form-text"></div>
+
                 <div class="mb-3">
                     <label for="memberPw" class="form-label">비밀번호</label>
-                    <input type="password" name="memberPw" class="form-control"  aria-describedby="emailHelp" id="memberPw" placeholder="8자 이상의 비밀번호 입력 (영문, 숫자, 특수문자 혼합)">
-                    <div class="form-text" style="color:red; font-size:13px;">비밀번호가 올바르지 않습니다 어쩌고저쩌고</div>
+                    <input type="password" name="memberPw" class="form-control pw-check"  aria-describedby="emailHelp" id="memberPw" placeholder="8자 이상의 비밀번호 입력 (영문, 숫자, 특수문자 혼합)">
+                    <div class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
                 <div class="mb-3">
-                    <label for="checkPassword" class="form-label">비밀번호 확인</label>
-                    <input type="password" class="form-control" id="checkPassword" >
-                    <div class="form-text" style="color:red; font-size:13px;">비밀번호가 일치하지 않습니다 </div>
+                    <label for="checkPw" class="form-label">비밀번호 확인</label>
+                    <input type="password" class="form-control pw-check" id="checkPw" >
+                    <div id="pw-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
                 <div class="mb-3">
                     <label for="memberName" class="form-label">이름</label>
                     <input type="text" name="memberName" class="form-control" id="memberName">
+                    <div id="name-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
                 <div class="mb-3">
                     <label for="memberEmail" class="form-label">e-mail</label>
                     <input type="text" name="memberEmail" class="form-control" id="memberEmail">
+                    <div id="email-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
                 <div class="mb-3">
                     <label for="memberContactInfo" class="form-label">휴대폰 번호</label>
                     <input type="text" name="memberContactInfo" class="form-control" id="memberContactInfo"
-                           placeholder="휴대폰 번호 입력('-' 제외)">
+                           placeholder="휴대폰 번호 11자리 입력" >
+                    <div id="phone-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
             </form>
 
@@ -655,7 +665,7 @@ Fax: 02)0000-0000
                 </div>
 
             <div class="d-grid gap-2" >
-                <button type="submit" class="btn btn-primary btn-lg" id="join-button">회원가입</button>
+                <button type="submit" class="btn btn-primary btn-lg" id="join-button" style="border-radius: 0;">회원가입</button>
             </div>
         </div>
 
@@ -689,26 +699,113 @@ Fax: 02)0000-0000
             });
         });
 
-        /* ------------------- 회원가입 ---------------------- */
+        /* ----------------------------- 회원가입 ----------------------------------- */
         const $joinBtn = document.getElementById('join-button');
         const $formEles = document.querySelectorAll('#join-form input');
 
-        // 라디오 버튼의 선택을 감지하고 hidden 필드를 업데이트
+        /* 라디오 버튼의 선택을 감지하고 hidden 필드를 업데이트 */
         const radioButtons = document.querySelectorAll('input[name="memberType"]');
         const hiddenField = document.getElementById('memberTypeCode');
 
         radioButtons.forEach(function (radioButton) {
             radioButton.addEventListener('change', function () {
                 hiddenField.value = radioButton.value;
-                console.log(radioButton.value);
             });
         });
 
-        // 회원가입 버튼 클릭 이벤트리스너 등록
-        $joinBtn.addEventListener('click', function(){
+        let $memberId = document.getElementById('memberId');
+        const $idCheckBtn =  document.getElementById('id-check-btn');
+        let $idAlert = document.getElementById('id-alert');
+        const $disabledBtn = document.getElementById('readonly-btn');
 
-           let isValid = true;
-            // 1. 모든 input이 다 작성되었는지, 유효한 값인지 검사
+        /* 중복확인 버튼 클릭 이벤트리스너 등록 */
+        $idCheckBtn.addEventListener('click',function (){
+
+            // 유효성 검사
+            if($memberId.value.trim() === '' || typeof $memberId === 'undefined'){
+                $idAlert.textContent = '올바른 ID를 입력해 주세요';
+
+            }else{
+                // 아이디 중복 확인
+                $.ajax({
+                    url : '/user/account/idCheck',
+                    method : 'POST',
+                    data : {'memberId': $memberId.value},
+                    dataType : 'json'
+                })
+
+                    .done(function (response){
+                        if(response) { // true : 이미 아이디 존재
+                            $idAlert.textContent = '이미 사용 중인 아이디입니다'
+                        }else{
+                            $idAlert.textContent = '';
+                            alert('사용 가능한 아이디입니다');
+                            /* readonly로 변경하고 스타일 바꾸기 */
+                            $idCheckBtn.style.display = 'none';
+                            $disabledBtn.style.display = 'block';
+
+                            $memberId.setAttribute('readonly','readonly');
+                            console.log($memberId.value);
+                        }
+                    })
+
+                    .fail(function(jqXHR, textStatus){
+                        alert('통신 중 오류가 발생하였습니다');
+                        console.log(`Request failed: ${textStatus}`);
+                    })
+            }
+        });
+
+        /* 변경하기 버튼 클릭 이벤트리스너 등록 */
+        $disabledBtn.addEventListener('click',()=>{
+            $memberId.value = '';
+            $memberId.removeAttribute('readonly');
+            $disabledBtn.style.display = 'none';
+            $idCheckBtn.style.display = 'block';
+        })
+
+        /* 휴대폰 번호 keydown 이벤트 리스너 등록 */
+        const $memberPhone = document.getElementById('memberContactInfo');
+        $memberPhone.addEventListener('keydown',function (event){
+            // 입력된 키가 숫자가 아니면 무시
+            const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'ArrowLeft', 'ArrowRight'];
+
+            if (!allowedKeys.includes(event.key)) {
+                event.preventDefault();
+            }
+
+            let phoneNumber = event.target.value;
+            if (phoneNumber.length > 6) {
+                phoneNumber = phoneNumber.replace(/(\d{3})(\d{4})(\d{1,4})/, '$1-$2-$3');
+            }
+            event.target.value = phoneNumber;
+
+            // 길이가 13자 이상이면 초과 부분을 잘라냄
+            if (phoneNumber.length > 13) {
+                phoneNumber = phoneNumber.substring(0, 12);
+            }
+            event.target.value = phoneNumber;
+        })
+
+        /* 휴대폰 번호 focusout 이벤트 리스너 등록 */
+        $memberPhone.addEventListener('focusout', function (event){
+            if(event.target.value.length < 13){
+                document.getElementById('phone-alert').textContent = '휴대폰 번호 11자리를 입력해 주세요'
+            }else{
+                document.getElementById('phone-alert').textContent = '';
+            }
+        })
+
+
+        /* 회원가입 버튼 클릭 이벤트리스너 등록 */
+        $joinBtn.addEventListener('click', function(){
+            // 0. 아이디 중복체크 했는지 확인
+            if(!$memberId.readOnly) {
+                alert('아이디 중복 확인이 필요합니다');
+                return;
+            }
+            let isValid = true;
+            // 1. 모든 input이 다 작성되었는지 검사
             $formEles.forEach((input) => {
                 if(input.value.trim() === '' || typeof input === 'undefined'){
                     isValid = false;
@@ -716,13 +813,45 @@ Fax: 02)0000-0000
             })
 
             if(isValid){
-                document.getElementById('join-form').submit();
+                    // 2. 모든 input이 올바른 값인지 검사 (빨간 경고 있으면 회원가입 안 되게)
+                    const $formEles = document.querySelectorAll('.form-text');
+                    let haveRed = 0;
+                    $formEles.forEach((ele)=>{
+                        if(ele.textContent.length>1) haveRed += 1;
+                    })
+                    if(haveRed === 0){
+                        // 3. 모든 체크박스가 체크되었는지 확인
+                        $allAgree.checked ? document.getElementById('join-form').submit() : alert('필수 항목을 체크해 주세요');
+                    }else alert('필수 입력 항목을 모두 올바르게 입력해 주세요');
 
-            }else{
-                alert('유효한 값을 입력해 주세요');
+            } else {
+                alert('필수 입력 항목을 모두 입력해 주세요');
             }
-            // 2. input에 담긴 값들이 유효한지
+
         })
+
+        /* 비밀번호 & 비밀번호확인 일치 체크 */
+        const $pwEles = document.querySelectorAll('.pw-check');
+        const $memberPw = document.getElementById('memberPw');
+        const $checkPw = document.getElementById('checkPw');
+        const $pwAlert = document.getElementById('pw-alert');
+        $pwEles.forEach((ele)=>{
+
+            ele.addEventListener('focusout',()=>{
+                // 두 입력창이 모두 채워져 있는지 확인
+                if($memberPw.value.length > 0 && $checkPw.value.length > 0){
+                    // 비밀번호가 서로 같은지 검사
+                    if($memberPw.value !== $checkPw.value){
+                        $pwAlert.textContent = '비밀번호가 서로 일치하지 않습니다';
+
+                    }else{
+                        $pwAlert.textContent = '';
+                    }
+                }
+            })
+        })
+
+
     </script>
 
 </th:block>
@@ -731,6 +860,6 @@ Fax: 02)0000-0000
 <th:block layout:fragment="customJsFile">
 
 </th:block>
-<script th:src="@{/js/jquery-3.7.1.js}"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 </body>

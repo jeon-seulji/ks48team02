@@ -170,6 +170,7 @@
 
                 // list count
                 $('.total-list').text(list.orderList.length);
+
                 setOrderData(list.orderList);
 
                 // pager setting
@@ -400,26 +401,9 @@
 
                 </tbody>
             </table>
-            <!-- list pager -->
-            <div class="board-page-area">
-                <div class="list-controller-inner">
-                    <ul class="order-list-pager">
-                        <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
-                            <li th:unless="${num != currentPage}" class="link-active currentPage"><a th:data-value="${num}">[[${num}]]</a></li>
-                            <li th:if="${num != currentPage}"><a th:data-value="${num}">[[${num}]]</a></li>
-                        </th:block>
-                    </ul>
-                    <div class="list-btn-area">
-                        <button th:attr="class=${(startPageNum == currentPage) ? 'prev-transfer no-action' : 'prev-transfer'}">
-                            <span>prev</span>
-                        </button>
-                        <button th:attr="class=${(lastPage == currentPage) ? 'next-transfer no-action' : 'next-transfer'}">
-                            <span>next</span>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
+            <!-- pagenation start -->
+            <th:block th:replace="~{common/fragments/adminPagenation :: adminPagenation}"></th:block>
+            <!-- pagenation end -->
         </div>
 
     </div>

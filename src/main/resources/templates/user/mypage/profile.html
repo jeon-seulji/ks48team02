@@ -74,6 +74,12 @@
         .form-control-plaintext{
             margin: 10px 30px 10px 50px;
         }
+
+        .btn.btn-secondary.btn-sm{
+            background-color: lightgrey;
+            border: 1px solid white;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -155,10 +161,7 @@
         $editIntroduceBtn.addEventListener('change', () => {
             $textArea.style.display = 'none';
             $editIntroduceBtn.textContent = '수정';
-
         })
-
-
     </script>
 </th:block>
 

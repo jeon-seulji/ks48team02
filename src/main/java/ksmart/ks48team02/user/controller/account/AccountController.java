@@ -23,8 +23,6 @@ public class AccountController {
         this.userMemberService = userMemberService;
     }
 
-
-
     //로그인 페이지
     @GetMapping("/login")
     public String login(Model model, @RequestParam(name="msg", required = false) String msg) {
@@ -54,7 +52,9 @@ public class AccountController {
             // 로그인 처리 후에는 메인화면으로 전환
             return "redirect:/user";
         }
-        reAttr.addFlashAttribute("msg", "일치하는 회원의 정보가 없습니다.");
+        reAttr.addFlashAttribute("msg",resultMap.get("msg"));
+
+
         return "redirect:/user/account/login";
     }
 
@@ -63,14 +63,6 @@ public class AccountController {
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/user";
-    }
-
-
-
-    @GetMapping("/drop")
-    public String dropPage(){
-
-        return "user/account/drop";
     }
 
 
