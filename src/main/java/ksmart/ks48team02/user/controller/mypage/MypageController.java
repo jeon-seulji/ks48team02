@@ -40,6 +40,7 @@ public class MypageController {
         model.addAttribute("selectFund",selectFund);
         model.addAttribute("memberEmail", memberEmail);
         model.addAttribute("memberContactInfo", memberContactInfo);
+        model.addAttribute("loginId",loginId);
 
         return "user/mypage/mypage";
     }
@@ -72,9 +73,19 @@ public class MypageController {
     }
 
     // 이메일 변경
-
+    @PostMapping("/emailModify")
+    @ResponseBody
+    public void emailModify(@RequestParam(name="memberEmail")String memberEmail, HttpSession session){
+        String loginId = (String) session.getAttribute("SID");
+        mypageService.emailModify(loginId,memberEmail);
+    }
     // 연락처 변경
-
+    @PostMapping("/contactInfoModify")
+    @ResponseBody
+    public void contactInfoModify(@RequestParam(name="memberContactInfo")String memberContactInfo, HttpSession session){
+        String loginId = (String) session.getAttribute("SID");
+        mypageService.contactInfoModify(loginId,memberContactInfo);
+    }
 
 
 

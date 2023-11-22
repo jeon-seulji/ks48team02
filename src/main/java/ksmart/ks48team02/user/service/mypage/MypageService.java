@@ -65,7 +65,7 @@ public class MypageService {
     }
 
     // 연락처 변경
-    public int memberContactModify(String loginId, String memberEmail){
-        return mypageMapper.memberContactModify(loginId,memberEmail);
+    public int contactInfoModify(String loginId, String memberContactInfo){
+        return mypageMapper.contactInfoModify(loginId,memberContactInfo);
     }
 }

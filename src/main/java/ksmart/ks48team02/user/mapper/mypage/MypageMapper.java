@@ -18,7 +18,7 @@ public interface MypageMapper {
     public int emailModify(String loginId, String memberEmail);
 
     // 연락처 변경
-    public int memberContactModify(String loginId, String memberContactInfo);
+    public int contactInfoModify(String loginId, String memberContactInfo);
 
     // 자기소개 변경
 
