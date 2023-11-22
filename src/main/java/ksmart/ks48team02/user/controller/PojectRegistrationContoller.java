@@ -101,6 +101,7 @@ public class PojectRegistrationContoller {
 
         return "user/projectRegistration/investment/invest_judge_insert";
     }
+
     //투자 프로젝트 공고 등록 페이지
     @GetMapping(value = {"/investment/insert"})
     public String investmentRegistrationPage(Model model) {
