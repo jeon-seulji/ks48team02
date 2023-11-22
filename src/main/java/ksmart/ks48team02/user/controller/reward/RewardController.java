@@ -43,18 +43,29 @@ public class RewardController {
 
     //리워드 메인 페이지
     @GetMapping(value = {"" , "/"})
-    public String mainPage(Model model) {
+    public String mainPage(Model model, @RequestParam(name="projectStatus", required = false, defaultValue = "all") String projectStatus,
+                           @RequestParam(name="projectArrange", required = false, defaultValue = "like") String projectArrange,
+                           @RequestParam(name="category", required = false, defaultValue = "allCategory") String category) {
 
 
-        List<RewardProject> rewardProjectList = rewardService.rewardProjectList();
+        List<RewardProject> rewardProjectList = rewardService.rewardProjectList(projectStatus, projectArrange, category);
         model.addAttribute("rewardProjectList",rewardProjectList);
+        model.addAttribute("projectStatus",projectStatus);
+        model.addAttribute("projectArrange",projectArrange);
+        model.addAttribute("category",category);
 
         return "user/reward/main";
     }
 
     //리워드 상세 페이지
     @GetMapping("/detail")
-    public String detailPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+    public String detailPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                             @RequestParam(name = "searchCnt" , required = false) boolean searchCnt) {
+
+        //메인 페이지에서 상세페이지 진입 시에만 조회수 증가 하도록.
+        if(searchCnt) {
+            rewardService.searchCnt(rewardProjectCode);
+        }
 
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
 

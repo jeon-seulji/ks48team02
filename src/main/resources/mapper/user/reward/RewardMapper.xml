@@ -108,6 +108,18 @@
         </collection>
     </resultMap>
 
+    <!-- 리워드 공고 상세 result map -->
+    <resultMap id="rewardOptionMap" type="RewardOption">
+        <id property="rewardOptionCode" column="reward_option_code"/>
+        <result property="rewardProjectCode" column="reward_project_code"/>
+        <result property="optionContents" column="option_contents"/>
+        <result property="optionPrice" column="option_price"/>
+        <result property="optionLimitQuantity" column="option_limit_quantity"/>
+        <result property="optionName" column="option_name"/>
+        <result property="optionDeliveryPrice" column="option_delivery_price"/>
+        <result property="optionEstimatedDeliveryDate" column="option_estimated_delivery_date"/>
+    </resultMap>
+
     <!--주문 회원 정보 조회-->
     <select id="getOrderMemberInfo" parameterType="String" resultMap="memberResultMap">
 
@@ -204,7 +216,7 @@
 
 
     <!--리워드프로젝트 전체 조회-->
-    <select id="rewardProjectList" resultMap="RewardResultMap">
+    <select id="rewardProjectList" resultMap="RewardResultMap" parameterType="String">
         SELECT
             r.reward_project_code,
             r.total_cagegory_code,
@@ -229,10 +241,33 @@
             r.project_condition
         FROM
             reward_project AS r
-        WHERE
-            r.project_end_date >= now()
-        ORDER BY
-            r.project_reg_date DESC
+                <where>
+                    <if test="projectStatus == 'ing'">
+                        <![CDATA[ AND r.project_end_date >= now() ]]>
+                    </if>
+                    <if test="projectStatus == 'end'">
+                        <![CDATA[ AND r.project_end_date < now() ]]>
+                    </if>
+                    <if test="category != 'allCategory'">
+                        AND r.total_cagegory_code = #{category}
+                    </if>
+                </where>
+                ORDER BY
+                <if test="projectArrange == 'like'">
+                    r.search_count DESC
+                </if>
+                <if test="projectArrange == 'latest'">
+                    r.project_reg_date DESC
+                </if>
+                <if test="projectArrange == 'popularity'">
+                    r.search_count DESC
+                </if>
+                <if test="projectArrange == 'achieveMoney'">
+                    r.project_achievement_money DESC
+                </if>
+                <if test="projectArrange == 'endDate'">
+                    r.project_end_date
+                </if>
     </select>
 
     <!--리워드 상세 페이지-->
@@ -251,6 +286,7 @@
             r.project_start_date,
             r.project_end_date,
             r.project_condition,
+            r.total_cagegory_code,
             o.reward_option_code,
             o.option_contents,
             o.option_price,
@@ -283,6 +319,16 @@
         WHERE
             r.reward_project_code = #{rewardProjectCode};
     </select>
+
+    <!--리워드 프로젝트 클릭 시 조회수 증가-->
+    <update id="searchCnt" parameterType="String">
+        UPDATE
+            reward_project
+        SET
+            search_count = search_count + 1
+        WHERE
+            reward_project_code = #{rewardProjectCode};
+    </update>
 
     <!--리워드 옵션 별 총 주문개수 조회-->
     <select id="optionTotalOrderQuantity" parameterType="String" resultType="int">
@@ -624,7 +670,22 @@
     </insert>
 
 
-
+    <!-- 리워드 공고 옵션 조회 -->
+    <select id="getRewardOptionByCode" parameterType="String" resultMap="rewardOptionMap">
+        SELECT
+            ro.reward_option_code,
+            ro.reward_project_code,
+            ro.option_contents,
+            ro.option_price,
+            ro.option_limit_quantity,
+            ro.option_name,
+            ro.option_delivery_price,
+            ro.option_estimated_delivery_date
+        FROM
+            reward_option AS ro
+        WHERE
+            ro.reward_project_code = #{rewardProjectCode};
+    </select>
 
 
 
