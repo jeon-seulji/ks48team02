@@ -351,6 +351,9 @@
             }
         }
     });
+
+    // aside 금액 숫자에 , 붙이는 기능
+    $('#achievementMoney').text($('#achievementMoney').text().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 </script>
 
 </body>

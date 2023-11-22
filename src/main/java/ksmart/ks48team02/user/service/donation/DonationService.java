@@ -2,10 +2,18 @@ package ksmart.ks48team02.user.service.donation;
 
 import ksmart.ks48team02.admin.dto.DonationInfo;
 import ksmart.ks48team02.seller.dto.NewsList;
+import ksmart.ks48team02.user.controller.donation.KaKaoPayProperties;
 import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.mapper.donation.DonationUserMapper;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -13,7 +21,10 @@ import java.util.*;
 @Transactional
 public class DonationService{
     private final DonationUserMapper donationUserMapper;
-    public DonationService(DonationUserMapper donationUserMapper){
+
+    // DI (의존성주입)
+    DonationService(DonationUserMapper donationUserMapper){
+
         this.donationUserMapper = donationUserMapper;
     }
 
@@ -77,6 +88,18 @@ public class DonationService{
 
     public void addDonationPayemnt(String donationCode, String floverAmount, String floverToMoney){
         donationUserMapper.addDonationPayemnt(donationCode, floverAmount, floverToMoney);
+    }
+
+    public void updateMoney(String donationCode, String acvMoney, String acvPercent){
+        donationUserMapper.updateMoney(donationCode, acvMoney, acvPercent);
+    }
+
+    public int getNumberOfParticipants(String donationCode){
+        return donationUserMapper.getNumberOfParticipants(donationCode);
+    }
+
+    public void chargeFlover(String memberId, String floverCount){
+        donationUserMapper.chargeFlover(memberId, floverCount);
     }
 
 }

@@ -301,7 +301,7 @@
         INSERT INTO order_table
             (order_code, member_id, order_category_code, order_name, order_funding_name, order_total_price, order_category_detail, goods_code, order_application_date, order_confirm_date, order_cancell_date)
         VALUES
-            (#{orderCode}, #{memberId}, 'ORDC_007', #{memberName}, #{donationSubject}, #{orderTotalPrice}, '주문 확정-기부 프로젝트 주문 확정', #{donationCode}, NOW(), NULL, NULL);
+            (#{orderCode}, #{memberId}, 'ORDC_002', #{memberName}, #{donationSubject}, #{orderTotalPrice}, '주문 확정-기부 프로젝트 주문 확정', #{donationCode}, NOW(), NULL, NULL);
     </insert>
 
     <insert id="addDonationPayemnt" parameterType="String">
@@ -339,4 +339,33 @@
         VALUES
         (#{donationOrderCode}, #{orderCode}, #{floverAmount}, #{floverToMoney}, #{memberName}, '941020-1241234');
     </insert>
+
+    <update id="updateMoney" parameterType="String">
+        UPDATE
+            donation
+        SET
+            donation_achievement_money = #{acvMoney},
+            donation_achievement_percent = #{acvPercent}
+        WHERE
+            donation_code = #{donationCode};
+    </update>
+
+    <!-- 기부 참여인원 확인 쿼리 -->
+    <select id="getNumberOfParticipants" parameterType="String">
+        SELECT
+            COUNT(DISTINCT member_id)
+        FROM
+            order_table
+        WHERE
+            goods_code = #{donationCode};
+    </select>
+
+    <update id="chargeFlover" parameterType="String">
+        UPDATE
+            customer
+        SET
+            customer_flover = #{floverCount}
+        WHERE
+            member_id = #{memberId};
+    </update>
 </mapper>

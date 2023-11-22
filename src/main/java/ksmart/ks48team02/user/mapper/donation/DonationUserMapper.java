@@ -26,5 +26,8 @@ public interface DonationUserMapper {
     public void deductFlover(Map<String,Object> deductData);
     public void addOrderTable(String memberId, String donationCode, String orderTotalPrice);
     public void addDonationPayemnt(String donationCode, String floverAmount, String floverToMoney);
+    public void updateMoney(String donationCode, String acvMoney, String acvPercent);
 
+    public int getNumberOfParticipants(String donationCode);
+    public void chargeFlover(String memberId, String floverCount);
 }
