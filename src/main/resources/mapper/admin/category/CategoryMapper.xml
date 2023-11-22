@@ -15,6 +15,32 @@
         <result property="categoryRegDate"      column="category_reg_date"/>
     </resultMap>
 
+<!--    카테고리 등록-->
+    <insert id="createCategory" parameterType="Category">
+        insert into
+        total_category
+    (
+        total_category_code,
+        member_id,
+        project_patition,
+        category_name,
+        category_comment,
+        category_usage_status,
+        category_reg_date
+    )
+        select
+        concat('category_code_',LPAD(COUNT(total_category_code) +1,3,'0')),
+        #{memberId},
+        #{project_patition},
+        #{category_name},
+        #{category_comment},
+        #{category_usage_status},
+        #{category_reg_date},
+
+        from
+        total_category;
+    </insert>
+
 <!--    카테고리 수정-->
     <update id="updateCategory" parameterType="Category">
         update
@@ -76,7 +102,7 @@
         GROUP BY
             tc.project_patition;
     </select>
-    
+
 <!--    카테고리 중분류 조회-->
     <select id="getCategoryDepth2" parameterType="String" resultMap="categoryResultMap">
         SELECT

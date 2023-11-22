@@ -39,6 +39,11 @@ public class CategoryService {
         return categoryMapper.getCategoryDepth2(projectPatition);
     }
 
+    // 카테고리 등록
+    public void createCategory(Category category){
+        categoryMapper.createCategory(category);
+    }
+
     // 카테고리 수정 post
     public void updateCategory(Category category){
         categoryMapper.updateCategory(category);

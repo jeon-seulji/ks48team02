@@ -143,10 +143,12 @@
                     <td th:text="${c.numberCouponsRemaining}"></td>
                     <td th:text="${c.couponValidPeriod}"></td>
                     <td th:text="${c.couponTermsUse}"></td>
-                    <td>id001</td>
+                    <td th:text="${c.memberId}"></td>
                     <td>
-                        <a th:href="@{/admin/board/couponAdd(couponCode=${c.couponCode})}" class="modify">수정</a>
-                        <a th:href="@{#}" class="delete" id="deleteCouponButton">삭제</a>
+                        <ul STYLE="display: flex; align-items: center; gap: 5px; height: 100%; margin: 0;">
+                            <li><a th:href="@{/admin/board/couponAdd(couponCode=${c.couponCode})}" class="modify">수정</a></li>
+                            <li> <a th:href="@{#}" class="delete" id="deleteCouponButton">삭제</a></li>
+                        </ul>
                     </td>
                 </tr>
 
