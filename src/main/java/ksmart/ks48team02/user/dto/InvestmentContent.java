@@ -19,6 +19,4 @@ public class InvestmentContent {
     private String etcInvestContent;
     private String registrationDate;
 
-    private List<InvestmentInfo> investmentInfo;
-
 }
