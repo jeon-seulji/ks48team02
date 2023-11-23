@@ -7,6 +7,7 @@ public class OrderConfirmationLog {
     private String orderConfirmationLogCode;
     private String memberId;
     private String projectPartition;
+    private String orderCode;
     private String projectCode;
     private String orderConfirmationDate;
     private int orderPriceTotal;
@@ -14,4 +15,6 @@ public class OrderConfirmationLog {
     private int addFlover;
     private String addReserveCode;
     private String addFloverCode;
+
+    private OrderTotal orderTotal;
 }

@@ -65,11 +65,11 @@
             </div>
             <div class="d-flex col-lg-12 justify-content-center">
                 <div style="background: #f9fafb; border-radius: 5px; padding: 20px; display: inline-block; width: 80%; height: auto; margin-bottom: 10px;">
-                    <p style="font-size: 20px; margin-bottom: 20px">Flover <em style="color: #235FD9">100개</em> 기부되었습니다.</p>
+                    <p style="font-size: 20px; margin-bottom: 20px">Flover <em style="color: #235FD9" th:text="${floverCount}"></em> 개 기부되었습니다.</p>
                     <span>모금함명</span>
-                    <span style="color: black; font-weight: bold; margin-left: 10px">시설 퇴소를 앞둔, 음악으로 세상에 서고 싶은 사랑이</span><br>
+                    <span style="color: black; font-weight: bold; margin-left: 10px" th:text="${donationSubject}"></span><br>
                     <span>단체명</span>
-                    <span style="color: black; margin-left: 10px">파주시문산종합사회복지관</span>
+                    <span style="color: black; margin-left: 10px" th:text="${storeName}"></span>
                 </div>
             </div>
             <div class="d-flex col-lg-12 justify-content-center" style="margin-top: 10px;">

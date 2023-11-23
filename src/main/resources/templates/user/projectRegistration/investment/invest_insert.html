@@ -23,6 +23,13 @@
   <!-- common js -->
   <script src="/common/js/common-custom.js"></script>
 
+  <!-- include summernote css/js -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist/summernote.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist/summernote.min.js"></script>
+
 </th:block>
 
 
@@ -58,6 +65,61 @@
       });
     });
 
+    $(document).ready(function() {
+      $('#summernote').summernote();
+    });
+
+    //summerNote API 설정.
+    $('.summernote').summernote({
+      height: 400,                 // 에디터 높이
+      minHeight: null,             // 최소 높이
+      maxHeight: null,             // 최대 높이
+      focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+      lang: "ko-KR",					// 한글 설정
+      placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
+      callbacks: {	//이미지 첨부 함수
+        onImageUpload : function(files) {
+          uploadSummernoteImageFile(files[0],this);
+        },
+        onPaste: function (e) {
+          var clipboardData = e.originalEvent.clipboardData;
+          if (clipboardData && clipboardData.items && clipboardData.items.length) {
+            var item = clipboardData.items[0];
+            if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+              e.preventDefault();
+            }
+          }
+        }
+      }
+    });
+
+    /**
+     * 이미지 파일 업로드
+     */
+    function uploadSummernoteImageFile(file, editor) {
+      data = new FormData();
+      data.append("file", file);
+      $.ajax({
+        data : data,
+        type : "POST",
+        url : "/user/projectRegistration/uploadSummernoteImageFile",
+        contentType : false,
+        processData : false,
+        success : function(data) {
+          //항상 업로드된 파일의 url이 있어야 한다.
+          $(editor).summernote('insertImage', data.url);
+        }
+      });
+    }
+
+    // summernote 드래그 & 드랍 구현
+    $("div.note-editable").on('drop',function(e){
+      for(i=0; i< e.originalEvent.dataTransfer.files.length; i++){
+        uploadSummernoteImageFile(e.originalEvent.dataTransfer.files[i],$(".summernote")[0]);
+      }
+      e.preventDefault();
+    })
+
     //약관 체크 모두 될 시 모두 동의에 체크.
     $('.essential').not('#agreeNews').click(function(){
       let checkLength = $('.essential').not('#agreeNews').length;
@@ -71,15 +133,14 @@
       $('.essential').not('#agreeNews').prop('checked',$(this).prop('checked'));
     });
 
-    // 제출하기 클릭 시 필수 약관동의 모두 체크되어있는지 확인
-    $('.nextBtn').click(function(){
+    $('.registrationBtn').click(function(e){
+      e.preventDefault(); // 폼 제출을 막는 코드
 
-      const targetEls = $('.needs-validation input, .needs-validation select, .needs-validation textarea');
+      const targetEls = $('.needs-validation input, .needs-validation select, .needs-validation textarea').not('#patentAwardDetails').not('#etcInvestContent');
       // 값 유효성 검사
       if(!validationEmptyFn(targetEls)){
         return;
       }
-
 
       let isValid = true;
       $('.essential').each(function(idx,item){
@@ -90,6 +151,11 @@
           return false;
         }
       });
+
+      // 유효성 검사와 약관 동의 검증이 모두 통과하면 다음 화면으로 이동
+      if (isValid) {
+        location.href='/user/projectRegistration/investment/success';
+      }
     });
 
 
@@ -113,77 +179,54 @@
 
       <div class="row g-5" style="justify-content: center;">
         <div class="col-md-7 col-lg-8">
-          <form class="needs-validation" novalidate="">
+          <form class="needs-validation" method="post">
             <div class="row g-3">
-              <div class="my-2 col-12">
-                <label for="projectIntroduction" class="form-label fw-bord text-dark">프로젝트 소개</label>
-                <textarea rows="6" class="form-control" id="projectIntroduction" placeholder="프로젝트 소개를 입력해주세요."></textarea>
-              </div>
+              <div class="my-2 col-12 form-group">
+                <label for="investmentImage">프로젝트 대표 이미지 업로드</label>
+                <input type="file" class="form-control-file" id="investmentImage">
+              </div><br><br>
 
               <div class="my-2 col-12">
-                <label for="investmentIntroductionImage" class="form-label fw-bord text-dark">프로젝트 소개 이미지(url)</label>
-                <input type="text" class="form-control" id="investmentIntroductionImage" placeholder="프로젝트 소개 이미지(url)를 입력해주세요." value required>
+                <label for="projectIntroduction" class="fw-bord text-dark">프로젝트 소개</label>
+                <textarea class="summernote" id="projectIntroduction" name="projectIntroduction" placeholder="프로젝트 소개를 입력해주세요."></textarea>
               </div>
+
 
               <div class="my-2 col-12">
                 <label for="marketAnalysis" class="form-label fw-bord text-dark">시장 분석</label>
-                <textarea rows="6" class="form-control" id="marketAnalysis" placeholder="시장 분석을 입력해주세요."></textarea>
+                <textarea class="summernote form-control" id="marketAnalysis" placeholder="시장 분석을 입력해주세요."></textarea>
               </div>
 
-              <div class="my-2 col-12">
-                <label for="marketAnalysisImage" class="form-label fw-bord text-dark">시장 분석 이미지(url)</label>
-                <input type="text" class="form-control" id="marketAnalysisImage" placeholder="시장 분석 이미지(url)를 입력해주세요." value required>
-              </div>
 
               <div class="my-2 col-12">
                 <label for="majorFinancialInformation" class="form-label fw-bord text-dark">주요 재무 정보</label>
-                <textarea rows="6" class="form-control" id="majorFinancialInformation" placeholder="주요 재무 정보를 입력해주세요."></textarea>
+                <textarea rows="6" class="summernote form-control" id="majorFinancialInformation" placeholder="주요 재무 정보를 입력해주세요."></textarea>
               </div>
 
-              <div class="my-2 col-12">
-                <label for="majorFinancialInformationImage" class="form-label fw-bord text-dark">주요 재무 정보 이미지(url)</label>
-                <input type="text" class="form-control" id="majorFinancialInformationImage" placeholder="주요 재무 정보 이미지(url)를 입력해주세요." value required>
-              </div>
 
               <div class="my-2 col-12">
                 <label for="risk" class="form-label fw-bord text-dark">리스크</label>
-                <textarea rows="6" class="form-control" id="risk" placeholder="리스크를 입력해주세요."></textarea>
+                <textarea class="summernote form-control" id="risk" placeholder="리스크를 입력해주세요."></textarea>
               </div>
 
-              <div class="my-2 col-12">
-                <label for="riskImage" class="form-label fw-bord text-dark">리스크 이미지(url)</label>
-                <input type="text" class="form-control" id="riskImage" placeholder="리스크 이미지(url)를 입력해주세요." value required>
-              </div>
 
               <div class="my-2 col-12">
                 <label for="majorManpower" class="form-label fw-bord text-dark">주요 인력</label>
-                <textarea rows="6" class="form-control" id="majorManpower" placeholder="주요 인력을 입력해주세요."></textarea>
+                <textarea class="summernote form-control" id="majorManpower" placeholder="주요 인력을 입력해주세요."></textarea>
               </div>
 
-              <div class="my-2 col-12">
-                <label for="majorManpowerImage" class="form-label fw-bord text-dark">주요 인력 이미지(url)</label>
-                <input type="text" class="form-control" id="majorManpowerImage" placeholder="주요 인력 이미지(url)를 입력해주세요." value required>
-              </div>
 
               <div class="my-2 col-12">
-                <label for="patentAwardDetails" class="form-label fw-bord text-dark">특허/수상 내역</label>
-                <textarea rows="6" class="form-control" id="patentAwardDetails" placeholder="특허/수상 내역을 입력해주세요."></textarea>
+                <label for="patentAwardDetails" class="form-label fw-bord text-dark">특허/수상 내역(선택)</label>
+                <textarea class="summernote form-control" id="patentAwardDetails" placeholder="특허/수상 내역을 입력해주세요."></textarea>
               </div>
 
-              <div class="my-2 col-12">
-                <label for="patentAwardDetailsImage" class="form-label fw-bord text-dark">특허/수상 내역 이미지(url)</label>
-                <input type="text" class="form-control" id="patentAwardDetailsImage" placeholder="특허/수상 내역 이미지(url)를 입력해주세요." value required>
-              </div>
 
               <div class="my-2 col-12">
-                <label for="etcInvestContent" class="form-label fw-bord text-dark">기타 투자 내용</label>
-                <textarea rows="6" class="form-control" id="etcInvestContent" placeholder="기타 투자 내용을 입력해주세요."></textarea>
+                <label for="etcInvestContent" class="form-label fw-bord text-dark">기타 투자 내용(선택)</label>
+                <textarea class="summernote form-control" id="etcInvestContent" placeholder="기타 투자 내용을 입력해주세요."></textarea>
               </div>
 
-              <div class="my-2 col-12">
-                <label for="etcInvestContentImage" class="form-label fw-bord text-dark">기타 투자 내용 이미지(url)</label>
-                <input type="text" class="form-control" id="etcInvestContentImage" placeholder="기타 투자 내용 이미지(url)를 입력해주세요." value required>
-              </div>
 
 
 
@@ -218,20 +261,20 @@
 
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="" id="allCheck">
-                  <label class="form-check-label" for="allCheck">
+                  <label class="ml-lg-4 form-check-label" for="allCheck">
                     필수 약관 모두동의
                   </label>
                 </div>
                 <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
                 <div class="form-check">
                   <input class="essential form-check-input" type="checkbox" value="" id="agree1">
-                  <label class="form-check-label" for="agree1">
+                  <label class="ml-lg-4 form-check-label" for="agree1">
                     개인정보 제3자 제공 동의 (필수)
                   </label>
                 </div>
                 <div class="form-check">
                   <input class="essential form-check-input" type="checkbox" value="" id="agree2">
-                  <label class="form-check-label" for="agree2">
+                  <label class="ml-lg-4 form-check-label" for="agree2">
                     책임 규정에 대한 동의 (필수)
                   </label>
                 </div>
@@ -242,7 +285,7 @@
 
             <div class="d-flex justify-content-center">
               <button class="prevBtn w-80 btn btn-secondary btn-lg" type="button" onClick="history.back();">이전단계</button>
-              <button class="paymentBtn w-80 btn btn-primary  btn-lg" type="submit" th:onclick="|location.href='@{/user/projectRegistration/investment/success}'|">등록하기</button>
+              <button class="registrationBtn w-80 btn btn-primary btn-lg" type="submit" th:onclick="|location.href='@{/user/projectRegistration/investment/success}'|">등록하기</button>
             </div><br>
           </form>
         </div>

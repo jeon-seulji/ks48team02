@@ -5,7 +5,9 @@ import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DonationUserMapper {
@@ -20,5 +22,12 @@ public interface DonationUserMapper {
     public void CommentAdd(String memberId, String donationCode,String memberName,String commentContent);
     public List<DonationCommentList> getCommentList(String donationCode);
     public void replyAdd(String reply, String donationCode, String parentCommentCode, String memberId, String memberName);
+    public int getFlover(String memberId);
+    public void deductFlover(Map<String,Object> deductData);
+    public void addOrderTable(String memberId, String donationCode, String orderTotalPrice);
+    public void addDonationPayemnt(String donationCode, String floverAmount, String floverToMoney);
+    public void updateMoney(String donationCode, String acvMoney, String acvPercent);
 
+    public int getNumberOfParticipants(String donationCode);
+    public void chargeFlover(String memberId, String floverCount);
 }

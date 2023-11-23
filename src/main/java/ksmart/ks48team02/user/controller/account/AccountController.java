@@ -1,8 +1,11 @@
 package ksmart.ks48team02.user.controller.account;
 
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.seller.dto.Store;
+import ksmart.ks48team02.seller.service.store.StoreService;
 import ksmart.ks48team02.user.dto.Member;
 import ksmart.ks48team02.user.service.member.UserMemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +16,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping("/user/account")
 public class AccountController {
 
     private final UserMemberService userMemberService;
+    private final StoreService storeService;
 
-    public AccountController (UserMemberService userMemberService) {
+
+    public AccountController (UserMemberService userMemberService,
+                              StoreService storeService) {
         this.userMemberService = userMemberService;
+        this.storeService = storeService;
     }
 
     //로그인 페이지
@@ -49,6 +57,10 @@ public class AccountController {
             session.setAttribute("SNAME", memberName);
             session.setAttribute("STYPECODE", memberTypeCode);
 
+            String getStoreCodeById = storeService.getStoreCodeById(memberId);
+
+            log.info("getStoreCodeById {}", getStoreCodeById);
+            session.setAttribute("SSTORECODE", getStoreCodeById);
             // 로그인 처리 후에는 메인화면으로 전환
             return "redirect:/user";
         }
