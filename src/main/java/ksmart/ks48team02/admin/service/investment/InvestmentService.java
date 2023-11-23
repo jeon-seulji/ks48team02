@@ -1,6 +1,8 @@
 package ksmart.ks48team02.admin.service.investment;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import org.springframework.stereotype.Service;
@@ -26,14 +28,35 @@ public class InvestmentService {
     }
 
     // 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList() {
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeList();
+    public Map<String, Object> getInvestmentRequestJudgeList(int currentPage) {
 
-        return investmentRequestJudgeList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getInvestmentRequestJudgeCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeList(startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("investmentRequestJudgeList", investmentRequestJudgeList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+
     }
 
     // 검색조건에 따른 투자펀딩 심사요청 목록 조회
-    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue) {
+    public Map<String, Object> getInvestmentRequestJudgeList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue, int currentPage) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -57,9 +80,29 @@ public class InvestmentService {
                 searchKey = "i.invest_judge_result";
                 break;
         }
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
 
-        return investmentRequestJudgeList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getInvestmentRequestJudgeCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = adminInvestmentMapper.getInvestmentRequestJudgeListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("investmentRequestJudgeList", investmentRequestJudgeList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 특정 투자펀딩 심사요청 조회
@@ -76,14 +119,35 @@ public class InvestmentService {
     }
 
     // 자본시장법 범위충족기준 목록 조회
-    public List<AdminLawSatistifyReason> getLawSatistifyList() {
-        List<AdminLawSatistifyReason> lawSatistifyReasonList = adminInvestmentMapper.getLawSatistifyList();
+    public Map<String, Object> getLawSatistifyList(int currentPage) {
 
-        return lawSatistifyReasonList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getLawSatistifyCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<AdminLawSatistifyReason> lawSatistifyReasonList = adminInvestmentMapper.getLawSatistifyList(startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("lawSatistifyReasonList", lawSatistifyReasonList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 검색조건에 따른 자본시장법 범위충족기준 목록 조회
-    public List<AdminLawSatistifyReason> getLawSatistifyList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
+    public Map<String, Object> getLawSatistifyList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int currentPage) {
+
         switch (searchKey) {
             case "lawSatistifyCode":
                 searchKey = "l.law_satistify_code";
@@ -95,9 +159,29 @@ public class InvestmentService {
                 searchKey = "l.member_id";
                 break;
         }
-        List<AdminLawSatistifyReason> lawSatistifyReasonList = adminInvestmentMapper.getLawSatistifyListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
 
-        return lawSatistifyReasonList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getLawSatistifyCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<AdminLawSatistifyReason> lawSatistifyReasonList = adminInvestmentMapper.getLawSatistifyListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("lawSatistifyReasonList", lawSatistifyReasonList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 특정 자본시장법 범위충족기준 조회
@@ -108,14 +192,34 @@ public class InvestmentService {
     }
 
     // 부적합 업종 목록 조회
-    public List<AdminIncongruitySectors> getIncogruitySectorsList() {
-        List<AdminIncongruitySectors> incongruitySectorsList = adminInvestmentMapper.getIncogruitySectorsList();
+    public Map<String, Object> getIncogruitySectorsList(int currentPage) {
 
-        return incongruitySectorsList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getIncogruitySectorsCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<AdminIncongruitySectors> incongruitySectorsList = adminInvestmentMapper.getIncogruitySectorsList(startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("incongruitySectorsList", incongruitySectorsList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 검색조건에 따른 부적합 업종 목록
-    public List<AdminIncongruitySectors> getIncogruitySectorsList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate) {
+    public Map<String, Object> getIncogruitySectorsList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int currentPage) {
         switch (searchKey) {
             case "incongruitySectorsCode":
                 searchKey = "i.incongruity_sectors_code";
@@ -127,9 +231,29 @@ public class InvestmentService {
                 searchKey = "i.member_id";
                 break;
         }
-        List<AdminIncongruitySectors> incongruitySectorsList = adminInvestmentMapper.getIncogruitySectorsListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate);
 
-        return incongruitySectorsList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getIncogruitySectorsCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<AdminIncongruitySectors> incongruitySectorsList = adminInvestmentMapper.getIncogruitySectorsListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("incongruitySectorsList", incongruitySectorsList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 특정 부적합 업종 조회
@@ -140,14 +264,34 @@ public class InvestmentService {
     }
 
     // 기업가치 평가결과 목록 조회
-    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList() {
-        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationList();
+    public Map<String, Object> getCorporateValueEvaluationList(int currentPage) {
 
-        return corporateValueEvaluationList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getCorporateValueEvaluation();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationList(startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("corporateValueEvaluationList", corporateValueEvaluationList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 검색조건에 따른 기업가치 평가결과 목록 조회
-    public List<AdminCorporateValueEvaluation> getCorporateValueEvaluationList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue) {
+    public Map<String, Object> getCorporateValueEvaluationList(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue, int currentPage) {
         switch (searchKey) {
             case "investmentRequestJudgeCode":
                 searchKey = "i.investment_request_judge_code";
@@ -168,9 +312,29 @@ public class InvestmentService {
                 searchKey = "c.corp_value_fulfill";
                 break;
         }
-        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue);
 
-        return corporateValueEvaluationList;
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = adminInvestmentMapper.getCorporateValueEvaluation();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<AdminCorporateValueEvaluation> corporateValueEvaluationList = adminInvestmentMapper.getCorporateValueEvaluationListBySearch(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("corporateValueEvaluationList", corporateValueEvaluationList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 특정 기업가치 평가결과 조회
@@ -239,4 +403,39 @@ public class InvestmentService {
     public void removeCorporateValueEvaluation(String corporateValueEvaluationCode) {
         adminInvestmentMapper.removeCorporateValueEvaluation(corporateValueEvaluationCode);
     }
+
+    // 페이징 처리
+    private Map<String, Integer> calculatePagingInfo(int currentPage, double rowCnt, int rowPerpage) {
+
+        // 보여줄 행의 시작점
+        int startRowNum = (currentPage - 1) * rowPerpage;
+
+        // 마지막페이지: (전체 행의 갯수/보여줄 행의 갯수) 올림처리
+        int lastPage = (int) Math.ceil(rowCnt / rowPerpage);
+
+        // 보여줄 페이지 번호 초기값:1
+        int startPageNum = 1;
+
+        // 마지막 페이지 번호 초기값:10(10 미만일경우 마지막페이지만큼)
+        int endPageNum = (lastPage < 10) ? lastPage : 10;
+
+        // 동적으로 페이지번호 구성
+        if (currentPage > 6 && lastPage > 9) {
+            startPageNum = currentPage - 5;
+            endPageNum = currentPage + 4;
+            if (endPageNum >= lastPage) {
+                startPageNum = lastPage - 9;
+                endPageNum = lastPage;
+            }
+        }
+
+        Map<String, Integer> pagingInfo = new HashMap<>();
+        pagingInfo.put("startRowNum", startRowNum);
+        pagingInfo.put("lastPage", lastPage);
+        pagingInfo.put("startPageNum", startPageNum);
+        pagingInfo.put("endPageNum", endPageNum);
+
+        return pagingInfo;
+    }
+
 }

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{seller/layout/default}">
+      layout:decorate="~{user/donation/layout/default}">
 
 <head>
-    <!--  사용자별 css file 추가 부분 -->
+    <style>
+
+    </style>
 </head>
 
 
@@ -21,12 +23,13 @@
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
-    <a th:href="@{/seller/investment/view/after-invest-division}">상세</a>
-    <button>
-        <a th:href="@{/seller/investment/insert/after-invest-division}">등록</a>
-    </button>
-    <button>
-        <a th:href="@{/seller/investment/update/after-invest-division}">수정</a>
-    </button>
+    <div class="container" style="border: 1px solid lightgrey; margin-top: 50px; padding: 30px">
+        <div class="row">
+            <div>
+                <p>취소페이지</p>
+            </div>
+        </div>
+    </div>
 </th:block>
+
 </html>

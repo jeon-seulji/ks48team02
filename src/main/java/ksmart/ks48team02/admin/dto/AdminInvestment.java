@@ -1,5 +1,7 @@
 package ksmart.ks48team02.admin.dto;
 
+import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
+
 public class AdminInvestment {
 
     private String investmentCode;
@@ -27,6 +29,11 @@ public class AdminInvestment {
     private float contractFeeRate;
     private String contractFile;
     private int investJudgeSituation;
+
+    private AdminInvestmentRequestJudge adminInvestmentRequestJudge;
+
+    private SellerInvestmentContent sellerInvestmentContent;
+
     public String getInvestmentCode() {
         return investmentCode;
     }
@@ -34,149 +41,213 @@ public class AdminInvestment {
     public void setInvestmentCode(String investmentCode) {
         this.investmentCode = investmentCode;
     }
+
     public String getMemberId() {
         return memberId;
     }
+
     public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
+
     public String getStoreCode() {
         return storeCode;
     }
+
     public void setStoreCode(String storeCode) {
         this.storeCode = storeCode;
     }
+
     public String getInvestmentRequestJudgeCode() {
         return investmentRequestJudgeCode;
     }
+
     public void setInvestmentRequestJudgeCode(String investmentRequestJudgeCode) {
         this.investmentRequestJudgeCode = investmentRequestJudgeCode;
     }
+
     public String getTotalCategoryCode() {
         return totalCategoryCode;
     }
+
     public void setTotalCategoryCode(String totalCategoryCode) {
         this.totalCategoryCode = totalCategoryCode;
     }
+
     public String getMemberIdSeller() {
         return memberIdSeller;
     }
+
     public void setMemberIdSeller(String memberIdSeller) {
         this.memberIdSeller = memberIdSeller;
     }
+
     public String getInvestmentSubject() {
         return investmentSubject;
     }
+
     public void setInvestmentSubject(String investmentSubject) {
         this.investmentSubject = investmentSubject;
     }
+
     public String getInvestmentContent() {
         return investmentContent;
     }
+
     public void setInvestmentContent(String investmentContent) {
         this.investmentContent = investmentContent;
     }
+
     public String getInvestmentImage() {
         return investmentImage;
     }
+
     public void setInvestmentImage(String investmentImage) {
         this.investmentImage = investmentImage;
     }
+
     public int getInvestmentLike() {
         return investmentLike;
     }
+
     public void setInvestmentLike(int investmentLike) {
         this.investmentLike = investmentLike;
     }
+
     public long getInvestmentAmount() {
         return investmentAmount;
     }
+
     public void setInvestmentAmount(long investmentAmount) {
         this.investmentAmount = investmentAmount;
     }
+
     public long getInvInvestmentAchievementMoney() {
         return invInvestmentAchievementMoney;
     }
+
     public void setInvInvestmentAchievementMoney(long invInvestmentAchievementMoney) {
         this.invInvestmentAchievementMoney = invInvestmentAchievementMoney;
     }
+
     public int getInvestAchievementPercent() {
         return investAchievementPercent;
     }
+
     public void setInvestAchievementPercent(int investAchievementPercent) {
         this.investAchievementPercent = investAchievementPercent;
     }
+
     public String getInvestmentCompany() {
         return investmentCompany;
     }
+
     public void setInvestmentCompany(String investmentCompany) {
         this.investmentCompany = investmentCompany;
     }
+
     public int getSearchCount() {
         return searchCount;
     }
+
     public void setSearchCount(int searchCount) {
         this.searchCount = searchCount;
     }
+
     public int getInvestCount() {
         return investCount;
     }
+
     public void setInvestCount(int investCount) {
         this.investCount = investCount;
     }
+
     public String getSecuritiesClassification() {
         return securitiesClassification;
     }
+
     public void setSecuritiesClassification(String securitiesClassification) {
         this.securitiesClassification = securitiesClassification;
     }
+
     public String getInvestmentDisplayDate() {
         return investmentDisplayDate;
     }
+
     public void setInvestmentDisplayDate(String investmentDisplayDate) {
         this.investmentDisplayDate = investmentDisplayDate;
     }
+
     public String getInvestmentRegDate() {
         return investmentRegDate;
     }
+
     public void setInvestmentRegDate(String investmentRegDate) {
         this.investmentRegDate = investmentRegDate;
     }
+
     public String getInvestmentDeadline() {
         return investmentDeadline;
     }
+
     public void setInvestmentDeadline(String investmentDeadline) {
         this.investmentDeadline = investmentDeadline;
     }
+
     public String getInvestmentReport() {
         return investmentReport;
     }
+
     public void setInvestmentReport(String investmentReport) {
         this.investmentReport = investmentReport;
     }
+
     public int getBasicFee() {
         return basicFee;
     }
+
     public void setBasicFee(int basicFee) {
         this.basicFee = basicFee;
     }
+
     public float getContractFeeRate() {
         return contractFeeRate;
     }
+
     public void setContractFeeRate(float contractFeeRate) {
         this.contractFeeRate = contractFeeRate;
     }
+
     public String getContractFile() {
         return contractFile;
     }
+
     public void setContractFile(String contractFile) {
         this.contractFile = contractFile;
     }
+
     public int getInvestJudgeSituation() {
         return investJudgeSituation;
     }
+
     public void setInvestJudgeSituation(int investJudgeSituation) {
         this.investJudgeSituation = investJudgeSituation;
+    }
+
+    public AdminInvestmentRequestJudge getAdminInvestmentRequestJudge() {
+        return adminInvestmentRequestJudge;
+    }
+
+    public void setAdminInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
+        this.adminInvestmentRequestJudge = adminInvestmentRequestJudge;
+    }
+
+    public SellerInvestmentContent getSellerInvestmentContent() {
+        return sellerInvestmentContent;
+    }
+
+    public void setSellerInvestmentContent(SellerInvestmentContent sellerInvestmentContent) {
+        this.sellerInvestmentContent = sellerInvestmentContent;
     }
 
     @Override
@@ -232,6 +303,8 @@ public class AdminInvestment {
         builder.append(contractFile);
         builder.append(", investJudgeSituation=");
         builder.append(investJudgeSituation);
+        builder.append(", adminInvestmentRequestJudge=");
+        builder.append(adminInvestmentRequestJudge);
         builder.append("]");
         return builder.toString();
     }

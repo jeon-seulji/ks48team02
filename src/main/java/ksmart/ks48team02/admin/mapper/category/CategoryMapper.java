@@ -22,4 +22,7 @@ public interface CategoryMapper {
 
     // 카테고리 수정 post
     void updateCategory(Category category);
+
+    // 카테고리 등록
+    void createCategory(Category category);
 }

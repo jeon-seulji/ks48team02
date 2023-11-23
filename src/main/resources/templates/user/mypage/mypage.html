@@ -315,7 +315,7 @@
                                 <div class="mb-6">
                                     <p class="user-info-list">ID</p>
                                     <div class="user-info">
-                                    <div>id001</div>
+                                    <div th:text="${loginId}">id001</div>
                                     </div>
                                 </div>
                                 <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey" style="width: auto"></div>
@@ -371,12 +371,12 @@
                                 <div class="mb-6">
                                     <div style="display: flex; justify-content: space-between;">
                                         <p class="user-info-list">휴대폰 번호</p>
-                                        <!-- 변경 버튼 클릭시 edit-pw div가 floating  -->
+                                        <!-- 변경 버튼 클릭시 div가 floating  -->
                                         <button id="edit-phone-btn" type="button" data-target="edit-phone" class="btn btn-secondary btn-sm edit">변경</button>
                                     </div>
                                     <div>
                                         <div id="edit-phone" class="info-box" style="margin: 10px 50px 0 50px; display: none;">
-                                            <input class="form-control" placeholder="휴대폰 번호 입력" id="phone-input"
+                                            <input class="form-control" placeholder="휴대폰 번호 11자리 숫자만 입력" id="phone-input"
                                                    style="height: 10px; border: 1px solid black; margin: 15px 40px 10px 15px;"/>
                                             <div id="phone-alert" class="form-text" style="color:red; font-size:13px; margin: 0 0 5px 15px;"></div>
                                             <button id="phone-edit-btn" type="button" class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">저장</button>
@@ -419,11 +419,6 @@
       $bodyContainer = document.querySelectorAll('.bodyContainer');
 
 
-
-      document.getElementById('lead-drop-page').addEventListener('focus', ()=>{
-      })
-
-
       /* 내 정보 tab 🔽 */
       /* 비밀번호 변경 버튼 클릭시 div 보이게 */
       const $editPwBtn = document.getElementById('edit-pw-btn');
@@ -450,7 +445,7 @@
               const $targetDivId = button.getAttribute('data-target');
               const $targetDiv= document.getElementById($targetDivId);
 
-              // $targetDiv의 부모로 가서 existing-value 찾기
+              // $targetDiv의 부모로 가서 (기존 정보 보여 주는) existing-value 찾기
               const $existingDiv = $targetDiv.parentNode.nextSibling.nextSibling;
 
               if($targetDiv.style.display === 'none'){
@@ -461,7 +456,7 @@
 
                   $targetInput.focus();
 
-                  $targetInput.value=$existingDiv.textContent.replaceAll(' ','');
+                  $targetInput.value=$existingDiv.textContent.replaceAll(' ',''); // 기존 회원 정보를 표시
                   button.textContent = '취소';
                   button.style.backgroundColor = 'white';
                   button.style.color = 'black';
@@ -518,7 +513,7 @@
           console.log(isValid);
           if(!isValid){
               $pwCheckAlert.textContent = '유효한 값을 입력해 주세요';
-          } else{
+          } else {
               // 2. 기존 비밀번호와 동일하진 않은지 확인
               if($pwInput.value === $newPw.value){
                   $pwCheckAlert.textContent = '기존 비밀번호와 다른 값을 입력해 주세요';
@@ -555,12 +550,73 @@
       })
 
 
-
       /* 이메일 저장 버튼 클릭시 update */
+      let $newEmail = document.getElementById('email-input');
+      $emailEditBtn.addEventListener('click',function (){
+          $newEmail.nextElementSibling.textContent = '';
+          // 유효성 검사
+          if(validationCheck($newEmail)){
+              // 비밀번호 UPDATE
+              $.ajax({
+                  url : '/user/mypage/emailModify',
+                  method : 'POST',
+                  data : { 'memberEmail': $newEmail.value },
+              })
+                  .done(function(){
+                      alert('이메일이 정상적으로 변경되었습니다.');
+                  })
 
+                  .fail(function(jqXHR, textStatus){
+                      alert('통신 중 오류가 발생하였습니다');
+                      console.log(`Request failed: ${textStatus}`);
+                  })
+          }
+      })
+
+      /* 휴대폰 번호 keydown 이벤트 리스너 등록 */
+      let $newContact = document.getElementById('phone-input');
+      $newContact.addEventListener('keydown',function (event){
+          // 입력된 키가 숫자가 아니면 무시
+          const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'ArrowLeft', 'ArrowRight'];
+
+          if (!allowedKeys.includes(event.key)) {
+              event.preventDefault();
+          }
+
+          let phoneNumber = event.target.value;
+          if (phoneNumber.length > 6) {
+              phoneNumber = phoneNumber.replace(/(\d{3})(\d{4})(\d{1,4})/, '$1-$2-$3');
+          }
+          event.target.value = phoneNumber;
+
+          // 길이가 13자 이상이면 초과 부분을 잘라냄
+          if (phoneNumber.length > 13) {
+              phoneNumber = phoneNumber.substring(0, 12);
+          }
+          event.target.value = phoneNumber;
+      })
 
       /* 휴대폰번호 저장 버튼 클릭시 update */
+      $phoneEditBtn.addEventListener('click',function (){
+          $newContact.nextElementSibling.textContent = '';
+          // 유효성 검사
+          if(validationCheck($newContact)){
+              // 비밀번호 UPDATE
+              $.ajax({
+                  url : '/user/mypage/contactInfoModify',
+                  method : 'POST',
+                  data : { 'memberEmail': $newContact.value },
+              })
+                  .done(function(){
+                      alert('휴대폰 번호가 정상적으로 변경되었습니다.');
+                  })
 
+                  .fail(function(jqXHR, textStatus){
+                      alert('통신 중 오류가 발생하였습니다');
+                      console.log(`Request failed: ${textStatus}`);
+                  })
+          }
+      })
       /* 입력란 유효성 검사 함수 */
       function validationCheck(input){
           let isValid = true;

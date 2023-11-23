@@ -3,6 +3,7 @@ package ksmart.ks48team02.admin.dto;
 public class Coupon {
     private String couponCode;
     private String couponSerialNumber;
+    private String memberId;
     private String couponName;
     private int couponDiscountRate;
     private int couponDiscountAmount;
@@ -13,12 +14,12 @@ public class Coupon {
 
     private MemberCoupon memberCoupon;
 
-
     @Override
     public String toString() {
         return "Coupon{" +
                 "couponCode='" + couponCode + '\'' +
                 ", couponSerialNumber='" + couponSerialNumber + '\'' +
+                ", memberId='" + memberId + '\'' +
                 ", couponName='" + couponName + '\'' +
                 ", couponDiscountRate=" + couponDiscountRate +
                 ", couponDiscountAmount=" + couponDiscountAmount +
@@ -117,6 +118,15 @@ public class Coupon {
 
     public Coupon setCouponTermsUse(String couponTermsUse) {
         this.couponTermsUse = couponTermsUse;
+        return this;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public Coupon setMemberId(String memberId) {
+        this.memberId = memberId;
         return this;
     }
 
