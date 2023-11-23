@@ -58,29 +58,26 @@
     <insert id="insertCoupon" parameterType="Coupon">
         INSERT INTO coupon_details
         (
-            coupon_code,
-            member_id,
-            coupon_serial_number,
-            coupon_name,
-            coupon_discount_rate,
-            coupon_discount_amount,
-            coupon_stock,
-            number_coupons_remaining,
-            coupon_valid_period,
-            coupon_terms_use
+        coupon_code,
+        coupon_serial_number,
+        coupon_name,
+        coupon_discount_rate,
+        coupon_discount_amount,
+        coupon_stock,
+        number_coupons_remaining,
+        coupon_valid_period,
+        coupon_terms_use
         )
         SELECT
-            CONCAT('coup_',LPAD(COUNT(coupon_code) + 1, 4, '0')),
-            #{memberId},
-            #{couponSerialNumber},
-            #{couponName},
-            #{couponDiscountRate},
-            #{couponDiscountAmount},
-            #{couponStock},
-            #{numberCouponsRemaining},
-            #{couponValidPeriod},
-            #{couponTermsUse},
-
+        CONCAT('coup_',LPAD(COUNT(coupon_code) + 1, 4, '0')),
+        #{couponSerialNumber},
+        #{couponName},
+        #{couponDiscountRate},
+        #{couponDiscountAmount},
+        #{couponStock},
+        #{numberCouponsRemaining},
+        #{couponValidPeriod},
+        #{couponTermsUse}
         FROM
         coupon_details;
     </insert>
@@ -95,7 +92,7 @@
             c.coupon_discount_rate as couponDiscountRate,
             c.coupon_discount_amount as couponDiscountAmount,
             c.coupon_stock as couponStock,
-            c.number_coupons_remaining as numberCouponRemaining,
+            c.number_coupons_remaining as numberCouponsRemaining,
             c.coupon_valid_period as couponValidPeriod,
             c.coupon_terms_use as couponTermsUse
         from
