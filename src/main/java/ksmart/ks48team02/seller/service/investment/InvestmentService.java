@@ -1,6 +1,7 @@
 package ksmart.ks48team02.seller.service.investment;
 
 import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
 import ksmart.ks48team02.seller.mapper.investment.SellerInvestmentMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,8 +103,8 @@ public class InvestmentService {
     }
 
     // 판매자 특정 투자펀딩 공고 조회
-    public AdminInvestment getInvestementByCode(String investmentCode) {
-        AdminInvestment investmentInfo = sellerInvestmentMapper.getInvestementByCode(investmentCode);
+    public AdminInvestment getInvestementByCode(String memberIdSeller, String investmentCode) {
+        AdminInvestment investmentInfo = sellerInvestmentMapper.getInvestementByCode(memberIdSeller, investmentCode);
 
         return investmentInfo;
     }
@@ -188,8 +189,8 @@ public class InvestmentService {
     }
 
     // 판매자 특정 투자펀딩 심사요청 조회
-    public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String investmentRequestJudgeCode) {
-        AdminInvestmentRequestJudge investmentRequestJudgeInfo = sellerInvestmentMapper.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+    public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String memberIdSeller, String investmentRequestJudgeCode) {
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = sellerInvestmentMapper.getInvestmentRequestJudgeByCode(memberIdSeller, investmentRequestJudgeCode);
 
         return investmentRequestJudgeInfo;
     }
@@ -215,9 +216,26 @@ public class InvestmentService {
         return  corporateValueEvaluationInfo;
     }
 
+    // 판매자 투자펀딩 공고 수정
+    public void modifyInvestment(AdminInvestment adminInvestment) {
+        sellerInvestmentMapper.modifyInvestment(adminInvestment);
+    }
+
+    // 판매자 투자펀딩 공고 상세 수정
+    public void modifyInvestmentContent(SellerInvestmentContent sellerInvestmentContent) {
+        sellerInvestmentMapper.modifyInvestmentContent(sellerInvestmentContent);
+    }
+
     // 판매자 투자펀딩 심사요청 수정
     public void modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
         sellerInvestmentMapper.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
+    }
+
+    // 판매자 투자펀딩 공고 삭제
+    public void removeInvestment(String investmentCode, String investmentContentCode) {
+
+        sellerInvestmentMapper.removeInvestmentContent(investmentContentCode);
+        sellerInvestmentMapper.removeInvestment(investmentCode);
     }
 
     // 판매자 투자펀딩 심사요청 삭제

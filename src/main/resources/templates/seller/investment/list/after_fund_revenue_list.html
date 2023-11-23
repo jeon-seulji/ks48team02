@@ -28,7 +28,7 @@
         <table>
             <thead>
             <tr>
-                <th>투자펀딩후 진행정보 코드</th>
+                <th>투자후 기업정보 공개 코드</th>
                 <th>대표자 아이디</th>
                 <th>투자펀딩 공고코드</th>
                 <th>진행 후 펀딩 달성금액 가치</th>
@@ -50,13 +50,11 @@
                 <th>매출기준기간(시작)</th>
                 <th>매출기준기간(종료)</th>
                 <th>등록일시</th>
-                <th>수정</th>
-                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
             <tr th:if="${afterFundrevenueList == null}">
-                <td colspan="24">투자후 기업정보 공개 목록이 없습니다.</td>
+                <td colspan="22">투자후 기업정보 공개 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${afterFundrevenueList == null}" th:each="l : ${afterFundrevenueList}">
                 <td>
@@ -96,15 +94,6 @@
         </table>
         <br>
 
-        <button type="button" class="submitBtn"
-                th:onclick="|location.href='@{/seller/investment/insert/after-fund-revenue}'|">
-            등록하기
-        </button>
-        <button type="button" class="submitBtn"
-                th:onclick="|location.href='@{/seller/investment/update/after-fund-revenue}'|">
-            수정하기
-        </button>
-
         <div class="board-page-area">
             <div class="list-controller-inner">
                 <ul>
@@ -126,6 +115,21 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="btn-area">
+        <ul>
+            <li>
+                <button type="button" class="submitBtn"
+                        th:onclick="|location.href='@{/seller/investment/insert/after-fund-revenue}'|">
+                    등록하기
+                </button>
+                <button type="button" class="submitBtn"
+                        th:onclick="|location.href='@{/seller/investment/update/after-fund-revenue}'|">
+                    수정하기
+                </button>
+            </li>
+        </ul>
     </div>
 
 </th:block>

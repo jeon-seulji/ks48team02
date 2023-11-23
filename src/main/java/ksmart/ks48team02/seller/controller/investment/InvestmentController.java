@@ -2,6 +2,7 @@ package ksmart.ks48team02.seller.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
 import ksmart.ks48team02.seller.service.investment.InvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -150,9 +151,11 @@ public class InvestmentController {
     }
 
     @GetMapping("/view/investment")
-    public String getInvestementByCode(Model model, String investmentCode) {
+    public String getInvestementByCode(Model model, String memberIdSeller, String investmentCode, HttpSession session) {
 
-        AdminInvestment investmentInfo = investmentService.getInvestementByCode(investmentCode);
+        String loginId = (String) session.getAttribute("SID");
+
+        AdminInvestment investmentInfo = investmentService.getInvestementByCode(loginId, investmentCode);
 
         model.addAttribute("title", "판매자 : 투자펀딩 공고 상세");
         model.addAttribute("contentsTitle","투자펀딩 공고 상세");
@@ -167,7 +170,7 @@ public class InvestmentController {
 
         String loginId = (String) session.getAttribute("SID");
 
-        AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(loginId, investmentRequestJudgeCode);
 
         model.addAttribute("title", "판매자 : 투자 펀딩 심사 요청 상세");
         model.addAttribute("contentsTitle","투자 펀딩 심사 요청 상세");
@@ -263,9 +266,11 @@ public class InvestmentController {
     }
 
     @GetMapping("/update/investment")
-    public String modifyInvestment(Model model, String investmentCode) {
+    public String modifyInvestment(Model model, String investmentCode, HttpSession session) {
 
-        AdminInvestment investmentInfo = investmentService.getInvestementByCode(investmentCode);
+        String loginId = (String) session.getAttribute("SID");
+
+        AdminInvestment investmentInfo = investmentService.getInvestementByCode(loginId, investmentCode);
 
         model.addAttribute("title", "투자펀딩 공고 수정");
         model.addAttribute("contentsTitle","투자펀딩 공고 수정");
@@ -274,10 +279,21 @@ public class InvestmentController {
         return "seller/investment/update/investment_update";
     }
 
-    @GetMapping("/update/judge")
-    public String modifyInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model){
+    @PostMapping("/update/investment")
+    public String modifyInvestmentJudge(AdminInvestment adminInvestment, SellerInvestmentContent sellerInvestmentContent) {
 
-        AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+        investmentService.modifyInvestment(adminInvestment);
+        investmentService.modifyInvestmentContent(sellerInvestmentContent);
+
+        return "redirect:/seller/investment/invest-main";
+    }
+
+    @GetMapping("/update/judge")
+    public String modifyInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode, Model model, HttpSession session){
+
+        String loginId = (String) session.getAttribute("SID");
+
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = investmentService.getInvestmentRequestJudgeByCode(loginId, investmentRequestJudgeCode);
         List<AdminLawSatistifyReason> lawSatistifyReasonList = investmentService.getLawSatistifyList();
         List<AdminIncongruitySectors> incongruitySectorsList = investmentService.getIncogruitySectorsList();
 
@@ -349,6 +365,32 @@ public class InvestmentController {
         model.addAttribute("contentsTitle", "투자 댓글관리");
 
         return "seller/investment/comment/main";
+    }
+
+    @GetMapping("/delete/investment")
+    public String removeInvestment(@RequestParam(value = "investmentCode") String investmentCode
+                                  ,@RequestParam(value = "investmentContentCode") String investmentContentCode
+                                  ,Model model) {
+
+        investmentService.removeInvestment(investmentCode, investmentContentCode);
+
+        model.addAttribute("investmentCode", investmentCode);
+        model.addAttribute("investmentContentCode",investmentContentCode);
+
+        return "redirect:/seller/investment/invest-main";
+    }
+
+    @PostMapping("/delete/investment")
+    public String removeInvestment(@RequestParam(value = "investmentCode") String investmentCode
+            ,@RequestParam(value = "investmentContentCode") String investmentContentCode
+            ,RedirectAttributes redirectAttributes) {
+
+        investmentService.removeInvestment(investmentCode, investmentContentCode);
+
+        redirectAttributes.addAttribute("investmentCode", investmentCode);
+        redirectAttributes.addAttribute("investmentContentCode", investmentContentCode);
+
+        return "redirect:/seller/investment/invest-main";
     }
 
     @GetMapping("/delete/judge")

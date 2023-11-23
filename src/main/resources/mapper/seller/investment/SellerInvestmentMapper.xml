@@ -333,7 +333,14 @@
             i.investment_company,
             i.member_id_seller,
             s.representative_name,
+            ic.investment_content_code,
             ic.project_introduction,
+            ic.market_analysis,
+            ic.major_financial_information,
+            ic.risk,
+            ic.major_manpower,
+            ic.patent_award_details,
+            ic.etc_invest_content,
             i.investment_like,
             i.investment_amount,
             i.investment_achievement_money AS invInvestmentAchievementMoney,
@@ -362,6 +369,8 @@
             ON
             i.investment_request_judge_code = ir.investment_request_judge_code
         WHERE
+            i.member_id_seller = #{memberIdSeller}
+            AND
             i.investment_code = #{investmentCode};
     </select>
 
@@ -505,6 +514,8 @@
             ON
             i.law_satistify_code = l.law_satistify_code
         WHERE
+            i.member_id_seller = #{memberIdSeller}
+            AND
             i.investment_request_judge_code = #{investmentRequestJudgeCode};
     </select>
 
@@ -543,7 +554,7 @@
             i.investment_request_content,
             i.investment_request_date,
             i.member_id_seller,
-            i.investment_achievement_money,
+            i.investment_achievement_money AS invInvestmentAchievementMoney,
             i.issue_stock_number,
             c.corporate_value_evaluation_code,
             c.member_id,
@@ -568,9 +579,67 @@
             c.corporate_value_evaluation_code = #{corporateValueEvaluationCode};
     </select>
 
+    <!-- 판매자 투자펀딩 공고 수정 -->
+    <update id="modifyInvestment" parameterType="AdminInvestment">
+        /* 판매자 투자펀딩 공고 수정 */
+        UPDATE investment
+        <set>
+            <if test="investmentSubject != null and investmentSubject != ''">
+                investment_subject = #{investmentSubject},
+            </if>
+            <if test="invInvestmentAchievementMoney != null and invInvestmentAchievementMoney != ''">
+                investment_achievement_money = #{invInvestmentAchievementMoney},
+            </if>
+            <if test="invInvestmentAchievementMoney == 0">
+                investment_achievement_money = #{invInvestmentAchievementMoney},
+            </if>
+            <if test="investmentAmount != null and investmentAmount != ''">
+                investment_amount = #{investmentAmount},
+            </if>
+            <if test="investmentAmount == 0">
+                investment_amount = #{investmentAmount},
+            </if>
+            <if test="securitiesClassification != null and securitiesClassification != ''">
+                securities_classification = #{securitiesClassification}
+            </if>
+        </set>
+        WHERE
+            investment_code = #{investmentCode};
+    </update>
+
+    <!-- 판매자 투자펀딩 공고 상세 수정 -->
+    <update id="modifyInvestmentContent" parameterType="SellerInvestmentContent">
+        UPDATE investment_content
+        <set>
+            <if test="projectIntroduction != null and projectIntroduction != ''">
+                project_introduction = #{projectIntroduction},
+            </if>
+            <if test="marketAnalysis != null and marketAnalysis != ''">
+                market_analysis = #{marketAnalysis},
+            </if>
+            <if test="majorFinancialInformation != null and majorFinancialInformation != ''">
+                major_financial_information = #{majorFinancialInformation},
+            </if>
+            <if test="risk != null and risk != ''">
+                risk = #{risk},
+            </if>
+            <if test="majorManpower != null and majorManpower != ''">
+                major_manpower = #{majorManpower},
+            </if>
+            <if test="patentAwardDetails != null and patentAwardDetails != ''">
+                patent_award_details = #{patentAwardDetails},
+            </if>
+            <if test="etcInvestContent != null and etcInvestContent != ''">
+                etc_invest_content = #{etcInvestContent}
+            </if>
+        </set>
+        WHERE
+            investment_content_code = #{investmentContentCode};
+    </update>
+
     <!-- 판매자 투자펀딩 심사요청 수정 -->
     <update id="modifyInvestmentRequestJudge" parameterType="AdminInvestmentRequestJudge">
-        /* 투자펀딩 심사요청 수정 */
+        /* 판매자 투자펀딩 심사요청 수정 */
         UPDATE investment_request_judge
         <set>
             <if test="investmentRequestJudgeCode != null and investmentRequestJudgeCode != ''">
@@ -637,6 +706,24 @@
         WHERE
             investment_request_judge_code = #{investmentRequestJudgeCode};
     </update>
+
+    <!-- 판매자 투자펀딩 공고 삭제 -->
+    <delete id="removeInvestment" parameterType="String">
+        /* 판매자 투자펀딩 공고 삭제 */
+        DELETE
+        FROM
+            investment
+        WHERE
+            investment_code = #{investmentCode};
+    </delete>
+
+    <delete id="removeInvestmentContent" parameterType="String">
+        DELETE
+        FROM
+            investment_content
+        WHERE
+            investment_content_code = #{investmentContentCode};
+    </delete>
 
     <!-- 판매자 투자펀딩 심사요청 삭제 -->
     <delete id="removeInvestmentRequestJudge" parameterType="String">
