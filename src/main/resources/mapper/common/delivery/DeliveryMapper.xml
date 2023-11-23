@@ -80,9 +80,23 @@
                 od.delivery_name LIKE CONCAT('%', #{searchValue}, '%')
                 )
             </if>
-            <if test="searchKey != null and searchKey != 'total' and searchKey != ''">
+            <if test="searchKey != null and searchKey == 'orderCode'">
                 AND
-                od.${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+                od.order_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'deliveryName'">
+                AND
+                od.delivery_name LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'memberId'">
+                AND
+                od.member_id LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+
+            <!-- session store code 값과 일치하는 공고 한정 조회 -->
+            <if test="sstorecode != 'empty'">
+                AND
+                rs.storeCode = #{sstorecode}
             </if>
         </where>
 
@@ -105,8 +119,36 @@
             </otherwise>
         </choose>
     </sql>
+
+    <!-- 리워드 기부 투자 프로젝트 rwsultset -->
+    <sql id="resultset">
+        WITH resultset AS (
+            SELECT
+                r.reward_project_code AS projectCode,
+                r.store_code AS storeCode,
+                '리워드' AS projectType
+            FROM
+                reward_project AS r
+            UNION ALL
+            SELECT
+                d.donation_code AS projectCode,
+                d.store_code AS storeCode,
+                '기부' AS projectType
+            FROM
+                donation AS d
+            UNION ALL
+            SELECT
+                i.investment_code AS projectCode,
+                i.store_code AS storeCode,
+                '투자' AS projectType
+            FROM
+                investment AS i
+        ) -- cte
+    </sql>
+
     <!-- delivery list  조회 -->
     <select id="getDeliveryList" parameterType="map" resultMap="orderDeliveryMap">
+        <include refid="resultset"/>
         SELECT
             od.order_delivery_code,
             od.order_code,
@@ -127,7 +169,18 @@
             od.due_date_arrival
         FROM
             order_delivery AS od
+            <choose>
+                <when test="sstorecode != 'empty'">
+                    INNER JOIN
+                    order_table AS ot
+                    on od.order_code = ot.order_code
+                    INNER JOIN
+                    resultset AS rs
+                    ON ot.goods_code = rs.projectCode
+                </when>
+            </choose>
         <include refid="deliveryListWhere"></include>
+
         <if test="startRowNum > -1">
             LIMIT ${startRowNum}, ${rowPerPage};
         </if>
@@ -136,10 +189,21 @@
 
     <!-- 전체 행 수 조회 -->
     <select id="getDeliveryCnt" parameterType="map" resultType="int">
+        <include refid="resultset"/>
         SELECT
             COUNT(1)
         FROM
             order_delivery AS od
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                order_table AS ot
+                on od.order_code = ot.order_code
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
         <include refid="deliveryListWhere"></include>
     </select>
 

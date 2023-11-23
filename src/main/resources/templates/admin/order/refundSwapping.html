@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/default}">
+      layout:decorate="|@{${(session.STYPECODE == 'mem_type_02'
+                                || session.STYPECODE == 'mem_type_03'
+                                || session.STYPECODE == 'mem_type_04')? '/seller/layout/default'
+                                :(session.STYPECODE == 'mem_type_01')? '/admin/layout/default':''}}|">
 
 <head>
   <!--  사용자별 css file 추가 부분 -->
@@ -69,7 +72,7 @@
                     ${(l.apcState == 1)?'처리중':(l.apcState == 2)?'반려':'처리완료'}
                   </td>
                   <td class="table-data-center">
-                      ${l.adminId}
+                      ${(l.adminId == null)? '-':l.adminId}
                   </td>
                   <td class="table-data-center">
                     ${(l.completedDate != null)? l.completedDate:'-'}
@@ -415,7 +418,7 @@
               [[${l.apcDate}]]
             </td>
             <td class="table-data-center">
-              [[${(l.apcState == 1)?'처리중':(l.apcState == 2)?'반려':'처리완료'}]]
+              [[${(l.apcState == 1)?'처리중':(l.apcState == 2)?'처리완료':''}]]
             </td>
             <td class="table-data-center">
               [[${l.adminId}]]

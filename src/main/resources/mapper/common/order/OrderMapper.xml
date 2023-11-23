@@ -142,7 +142,6 @@
     <!-- 주문 목록 공통 조회 조건 sql -->
     <sql id="orderListWhere">
         <where>
-
             <!-- 기간 선택 -->
             <if test="dateSettStartDate != null and dateSettStartDate != ''">
                 AND
@@ -206,9 +205,21 @@
                     ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
                 )
             </if>
-            <if test="searchKey != null and searchKey != 'total' and searchKey != ''">
+            <if test="searchKey != null and searchKey == 'orderCode'">
                 AND
-                ot.${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+                ot.order_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderName'">
+                AND
+                ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'memberId'">
+                AND
+                ot.member_id LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderFundingName'">
+                AND
+                ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
             </if>
             <!-- session store code 값과 일치하는 공고 한정 조회 -->
             <if test="sstorecode != 'empty'">
@@ -327,6 +338,11 @@
                 AND
                 apc_code LIKE CONCAT('%', #{searchValue}, '%')
             </if>
+            <!-- session store code 값과 일치하는 공고 한정 조회 -->
+            <if test="sstorecode != 'empty'">
+                AND
+                rs.storeCode = #{sstorecode}
+            </if>
         </where>
         <!-- ORDER BY -->
         <choose>
@@ -344,6 +360,76 @@
             </when>
             <otherwise>
                 ORDER BY apc_date DESC
+            </otherwise>
+        </choose>
+
+
+    </sql>
+
+    <!-- 주문 확정 목록 조회 공통 조건 sql -->
+    <sql id="orderCompWhere">
+        <where>
+            <!-- 기간 선택 -->
+            <if test="dateSettStartDate != null and dateSettStartDate != ''">
+                AND
+                DATE_FORMAT(order_confirmation_date, '%Y-%m-%d') >= #{dateSettStartDate}
+            </if>
+            <if test="dateSettEndDate != null and dateSettEndDate != ''">
+                AND
+                #{dateSettEndDate} >= DATE_FORMAT(order_confirmation_date, '%Y-%m-%d')
+            </if>
+            <!-- 공고 분류 선택 -->
+            <if test="projectPartition != null">
+                AND
+                project_partition IN
+                <foreach collection="projectPartition" item="item" open="(" close=")"  separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <!-- 키워드 선택 -->
+            <if test="searchKey != null and searchKey == 'total'">
+                AND
+                (
+                ocl.order_code LIKE CONCAT('%', #{searchValue}, '%')
+                OR
+                ocl.member_id LIKE CONCAT('%', #{searchValue}, '%')
+                OR
+                ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
+                OR
+                ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
+                )
+            </if>
+            <if test="searchKey != null and searchKey == 'memberId'">
+                AND
+                ocl.member_id LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderCode'">
+                AND
+                ocl.order_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderName'">
+                AND
+                ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderFundingName'">
+                AND
+                ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'apcCode'">
+                AND
+                apc_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+        </where>
+        <!-- ORDER BY -->
+        <choose>
+            <when test="orderby == 'order_d'">
+                ORDER BY order_confirmation_date DESC
+            </when>
+            <when test="orderby == 'order_a'">
+                ORDER BY order_confirmation_date ASC
+            </when>
+            <otherwise>
+                ORDER BY order_confirmation_date DESC
             </otherwise>
         </choose>
 
@@ -497,6 +583,7 @@
 
     <!-- 환불 신청 목록 조회 -->
     <select id="getRefundApplicationList" parameterType="map" resultMap="refundApplicationMap">
+        <include refid="resultset"/>
         SELECT
             ra.apc_code,
             ra.order_code,
@@ -522,6 +609,13 @@
             INNER JOIN
             order_table AS ot
             ON ra.order_code = ot.order_code
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
         <include refid="rfndSwapListWhere"/>
         <if test="startRowNum > -1">
             LIMIT ${startRowNum}, ${rowPerPage};
@@ -530,6 +624,7 @@
 
     <!-- 환불 신청 전체 행 수 조회 -->
     <select id="getRfndCnt" parameterType="map" resultType="int">
+        <include refid="resultset"/>
         /* 전체 주문 행 조회 */
         SELECT
             COUNT(1)
@@ -538,11 +633,19 @@
             INNER JOIN
             order_table AS ot
             ON ra.order_code = ot.order_code
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
         <include refid="rfndSwapListWhere"/>
     </select>
 
     <!-- 교환 신청 목록 조회 -->
     <select id="getSwapApplicationList" parameterType="map" resultMap="swappingApplicationMap">
+        <include refid="resultset"/>
         SELECT
             sa.apc_code,
             sa.order_code,
@@ -568,14 +671,22 @@
             INNER JOIN
             order_table AS ot
             ON sa.order_code = ot.order_code
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
         <include refid="rfndSwapListWhere"/>
         <if test="startRowNum > -1">
             LIMIT ${startRowNum}, ${rowPerPage};
         </if>
     </select>
 
-    <!-- 환불 신청 전체 행 수 조회 -->
+    <!-- 교환 신청 전체 행 수 조회 -->
     <select id="getSwapCnt" parameterType="map" resultType="int">
+        <include refid="resultset"/>
         /* 전체 주문 행 조회 */
         SELECT
             COUNT(1)
@@ -584,11 +695,18 @@
             INNER JOIN
             order_table AS ot
             ON ra.order_code = ot.order_code
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
         <include refid="rfndSwapListWhere"/>
     </select>
 
     <!-- 주문 확정 목록 조회 -->
-    <select id="getOrderConfLogList" resultMap="orderConfLogListMap">
+    <select id="getOrderConfLogList" parameterType="map" resultMap="orderConfLogListMap">
         SELECT
             ocl.order_confirmation_log_code,
             ocl.member_id,
@@ -607,6 +725,20 @@
             order_confirmation_log AS ocl
             LEFT OUTER JOIN
             order_table AS ot
-            ON ocl.order_code = ot.order_code;
+            ON ocl.order_code = ot.order_code
+
+        <include refid="orderCompWhere"/>
+        <if test="startRowNum > -1">
+            LIMIT ${startRowNum}, ${rowPerPage};
+        </if>
+    </select>
+
+    <!-- 주문 확정 전체 행 수 조회 -->
+    <select id="getOrderConfCnt" parameterType="map" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            order_confirmation_log AS ocl
+        <include refid="orderCompWhere"/>
     </select>
 </mapper>

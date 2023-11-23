@@ -42,5 +42,8 @@ public interface OrderMapper {
     public int getSwapCnt(Map<String, Object> paramMap);
 
     // 주문 확정 목록 조회
-    public List<OrderConfirmationLog> getOrderConfLogList();
+    public List<OrderConfirmationLog> getOrderConfLogList(Map<String, Object> paramMap);
+
+    // 주문 확정 목록 행 수 조회
+    public int getOrderConfCnt(Map<String, Object> paramMap);
 }
