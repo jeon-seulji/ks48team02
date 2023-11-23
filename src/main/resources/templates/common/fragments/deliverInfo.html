@@ -64,8 +64,8 @@
                 <td style="text-align: left !important;">
                     <select name="delivery_category">
                         <option value="" th:selected="${getDeliveryByCode.deliveryCategoryCode == null}">=== 택배사를 선택해주세요 ===</option>
-                        <th:block th:each="l : ${deliveryCourierCategory}">
-                            <option th:value="${l.deliveryCategoryCode}" th:selected="${l.deliveryCategoryCode} == ${getDeliveryByCode.deliveryCategoryCode}">[[${l.deliveryCourierName}]]</option>
+                        <th:block th:each="dcl : ${deliveryCourierCategory}">
+                            <option th:value="${dcl.deliveryCategoryCode}" th:selected="${dcl.deliveryCategoryCode} == ${getDeliveryByCode.deliveryCategoryCode}">[[${dcl.deliveryCourierName}]]</option>
                         </th:block>
                     </select>
                 </td>

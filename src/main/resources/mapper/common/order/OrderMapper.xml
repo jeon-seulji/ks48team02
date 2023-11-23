@@ -98,6 +98,7 @@
         <id property="orderConfirmationLogCode" column="order_confirmation_log_code"/>
         <result property="memberId" column="member_id"/>
         <result property="projectPartition" column="project_partition"/>
+        <result property="orderCode" column="order_code"/>
         <result property="projectCode" column="project_code"/>
         <result property="orderConfirmationDate" column="order_confirmation_date"/>
         <result property="orderPriceTotal" column="order_price_total"/>
@@ -105,13 +106,46 @@
         <result property="addFlover" column="add_flover"/>
         <result property="addReserveCode" column="add_reserve_code"/>
         <result property="addFloverCode" column="add_flover_code"/>
+
+        <association property="orderTotal" javaType="OrderTotal">
+            <result property="orderCode" column="order_code"/>
+            <result property="orderFundingName" column="order_funding_name"/>
+            <result property="goodsCode" column="goods_code"/>
+        </association>
     </resultMap>
 
+    <!-- 리워드 기부 투자 프로젝트 rwsultset -->
+    <sql id="resultset">
+        WITH resultset AS (
+            SELECT
+                r.reward_project_code AS projectCode,
+                r.store_code AS storeCode,
+                '리워드' AS projectType
+            FROM
+                reward_project AS r
+            UNION ALL
+            SELECT
+                d.donation_code AS projectCode,
+                d.store_code AS storeCode,
+                '기부' AS projectType
+            FROM
+                donation AS d
+            UNION ALL
+            SELECT
+                i.investment_code AS projectCode,
+                i.store_code AS storeCode,
+                '투자' AS projectType
+            FROM
+                investment AS i
+        ) -- cte
+    </sql>
     <!-- 주문 목록 공통 조회 조건 sql -->
     <sql id="orderListWhere">
         <where>
+
             <!-- 기간 선택 -->
             <if test="dateSettStartDate != null and dateSettStartDate != ''">
+                AND
                 DATE_FORMAT(ot.order_application_date, '%Y-%m-%d') >= #{dateSettStartDate}
             </if>
             <if test="dateSettEndDate != null and dateSettEndDate != ''">
@@ -138,6 +172,10 @@
             <if test="orderby == 'deliveryWait_o'">
                 AND
                 ot.order_category_code = 'ORDC_004'
+            </if>
+            <if test="orderby == 'delivering_o'">
+                AND
+                ot.order_category_code = 'ORDC_015'
             </if>
             <if test="orderby == 'deliveryCompleted_o'">
                 AND
@@ -172,8 +210,13 @@
                 AND
                 ot.${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
             </if>
-
+            <!-- session store code 값과 일치하는 공고 한정 조회 -->
+            <if test="sstorecode != 'empty'">
+                AND
+                rs.storeCode = #{sstorecode}
+            </if>
         </where>
+
         <!-- ORDER BY -->
         <choose>
             <when test="orderby == 'order_d'">
@@ -213,15 +256,15 @@
                 ORDER BY ot.order_application_date DESC
             </otherwise>
         </choose>
-
-
     </sql>
+
 
     <!-- 교환 환불 공통 조회 조건 sql -->
     <sql id="rfndSwapListWhere">
         <where>
             <!-- 기간 선택 -->
             <if test="dateSettStartDate != null and dateSettStartDate != ''">
+                AND
                 DATE_FORMAT(apc_date, '%Y-%m-%d') >= #{dateSettStartDate}
             </if>
             <if test="dateSettEndDate != null and dateSettEndDate != ''">
@@ -309,6 +352,8 @@
 
     <!-- order list 조회 -->
     <select id="getOrderList" parameterType="map" resultMap="orderMap">
+        <include refid="resultset"/>
+
         SELECT
             ot.order_code,
             ot.member_id,
@@ -324,6 +369,14 @@
             ot.order_cancell_date
         FROM
             order_table AS ot
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
+
         <include refid="orderListWhere"/>
 
         <if test="startRowNum > -1">
@@ -337,10 +390,18 @@
     <!-- 전체 주문 행 갯수 -->
     <select id="getOrderCnt" resultType="int" parameterType="map">
         /* 전체 주문 행 조회 */
+        <include refid="resultset"/>
         SELECT
             COUNT(1)
         FROM
             order_table AS ot
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
         <include refid="orderListWhere"/>
     </select>
 
@@ -538,8 +599,14 @@
             ocl.add_reserve_price,
             ocl.add_flover,
             ocl.add_reserve_code,
-            ocl.add_flover_code
+            ocl.add_flover_code,
+            ot.order_funding_name,
+            ot.order_code,
+            ot.goods_code
         FROM
-            order_confirmation_log AS ocl;
+            order_confirmation_log AS ocl
+            LEFT OUTER JOIN
+            order_table AS ot
+            ON ocl.order_code = ot.order_code;
     </select>
 </mapper>

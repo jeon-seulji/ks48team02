@@ -7,15 +7,14 @@
             <h5>주문 코드</h5>
             <p th:text="${OrderInfoById.orderCode}" style="color: var(--maincolor);">주문 코드</p>
         </div>
-        <div class="info-more-btn">
-            <a th:if="${orderPartition.equals('rwd')}" class="more-btn" target="_blank" th:href="@{/user/reward/detail?(rewardProjectCode=${OrderInfoById.goodsCode})}" style="padding: 7px 10px 9px 19px;">
+        <div class="info-more-btn" th:switch="${orderPartition}">
+            <a th:case="rwd" class="more-btn" target="_blank" th:href="@{/user/reward/detail(rewardProjectCode=${OrderInfoById.goodsCode})}" style="padding: 7px 10px 9px 19px;">
                 <span style="color: #fff !important;">공고 상세 보기</span>
             </a>
-            <a th:if="${orderPartition.equals('don')}" class="more-btn" target="_blank" th:href="@{/user/donation/detail?(projectCode=${OrderInfoById.goodsCode})}" style="padding: 7px 10px 9px 19px;">
+            <a th:case="don" class="more-btn" target="_blank" th:href="@{/user/donation/detail(donationCode=${OrderInfoById.goodsCode})}" style="padding: 7px 10px 9px 19px;">
                 <span style="color: #fff !important;">공고 상세 보기</span>
             </a>
-            <!-- 체크 포인트 -->
-            <a th:if="${orderPartition.equals('inv')}" class="more-btn" target="_blank" th:href="@{/user/investment/detail/main?(investmentCode=${OrderInfoById.goodsCode})}" style="padding: 7px 10px 9px 19px;">
+            <a th:case="inv" class="more-btn" target="_blank" th:href="@{/user/investment/detail/main(investmentCode=${OrderInfoById.goodsCode})}" style="padding: 7px 10px 9px 19px;">
                 <span style="color: #fff !important;">공고 상세 보기</span>
             </a>
         </div>

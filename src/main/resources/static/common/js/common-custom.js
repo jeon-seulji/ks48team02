@@ -138,8 +138,9 @@ const projectPointColor = {
 // 진현
 // popup 형태 새로운 브라우저 open function
 function popupOpen(customUrl, width, height) {
-    console.log("a");
-    var url = customUrl;    //팝업창에 출력될 페이지 URL
+
+    // var url = customUrl.replaceAll('"','');
+    var url = customUrl;
     var winWidth = width;
     var winHeight = height;
 
