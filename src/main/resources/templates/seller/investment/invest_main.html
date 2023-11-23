@@ -6,227 +6,163 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <style>
-        #investInsertBtn {
-            width: 400px;
-        }
-        .category-button {
-            border: none;
-            border-radius: 25px; /* 라운드 처리 반경을 조정합니다. */
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .category-li{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-left: 20px;
-        }
-        .selected {
-            font-weight: bold;
-            color: black;
-        }
-        ul.d-flex li:hover {
-            cursor: pointer;
-        }
-        .investment-item-box{
-            width: 350px;
-            height: 300px;
-            margin: 10px;
-        }
-        .investment-item-first-child{
-            background: grey;
-            width: 350px;
-            height: 200px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .investment-item-first-child img{
-            width: 100%;
-            height: 100%;
-            border-radius: 5px;
-        }
-        .investment-item-second-child{
-            width: 350px;
-            height: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .investment-item-third-child{
-            width: 350px;
-            height: auto;
-            font-weight: bolder;
-            color: black;
-            font-size: 15px;
-        }
-        .investment-item-fourth-child{
-            width: 350px;
-            height: auto;
-        }
-        .investment-item-span-first{
-            font-weight: bold;
-            font-size: 20px;
-            color: #235FD9;
-        }
-        .investment-item-span-second{
-            margin-left: 5px;
-        }
-        .investment-item-span-third{
-            margin-left: auto;
-            color: #235FD9;
-            background: #cce5ff;
-            font-size: 12px;
-            padding: 2px;
-            border-radius: 5px;
-        }
-        .seller-management-page-add-btn:active{
-            box-shadow: inset -.3rem -.1rem 1.4rem  #FBFBFB, inset .3rem .4rem .8rem #BEC5D0;
-            cursor: pointer;
-        }
-        .seller-management-page-add-btn{
-            /* 상자 디자인 큰틀*/
-            padding: 10px;
-            border: 0px;
-            background-color: #235FD9;
-
-            /* 그림자 */
-            border-radius: 5px;
-            box-shadow:.5rem .3rem 1.4rem  #BEC5D0, -.1rem -.2rem .8rem #FBFBFB;
-            /* box-shadow:-.2rem -.2rem 1.8rem white, .8rem .8rem 1.4rem  #AAB7CB; */
-
-            /* 글씨 */
-            color: whitesmoke;
-            font-weight: bold;
-
-            animation-name: keybtn-language;
-            animation-duration: .2s;
+        .hidden {
+            display: none;
         }
     </style>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
 </head>
 
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        function sortItemClickedStyle(element) {
-            const listItems = document.querySelectorAll("#sort-item-wrap li");
+        function toggleInput() {
+            let selectElement = document.getElementById('searchKey');
+            let searchInput = document.getElementById('inputSearchValue');
+            let searchSelect = document.getElementById('selectSearchValue');
 
-            for (const listItem of listItems) {
-                listItem.classList.remove("selected");
+            if (selectElement.value === 'investJudgeSituation') {
+                searchInput.classList.add('hidden');
+                searchSelect.classList.remove('hidden');
+                searchInput.value = '';
+            } else {
+                searchInput.classList.remove('hidden');
+                searchSelect.classList.add('hidden');
+                searchSelect.value = '';
             }
-
-            element.classList.add("selected");
         }
-        function cateItemClickedStyle(element) {
-            const listItems = document.querySelectorAll("#category-wrap li");
-
-            for (const listItem of listItems) {
-                listItem.classList.remove("selected");
-            }
-
-            element.classList.add("selected");
-        }
-
-        // 초기 스타일이 적용되도록 직접 호출
-        document.addEventListener("DOMContentLoaded", function() {
-            const sortItemWrap = document.querySelector("#sort-item-wrap li:first-child");
-            sortItemWrap.classList.add("selected");
-
-            const categoryItemWrap = document.querySelector("#category-wrap li:first-child");
-            categoryItemWrap.classList.add("selected");
-        });
     </script>
 </th:block>
+
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
-    <div class="container admin-content-wrapper" style="width: 100%; height: 100%">
-        <div class="row">
+    <div th:include="~{seller/investment/search/investment_search :: searchFragment}"></div>
+    <br>
 
-            <div class="col-lg-3 investment-item-box">
-                <div class="investment-item-first-child" th:onclick="|location.href='@{/user/investment/detail/main}'|">
-                    <img class="donation-item-third-child-image" src="https://ohmycompany.imgix.net/uploads/invest/main/MAIN_202308250201186818d6.jpg?lossless=1&h=450">
-                </div>
-                <div class="investment-item-second-child">
-                    <span class="investment-item-span-first">103% 달성</span>
-                    <span class="investment-item-span-second">1,033,580,000원</span>
-                    <span class="investment-item-span-third">5일 남음</span>
-                </div>
-                <div class="investment-item-third-child">
-                    <a th:href="@{/user/investment/detail/main}">마케팅 전문기업이 만든 스페셜티 커피 온라인 플랫폼, 커핑커피</a>
-                </div>
-                <div class="investment-item-fourth-child">
-                    플라이강원(주)
-                </div>
-                <button type="button" class="seller-management-page-add-btn" th:onclick="|location.href='@{/seller/investment/update/update}'|">
-                    수정
-                </button>
+    <h4 class="admin-content-title">투자 공고 목록</h4>
+
+    <div class="admin-content-wrapper">
+
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>심사 요청 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
             </div>
-
-            <div class="col-lg-3 investment-item-box">
-                <div class="investment-item-first-child">
-                </div>
-                <div class="investment-item-second-child">
-                    <span class="investment-item-span-first">103% 달성</span>
-                    <span class="investment-item-span-second">1,033,580,000원</span>
-                    <span class="investment-item-span-third">5일 남음</span>
-                </div>
-                <div class="investment-item-third-child">
-                    [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
-                </div>
-                <div class="investment-item-fourth-child">
-                    플라이강원(주)
-                </div>
-                <button type="button" class="seller-management-page-add-btn" th:onclick="|location.href='@{/seller/investment/update/update}'|">
-                    수정
-                </button>
+            <div class="list-count-selector">
+                <select name="orderby">
+                    <option value="regist_d">신청일 순</option>
+                    <option value="regist_a">신청일 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">요청 코드순</option>
+                    <option value="project_name_a">요청 코드 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">심사요청 제목순</option>
+                    <option value="project_name_a">심사요청 제목역순</option>
+                </select>
+                <select name="rowPerpage">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
             </div>
-
-            <div class="col-lg-3 investment-item-box">
-                <div class="investment-item-first-child">
-                </div>
-                <div class="investment-item-second-child">
-                    <span class="investment-item-span-first">103% 달성</span>
-                    <span class="investment-item-span-second">1,033,580,000원</span>
-                    <span class="investment-item-span-third">5일 남음</span>
-                </div>
-                <div class="investment-item-third-child">
-                    [소득공제] 국내 최초 TCC 항공사｜항공과 관광의 융합!
-                </div>
-                <div class="investment-item-fourth-child">
-                    플라이강원(주)
-                </div>
-                <button type="button" class="seller-management-page-add-btn" th:onclick="|location.href='@{/seller/investment/update/update}'|">
-                    수정
-                </button>
-            </div>
-
         </div>
 
-    </div>
-    <br>
-    <button type="button" id="investInsertBtn" class="seller-management-page-add-btn" th:onclick="|location.href='@{/seller/investment/insert/judge}'|">
-        공고 등록하러 가기
-    </button>
+        <table class="settlement-log">
+            <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" name="allSelect" id="allSelectBtn">
+                </th>
+                <th>투자 공고 코드</th>
+                <th>투자 심사요청 코드</th>
+                <th>요청한 아이디</th>
+                <th>공고 제목</th>
+                <th>좋아요 수</th>
+                <th>펀딩된 금액</th>
+                <th>투자 펀딩 목표 금액</th>
+                <th>달성율</th>
+                <th>회사명</th>
+                <th>조회수</th>
+                <th>투자자 수</th>
+                <th>증권구분</th>
+                <th>공고일</th>
+                <th>마감일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${investmentList == null}">
+                <td>
+                    <input type="checkbox" name="selectList">
+                </td>
+                <td colspan="14">투자 공고 목록이 없습니다.</td>
+            </tr>
+            <tr th:unless="${investmentList == null}" th:each="l : ${investmentList}">
+                <td>
+                    <input type="checkbox" name="selectList">
+                </td>
+                <td>
+                    <a class="detail-link"
+                       th:href="@{/seller/investment/view/investment(investmentCode=${l.investmentCode})}"
+                       th:text="${l.investmentCode}"></a>
+                </td>
+                <td th:text="${l.investmentRequestJudgeCode}"></td>
+                <td th:text="${l.memberIdSeller}"></td>
+                <td th:text="${l.investmentSubject}"></td>
+                <td th:text="${l.investmentLike}"></td>
+                <td th:text="${#numbers.formatInteger(l.investmentAmount,3,'COMMA')} + '원'"></td>
+                <td th:text="${#numbers.formatInteger(l.invInvestmentAchievementMoney,3,'COMMA')} + '원'"></td>
+                <td><span th:text="${l.investAchievementPercent}"></span>%</td>
+                <td th:text="${l.investmentCompany}"></td>
+                <td th:text="${l.searchCount}"></td>
+                <td th:text="${l.investCount}"></td>
+                <td th:text="${l.securitiesClassification}"></td>
+                <td th:text="${l.investmentDisplayDate}"></td>
+                <td th:text="${l.investmentDeadline}"></td>
+            </tr>
+            </tbody>
+        </table>
 
+        <div class="board-page-area">
+            <div class="list-controller-inner">
+                <ul>
+                    <li><a th:href="@{/seller/investment/invest-main(searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[맨처음으로]</a></li>
+                    <li><a th:if="${currentPage > 1}"
+                           th:href="@{/seller/investment/invest-main(currentPage=${currentPage - 1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[이전]</a>
+                        <span th:unless="${currentPage > 1}">[이전]</span>
+                    </li>
+                    <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
+                        <a th:if="${num != currentPage}"
+                           th:href="@{/seller/investment/invest-main(currentPage=${num}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[[${'[' + num + ']'}]]</a>
+                        <span th:unless="${num != currentPage}" th:text="|[${num}]|"></span>
+                    </th:block>
+                    <li><a th:if="${currentPage < lastPage}"
+                           th:href="@{/seller/investment/invest-main(currentPage=${currentPage +1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[다음]</a>
+                        <span th:unless="${currentPage < lastPage}">[다음]</span>
+                    </li>
+                    <li><a th:href="@{/seller/investment/invest-main(currentPage=${lastPage}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[맨마지막]</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-area">
+        <ul>
+            <li>
+                <button type="button" class="submitBtn"
+                        th:onclick="|location.href='@{/user/projectRegistration/investment/judge}'|">
+                    등록하기
+                </button>
+            </li>
+        </ul>
+    </div>
 </th:block>
 </html>

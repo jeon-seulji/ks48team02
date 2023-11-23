@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/default}">
+      layout:decorate="~{seller/layout/default}">
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
-    <style>
-        #settDeleteBtn {
-            background-color: red;
-        }
-    </style>
 </head>
 
 
@@ -20,17 +15,7 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-    <script>
-        $('#settDeleteBtn').click(function () {
-            let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
-            if (deleteConfirm) {
-                window.location.href = `[[@{/admin/investment/delete/corporate-value(corporateValueEvaluationCode=${corporateValueEvaluationInfo.corporateValueEvaluationCode})}]]` ;
-                alert('삭제되었습니다');
-            } else {
-                alert('취소되었습니다');
-            }
-        });
-    </script>
+
 </th:block>
 
 
@@ -43,7 +28,7 @@
             <div class="project-info-title-area">
                 <div class="project-info-title">
                     <h5>투자 심사요청 코드</h5>
-                    <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=*{adminInvestmentRequestJudge.investmentRequestJudgeCode})}"
+                    <a th:href="@{/seller/investment/view/judge(investmentRequestJudgeCode=*{adminInvestmentRequestJudge.investmentRequestJudgeCode})}"
                        th:text="*{adminInvestmentRequestJudge.investmentRequestJudgeCode}"
                        class="detail-link" style="color: var(--maincolor);"></a>
                 </div>
@@ -233,18 +218,6 @@
                     <ul>
                         <li>
                             <button id="settBackBtn" class="submitBtn" type="button" onclick="backLocationFn()">뒤로
-                            </button>
-                        </li>
-                        <li>
-                            <button id="settUpdateBtn" class="submitBtn" type="button"
-                                    th:onclick="|location.href='@{/admin/investment/update/corporate-value(corporateValueEvaluationCode=*{corporateValueEvaluationCode})}'|">
-                                수정
-                            </button>
-                        </li>
-                        <li>
-                            <button id="settDeleteBtn" name="settDeleteBtn" class="submitBtn" type="button"
-                                    th:onclick="return false">
-                                삭제
                             </button>
                         </li>
                     </ul>
