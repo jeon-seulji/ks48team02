@@ -26,9 +26,9 @@ public class AdminCouponService {
 
 
     // 쿠폰 수정
-    public void updateCoupon(Coupon coupon){
+    public int updateCoupon(Coupon coupon){
         System.out.println(coupon);
-        adminCouponMapper.updateCoupon(coupon);
+        return adminCouponMapper.updateCoupon(coupon);
     }
 
     // 쿠폰 등록
@@ -51,8 +51,8 @@ public class AdminCouponService {
     }
 
     // 특정 쿠폰 조회
-    public List<Coupon> getCouponCodeById(String couponCode) {
-        List<Coupon> getCouponCodeById = adminCouponMapper.getCouponCodeById(couponCode);
+    public Coupon getCouponCodeById(String couponCode) {
+        Coupon getCouponCodeById = adminCouponMapper.getCouponCodeById(couponCode);
 
         return getCouponCodeById;
     }

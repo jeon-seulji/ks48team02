@@ -8,15 +8,7 @@ public class Inquiry {
     private String iqContent;
     private String iqDatetime;
 
-
-    public String getIqDatetime() {
-        return iqDatetime;
-    }
-
-    public Inquiry setIqDatetime(String iqDatetime) {
-        this.iqDatetime = iqDatetime;
-        return this;
-    }
+    private InquiryPage inquiryPage;
 
     @Override
     public String toString() {
@@ -27,6 +19,7 @@ public class Inquiry {
                 ", iqSubject='" + iqSubject + '\'' +
                 ", iqContent='" + iqContent + '\'' +
                 ", iqDatetime='" + iqDatetime + '\'' +
+                ", inquiryPage=" + inquiryPage +
                 '}';
     }
 
@@ -75,5 +68,21 @@ public class Inquiry {
         return this;
     }
 
+    public String getIqDatetime() {
+        return iqDatetime;
+    }
 
+    public Inquiry setIqDatetime(String iqDatetime) {
+        this.iqDatetime = iqDatetime;
+        return this;
+    }
+
+    public InquiryPage getInquiryPage() {
+        return inquiryPage;
+    }
+
+    public Inquiry setInquiryPage(InquiryPage inquiryPage) {
+        this.inquiryPage = inquiryPage;
+        return this;
+    }
 }
