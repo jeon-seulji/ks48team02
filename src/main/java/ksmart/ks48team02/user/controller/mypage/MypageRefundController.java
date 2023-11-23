@@ -16,7 +16,7 @@ public class MypageRefundController {
 
     private final MypageRewardService mypageRewardService;
 
-    //환불 페이지
+    //환불 페이지 ㅎㅎ
     @GetMapping(value={"","/"})
     public String refundMainPage(){
 
