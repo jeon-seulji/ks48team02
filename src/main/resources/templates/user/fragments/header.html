@@ -70,7 +70,7 @@
 							<li th:unless="${session.STYPECODE == 'mem_type_05'}">
 								<a th:href="@{${(session.STYPECODE == 'mem_type_01')?'/admin':'/seller'}}">관리자페이지</a>
 							</li>
-							<li><a th:href="@{#}">1:1문의</a></li>
+							<li><a th:href="@{/user/inquiry}">1:1문의</a></li>
 							<li><a th:href="@{/user/account/logout}">로그아웃</a></li>
 						</ul>
 					</li>

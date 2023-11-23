@@ -4,7 +4,6 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.admin.mapper.investment.AdminInvestmentMapper">
 
-
     <resultMap type="AdminInvestment" id="adminInvestmentListMap">
         <id property="investmentCode" column="investment_code"/>
         <result property="memberId" column="member_id"/>
@@ -26,13 +25,12 @@
         <result property="investmentDisplayDate" column="investment_display_date"/>
         <result property="investmentRegDate" column="investment_reg_date"/>
         <result property="investmentDeadline" column="investment_deadline"/>
-        <result property="investment_report" column="investmentReport"/>
+        <result property="investmentReport" column="investment_report"/>
         <result property="basicFee" column="basic_fee"/>
         <result property="contractFeeRate" column="contract_fee_rate"/>
         <result property="contractFile" column="contract_file"/>
         <result property="investJudgeSituation" column="invest_judge_situation"/>
     </resultMap>
-
 
     <resultMap type="AdminInvestmentRequestJudge" id="adminInvestmentRequestJudgeListMap">
         <id property="investmentRequestJudgeCode" column="investment_request_judge_code"/>
@@ -86,7 +84,7 @@
             <result property="investmentDisplayDate" column="investment_display_date"/>
             <result property="investmentRegDate" column="investment_reg_date"/>
             <result property="investmentDeadline" column="investment_deadline"/>
-            <result property="investment_report" column="investmentReport"/>
+            <result property="investmentReport" column="investment_report"/>
             <result property="basicFee" column="basic_fee"/>
             <result property="contractFeeRate" column="contract_fee_rate"/>
             <result property="contractFile" column="contract_file"/>
@@ -156,6 +154,29 @@
         </association>
     </resultMap>
 
+    <resultMap type="SellerInvestmentContent" id="sellerInvestmentContentList">
+        <id property="investmentContentCode" column="investment_content_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="investmentCode" column="investment_code"/>
+        <result property="memberIdAdmin" column="member_id_admin"/>
+        <result property="projectIntroduction" column="project_introduction"/>
+        <result property="investmentIntroductionImage" column="investment_introduction_image"/>
+        <result property="marketAnalysis" column="market_analysis"/>
+        <result property="marketAnalysisImage" column="market_analysis_image"/>
+        <result property="majorFinancialInformation" column="major_financial_information"/>
+        <result property="majorFinancialInformationImage" column="major_financial_information_image"/>
+        <result property="risk" column="risk"/>
+        <result property="riskImage" column="risk_image"/>
+        <result property="majorManpower" column="major_manpower"/>
+        <result property="majorManpowerImage" column="major_manpower_image"/>
+        <result property="patentAwardDetails" column="patent_award_details"/>
+        <result property="patentAwardDetailsImage" column="patent_award_details_image"/>
+        <result property="etcInvestContent" column="etc_invest_content"/>
+        <result property="etcInvestContentImage" column="etc_invest_content_image"/>
+        <result property="registrationDate" column="registration_date"/>
+    </resultMap>
+
+
     <!-- 투자펀딩 심사요청 목록 조회 -->
     <select id="getInvestmentRequestJudgeList" resultMap="adminInvestmentRequestJudgeListMap">
         /* 투자펀딩 심사요청 목록 조회 */
@@ -208,7 +229,19 @@
             store AS s
             ON
             i.store_code = s.store_code
-        ORDER BY i.investment_request_judge_code;
+        ORDER BY i.investment_request_judge_code DESC
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
+    </select>
+
+    <!-- 투자펀딩 심사요청 전체 행의 갯수 -->
+    <select id="getInvestmentRequestJudgeCnt" resultType="int">
+        /* 투자펀딩 심사요청 전체 행의 갯수 */
+        SELECT
+            COUNT(1)
+        FROM
+            investment_request_judge
     </select>
 
     <!-- 검색조건에 따른 투자펀딩 심사요청 목록 조회 -->
@@ -273,12 +306,17 @@
                 AND
             </if>
             <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != ''">
-                ${searchKey} = #{searchSelectValue};
+                ${searchKey} = #{searchSelectValue}
+                AND
             </if>
-            <if test="searchKey != null and searchKey != '' and searchSelectValue == null or searchSelectValue == ''">
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+            <if test="searchKey != null and searchKey != ''">
+                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
             </if>
         </where>
+        ORDER BY i.investment_request_judge_code DESC
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
     </select>
 
     <!-- 코드에 따른 특정 투자펀딩 심사요청 조회 -->
@@ -414,6 +452,18 @@
             l.code_reg_day
         FROM
             law_satistify_reason AS l
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
+    </select>
+
+    <!-- 자본시장법 범위충족기준 전체 행의 갯수 -->
+    <select id="getLawSatistifyCnt" resultType="int">
+        /* 자본시장법 범위충족기준 전체 행의 갯수 */
+        SELECT
+            COUNT(1)
+        FROM
+            law_satistify_reason;
     </select>
 
     <!-- 검색조건에 따른 자본시장법 범위충족기준 목록 조회 -->
@@ -437,9 +487,12 @@
                 AND
             </if>
             <if test="searchKey != null and searchKey != ''">
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
             </if>
         </where>
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
     </select>
 
     <!-- 특정 자본시장 범위충족기준 조회 -->
@@ -467,7 +520,19 @@
             i.incongruity_sectors_whether,
             i.code_reg_day
         FROM
-            incongruity_sectors AS i;
+            incongruity_sectors AS i
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
+    </select>
+
+    <!-- 자본시장법 범위충족기준 전체 행의 갯수 -->
+    <select id="getIncogruitySectorsCnt" resultType="int">
+        /* 자본시장법 범위충족기준 전체 행의 갯수 */
+        SELECT
+            COUNT(1)
+        FROM
+            incongruity_sectors;
     </select>
 
     <!-- 검색조건에 따른 부적합 업종 목록 조회 -->
@@ -491,9 +556,12 @@
                 AND
             </if>
             <if test="searchKey != null and searchKey != ''">
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
             </if>
         </where>
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
     </select>
 
     <!-- 특정 부적합 업종 조회 -->
@@ -559,7 +627,20 @@
             LEFT JOIN
             corporate_value_evaluation AS c
             ON
-            c.corporate_value_evaluation_code = i.corporate_value_evaluation_code;
+            c.corporate_value_evaluation_code = i.corporate_value_evaluation_code
+        ORDER BY i.investment_request_judge_code DESC
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
+    </select>
+
+    <!-- 기업가치 평가결과 전체 행의 갯수 -->
+    <select id="getCorporateValueEvaluation" resultType="int">
+        /* 기업가치 평가결과 전체 행의 갯수 */
+        SELECT
+            COUNT(1)
+        FROM
+            corporate_value_evaluation;
     </select>
 
     <!-- 검색조건에 따른 기업가치 평가결과 목록 조회 -->
@@ -621,15 +702,19 @@
                 AND
             </if>
             <if test="searchKey != null and searchKey != '' and searchSelectValue != null and searchSelectValue != '' and searchSelectValue != 100 and searchSelectValue != 99">
-                ${searchKey} = #{searchSelectValue};
+                ${searchKey} = #{searchSelectValue}
             </if>
             <if test="searchKey != null and searchKey != '' and searchSelectValue == 99">
-                c.corporate_value_evaluation_code IS NULL;
+                c.corporate_value_evaluation_code IS NULL
             </if>
-            <if test="searchKey != null and searchKey != '' and searchSelectValue == '' or searchSelectValue == null">
-                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%');
+            <if test="searchKey != null and searchKey != '' and searchValue != ''">
+                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
             </if>
         </where>
+        ORDER BY i.investment_request_judge_code DESC
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
     </select>
 
     <!-- 특정 기업가치 평가결과 조회 -->
@@ -673,7 +758,7 @@
             SELECT
                 (CASE
                 WHEN COUNT(c.corporate_value_evaluation_code) = 0 THEN CONCAT('cor_val_', CURDATE()+0, '_0001')
-                WHEN COUNT(c.corporate_value_evaluation_code) > 9999 THEN CONCAT('cor_val_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1)
+                WHEN MAX(c.corporate_value_evaluation_code) = CONCAT('cor_val_', CURDATE()+0, '_9999') THEN CONCAT('cor_val_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1)
                 ELSE CONCAT('cor_val_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(c.corporate_value_evaluation_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
                 END) AS corporateValueEvaluationCode
             FROM
@@ -713,7 +798,7 @@
             SELECT
                 (CASE
                 WHEN COUNT(l.law_satistify_code) = 0 THEN CONCAT('law_stf_', CURDATE()+0, '_0001')
-                WHEN COUNT(l.law_satistify_code) > 9999 THEN CONCAT('law_stf_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1)
+                WHEN MAX(l.law_satistify_code) = CONCAT('law_stf_', CURDATE()+0, '_9999') THEN CONCAT('law_stf_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1)
                 ELSE CONCAT('law_stf_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(l.law_satistify_code,'_',-1) AS UNSIGNED))+1, 4, '0'))
                 END) AS lawSatistifyCode
             FROM
@@ -735,7 +820,7 @@
             SELECT
                 (CASE
                 WHEN COUNT(i.incongruity_sectors_code) = 0 THEN CONCAT('inc_sec_', CURDATE()+0, '_0001')
-                WHEN COUNT(i.incongruity_sectors_code) > 9999 THEN CONCAT('inc_sec_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code,'_',-1) AS UNSIGNED))+1)
+                WHEN MAX(i.incongruity_sectors_code) = CONCAT('inc_sec_', CURDATE()+0, '_9999') THEN CONCAT('inc_sec_', CURDATE()+0, '_', MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code,'_',-1) AS UNSIGNED))+1)
                 ELSE CONCAT('inc_sec_', CURDATE()+0, '_', LPAD(MAX(CAST(SUBSTRING_INDEX(i.incongruity_sectors_code, '_', -1) AS UNSIGNED))+1, 4, '0'))
                 END) AS incongruitySectorsCode
             FROM
