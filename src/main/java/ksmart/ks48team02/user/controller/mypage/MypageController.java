@@ -29,7 +29,7 @@ public class MypageController {
                          @RequestParam(name="selectFund", required = false, defaultValue = "viewAll") String selectFund){
 
         String loginId = (String) session.getAttribute("SID");
-        List<OrderTotal> mypageOrderList = mypageService.mypageOrderList(loginId);
+        List<OrderTotal> mypageOrderList = mypageService.mypageOrderList(loginId, selectFund);
         Map<String, Object> resultMap = mypageService.getMemberInfoById(loginId);
         String memberEmail = (String) resultMap.get("memberEmail");
         String memberContactInfo = (String) resultMap.get("memberContactInfo");
