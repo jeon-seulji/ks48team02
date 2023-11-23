@@ -43,7 +43,7 @@ public class DonationController {
     public String mainPage(Model model){
         List<AllDonationInfo> allDonationInfo = donationService.getAllDonationInfo();
         model.addAttribute("allDonationInfo", allDonationInfo);
-
+        
         return "user/donation/main";
     }
 
