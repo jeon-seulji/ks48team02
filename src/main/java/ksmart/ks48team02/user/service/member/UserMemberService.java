@@ -42,5 +42,9 @@ public class UserMemberService {
         return resultMap;
     }
 
+    // 로그인시 로그인로그 업데이트
+    public void addLoginLog(String clientIp, String memberId){
+        userMemberMapper.addLoginLog(clientIp, memberId);
+    }
 
 }
