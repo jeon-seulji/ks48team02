@@ -33,8 +33,7 @@ public class InvestmentInfo {
     private int investJudgeSituation;
     private int investmentDeadlineCnt;
 
-    private InvestmentContent investmentContent;
-    private InvestmentJudge investmentJudge;
+
 
 
 

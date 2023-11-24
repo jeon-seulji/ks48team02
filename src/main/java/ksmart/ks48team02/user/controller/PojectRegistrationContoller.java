@@ -92,9 +92,14 @@ public class PojectRegistrationContoller {
 
 
 
-    //투자 프로젝트 심사 요청 페이지
+    //투자 프로젝트 심사 요청, 공고등록 페이지
     @GetMapping(value = {"/investment/judge"})
-    public String investmentJudgePage(Model model) {
+    public String investmentJudgePage(Model model, HttpSession httpSession) {
+        String memberId = (String) httpSession.getAttribute("SID");
+
+        if(memberId == null) {
+            return "user/account/login";
+        }
 
         List<UserCompanyBusinessType> userCompanyBusinessType = userInvestmentService.getUserCompanyBusinessType();
         List<UserLawSatistifyReason> userLawSatistifyReason = userInvestmentService.getUserLawSatistifyReason();
@@ -107,53 +112,22 @@ public class PojectRegistrationContoller {
         return "user/projectRegistration/investment/invest_judge_insert";
     }
 
-
-
-//    //투자 프로젝트 공고 등록 페이지
-//    @GetMapping(value = {"/investment/insert"})
-//    public String investmentRegistrationPage(Model model) {
-//
-//        model.addAttribute("title", "투자펀딩 공고 등록 페이지");
-//
-//        return "user/projectRegistration/investment/invest_insert";
-//    }
-
-
-
     // 투자 프로젝트 등록
-    @PostMapping(value = {"/investment/insert"})
-    public String investmentRegistrationPage(Model model,
-                                             InvestmentJudge investmentJudge){
+    @PostMapping(value = {"/investment/judge"})
+    public String investmentRegistrationPage(InvestmentJudge investmentJudge, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession httpSession){
+        userInvestmentService.addInvestmentJudge(investmentJudge);
+        userInvestmentService.addInvestment(investmentInfo);
+        userInvestmentService.addInvestmentContent(investmentContent);
 
-        System.out.println(investmentJudge);
+        investmentInfo.setInvestmentRequestJudgeCode(investmentJudge.getInvestmentRequestJudgeCode());
+        investmentInfo.setInvestmentSubject(investmentJudge.getInvestmentRequestSubject());
+        investmentContent.setInvestmentCode(investmentInfo.getInvestmentCode());
 
-        model.addAttribute("title", "투자펀딩 공고 등록 페이지");
-        model.addAttribute("investmentJudge",investmentJudge);
-
-        return "user/projectRegistration/investment/invest_insert";
-    }
-
-
-    // 투자 프로젝트 최종 등록
-    @PostMapping(value = {"/investment/insert/confirm"})
-    @ResponseBody
-    public String investmentRegistrationConfirm(@RequestBody InvestmentInfo investmentInfo,
-                                             HttpSession httpSession) throws JsonProcessingException {
-
-        System.out.println(investmentInfo);
         String memberId = (String) httpSession.getAttribute("SID");
+        investmentJudge.setMemberIdSeller(memberId);
 
-        investmentInfo.setMemberId(memberId);
-
-        //DB 작업 시작
-//        userInvestmentService.addInvestment(investmentInfo);
-
-        //DB 작업 완료
-
-        return "user/projectRegistration/investment/success";
+        return "redirect:/user/projectRegistration/investment/success";
     }
-
-
 
     //투자 프로젝트 등록 완료 페이지
     @GetMapping(value = "investment/success")
