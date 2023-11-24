@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.ks48team02.user.mapper.mypage.MypageRewardMapper">
+
+    <resultMap id="rewardOrderInfoMap" type="MypageReward">
+        <id property="paymentCode" column="reward_payment_code"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="rewardRefundCode" column="reward_refund_code"/>
+        <result property="switchingCode" column="switching_code"/>
+        <result property="orderPrice" column="order_price"/>
+        <result property="deliveryPrice" column="delivery_price"/>
+        <result property="orderTotalPrice" column="order_total_price"/>
+        <result property="useReservePrice" column="use_reserve_price"/>
+        <result property="useReserveCode" column="use_reserve_code"/>
+        <result property="discountRankPrice" column="discount_rank_price"/>
+        <result property="discountCouponPrice" column="discount_coupon_price"/>
+        <result property="paymentScheduledPrice" column="payment_scheduled_price"/>
+        <result property="paymentMethod" column="payment_method"/>
+        <result property="depositName" column="deposit_name"/>
+        <result property="depositAccount" column="deposit_account"/>
+        <result property="refundAccount" column="refund_account"/>
+        <result property="depositPrice" column="deposit_price"/>
+        <result property="paymentState" column="payment_state"/>
+        <result property="paymentDeadlineDate" column="payment_deadline_date"/>
+        <result property="paymentCompletedDate" column="payment_completed_date"/>
+        <result property="projectThumbnailImage" column="project_thumbnail_image"/>
+        <result property="rewardProjectCode" column="reward_project_code"/>
+        <result property="projectSubject" column="project_subject"/>
+        <result property="storeCode" column="store_code"/>
+
+        <collection property="rewardOrderDetailList" javaType="list" ofType="RewardOrderDetail">
+            <id property="rewardOrderDetailCode" column="rd_order_detail_code"/>
+            <result property="rewardOptionCode" column="reward_option_code"/>
+            <result property="orderCode" column="order_code"/>
+            <result property="orderOptionAmount" column="order_option_amount"/>
+            <result property="optionPrice" column="option_price"/>
+            <result property="optionTotalPrice" column="option_total_price"/>
+            <result property="optionName" column="option_name"/>
+            <result property="optionContents" column="option_contents"/>
+        </collection>
+    </resultMap>
+<!--    ㅇㅁㄹㄴ-->
+    <!--구매자 주문, 결제정보 조회 -->
+    <select id="rewardOrderInfo" parameterType="String" resultMap="rewardOrderInfoMap">
+        SELECT
+            p.reward_payment_code,
+            p.order_code ,
+            p.member_id ,
+            p.reward_refund_code ,
+            p.switching_code ,
+            p.order_price ,
+            p.delivery_price ,
+            p.order_total_price ,
+            p.use_reserve_price ,
+            p.use_reserve_code ,
+            p.discount_rank_price ,
+            p.discount_coupon_price ,
+            p.payment_scheduled_price ,
+            p.payment_method ,
+            p.deposit_name ,
+            p.deposit_account ,
+            p.refund_account ,
+            p.deposit_price ,
+            p.payment_state ,
+            p.payment_deadline_date ,
+            p.payment_completed_date ,
+            r.project_thumbnail_image ,
+            r.reward_project_code ,
+            r.project_subject ,
+            r.store_code,
+            ro.option_price ,
+            ro.order_option_amount ,
+            rp.option_name ,
+            rp.option_contents
+        FROM
+            reward_payment AS p
+        INNER JOIN
+            order_table AS o
+        ON
+            p.order_code = o.order_code
+        INNER JOIN
+            reward_project AS r
+        ON
+            r.reward_project_code = o.goods_code
+        LEFT JOIN
+            reward_order_detail AS ro
+        ON
+            o.order_code = ro.order_code
+        INNER JOIN
+            reward_option AS rp
+        ON
+            ro.reward_option_code = rp.reward_option_code
+        WHERE
+            p.order_code = #{orderCode};
+    </select>
+
+    <!--주문 취소,환불,교환 시 주문테이블 업데이트-->
+    <update id="orderCancel" parameterType="MypageReward">
+        UPDATE order_table
+        <set>
+            <if test = "changeCategory == '주문취소'">
+                order_category_code = 'ORDC_014',
+                order_category_detail = '주문 취소-구매자 신청'
+            </if>
+            <if test = "changeCategory == '환불'">
+                order_category_code = 'ORDC_009',
+                order_category_detail = '환불 처리중-환불 처리중'
+            </if>
+            <if test = "changeCategory == '교환'">
+                order_category_code = 'ORDC_011',
+                order_category_detail = '교환 처리중-교환 처리중'
+            </if>
+            <if test = "changeCategory == '구매확정'">
+                order_category_code = 'ORDC_006',
+                order_category_detail = '주문 확정-리워드 프로젝트 주문 확정'
+            </if>
+        </set>
+        WHERE
+            order_code = #{orderCode}
+    </update>
+
+    <!--주문 취소, 환불 시 환불 테이블 인서트-->
+    <insert id="refundInsert" parameterType="MypageReward">
+        <selectKey keyProperty="refundCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(r.apc_code) = 0  THEN CONCAT('RAP_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('RAP_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(r.apc_code,'_',-1)AS UNSIGNED )+1))
+                END) AS refundCode
+            FROM
+                refund_application as r
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(r.apc_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO refund_application
+            (apc_code, order_code, order_partition, option_price, apc_amount, total_price,
+            apc_subject, apc_title, apc_contents, apc_date, processing_status,
+            processing_status_reason, processing_date, admin_id, apc_state, completed_date,
+            store_code)
+        <if test="changeCategory =='주문취소'">
+            VALUES
+                (#{refundCode},#{orderCode},'리워드',NULL,NULL,#{paymentScheduledPrice},
+                #{refundSubejct},#{refundTitle},#{refundComments},
+                NOW(),'승인',NULL,NULL,NULL,2,NOW(),#{storeCode});
+        </if>
+    </insert>
+
+    <!--결제 테이블 결제 현황 업데이트-->
+    <update id="paymentUpdate" parameterType="MypageReward">
+        UPDATE reward_payment
+        <set>
+            <if test="changeCategory ='주문취소'">
+                reward_refund_code = #{refundCode}
+            </if>
+        </set>
+        WHERE
+            order_code = #{orderCode}
+    </update>
+
+    <!--주문 취소,환불 시 사용한 포인트 돌려주기, 구매 확정 시 포인트 적립-->
+    <update id="customerPoint" parameterType="MypageReward">
+        UPDATE
+            customer
+        <set>
+            <if test="changeCategory == '주문취소'">
+                customer_point = customer_point + #{usePoint}
+            </if>
+            <if test="changeCategory == '구매확정'">
+                customer_point = customer_point + #{savingPoint}
+            </if>
+        </set>
+        WHERE
+            member_id = #{orderMemberId};
+    </update>
+
+    <!--포인트 적립 내역 인서트-->
+    <insert id="returnPointLogInsert" parameterType="MypageReward">
+
+        <selectKey keyProperty="pointLogCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(p.point_log_code) = 0  THEN CONCAT('PL_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('PL_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(p.point_log_code,'_',-1)AS UNSIGNED )+1))
+                END) AS pointLogCode
+            FROM
+                point_log AS p
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(p.point_log_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO point_log
+            (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
+        VALUES
+            (#{pointLogCode}, #{memberId}, #{useReservePrice}, '주문취소', CURDATE(), #{useReserveCode})
+    </insert>
+
+<!--    <select id="getCouponIssueCode" parameterType="MypageReward" resultType="MypageReward">-->
+<!--        SELECT-->
+<!--            u.coupon_issue_code AS couponIssueCode-->
+<!--        FROM-->
+<!--            use_coupon_log as u-->
+<!--        WHERE-->
+<!--            u.reward_payment_code = #{paymentCode};-->
+<!--    </select>-->
+
+    <!--주푼 취소 시 사용한 쿠폰 돌려주기-->
+    <update id="couponReturn" parameterType="MypageReward">
+        <selectKey  keyProperty="couponIssueCode" resultType="String" order="BEFORE">
+            SELECT
+                u.coupon_issue_code AS couponIssueCode
+            FROM
+                use_coupon_log as u
+            WHERE
+                u.reward_payment_code = #{paymentCode};
+        </selectKey>
+        UPDATE
+            member_coupon
+        SET
+            coupon_used = 1
+        WHERE
+            coupon_issue_code = #{couponIssueCode}
+    </update>
+
+    <!--주문 취소 시 프로젝트 달성 금액, 달성률 주문 금액만큼 감소-->
+    <update id="projectAchievementMoney" parameterType="MypageReward">
+        UPDATE
+            reward_project
+        SET
+            project_achievement_money = project_achievement_money - #{orderPrice},
+            project_achievement_percent = ROUND(project_achievement_money / project_goal_money * 100)
+        WHERE
+            reward_project_code = #{rewardProjectcode};
+    </update>
+
+
+
+
+</mapper>
