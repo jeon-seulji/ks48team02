@@ -1,6 +1,8 @@
 package ksmart.ks48team02.seller.service.investment;
 
 import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueBond;
+import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueStock;
 import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
 import ksmart.ks48team02.seller.mapper.investment.SellerInvestmentMapper;
 import org.springframework.stereotype.Service;
@@ -181,6 +183,60 @@ public class InvestmentService {
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("investmentRequestJudgeList", investmentRequestJudgeList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+    }
+
+    // 판매자 투자후 기업정보 공개(주식) 목록 조회
+    public  Map<String, Object> getAfterFundRevenueStockList(String memberId, int currentPage) {
+
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = sellerInvestmentMapper.getAfterFundRevenueStockCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<SellerAfterFundRevenueStock> SellerAfterFundRevenueStockList = sellerInvestmentMapper.getAfterFundRevenueStockList(memberId, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("SellerAfterFundRevenueStockList", SellerAfterFundRevenueStockList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+    }
+
+    // 판매자 투자후 기업정보 공개(채권) 목록 조회
+    public  Map<String, Object> getAfterFundRevenueBondList(String memberId, int currentPage) {
+
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = sellerInvestmentMapper.getAfterFundRevenueBondCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<SellerAfterFundRevenueBond> SellerAfterFundRevenueBondList = sellerInvestmentMapper.getAfterFundRevenueBondList(memberId, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("SellerAfterFundRevenueBondList", SellerAfterFundRevenueBondList);
         resultMap.put("lastPage", lastPage);
         resultMap.put("startPageNum", startPageNum);
         resultMap.put("endPageNum", endPageNum);

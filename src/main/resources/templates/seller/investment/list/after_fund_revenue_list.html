@@ -25,6 +25,37 @@
     <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div>
     <br>
     <div class="admin-content-wrapper">
+
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>심사 요청 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
+            </div>
+            <div class="list-count-selector">
+                <select name="security">
+                    <option value="stock">주식</option>
+                    <option value="bond">채권</option>
+                </select>
+                <select name="orderby">
+                    <option value="regist_d">신청일 순</option>
+                    <option value="regist_a">신청일 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">요청 코드순</option>
+                    <option value="project_name_a">요청 코드 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">심사요청 제목순</option>
+                    <option value="project_name_a">심사요청 제목역순</option>
+                </select>
+                <select name="rowPerpage">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
         <table>
             <thead>
             <tr>

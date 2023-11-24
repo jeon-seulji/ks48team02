@@ -1,6 +1,8 @@
 package ksmart.ks48team02.seller.mapper.investment;
 
 import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueBond;
+import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueStock;
 import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -33,8 +35,17 @@ public interface SellerInvestmentMapper {
     // 판매자 특정 투자펀딩 심사요청 조회
     public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String memberIdSeller, String investmentRequestJudgeCode);
 
-    // 판매자 투자후 기업정보 공개 조회
+    // 판매자 투자후 기업정보 공개(주식) 목록 조회
+    public List<SellerAfterFundRevenueStock> getAfterFundRevenueStockList(String memberId, int startRowNum, int rowPerPage);
 
+    // 판매자 투자후 기업정보 공개(주식) 전체 행의 갯수
+    public int getAfterFundRevenueStockCnt();
+
+    // 판매자 투자후 기업정보 공개(채권) 목록 조회
+    public List<SellerAfterFundRevenueBond> getAfterFundRevenueBondList(String memberId, int startRowNum, int rowPerPage);
+
+    // 판매자 투자후 기업정보 공개(채권) 전체 행의 갯수
+    public int getAfterFundRevenueBondCnt();
 
     // 판매자 자본시장법 범위충족기준 목록 조회
     public List<AdminLawSatistifyReason> getLawSatistifyList();

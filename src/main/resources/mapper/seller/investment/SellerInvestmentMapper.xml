@@ -146,6 +146,52 @@
         </association>
     </resultMap>
 
+    <resultMap type="SellerAfterFundRevenueStock" id="sellerAfterFundRevenueStockListMap">
+        <id property="afterFundRevenueStockCode" column="after_fund_revenue_stock_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="investmentCode" column="investment_code"/>
+        <result property="securitiesIssuanceStockCode" column="securities_issuance_stock_code"/>
+        <result property="afterInvestmentAmount" column="after_investment_amount"/>
+        <result property="investmentAmount" column="investment_amount"/>
+        <result property="take" column="take"/>
+        <result property="costOfSales" column="cost_of_sales"/>
+        <result property="grossProfit" column="gross_profit"/>
+        <result property="operatingProfit" column="operating_profit"/>
+        <result property="operatingCost" column="operating_cost"/>
+        <result property="netIncome" column="net_income"/>
+        <result property="salesDateEnterpriseValue" column="sales_date_enterprise_value"/>
+        <result property="subscriptionEnterpriseValue" column="subscription_enterprise_value"/>
+        <result property="salesBaseStockPrice" column="sales_base_stock_price"/>
+        <result property="issuePrice" column="issue_price"/>
+        <result property="dividendAmount" column="dividend_amount"/>
+        <result property="dividendRate" column="dividend_rate"/>
+        <result property="dividendPerStock" column="dividend_per_stock"/>
+        <result property="earningsPerShare" column="earnings_per_share"/>
+        <result property="revenuePeriodStart" column="revenue_period_start"/>
+        <result property="revenuePeriodEnd" column="revenue_period_end"/>
+        <result property="uploadDate" column="upload_date"/>
+    </resultMap>
+
+    <resultMap type="SellerAfterFundRevenueBond" id="sellerAfterFundRevenueBondListMap">
+        <id property="afterFundRevenueBondCode" column="after_fund_revenue_bond_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="investmentCode" column="investment_code"/>
+        <result property="securitiesIssuanceBondCode" column="securities_issuance_bond_code"/>
+        <result property="afterInvestmentAmount" column="after_investment_amount"/>
+        <result property="investmentAmount" column="investment_amount"/>
+        <result property="take" column="take"/>
+        <result property="profit" column="profit"/>
+        <result property="cost" column="cost"/>
+        <result property="netIncome" column="net_income"/>
+        <result property="visitorsNumber" column="visitors_number"/>
+        <result property="accountPrice" column="account_price"/>
+        <result property="interestRate" column="interest_rate"/>
+        <result property="earningsPerAccount" column="earnings_per_account"/>
+        <result property="revenuePeriodStart" column="revenue_period_start"/>
+        <result property="revenuePeriodEnd" column="revenue_period_end"/>
+        <result property="uploadDate" column="upload_date"/>
+    </resultMap>
+
     <resultMap type="AdminLawSatistifyReason" id="adminLawSatistifyReasonListMap">
         <id property="lawSatistifyCode" column="law_satistify_code"/>
         <result property="lawSatistifyReason" column="law_satistify_reason"/>
@@ -264,7 +310,7 @@
         SELECT
             COUNT(1)
         FROM
-            investment
+            investment;
     </select>
 
     <!-- 판매자 검색조건에 따른 투자펀딩 공고 목록 조회 -->
@@ -410,7 +456,7 @@
         SELECT
             COUNT(1)
         FROM
-            investment_request_judge
+            investment_request_judge;
     </select>
 
     <!-- 판매자 검색조건에 따른 투자펀딩 심사요청 목록 조회 -->
@@ -517,6 +563,64 @@
             i.member_id_seller = #{memberIdSeller}
             AND
             i.investment_request_judge_code = #{investmentRequestJudgeCode};
+    </select>
+
+    <select id="getAfterFundRevenueStockList" resultMap="sellerAfterFundRevenueStockListMap">
+        SELECT
+            af.after_fund_revenue_stock_code,
+            af.member_id,
+            af.investment_code,
+            af.after_investment_amount,
+            af.investment_amount,
+            af.take,
+            af.operating_profit,
+            af.net_income,
+            af.sales_date_enterprise_value,
+            af.sales_base_stock_price,
+            af.dividend_amount,
+            af.upload_date
+        FROM
+            after_fund_revenue_stock AS af
+        WHERE
+            af.member_id = #{memberIdSeller};
+    </select>
+
+    <!-- 판매자 투자후 기업정보 공개(주식) 전체 행의 갯수 -->
+    <select id="getAfterFundRevenueStockCnt" resultType="int">
+        /* 판매자 투자후 기업정보 공개(주식) 전체 행의 갯수 */
+        SELECT
+            COUNT(1)
+        FROM
+            after_fund_revenue_stock;
+    </select>
+
+    <select id="getAfterFundRevenueBondList" resultMap="sellerAfterFundRevenueBondListMap">
+        SELECT
+            af.after_fund_revenue_bond_code,
+            af.member_id,
+            af.investment_code,
+            af.after_investment_amount,
+            af.investment_amount,
+            af.take,
+            af.profit,
+            af.net_income,
+            af.account_price,
+            af.interest_rate,
+            af.earnings_per_account,
+            af.upload_date
+        FROM
+            after_fund_revenue_bond AS af
+        WHERE
+            af.member_id = #{memberIdSeller};
+    </select>
+
+    <!-- 판매자 투자후 기업정보 공개(채권) 전체 행의 갯수 -->
+    <select id="getAfterFundRevenueBondCnt" resultType="int">
+        /* 판매자 투자후 기업정보 공개(채권) 전체 행의 갯수 */
+        SELECT
+            COUNT(1)
+        FROM
+            after_fund_revenue_bond;
     </select>
 
     <!-- 판매자 자본시장법 범위충족기준 목록 조회 -->

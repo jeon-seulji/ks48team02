@@ -2,6 +2,8 @@ package ksmart.ks48team02.seller.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueBond;
+import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueStock;
 import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
 import ksmart.ks48team02.seller.service.investment.InvestmentService;
 import org.springframework.stereotype.Controller;
@@ -124,7 +126,24 @@ public class InvestmentController {
     }
 
     @GetMapping("/search/after-fund-revenue")
-    public String getAfterFundRevenueList(Model model) {
+    public String getAfterFundRevenueList(Model model
+                                         ,@RequestParam(name = "searchKey", required = false) String searchKey
+                                         ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
+                                         ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
+                                         ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                         ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
+                                         ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage
+                                         ,HttpSession session) {
+
+        String loginId = (String) session.getAttribute("SID");
+
+        Map<String, Object> resultMap = null;
+
+        List<SellerAfterFundRevenueStock> SellerAfterFundRevenueStockList = null;
+
+        List<SellerAfterFundRevenueBond> SellerAfterFundRevenueBondList = null;
+
+
 
         model.addAttribute("title", "투자후 기업정보 공개 목록");
         model.addAttribute("contentsTitle","투자후 기업정보 공개 목록");
