@@ -30,4 +30,6 @@ public interface DonationUserMapper {
 
     public int getNumberOfParticipants(String donationCode);
     public void chargeFlover(String memberId, String floverCount);
+
+    public void searchCountUpdate(String donationCode, String searchCount);
 }
