@@ -128,7 +128,7 @@
                 </tr>
 
                 <tr class="row-7">
-                    <th class="banner" th:name="numberCouponRemaining" scope="row" >남은 쿠폰 갯수</th>
+                    <th class="banner" th:name="numberCouponsRemaining" scope="row" >남은 쿠폰 갯수</th>
                     <td>
                         <input class="count" type="number" name="numberCouponsRemaining"> 개
                     </td>
@@ -145,7 +145,7 @@
                     <td><input type="text" class="comment" name="couponTermsUse"/></td>
                 </tr>
 
-               <input type="hidden" class="comment" name="memberId" th:value="${session.SID}"/>
+               <input type="hidden" class="comment" th:name="memberId" th:value="${session.SID}"/>
 
 
                 </tbody>

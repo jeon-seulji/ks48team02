@@ -8,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
-import ksmart.ks48team02.user.dto.DonationRegistration;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import ksmart.ks48team02.user.service.reward.RewardService;
@@ -93,22 +91,70 @@ public class PojectRegistrationContoller {
     }
 
 
+
     //투자 프로젝트 심사 요청 페이지
     @GetMapping(value = {"/investment/judge"})
     public String investmentJudgePage(Model model) {
+
+        List<UserCompanyBusinessType> userCompanyBusinessType = userInvestmentService.getUserCompanyBusinessType();
+        List<UserLawSatistifyReason> userLawSatistifyReason = userInvestmentService.getUserLawSatistifyReason();
+
+        model.addAttribute("userCompanyBusinessType", userCompanyBusinessType);
+        model.addAttribute("userLawSatistifyReason", userLawSatistifyReason);
 
         model.addAttribute("title", "투자펀딩 심사 요청 페이지");
 
         return "user/projectRegistration/investment/invest_judge_insert";
     }
-    //투자 프로젝트 공고 등록 페이지
-    @GetMapping(value = {"/investment/insert"})
-    public String investmentRegistrationPage(Model model) {
+
+
+
+//    //투자 프로젝트 공고 등록 페이지
+//    @GetMapping(value = {"/investment/insert"})
+//    public String investmentRegistrationPage(Model model) {
+//
+//        model.addAttribute("title", "투자펀딩 공고 등록 페이지");
+//
+//        return "user/projectRegistration/investment/invest_insert";
+//    }
+
+
+
+    // 투자 프로젝트 등록
+    @PostMapping(value = {"/investment/insert"})
+    public String investmentRegistrationPage(Model model,
+                                             InvestmentJudge investmentJudge){
+
+        System.out.println(investmentJudge);
 
         model.addAttribute("title", "투자펀딩 공고 등록 페이지");
+        model.addAttribute("investmentJudge",investmentJudge);
 
         return "user/projectRegistration/investment/invest_insert";
     }
+
+
+    // 투자 프로젝트 최종 등록
+    @PostMapping(value = {"/investment/insert/confirm"})
+    @ResponseBody
+    public String investmentRegistrationConfirm(@RequestBody InvestmentInfo investmentInfo,
+                                             HttpSession httpSession) throws JsonProcessingException {
+
+        System.out.println(investmentInfo);
+        String memberId = (String) httpSession.getAttribute("SID");
+
+        investmentInfo.setMemberId(memberId);
+
+        //DB 작업 시작
+//        userInvestmentService.addInvestment(investmentInfo);
+
+        //DB 작업 완료
+
+        return "user/projectRegistration/investment/success";
+    }
+
+
+
     //투자 프로젝트 등록 완료 페이지
     @GetMapping(value = "investment/success")
     public String investmentRegistrationSuccessPage(){

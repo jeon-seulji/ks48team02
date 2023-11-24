@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface StorePageMapper {
-    List<StorePageDto> storePageNewsList();
+    List<StorePageDto> storePageNewsList(String storeCode);
 }

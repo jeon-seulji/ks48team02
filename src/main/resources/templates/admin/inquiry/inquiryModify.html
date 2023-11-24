@@ -21,6 +21,16 @@
         .title{
             text-align: center;
         }
+        .cancel{
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid #191919;
+            margin: 0 7px;
+            padding: 8px;
+            font-size: 15px;
+            border-radius: 20px 20px 20px 20px;
+            background-color: #FFF;
+        }
     </style>
 </head>
 <!--if(confirm('정말 취소하시겠습니까?')){-->
@@ -30,54 +40,58 @@
 <!--}-->
 
 <body>
-<form th:action="@{/admin/inquiry/inquiryModify}" method="post">
+<form>
     <div class="pop_modify">
         <div class="ui-header">
             <table border="1">
-                <tbody th:unless="${inquiryModifyList == null}" th:each="hp : ${inquiryModifyList}">
-                <h2 class="title">문의</h2>
-                <tr>
-                    <td class="sidebar">문의 코드</td>
-                    <td th:text="${hp.inquireCode}"></td>
-                </tr>
-                <tr>
-                    <td class="sidebar">문의 제목</td>
-                    <td th:text="${hp.iqSubject}"></td>
-                </tr>
-                <tr>
-                    <td class="sidebar">문의 등록자 아이디</td>
-                    <td>id005</td>
-                </tr>
-                <tr>
-                    <td class="sidebar">문의 내용</td>
-                    <td>
-                        <div id="summernote">
-                        </div>
-                        <script>
-                            $('#summernote').summernote({
-                                placeholder: '공지사항을 입력 해주세요.',
-                                tabsize: 2,
-                                height: 300,
-                                width: 600
-                            });
-                        </script>
-                    </td>
+                <tbody>
+                <h2 class="title">관리자 1:1 문의</h2>
+<!--                each 블록 안에서 조회 object 전체 잡아준다.-->
 
-                </tr>
-                <tr>
-                    <td class="sidebar">문의 날짜</td>
-                    <td th:text="${hp.iqDatetime}"></td>
-                </tr>
-                <tr>
-                    <td class="sidebar">관리자 ID</td>
-                    <td th:text="${hp.memberId}"></td>
-                </tr>
+                    <tr>
+                        <td class="sidebar">문의 코드</td>
+                        <td th:text="${hp.inquireCode}"></td>
+                    </tr>
+                    <tr>
+                        <td class="sidebar">문의 제목</td>
+                        <td th:text="${hp.iqSubject}"></td>
+                    </tr>
+                    <tr>
+                        <td class="sidebar">문의 등록자 아이디</td>
+                        <td th:text="${hp.memberId}"></td>
+                    </tr>
+                    <tr>
+                        <td class="sidebar">문의 내용</td>
+                        <td>
+                            <div id="summernote">
+                            </div>
+                            <script>
+                                $('#summernote').summernote({
+                                    placeholder: '공지사항을 입력 해주세요.',
+                                    tabsize: 2,
+                                    height: 300,
+                                    width: 600
+                                });
+                            </script>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="sidebar">문의 날짜</td>
+                        <td th:text="${hp.iqDatetime}"></td>
+                    </tr>
+                    <tr>
+                        <td class="sidebar">관리자 ID</td>
+                        <td th:text="${hp.memberId}"></td>
+                    </tr>
+
+
                 </tbody>
             </table>
 
             <div class="option">
-                <a th:href="@{#}" class="cancel submitBtn">취소</a>
-                <a th:href="@{#}" class="edit submitBtn">등록</a>
+                <a type="button" th:href="@{#}" class="cancel">취소</a>
+                <button type="submit" th:href="@{#}" class="edit submitBtn">등록</button>
             </div>
         </div>
     </div>

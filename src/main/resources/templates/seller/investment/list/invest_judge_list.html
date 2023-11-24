@@ -5,6 +5,11 @@
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 
@@ -15,41 +20,95 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
+    <script>
+        function toggleInput() {
+            let selectElement = document.getElementById('searchKey');
+            let searchInput = document.getElementById('inputSearchValue');
+            let searchSelect = document.getElementById('selectSearchValue');
 
+            if (selectElement.value === 'investJudgeResult') {
+                searchInput.classList.add('hidden');
+                searchSelect.classList.remove('hidden');
+                searchInput.value = '';
+            } else {
+                searchInput.classList.remove('hidden');
+                searchSelect.classList.add('hidden');
+                searchSelect.value = '';
+            }
+        }
+    </script>
 </th:block>
 
 
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
-    <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div>
+    <div th:include="~{seller/investment/search/invest_jduge_search :: searchFragment}"></div>
     <br>
+
+    <h4 class="admin-content-title">투자 심사요청 목록</h4>
+
     <div class="admin-content-wrapper">
-        <table>
+
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>심사 요청 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
+            </div>
+            <div class="list-count-selector">
+                <select name="orderby">
+                    <option value="regist_d">신청일 순</option>
+                    <option value="regist_a">신청일 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">요청 코드순</option>
+                    <option value="project_name_a">요청 코드 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">심사요청 제목순</option>
+                    <option value="project_name_a">심사요청 제목역순</option>
+                </select>
+                <select name="rowPerpage">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="settlement-log">
             <thead>
             <tr>
+                <th>
+                    <input type="checkbox" name="allSelect" id="allSelectBtn">
+                </th>
                 <th>투자 심사요청 코드</th>
                 <th>투자 심사요청 제목</th>
-                <th>대표자 아이디</th>
+                <th>요청한 판매자 아이디</th>
                 <th>스토어명</th>
                 <th>회사명</th>
-                <th>대표자 이름</th>
+                <th>요청자명</th>
                 <th>목표펀딩금액</th>
                 <th>신청일자</th>
                 <th>심사완료일자</th>
                 <th>심사자</th>
                 <th>심사결과</th>
-                <th>수정</th>
-                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
             <tr th:if="${investmentRequestJudgeList == null}">
-                <td colspan="13">투자 심사요청 목록이 없습니다.</td>
+                <td>
+                    <input type="checkbox" name="selectList">
+                </td>
+                <td colspan="12">투자 심사요청 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${investmentRequestJudgeList == null}" th:each="l : ${investmentRequestJudgeList}">
                 <td>
-                    <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}"
+                    <input type="checkbox" name="selectList">
+                </td>
+                <td>
+                    <a class="detail-link"
+                       th:href="@{/seller/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}"
                        th:text="${l.investmentRequestJudgeCode}"></a>
                 </td>
                 <td th:text="${l.investmentRequestSubject}"></td>
@@ -57,53 +116,49 @@
                 <td th:text="${l.storeName}"></td>
                 <td th:text="${l.investmentCompany}"></td>
                 <td th:text="${l.representativeName}"></td>
-                <td th:text="${l.investmentAchievementMoney}"></td>
+                <td th:text="${#numbers.formatInteger(l.investmentAchievementMoney,3,'COMMA')} + ' 원'"></td>
                 <td th:text="${l.investmentRequestDate}"></td>
                 <td th:text="${l.investJudgeDate}"></td>
                 <td th:text="${l.memberId}"></td>
                 <td th:if="${l.investJudgeResult == 0}">심사 대기</td>
                 <td th:if="${l.investJudgeResult == 1}">심사 승인</td>
                 <td th:if="${l.investJudgeResult == 2}">심사 반려</td>
-                <td>
-                    <a th:href="@{/admin/investment/update/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}">수정</a>
-                </td>
-                <td>
-                    <a th:href="@{/admin/investment/delete/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}">삭제</a>
-                </td>
             </tr>
             </tbody>
         </table>
-        <br>
-
-        <button type="button" class="submitBtn" th:onclick="|location.href='@{/seller/investment/insert/judge}'|">
-            등록하기
-        </button>
-        <button type="button" class="submitBtn" th:onclick="|location.href='@{/seller/investment/update/judge}'|">
-            수정하기
-        </button>
 
         <div class="board-page-area">
             <div class="list-controller-inner">
                 <ul>
-                    <li class="link-active"><a th:href="@{#}">1</a></li>
-                    <li><a th:href="@{#}">2</a></li>
-                    <li><a th:href="@{#}">3</a></li>
-                    <li><a th:href="@{#}">4</a></li>
-                    <li><a th:href="@{#}">5</a></li>
-                    <li><a th:href="@{#}">6</a></li>
+                    <li><a th:href="@{/seller/investment/search/judge(searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[맨처음으로]</a></li>
+                    <li><a th:if="${currentPage > 1}"
+                           th:href="@{/seller/investment/search/judge(currentPage=${currentPage - 1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[이전]</a>
+                        <span th:unless="${currentPage > 1}">[이전]</span>
+                    </li>
+                    <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
+                        <a th:if="${num != currentPage}"
+                           th:href="@{/seller/investment/search/judge(currentPage=${num}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[[${'[' + num + ']'}]]</a>
+                        <span th:unless="${num != currentPage}" th:text="|[${num}]|"></span>
+                    </th:block>
+                    <li><a th:if="${currentPage < lastPage}"
+                           th:href="@{/seller/investment/search/judge(currentPage=${currentPage +1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[다음]</a>
+                        <span th:unless="${currentPage < lastPage}">[다음]</span>
+                    </li>
+                    <li><a th:href="@{/seller/investment/search/judge(currentPage=${lastPage}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate}, searchSelectValue=${searchSelectValue})}">[맨마지막]</a></li>
                 </ul>
-                <div class="list-btn-area">
-                    <button class="prev-transfer">
-                        <span>prev</span>
-                    </button>
-                    <button class="next-transfer">
-                        <span>next</span>
-                    </button>
-                </div>
             </div>
         </div>
-
     </div>
 
+    <div class="btn-area">
+        <ul>
+            <li>
+                <button type="button" class="submitBtn"
+                        th:onclick="|location.href='@{/user/projectRegistration/investment/judge}'|">
+                    등록하기
+                </button>
+            </li>
+        </ul>
+    </div>
 </th:block>
 </html>

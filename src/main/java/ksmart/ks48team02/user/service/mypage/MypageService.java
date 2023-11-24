@@ -22,8 +22,8 @@ public class MypageService {
     private final MypageMapper mypageMapper;
 
     // 마이페이지 내 주문 내역 조회
-    public List<OrderTotal> mypageOrderList (String memberId) {
-        List<OrderTotal> mypageOrderList = orderMapper.mypageOrderList(memberId);
+    public List<OrderTotal> mypageOrderList (String memberId, String selectFund) {
+        List<OrderTotal> mypageOrderList = orderMapper.mypageOrderList(memberId, selectFund);
 
         //프로젝트가 리워드 이면 주문 상세 같이 조회
         mypageOrderList.forEach((option)->{
