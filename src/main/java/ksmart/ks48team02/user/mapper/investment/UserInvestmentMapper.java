@@ -11,6 +11,9 @@ public interface UserInvestmentMapper {
     // 투자 프로젝트 등록
     public int addInvestment(InvestmentInfo investmentInfo);
 
+    // 투자 프로젝트 상세내용 등록
+    public int addInvestmentContent(InvestmentContent investmentContent);
+
     // 투자 프로젝트 조회
     public List<InvestmentInfo> getInvestmentInfo();
 

@@ -71,7 +71,7 @@
         values
             (#{investmentCode},'id001', 'sto004', #{investmentRequestJudgeCode}, #{totalCategoryCode}, 'id002', #{investmentSubject},
             #{investmentImage}, '0', '0', '0', '0', #{investmentCompany}, '0', '0', #{securitiesClassification}, CURDATE(), #{investmentRegDate}, #{investmentDeadline},
-            #{investmentReport}, '3000000', 'null', #{contractFile}, '0');
+            #{investmentReport}, '3000000', '0.04', #{contractFile}, '0');
     </insert>
 
     <insert id="addInvestmentContent" parameterType="investmentInfo">

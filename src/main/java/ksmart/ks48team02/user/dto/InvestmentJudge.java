@@ -28,4 +28,11 @@ public class InvestmentJudge {
     private String investJudgeDate;
     private int investJudgeResult;
     private String projectPlan;
+
+
+
+    private String securitiesClassification;
+    private String investmentSubject;
+
+
 }

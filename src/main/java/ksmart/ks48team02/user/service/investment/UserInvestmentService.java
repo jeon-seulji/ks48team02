@@ -16,6 +16,21 @@ public class UserInvestmentService {
         this.userInvestmentMapper = userInvestmentMapper;
     }
 
+    // 투자 프로젝트 등록
+    public void addInvestment(InvestmentInfo investmentInfo){
+
+        int addInvestment = userInvestmentMapper.addInvestment(investmentInfo);
+        String investmentCode = investmentInfo.getInvestmentCode();
+
+//        List<InvestmentContent> contentList = investmentInfo.getInvestmentContent();
+//
+//        contentList.forEach(option -> {
+//
+//            option.setInvestmentCode(investmentCode);
+//            userInvestmentMapper.addInvestmentContent(option);
+//        });
+    }
+
     public List<InvestmentInfo> getInvestmentInfo(){
         List<InvestmentInfo> investmentInfo = userInvestmentMapper.getInvestmentInfo();
         return investmentInfo;

@@ -21,7 +21,7 @@ public interface OrderMapper {
     public OrderTotal getOrderInfoById(String orderCode);
 
     // 마이페이지 내 주문 내역 조회.
-    public List<OrderTotal> mypageOrderList (String memberId);
+    public List<OrderTotal> mypageOrderList (String memberId, String selectFund);
 
     //마이페이지 주문 상세 조회.
     public List<RewardOrderDetail> mypageOrderDetailList (String orderCode);

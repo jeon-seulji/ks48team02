@@ -1,6 +1,7 @@
 package ksmart.ks48team02.admin.service.inquiry;
 
 import ksmart.ks48team02.admin.dto.Inquiry;
+import ksmart.ks48team02.admin.dto.InquiryPage;
 import ksmart.ks48team02.admin.mapper.inquiry.InquiryMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,21 @@ public class InquiryService {
         return inquiryMapper.getInquiryList();
     }
 
+    // 문의관리
+    public List<Inquiry> getInquiryPage(){
+
+        return inquiryMapper.getInquiryPage();
+    }
+
     // 문의 관리 답변
     public List<Inquiry> getInquiryModifyList(){
 
         return inquiryMapper.getInquiryModifyList();
+    }
+    // 특정 문의 관리 답변
+    public Inquiry getInquiryModifyListByCode(String inquireCode){
+
+        return inquiryMapper.getInquiryModifyListByCode(inquireCode);
     }
 
     // 문의 관리 답변 post

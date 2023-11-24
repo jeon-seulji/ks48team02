@@ -655,8 +655,22 @@
             investment AS i
         ON
             o.goods_code = i.investment_code
-        WHERE
-            o.member_id = #{memberId};
+        <where>
+            AND o.member_id = #{memberId}
+            <if test="selectFund != 'viewAll'">
+                <if test="selectFund == 'reward'" >
+                    AND SUBSTRING_INDEX(o.goods_code,'_',1) = 'rwd' OR SUBSTRING_INDEX(o.goods_code,'_',1) = 'RWD'
+                </if>
+                <if test="selectFund == 'investment'" >
+                    AND SUBSTRING_INDEX(o.goods_code,'_',1) = 'inv'
+                </if>
+                <if test="selectFund == 'donation'" >
+                    AND SUBSTRING_INDEX(o.goods_code,'_',1) = 'don'
+                </if>
+            </if>
+        </where>
+        ORDER BY
+            o.order_application_date DESC
     </select>
 
     <!--마이 페이지 주문 상세 조회-->
