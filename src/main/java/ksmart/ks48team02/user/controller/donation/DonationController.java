@@ -4,9 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.admin.dto.Donation;
 import ksmart.ks48team02.admin.dto.DonationInfo;
 import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.*;
+import ksmart.ks48team02.user.scheduler.UserCommonScheduler;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,9 @@ public class DonationController {
         }
         int NumberOfParticipants = donationService.getNumberOfParticipants(donationCode);
         model.addAttribute("NumberOfParticipants", NumberOfParticipants);
+
+        int searchCount = donationInfo.getSearchCount() + 1;
+        donationService.searchCountUpdate(donationCode, Integer.toString(searchCount));
       
         return "user/donation/detail/main";
     }
