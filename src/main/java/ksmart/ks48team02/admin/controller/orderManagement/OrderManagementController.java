@@ -90,6 +90,7 @@ public class OrderManagementController {
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
         model.addAttribute("actionValue","/list");
 
+
         String orderby = "orderby";
         int currentPage = 1;
         int rowPerPage = 15;
@@ -381,14 +382,65 @@ public class OrderManagementController {
 
     // 자동 환불 목록 조회
     @GetMapping("/autorfnd")
-    public String admAutoRefdList(Model model){
+    public String admAutoRefdList(Model model,
+                                  @RequestParam(name="sid") String sid,
+                                  @RequestParam(name="stypecode") String stypecode,
+                                  @RequestParam(name="sstorecode",
+                                          required = false, defaultValue = "empty") String sstorecode){
         model.addAttribute("title","관리자 : 자동 환불 관리");
         model.addAttribute("contentsTitle","자동 환불 관리");
         model.addAttribute("contentsSubTitle","프로젝트 실패 자동 환불 관리");
 
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+
+        String orderby = "application_d";
+        int currentPage = 1;
+        int rowPerPage = 15;
+
+        paramMap.put("orderby", orderby);
+        paramMap.put("currentPage", currentPage);
+        paramMap.put("rowPerPage", rowPerPage);
+        paramMap.put("sid", sid);
+        paramMap.put("stypecode", stypecode);
+        paramMap.put("sstorecode", sstorecode);
+
+        Map<String, Object> resultMap = orderService.getAutoRefdList(paramMap);
+
+        log.info("list {}", resultMap.get("list"));
+
+        model.addAttribute("list", resultMap.get("list"));
+        model.addAttribute("lastPage",resultMap.get("lastPage"));
+        model.addAttribute("startPageNum",resultMap.get("startPageNum"));
+        model.addAttribute("endPageNum",resultMap.get("endPageNum"));
+        model.addAttribute("currentPage",resultMap.get("currentPage"));
+
         return "admin/order/autoRefund";
     }
 
+    // 자동 환불 ajax
+    @PostMapping(value = "/autoRfnd/ajax")
+    @ResponseBody
+    public Map<String, Object> admAutoRefdListAjax(@RequestBody Map<String, Object> paramMap,
+                                                   HttpSession session){
+        String sid = (String)session.getAttribute("SID");
+        String stypecode = (String)session.getAttribute("STYPECODE");
+        String sstorecode = (String)session.getAttribute("SSTORECODE");
+
+        paramMap.put("sid", sid);
+        paramMap.put("stypecode", stypecode);
+
+        if(sstorecode == null){
+            paramMap.put("sstorecode", "empty");
+        } else {
+            paramMap.put("sstorecode", sstorecode);
+        }
+
+        log.info("param {}", paramMap);
+
+
+        Map<String, Object> list = orderService.getAutoRefdList(paramMap);
+        return list;
+    }
 
     // 주문 확정 목록 조회
     @GetMapping( "/completedList")
@@ -407,8 +459,8 @@ public class OrderManagementController {
         paramMap.put("currentPage", currentPage);
         paramMap.put("rowPerPage", rowPerPage);
 
-
         Map<String, Object> resultMap = orderService.getOrderConfLogList(paramMap);
+
         model.addAttribute("confLogList", resultMap.get("confLogList"));
 
         return "admin/order/orderCompletedList";
@@ -417,10 +469,13 @@ public class OrderManagementController {
     // 주문 확정 조회 ajax
     @PostMapping("/completedList/ajax")
     @ResponseBody
-    public Map<String, Object> admOrderCmptedListAjax(@RequestBody Map<String, Object> paramMap,
-                                                      HttpSession session){
+    public Map<String, Object> admOrderCmptedListAjax(@RequestBody Map<String, Object> paramMap){
 
-        Map<String, Object> list = null;
+        log.info("param {}", paramMap);
+
+        Map<String, Object> list = orderService.getOrderConfLogList(paramMap);
+        log.info("list : {}", list);
+
         return list;
     }
 

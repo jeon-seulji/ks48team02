@@ -111,8 +111,10 @@
             <result property="orderCode" column="order_code"/>
             <result property="orderFundingName" column="order_funding_name"/>
             <result property="goodsCode" column="goods_code"/>
+            <result property="orderName" column="order_name"/>
         </association>
     </resultMap>
+
 
     <!-- 리워드 기부 투자 프로젝트 rwsultset -->
     <sql id="resultset">
@@ -269,6 +271,108 @@
         </choose>
     </sql>
 
+    <!-- 자동 환불 조회 조건 sql -->
+    <sql id="autoRfndWhere">
+        <where>
+            <!-- 기간 선택 -->
+            <if test="dateSettStartDate != null and dateSettStartDate != ''">
+                AND
+                DATE_FORMAT(apc_date, '%Y-%m-%d') >= #{dateSettStartDate}
+            </if>
+            <if test="dateSettEndDate != null and dateSettEndDate != ''">
+                AND
+                #{dateSettEndDate} >= DATE_FORMAT(apc_date, '%Y-%m-%d')
+            </if>
+            <!-- 공고 분류 선택 -->
+            <if test="projectPartition != null">
+                AND
+                order_partition IN
+                <foreach collection="projectPartition" item="item" open="(" close=")"  separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <!-- 공고 상태 선택 -->
+            <if test="orderby == 'progressing'">
+                AND
+                apc_state = 1
+            </if>
+            <if test="orderby == 'error'">
+                AND
+                apc_state = 2
+            </if>
+            <if test="orderby == 'completed'">
+                AND
+                apc_state = 3
+            </if>
+            <!-- 키워드 선택 -->
+            <if test="searchKey != null and searchKey == 'total'">
+                AND
+                (
+                ot.order_code LIKE CONCAT('%', #{searchValue}, '%')
+                OR
+                ot.member_id LIKE CONCAT('%', #{searchValue}, '%')
+                OR
+                ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
+                OR
+                apc_code LIKE CONCAT('%', #{searchValue}, '%')
+                OR
+                ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
+                )
+            </if>
+            <if test="searchKey != null and searchKey == 'memberId'">
+                AND
+                ot.member_id LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderCode'">
+                AND
+                ot.order_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderName'">
+                AND
+                ot.order_name LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'orderFundingName'">
+                AND
+                ot.order_funding_name LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'apcCode'">
+                AND
+                apc_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <if test="searchKey != null and searchKey == 'apcCode'">
+                AND
+                apc_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
+            <!-- session store code 값과 일치하는 공고 한정 조회 -->
+            <if test="sstorecode != 'empty'">
+                AND
+                rs.storeCode = #{sstorecode}
+            </if>
+        </where>
+        AND
+        apc_subject IS NULL
+        <!-- ORDER BY -->
+        <choose>
+            <when test="orderby == 'application_d'">
+                ORDER BY apc_date DESC
+            </when>
+            <when test="orderby == 'application_a'">
+                ORDER BY apc_date ASC
+            </when>
+            <when test="orderby == 'order_name_d'">
+                ORDER BY ot.order_name DESC
+            </when>
+            <when test="orderby == 'order_name_a'">
+                ORDER BY ot.order_name ASC
+            </when>
+            <otherwise>
+                ORDER BY apc_date DESC
+            </otherwise>
+        </choose>
+
+
+    </sql>
+
 
     <!-- 교환 환불 공통 조회 조건 sql -->
     <sql id="rfndSwapListWhere">
@@ -338,10 +442,18 @@
                 AND
                 apc_code LIKE CONCAT('%', #{searchValue}, '%')
             </if>
+            <if test="searchKey != null and searchKey == 'apcCode'">
+                AND
+                apc_code LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
             <!-- session store code 값과 일치하는 공고 한정 조회 -->
             <if test="sstorecode != 'empty'">
                 AND
                 rs.storeCode = #{sstorecode}
+            </if>
+            <if test="pageValue == 'refund'">
+                AND
+                apc_subject IS NOT NULL
             </if>
         </where>
         <!-- ORDER BY -->
@@ -566,6 +678,7 @@
         WHERE
             r.order_code = #{orderCode}
     </select>
+
     <!-- 주문 코드에 따른 주문 상세 조회 -->
     <select id="getRewardOptionByOrderCode" parameterType="String" resultMap="rewardOptionMap">
         SELECT
@@ -705,6 +818,69 @@
         <include refid="rfndSwapListWhere"/>
     </select>
 
+    <!-- 자동 환불 신청 전체 행 수 조회 -->
+    <select id="getAutoRfndCnt" parameterType="map" resultType="int" >
+        <include refid="resultset"/>
+        /* 전체 주문 행 조회 */
+        SELECT
+            COUNT(1)
+        FROM
+            refund_application AS ra
+            INNER JOIN
+            order_table AS ot
+            ON ra.order_code = ot.order_code
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
+        <include refid="autoRfndWhere"/>
+    </select>
+
+    <!-- 자동 환불 목록 조회 -->
+    <select id="getAutoRefdList" parameterType="map" resultMap="refundApplicationMap">
+        <include refid="resultset"/>
+        SELECT
+            ra.apc_code,
+            ra.order_code,
+            ra.order_partition,
+            ra.option_price,
+            ra.apc_amount,
+            ra.total_price,
+            ra.apc_subject,
+            ra.apc_title,
+            ra.apc_contents,
+            ra.apc_date,
+            ra.processing_status,
+            ra.processing_status_reason,
+            ra.processing_date,
+            ra.admin_id,
+            ra.apc_state,
+            ra.completed_date,
+            ot.member_id,
+            ot.order_name,
+            ot.order_funding_name
+        FROM
+            refund_application AS ra
+            INNER JOIN
+            order_table AS ot
+            ON ra.order_code = ot.order_code
+        <choose>
+            <when test="sstorecode != 'empty'">
+                INNER JOIN
+                resultset AS rs
+                ON ot.goods_code = rs.projectCode
+            </when>
+        </choose>
+        <include refid="autoRfndWhere"/>
+        <if test="startRowNum > -1">
+            LIMIT ${startRowNum}, ${rowPerPage};
+        </if>
+    </select>
+
+
     <!-- 주문 확정 목록 조회 -->
     <select id="getOrderConfLogList" parameterType="map" resultMap="orderConfLogListMap">
         SELECT
@@ -720,7 +896,8 @@
             ocl.add_flover_code,
             ot.order_funding_name,
             ot.order_code,
-            ot.goods_code
+            ot.goods_code,
+            ot.order_name
         FROM
             order_confirmation_log AS ocl
             LEFT OUTER JOIN
@@ -739,6 +916,9 @@
             COUNT(1)
         FROM
             order_confirmation_log AS ocl
+            LEFT OUTER JOIN
+            order_table AS ot
+            ON ocl.order_code = ot.order_code
         <include refid="orderCompWhere"/>
     </select>
 </mapper>
