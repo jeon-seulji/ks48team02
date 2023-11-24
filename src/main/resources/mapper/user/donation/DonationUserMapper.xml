@@ -368,4 +368,14 @@
         WHERE
             member_id = #{memberId};
     </update>
+
+    <update id="searchCountUpdate" parameterType="String">
+        UPDATE
+            donation
+        SET
+            search_count = #{searchCount}
+        WHERE
+            donation_code = #{donationCode};
+    </update>
+
 </mapper>

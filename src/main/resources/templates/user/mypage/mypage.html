@@ -129,12 +129,33 @@
             border: 1px solid #191919;
             font-size: 12px;
             transition: background 0.3s;
+            margin-left: 7px;
         }
 
         .submitBtn_white:hover {
             background: var(--maincolor);
             border: 1px solid var(--maincolor);
             color: #fff;
+        }
+
+        /* 흰 버튼 */
+        .submitBtn_blue {
+            background: var(--maincolor);
+            padding: 7px 23px;
+            transition: all .4s;
+            color: #fff;
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid #191919;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-left: 7px;
+        }
+
+        .submitBtn_blue:hover {
+            background: #fff;
+            border: 1px solid #191919;;
+            color: #191919;
         }
 
         .nav-link{
@@ -225,8 +246,8 @@
 
                     <!--  펀딩 종류 select  -->
                     <div id="selectContainer">
-                        <select name="" class="form-select form-select-lg" id="selectFund">
-                            <option class="fundCategory" value="viewAll" selected>전체</option>
+                        <select id="selectFund" class="form-select form-select-lg" >
+                            <option class="fundCategory" value="viewAll">전체</option>
                             <option class="fundCategory" value="reward">리워드</option>
                             <option class="fundCategory" value="investment">투자</option>
                             <option class="fundCategory" value="donation">기부</option>
@@ -241,7 +262,7 @@
                         <div class="contentsContainer mb-lg-5" th:each="l : ${mypageOrderList}">
                             <div class="card" style="width: 48rem;">
                                 <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header" th:text="${l.orderCategoryDetail}">결제 완료</h5>
+                                <h5 class="card-header" th:text="${l.orderCategoryDetail}"></h5>
                                 <!-- 내역 내용 -->
                                 <div class="card-body" style="display: flex">
                                     <!-- 이미지  -->
@@ -252,21 +273,95 @@
 
                                     <!-- 설명 / 버튼 -->
                                     <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                        <p class="orderApplicationDate" th:text="${l.orderApplicationDate}">2023.10.30 결제</p>
-                                        <h5 class="orderName" th:text="${l.orderName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
-                                        <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
-                                            <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
-                                            <span th:text="|주문 수량 : ${rl.orderOptionAmount} 개|"></span>
-                                        </th:block>
-
-                                        <div style="display: flex; justify-content: end; margin:0;">
-                                            <a href="#" class="submitBtn_white"
-                                               data-toggle="modal"
-                                               data-target="#exampleModal3"
-                                               data-what="hello"
-                                            >주문취소</a>
-                                            <a href="#" class="submitBtn_black" >결제상세</a>
-                                        </div>
+                                            <p class="orderApplicationDate" th:text="${l.orderApplicationDate}">2023.10.30 결제</p>
+                                            <h5 class="orderName" th:text="${l.orderFundingName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
+                                            <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
+                                                <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
+                                                <span th:text="|주문 수량 : ${rl.orderOptionAmount} 개|"></span>
+                                            </th:block>
+                                            <div style="display: flex; justify-content: end; margin:0;">
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_001'}">
+                                                    <!--리워드 프로젝트 주문 완료-->
+                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/cancel(orderCode=${l.orderCode})}" class="orderCancelBtn submitBtn_black">주문 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_002'}">
+                                                    <!--기부 프로젝트 주문 완료-->
+                                                    <a href="#" class="payDetailBtn submitBtn_white" >기부 내역</a>
+                                                    <!--기부 취소는 기부 주문 후 7일 이내 가능하도록.-->
+                                                    <a href="#" class="payDetailBtn orderCancelBtn submitBtn_black">기부 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_003'}">
+                                                    <!--투자 프로젝트 주문 완료, 청약 신청 중-->
+                                                    <a href="#" class="submitBtn_white">투자 현황</a>
+                                                    <a href="#" class="payDetailBtn submitBtn_white">투자 내역</a>
+                                                    <a href="#" class="orderCancelBtn submitBtn_black">투자 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_004'}">
+                                                    <!--리워드 배송 대기-->
+                                                    <a href="#" class="confirmBtn submitBtn_white" >구매 확정</a>
+                                                    <a href="#" class="payDetailBtn submitBtn_white" >결제 내역</a>
+                                                    <a href="#" class="orderCancelBtn submitBtn_black" data-toggle="modal" data-target="#exampleModal3" data-what="hello">주문 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_015'}">
+                                                    <!--리워드 배송 중-->
+                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a href="#" class="submitBtn_white" >배송 정보</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_005'}">
+                                                    <!--리워드 배송 완료-->
+                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/refund}" class="submitBtn_black" >환불 신청</a>
+                                                    <a th:href="@{/user/mypage/refund/cancel}" class="submitBtn_black" >교환 신청</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_006'}">
+                                                    <!--리워드 주문 확정-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_007'}">
+                                                    <!--기부 주문 확정-->
+                                                    <a href="#" class="submitBtn_white" >기부 현황</a>
+                                                    <a href="#" class="submitBtn_white" >기부 상세</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_008'}">
+                                                    <!--투자 주문 확정, 납입일 도래-->
+                                                    <a href="#" class="submitBtn_white" >투자 현황</a>
+                                                    <a href="#" class="submitBtn_white" >투자 상세</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_009'}">
+                                                    <!--리워드 환불 진행 중-->
+                                                    <a href="#" class="submitBtn_white" >환불 상세</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_010'}">
+                                                    <!--리워드 환불 처리 완료-->
+                                                    <a href="#" class="submitBtn_white" >환불 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_011'}">
+                                                    <!--리워드 교환 진행 중-->
+                                                    <a href="#" class="submitBtn_white" >교환 상세</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_012'}">
+                                                    <!--리워드 교환 완료-->
+                                                    <a href="#" class="submitBtn_white" >교환 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_013'}">
+                                                    <!--리워드 프로젝트 실패로 주문 취소-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">취소 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_014'}">
+                                                    <!--리워드 구매자 신청으로 주문 취소-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">취소 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                            </div>
                                     </form>
                                 </div>
                             </div>
@@ -289,7 +384,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -395,6 +489,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -417,6 +512,11 @@
       $selectFund = document.getElementById('selectFund');
       $donationTab = document.getElementById('donationTab');
       $bodyContainer = document.querySelectorAll('.bodyContainer');
+
+
+
+        document.getElementById('lead-drop-page').addEventListener('focus', ()=>{
+        })
 
 
       /* 내 정보 tab 🔽 */
@@ -626,6 +726,24 @@
           }
           return isValid;
       }
+
+
+        //====================상민======================
+
+        let selectFund = [[${selectFund}]];
+
+        $('.fundCategory').each((idx,item)=>{
+            if($(item).val() === selectFund) {
+                $(item).prop('selected',true);
+                return false;
+            }
+        })
+        //펀딩 내역 셀렉트 박스
+        $('#selectFund').change(function(){
+            selectFund = $(this).val();
+            console.log(selectFund);
+            location.href = `/user/mypage/?selectFund=${selectFund}`;
+        })
 
     </script>
 </th:block>
