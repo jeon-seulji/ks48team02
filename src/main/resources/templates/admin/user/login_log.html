@@ -24,9 +24,10 @@
                     기간
                 </td>
                 <td>
-                    <input type="date" name="amDateSettStartDate">
+                    <input type="date" name="amDateSettStartDate" id="start-date">
                     <span> - </span>
-                    <input type="date" name="amDateSettEndDate">
+                    <input type="date" name="amDateSettEndDate" id="end-date">
+
                 </td>
             </tr>
             <tr>
@@ -77,20 +78,17 @@
                 </div>
             </div>
             <!-- contents area -->
-            <table class="settlement-log">
+            <table class="login-log">
                 <thead>
                 <tr>
                     <th style="width:5%;">
                         <input type="checkbox" name="allSelect" id="allSelectBtn">
                     </th>
-                    <th style="width:12%;">회원 유형 코드</th>
+                    <th style="width:10%;">식별 코드</th>
                     <th style="width:10%;">ID</th>
-                    <th style="width:6%;">이름</th>
-                    <th style="width:20%;">이메일</th>
-                    <th style="width:10%;">휴대폰 번호</th>
-                    <th style="width:10%;">가입 일자</th>
-                    <th style="width:10%;">탈퇴 여부</th>
-                    <th style="width:10%;">탈퇴 일자</th>
+                    <th style="width:10%;">로그인 일시</th>
+                    <th style="width:10%;">로그아웃 일시</th>
+                    <th style="width:10%;">접속 IP</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -99,16 +97,11 @@
                     <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                 </tr>
                 <!-- 조회 결과 contents -->
-                <tr th:nuless="${loginLogs == null}" th:each="l : ${loginLogs}">
+                <tr th:unless="${loginLogs == null}" th:each="l : ${loginLogs}">
                     <td class="table-data-center">
                         <input type="checkbox" name="selectList">
                     </td>
-                    <td class="table-data-center">회원 유형 코드</td>
-                    <td th:text="${l.orderApplicationDate}" class="table-data-center">로그인 로그 코드</td>
-                    <td th:text="${l.orderFundingName}"  class="table-data-center">회원 ID</td>
-                    <td th:text="${l.orderCategoryDetail}">로그인 일시</td>
-                    <td th:text="${l.orderName}"  class="table-data-center">로그아웃 일시</td>
-                    <td th:text="${l.orderName}"  class="table-data-center">접속 IP</td>
+                    <td class="table-data-center"></td>
                 </tr>
                 </tbody>
             </table>
@@ -122,19 +115,79 @@
     <script>
         let $searchIdBtn = document.querySelector('.orderSearchBtn.submitBtn');
         let $searchId = document.getElementById('search-id');
+        const numFormat = num => num < 10 ? `0${num}` : num;
+        const dateFormat = targetDate => {
+            let year = targetDate.getFullYear();
+            let month = numFormat(targetDate.getMonth()+1);
+            let date = numFormat(targetDate.getDate());
+            let hours = numFormat(targetDate.getHours());
+            let minutes = numFormat(targetDate.getMinutes());
+            let seconds = numFormat(targetDate.getSeconds());
+            return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+        }
         $searchIdBtn.addEventListener('click',function (){
-                 /* 유효성 검사  */
+            let selectedStartDate = dateFormat(new Date(document.getElementById('start-date').value));
+            let selectedEndDate = dateFormat(new Date(document.getElementById('end-date').value));
+            console.log(selectedStartDate);
+            console.log(selectedEndDate);
+            /* 유효성 검사  */
                 if( $searchId.value.trim() === '' || typeof $searchId === 'undefined' || $searchId.value == null ) {
                     alert('회원 아이디를 입력해 주세요');
                 }else{
                     $.ajax({
                         url : '/admin/user/getLoginLog',
                         method : 'POST',
-                        data : {'memberId' : $searchId.value },
+                        data : {'memberId' : $searchId.value, 'startDate': selectedStartDate, 'endDate' : selectedEndDate },
                         dataType : 'json'
                     })
                         .done(function(response){
-                             console.log(response);
+                            //$('.login-log tbody').empty();
+                            if(document.querySelector('.login-log tbody').childElementCount>1){
+                                document.querySelector('.login-log tbody').replaceChildren();
+
+                            }
+                            console.log(response)
+                            // 표시할 데이터가 들어있는 HTML 코드를 생성
+                            let html = '';
+                            // 0.선택된 날짜 객체화
+                            let selectedStartDate = new Date(document.getElementById('start-date').value);
+                            let selectedEndDate = new Date(document.getElementById('end-date').value);
+
+                            if(response.length > 0){
+                                // 1. 선택한 날짜에 해당하는 기간만 필터링
+                               let filteredData = response.filter(function (data){ // 반환값 true만 배열에 포함
+                                   let loginTimeData = new Date(data.loginTime);
+                                   let logoutTimeData = new Date(data.logoutTime);
+                                   loginTimeData.setHours(0, 0, 0, 0);
+                                   logoutTimeData.setHours(0, 0, 0, 0);
+                                   let loginResult = (selectedStartDate <= loginTimeData && loginTimeData <= selectedEndDate);
+                                   let logoutResult = (selectedStartDate <= logoutTimeData && logoutTimeData <= selectedEndDate);
+                                   return loginResult || logoutResult;
+                               });
+                                console.log(selectedEndDate);
+                                console.log(`필터링된 데이터 : ${filteredData}`);
+                                console.log(`필터링된 데이터 배열 첫 요소의 로그인시간  : ${filteredData[0].loginTime}`);
+                                console.log(`필터링된 데이터 배열 첫 요소의 로그아웃시간  : ${filteredData[0].logoutTime}`);
+
+                                // 2. 필터링된 데이터만 렌더링
+                                filteredData.forEach(function (data) {
+                                    html += '<tr>';
+                                    html += '<td class="table-data-center"><input type="checkbox" name="selectList"></td>';
+                                    html += '<td class="table-data-center">' + (data.loginLogCode )+ '</td>';
+                                    html += '<td class="table-data-center">' + (data.memberId )+ '</td>';
+                                    html += '<td class="table-data-center">' + (data.loginTime !== null && data.loginTime !== undefined ? data.loginTime : '-')+ '</td>';
+                                    html += '<td class="table-data-center">' + (data.logoutTime !== null && data.logoutTime !== undefined ? data.logoutTime : '-')+ '</td>';
+                                    html += '<td class="table-data-center">' + (data.clientNetAddress ) + '</td>';
+                                    html += '</tr>';
+                                });
+                            }else{ // 해당하는 데이터 없는 경우
+                                html += '<tr>';
+                                html += '<td colSpan="6" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>';
+                                html += '</tr>';
+                            }
+
+                            // 표시할 위치에 HTML 코드를 삽입
+                            $('.login-log tbody').html(html);
                         })
 
                         .fail(function (jqXHR, textStatus){
@@ -144,26 +197,6 @@
                 }
         })
 
-
-
-        /* 체크박스 : 전체동의 체크시 모든 항목 체크  */
-        const $all = document.getElementById('all');
-        const $chooseUnreg = document.querySelectorAll('.choose-unreg');
-
-        $all.addEventListener('click', () => {
-            $chooseUnreg.forEach(element => {
-                element.checked = $all.checked;
-            })
-        })
-
-        /* 체크박스 : 개별 항목 전부 체크시 전체동의 체크 */
-        $chooseUnreg.forEach(checkbox => { // 개별 항목마다 이벤트 리스너를 걸어 주기
-            checkbox.addEventListener('change', () => {
-                const $checkedBoxes = document.querySelectorAll('.choose-unreg[type="checkbox"]:checked');
-
-                $all.checked = $checkedBoxes.length === $chooseUnreg.length;
-            });
-        });
     </script>
 </th:block>
 </html>

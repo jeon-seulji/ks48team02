@@ -12,6 +12,7 @@
 <th:block layout:fragment="customJsFile">
     <script th:src="@{/common/js/ajaxJs.js}"></script>
     <script th:src="@{/common/js/admin-commonJs.js}"></script>
+    <script th:src="@{/admin/js/userManagement/userManage.js}"></script>
 </th:block>
 
 <!-- 사용자별 컨텐츠 -->
@@ -26,15 +27,15 @@
                 <td class="order-category-select" style="height: auto !important;">
                     <ul>
                         <li>
-                            <input id="all" type="checkbox" name="don">
-                            <label for="all">전체</label>
+                            <input id="choose-all" type="checkbox" name="don">
+                            <label for="choose-all">전체</label>
                         </li>
                         <li>
-                            <input class="choose-unreg" id="unreg_inactive" type="checkbox" name="rwd" checked>
+                            <input class="choose-one" id="unreg_inactive" type="checkbox" name="rwd" checked>
                             <label for="unreg_inactive">활성 계정</label>
                         </li>
                         <li>
-                            <input class="choose-unreg" id="unreg_active" type="checkbox" name="don">
+                            <input class="choose-one" id="unreg_active" type="checkbox" name="don">
                             <label for="unreg_active">비활성 계정</label>
                         </li>
                     </ul>
@@ -140,24 +141,7 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-    /* 체크박스 : 전체동의 체크시 모든 항목 체크  */
-    const $all = document.getElementById('all');
-    const $chooseUnreg = document.querySelectorAll('.choose-unreg');
 
-    $all.addEventListener('click', () => {
-    $chooseUnreg.forEach(element => {
-    element.checked = $all.checked;
-    })
-    })
-
-    /* 체크박스 : 개별 항목 전부 체크시 전체동의 체크 */
-    $chooseUnreg.forEach(checkbox => { // 개별 항목마다 이벤트 리스너를 걸어 주기
-    checkbox.addEventListener('change', () => {
-    const $checkedBoxes = document.querySelectorAll('.choose-unreg[type="checkbox"]:checked');
-
-    $all.checked = $checkedBoxes.length === $chooseUnreg.length;
-    });
-    });
     </script>
 </th:block>
 </html>

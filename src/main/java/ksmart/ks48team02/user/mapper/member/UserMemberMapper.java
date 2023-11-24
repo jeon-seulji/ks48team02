@@ -12,5 +12,6 @@ public interface UserMemberMapper {
 
     public void addLoginLog(String clientIp, String memberId);
 
+    public void addLogoutLog(String clientIp, String loginId);
 
 }

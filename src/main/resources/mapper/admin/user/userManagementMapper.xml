@@ -26,8 +26,6 @@
 <!--        <result property="unRegStatus" column="unreg_status"/>-->
 <!--    </resultMap>-->
 
-    <!-- 회원 로그인시 로그인 로그 테이블에 insert -->
-
     <!-- 회원 아이디로 로그인 정보 조회-->
     <select id="getLoginLogById" parameterType="String" resultMap="loginLogResultMap">
         SELECT
@@ -38,8 +36,19 @@
             client_net_address
         FROM
             login_log
-        WHERE
-            member_id = #{memberId};
+        <where>
+            <if test="memberId != null and memberId != ''">
+                member_id = #{memberId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND login_time >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND logout_time <![CDATA[<=]]> #{endDate}
+            </if>
+        </where>
+
     </select>
+
 
 </mapper>

@@ -15,7 +15,8 @@ public class UserManagementService {
 
     private final UserManagementMapper userManagementMapper;
 
-    public List<UserManagement> getLoginLogById(String memberId){
-        return userManagementMapper.getLoginLogById(memberId);
+    public List<UserManagement> getLoginLogById(String memberId, String startDate, String endDate){
+        return userManagementMapper.getLoginLogById(memberId, startDate, endDate);
     }
+
 }

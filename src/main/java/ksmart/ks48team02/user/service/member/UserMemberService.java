@@ -47,4 +47,9 @@ public class UserMemberService {
         userMemberMapper.addLoginLog(clientIp, memberId);
     }
 
+    // 로그아웃시 로그아웃로그 업데이트
+    public void addLogoutLog(String clientIp, String loginId){
+        userMemberMapper.addLogoutLog(clientIp, loginId);
+    }
+
 }

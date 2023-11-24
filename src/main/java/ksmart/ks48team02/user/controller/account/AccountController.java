@@ -8,6 +8,7 @@ import ksmart.ks48team02.user.dto.Member;
 import ksmart.ks48team02.user.service.member.UserMemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +55,7 @@ public class AccountController {
             , @RequestParam(name="memberPw") String memberPw
             , HttpSession session
             , RedirectAttributes reAttr
-            , HttpServletRequest request) {
+            , HttpServletRequest request) throws UnknownHostException {
         Map<String, Object> resultMap = userMemberService.checkMemberInfo(memberId, memberPw);
         boolean isChecked = (boolean) resultMap.get("isChecked");
 
@@ -60,15 +64,15 @@ public class AccountController {
             String memberTypeCode = (String) resultMap.get("memberTypeCode");
             String memberName = (String) resultMap.get("memberName");
 
+            // 클라이언트 IP 가져오기
             String clientIp = getClientIp(request);
             log.info("=========클라이언트 IP{}======",clientIp);
-
+            // 로그인시 로그인 로그 업데이트
+            userMemberService.addLoginLog(clientIp, memberId);
 
             session.setAttribute("SID", memberId);
             session.setAttribute("SNAME", memberName);
             session.setAttribute("STYPECODE", memberTypeCode);
-            userMemberService.addLoginLog(clientIp, memberId);
-
 
             String getStoreCodeById = storeService.getStoreCodeById(memberId);
 
@@ -84,7 +88,8 @@ public class AccountController {
     }
 
     // ip 가져오기
-    public static String getClientIp(HttpServletRequest request) {
+    public static String getClientIp(HttpServletRequest request) throws UnknownHostException {
+
         String clientIp = null;
         boolean isIpInHeader = false;
 
@@ -112,15 +117,31 @@ public class AccountController {
             clientIp = request.getRemoteAddr();
         }
 
+        if(clientIp.equals("0:0:0:0:0:0:0:1") || clientIp.equals("127.0.0.1")){
+            InetAddress address = InetAddress.getLocalHost();
+
+            clientIp = /* address.getHostName() + "/" + */ address.getHostAddress();
+        }
+
+
         return clientIp;
+
+
+
+
+
+
     }
-
-
-
 
     //로그아웃  기능
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session, HttpServletRequest request) throws UnknownHostException {
+        // 로그아웃시 로그인 로그 업데이트
+        String loginId = (String) session.getAttribute("SID");
+        String clientIp = getClientIp(request);
+        userMemberService.addLogoutLog(clientIp, loginId);
+
+
         session.invalidate();
         return "redirect:/user";
     }

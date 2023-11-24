@@ -10,6 +10,7 @@ public class UserManagement {
     private String loginTime;
     private String logoutTime;
     private String clientNetAddress;
+    private int logType;
 
 
 }
