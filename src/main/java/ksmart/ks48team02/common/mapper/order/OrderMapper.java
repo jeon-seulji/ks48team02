@@ -41,6 +41,17 @@ public interface OrderMapper {
     // 교환 신청 행 수 조회
     public int getSwapCnt(Map<String, Object> paramMap);
 
+    // 자동 환불 목록 조회
+    public List<RefundApplication> getAutoRefdList(Map<String, Object> paramMap);
+
+    // 자동 환불 행 수 조회
+    public int getAutoRfndCnt(Map<String, Object> paramMap);
+
     // 주문 확정 목록 조회
-    public List<OrderConfirmationLog> getOrderConfLogList();
+    public List<OrderConfirmationLog> getOrderConfLogList(Map<String, Object> paramMap);
+
+    // 주문 확정 목록 행 수 조회
+    public int getOrderConfCnt(Map<String, Object> paramMap);
+
+
 }
