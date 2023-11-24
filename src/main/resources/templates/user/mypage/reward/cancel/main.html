@@ -233,6 +233,7 @@
                         data: JSON.stringify(orderInfo),
                         dataType: 'text'
                     });
+
                     //DB작업 완료
                     request.done(function(response){
                         let redirectURI = response;
@@ -240,6 +241,7 @@
                     });
                     request.fail(function(err){
                         console.log(err);
+                        console.log('ajax 에러');
                     });
                 }
             })

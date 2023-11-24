@@ -113,6 +113,10 @@
                 order_category_code = 'ORDC_011',
                 order_category_detail = '교환 처리중-교환 처리중'
             </if>
+            <if test = "changeCategory == '구매확정'">
+                order_category_code = 'ORDC_006',
+                order_category_detail = '주문 확정-리워드 프로젝트 주문 확정'
+            </if>
         </set>
         WHERE
             order_code = #{orderCode}
@@ -146,7 +150,7 @@
         </if>
     </insert>
 
-    <!--주문 취소,환불,교환 시 결제 테이블 업데이트-->
+    <!--결제 테이블 결제 현황 업데이트-->
     <update id="paymentUpdate" parameterType="MypageReward">
         UPDATE reward_payment
         <set>
@@ -157,4 +161,84 @@
         WHERE
             order_code = #{orderCode}
     </update>
+
+    <!--주문 취소,환불 시 사용한 포인트 돌려주기, 구매 확정 시 포인트 적립-->
+    <update id="customerPoint" parameterType="MypageReward">
+        UPDATE
+            customer
+        <set>
+            <if test="changeCategory == '주문취소'">
+                customer_point = customer_point + #{usePoint}
+            </if>
+            <if test="changeCategory == '구매확정'">
+                customer_point = customer_point + #{savingPoint}
+            </if>
+        </set>
+        WHERE
+            member_id = #{orderMemberId};
+    </update>
+
+    <!--포인트 적립 내역 인서트-->
+    <insert id="returnPointLogInsert" parameterType="MypageReward">
+
+        <selectKey keyProperty="pointLogCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(p.point_log_code) = 0  THEN CONCAT('PL_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('PL_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(p.point_log_code,'_',-1)AS UNSIGNED )+1))
+                END) AS pointLogCode
+            FROM
+                point_log AS p
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(p.point_log_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO point_log
+            (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
+        VALUES
+            (#{pointLogCode}, #{memberId}, #{useReservePrice}, '주문취소', CURDATE(), #{useReserveCode})
+    </insert>
+
+<!--    <select id="getCouponIssueCode" parameterType="MypageReward" resultType="MypageReward">-->
+<!--        SELECT-->
+<!--            u.coupon_issue_code AS couponIssueCode-->
+<!--        FROM-->
+<!--            use_coupon_log as u-->
+<!--        WHERE-->
+<!--            u.reward_payment_code = #{paymentCode};-->
+<!--    </select>-->
+
+    <!--주푼 취소 시 사용한 쿠폰 돌려주기-->
+    <update id="couponReturn" parameterType="MypageReward">
+        <selectKey  keyProperty="couponIssueCode" resultType="String" order="BEFORE">
+            SELECT
+                u.coupon_issue_code AS couponIssueCode
+            FROM
+                use_coupon_log as u
+            WHERE
+                u.reward_payment_code = #{paymentCode};
+        </selectKey>
+        UPDATE
+            member_coupon
+        SET
+            coupon_used = 1
+        WHERE
+            coupon_issue_code = #{couponIssueCode}
+    </update>
+
+    <!--주문 취소 시 프로젝트 달성 금액, 달성률 주문 금액만큼 감소-->
+    <update id="projectAchievementMoney" parameterType="MypageReward">
+        UPDATE
+            reward_project
+        SET
+            project_achievement_money = project_achievement_money - #{orderPrice},
+            project_achievement_percent = ROUND(project_achievement_money / project_goal_money * 100)
+        WHERE
+            reward_project_code = #{rewardProjectcode};
+    </update>
+
+
+
+
 </mapper>

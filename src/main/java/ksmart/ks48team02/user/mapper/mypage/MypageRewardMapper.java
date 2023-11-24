@@ -18,4 +18,17 @@ public interface MypageRewardMapper {
     //리워드 주문 취소,환불,교환 시 결제 테이블 업데이트
     public int paymentUpdate(MypageReward orderInfo);
 
+    //프로젝트 달성금액, 달성률 업데이트
+    public int projectAchievementMoney(MypageReward orderInfo);
+
+    //포인트 사용내역 업데이트
+    public int returnPointLogInsert(MypageReward orderInfo);
+
+    //주문 취소시 포인트 되돌려주기, 주문 확정시 포인트 적립
+    public int customerPoint(MypageReward orderInfo);
+
+    //사용한 쿠폰 되돌려주기
+    public int couponReturn(MypageReward orderInfo);
+
+
 }

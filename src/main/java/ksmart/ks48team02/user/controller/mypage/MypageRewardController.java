@@ -1,6 +1,5 @@
 package ksmart.ks48team02.user.controller.mypage;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.user.dto.MypageReward;
 import ksmart.ks48team02.user.service.mypage.MypageRewardService;
@@ -9,18 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller("mypageRefundController")
-@RequestMapping("/user/mypage/refund")
+@Controller("mypageRewardController")
+@RequestMapping("/user/mypage/reward")
 @AllArgsConstructor
-public class MypageRefundController {
+public class MypageRewardController {
 
     private final MypageRewardService mypageRewardService;
 
-    //환불 페이지 ㅎㅎ
+    //환불 페이지
     @GetMapping(value={"","/"})
     public String refundMainPage(){
 
-        return"user/mypage/refund/main";
+        return"user/mypage/reward/refund/main";
     }
 
     //취소 페이지
@@ -35,7 +34,7 @@ public class MypageRefundController {
         model.addAttribute("orderInfo",orderInfo);
 
 
-        return"user/mypage/cancel/main";
+        return"user/mypage/reward/cancel/main";
     }
 
     //취소 진행
@@ -43,11 +42,26 @@ public class MypageRefundController {
     @ResponseBody
     public String orderCancel(@RequestBody MypageReward orderInfo){
 
-        System.out.println("ajax");
         System.out.println(orderInfo);
-
         mypageRewardService.orderCancel(orderInfo);
 
-        return"redirect:/user/mypage";
+        return"/user/mypage";
     }
+
+    //구매 확정 진행
+    @GetMapping("/orderConfirm")
+    public String OrderConfirm (@RequestParam(name="orderCode", required = true) String orderCode) {
+
+        return "redirect:/user/mypage";
+    }
+
+    //결제, 환불, 취소 내역 페이지
+    @GetMapping("/detailInfo")
+    public String detailPage(@RequestParam(name="orderCode", required = true) String orderCode) {
+
+
+        return "user/mypage/reward/detailInfo";
+    }
+
+
 }

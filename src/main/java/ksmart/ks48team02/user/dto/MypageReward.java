@@ -37,14 +37,11 @@ public class MypageReward {
     private String changeCategory;
     private String refundCode;
     private String storeCode;
+    private int savingPoint;
+    private String couponIssueCode;
 
 
     private List<RewardOrderDetail> rewardOrderDetailList;
 
-// ㅎㅎ
-//    private int optionPrice;
-//    private int orderOptionAmount;
-//    private String optionName;
-//    private String optionContents;
 
 }
