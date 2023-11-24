@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/default}">
+      layout:decorate="|@{${(session.STYPECODE == 'mem_type_02'
+                                || session.STYPECODE == 'mem_type_03'
+                                || session.STYPECODE == 'mem_type_04')? '/seller/layout/default'
+                                :(session.STYPECODE == 'mem_type_01')? '/admin/layout/default':''}}|">
 
 <head>
   <!--  사용자별 css file 추가 부분 -->
@@ -69,7 +72,7 @@
                     ${(l.apcState == 1)?'처리중':(l.apcState == 2)?'반려':'처리완료'}
                   </td>
                   <td class="table-data-center">
-                      ${l.adminId}
+                      ${(l.adminId == null)? '-':l.adminId}
                   </td>
                   <td class="table-data-center">
                     ${(l.completedDate != null)? l.completedDate:'-'}
@@ -273,6 +276,7 @@
       });
     });
 
+    // 검색 버튼 click ajax
     $('.orderSearchBtn').on('click', function(){
       // orderby 초기화
       orderbyDefaultSet();
@@ -317,6 +321,7 @@
   <th:block th:replace="~{common/fragments/searchFormFragments :: searchFormFragments}"></th:block>
   <!-- search form fragments end -->
 
+
   <div class="title-wrap">
     <h4 class="admin-content-title">신청 목록</h4>
     <div class="btnArea">
@@ -355,26 +360,26 @@
       <!-- contents area -->
       <table class="settlement-log">
         <thead>
-        <tr>
-          <th style="width:5%;">
-            <input type="checkbox" name="allSelect" id="allSelectBtn">
-          </th>
-          <th style="width:10%;">
-            [[${(#ks.request.requestURI == '/admin/order/refundSwapping')? '환불':'교환'}]] 신청 코드
-          </th>
-          <th style="width:10%;">주문 코드</th>
-          <th style="width:5%;">주문 아이디</th>
-          <th style="width:8%;">신청 사유</th>
-          <th style="width:8%;">
-            신청 제목
-          </th>
-          <th style="width:20%;">신청 내용</th>
+          <tr>
+            <th style="width:5%;">
+              <input type="checkbox" name="allSelect" id="allSelectBtn">
+            </th>
+            <th style="width:10%;">
+              [[${(#ks.request.requestURI == '/admin/order/refundSwapping')? '환불':'교환'}]] 신청 코드
+            </th>
+            <th style="width:10%;">주문 코드</th>
+            <th style="width:5%;">주문 아이디</th>
+            <th style="width:8%;">신청 사유</th>
+            <th style="width:8%;">
+              신청 제목
+            </th>
+            <th style="width:20%;">신청 내용</th>
 
-          <th style="width:7%;">신청 시간</th>
-          <th style="width:7%;">처리 현황</th>
-          <th style="width:5%;">담당자 아이디</th>
-          <th style="width:7%;">처리 완료일</th>
-        </tr>
+            <th style="width:7%;">신청 시간</th>
+            <th style="width:7%;">처리 현황</th>
+            <th style="width:5%;">담당자 아이디</th>
+            <th style="width:7%;">처리 완료일</th>
+          </tr>
         </thead>
         <tbody>
           <!-- 조회 결과 없음 -->
@@ -387,13 +392,11 @@
               <input type="checkbox" name="selectList">
             </td>
             <td class="table-data-center">
-              <a class="detail-link" th:href="@{/seller/reword/order/refund/detail}">
-                [[${l.apcCode}]]
+              <a class="detail-link" th:text="${l.apcCode}" th:href="@{/seller/reword/order/refund/detail}">
               </a>
             </td>
             <td class="table-data-center">
-              <a class="detail-link" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}, goodsPartition=${l.orderPartition})}">
-                [[${l.orderCode}]]
+              <a class="detail-link" th:text="${l.orderCode}" th:href="@{/admin/order/detail?(orderCode=${l.orderCode}, goodsPartition=${l.orderPartition})}">
               </a>
             </td>
             <td class="table-data-center">
@@ -415,7 +418,7 @@
               [[${l.apcDate}]]
             </td>
             <td class="table-data-center">
-              [[${(l.apcState == 1)?'처리중':(l.apcState == 2)?'반려':'처리완료'}]]
+              [[${(l.apcState == 1)?'처리중':(l.apcState == 2)?'처리완료':''}]]
             </td>
             <td class="table-data-center">
               [[${l.adminId}]]

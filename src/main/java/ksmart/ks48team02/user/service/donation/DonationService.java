@@ -102,4 +102,8 @@ public class DonationService{
         donationUserMapper.chargeFlover(memberId, floverCount);
     }
 
+    public void searchCountUpdate(String donationCode, String searchCount){
+        donationUserMapper.searchCountUpdate(donationCode , searchCount);
+    }
+
 }
