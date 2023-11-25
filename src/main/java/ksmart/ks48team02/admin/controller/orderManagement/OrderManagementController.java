@@ -79,17 +79,34 @@ public class OrderManagementController {
     // 주문 목록
     @GetMapping( "/list")
     public String adminOrderList(Model model,
-                                 @RequestParam(name="sid") String sid,
-                                 @RequestParam(name="stypecode") String stypecode,
-                                 @RequestParam(name="sstorecode",
-                                                required = false, defaultValue = "empty") String sstorecode){
+                                 HttpSession session){
+
+        /*
+        * 답변감사합니다..아래 방법으로 해결했습니다.. 간단하게 걍 뻔히 보이는거만 막고싶은거라.. 이런식으로 하는게 제일 좋을거 같네요..
+        * out.println("인코딩 : ");
+        * out.println(java.net.URLEncoder.encode("한글"));
+        * String de = java.net.URLEncoder.encode("한글");
+        * out.println("디코딩 : ");
+        * out.println(java.net.URLDecoder.decode( de ));
+        * */
+
+        String sid = (String) session.getAttribute("SID");
+        String stypecode = (String) session.getAttribute("STYPECODE");
+        String sstorecode = (String) session.getAttribute("SSTORECODE");
+
+        if(sstorecode == null){
+            sstorecode = "empty";
+        }
+
+        log.info("sessionId {}", sid);
+        log.info("sessionType {}", stypecode);
+        log.info("sessionStoreCode {}", sstorecode);
 
         // default param setting
         model.addAttribute("title","관리자 : 주문 목록");
         model.addAttribute("contentsTitle","주문 목록");
         model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
         model.addAttribute("actionValue","/list");
-
 
         String orderby = "orderby";
         int currentPage = 1;
@@ -116,13 +133,13 @@ public class OrderManagementController {
         model.addAttribute("currentPage",resultMap.get("currentPage"));
 
         return "admin/order/list";
+
     }
 
     // 주문 목록 정렬 ajax
     @PostMapping(value="/list/ajax")
     @ResponseBody
-    public Map<String, Object> getOrderListOrderBy(@RequestBody Map<String, Object> paramMap,
-                                                   HttpSession session){
+    public Map<String, Object> getOrderListOrderBy(@RequestBody Map<String, Object> paramMap, HttpSession session){
         log.info("currentPage {}", paramMap.get("currentPage"));
         log.info("rowPerPage {}", paramMap.get("rowPerPage"));
 
@@ -222,15 +239,19 @@ public class OrderManagementController {
 
     // 배송 관리
     @GetMapping( "/delivery")
-    public String adminOrderDelivery(Model model,
-                                     @RequestParam(name="sid") String sid,
-                                     @RequestParam(name="stypecode") String stypecode,
-                                     @RequestParam(name="sstorecode",
-                                                    required = false, defaultValue = "empty") String sstorecode){
+    public String adminOrderDelivery(Model model, HttpSession session){
         model.addAttribute("title","관리자 : 배송 관리");
         model.addAttribute("contentsTitle","배송 관리");
         model.addAttribute("contentsSubTitle","관리자 배송 관리");
         model.addAttribute("paramActive","noActive");
+
+        String sid = (String) session.getAttribute("SID");
+        String stypecode = (String) session.getAttribute("STYPECODE");
+        String sstorecode = (String) session.getAttribute("SSTORECODE");
+
+        if(sstorecode == null){
+            sstorecode = "empty";
+        }
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
@@ -267,6 +288,7 @@ public class OrderManagementController {
     @ResponseBody
     public Map<String, Object> adminOrderDeliveryAjax(@RequestBody Map<String, Object> paramMap,
                                                       HttpSession session){
+
         String sid = (String)session.getAttribute("SID");
         String stypecode = (String)session.getAttribute("STYPECODE");
         String sstorecode = (String)session.getAttribute("SSTORECODE");
@@ -318,14 +340,18 @@ public class OrderManagementController {
 
     // 교환 환불 신청 관리 main
     @GetMapping( "/refundSwapping")
-    public String adminOrderRefundSwapping(Model model,
-                                           @RequestParam(name="sid") String sid,
-                                           @RequestParam(name="stypecode") String stypecode,
-                                           @RequestParam(name="sstorecode",
-                                                         required = false, defaultValue = "empty") String sstorecode){
+    public String adminOrderRefundSwapping(Model model,HttpSession session){
         model.addAttribute("title","관리자 : 교환 환불 관리");
         model.addAttribute("contentsTitle","교환/환불 관리");
         model.addAttribute("contentsSubTitle","관리자 교환/환불 관리");
+
+        String sid = (String) session.getAttribute("SID");
+        String stypecode = (String) session.getAttribute("STYPECODE");
+        String sstorecode = (String) session.getAttribute("SSTORECODE");
+
+        if(sstorecode == null){
+            sstorecode = "empty";
+        }
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
@@ -382,14 +408,19 @@ public class OrderManagementController {
 
     // 자동 환불 목록 조회
     @GetMapping("/autorfnd")
-    public String admAutoRefdList(Model model,
-                                  @RequestParam(name="sid") String sid,
-                                  @RequestParam(name="stypecode") String stypecode,
-                                  @RequestParam(name="sstorecode",
-                                          required = false, defaultValue = "empty") String sstorecode){
+    public String admAutoRefdList(Model model, HttpSession session){
+
         model.addAttribute("title","관리자 : 자동 환불 관리");
         model.addAttribute("contentsTitle","자동 환불 관리");
         model.addAttribute("contentsSubTitle","프로젝트 실패 자동 환불 관리");
+
+        String sid = (String) session.getAttribute("SID");
+        String stypecode = (String) session.getAttribute("STYPECODE");
+        String sstorecode = (String) session.getAttribute("SSTORECODE");
+
+        if(sstorecode == null){
+            sstorecode = "empty";
+        }
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
 

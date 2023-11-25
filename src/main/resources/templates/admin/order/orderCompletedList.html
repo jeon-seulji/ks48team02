@@ -46,7 +46,7 @@
             if(list.length == 0){
                 $('.settlement-log tbody').append(`
                   <tr>
-                    <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                    <td colspan="12" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                   </tr>
                  `);
             }
@@ -320,7 +320,7 @@
                     <tbody>
                         <!-- 조회 결과 없음 -->
                         <tr th:if="${confLogList == null}">
-                            <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                            <td colspan="12" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                         </tr>
                         <!-- 조회 결과 contents -->
                         <tr th:unless="${confLogList == null}" th:each="l : ${confLogList}">
