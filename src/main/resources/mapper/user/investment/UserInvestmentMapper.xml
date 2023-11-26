@@ -140,11 +140,11 @@
         INSERT INTO investment_request_judge
             (investment_request_judge_code, member_id, store_code, law_satistify_code, incongruity_sectors_code
             , company_business_type_code, corporate_value_evaluation_code, member_id_seller, investment_request_subject
-            , investment_request_content, investment_company investment_achievement_money, business_profits
+            , investment_request_content, investment_company, investment_achievement_money, business_profits
             , depreciation, net_debt, stock_number, issue_stock_number, cash_reserves, investment_request_date
             , invest_judge_date, invest_judge_result)
         VALUES
-            (#{investmentRequestJudgeCode}, 'id100', #{storeCode}, NULL, NULL,
+            (#{investmentRequestJudgeCode}, 'id100', 'sto004', NULL, NULL,
             #{companyBusinessTypeCode}, NULL, #{memberId}, #{investmentRequestSubject},
             #{investmentRequestContent}, #{investmentCompany}, #{investmentAchievementMoney},
             #{businessProfits}, #{depreciation}, #{netDebt}, #{stockNumber}, #{issueStockNumber}, #{cashReserves},
