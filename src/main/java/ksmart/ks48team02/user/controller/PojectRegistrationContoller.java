@@ -91,9 +91,15 @@ public class PojectRegistrationContoller {
     }
 
 
-    //투자 프로젝트 심사 요청 페이지
+
+    //투자 프로젝트 심사 요청, 공고등록 페이지
     @GetMapping(value = {"/investment/judge"})
-    public String investmentJudgePage(Model model) {
+    public String investmentJudgePage(Model model, HttpSession httpSession) {
+        String memberId = (String) httpSession.getAttribute("SID");
+
+        if(memberId == null) {
+            return "user/account/login";
+        }
 
         List<UserCompanyBusinessType> userCompanyBusinessType = userInvestmentService.getUserCompanyBusinessType();
         List<UserLawSatistifyReason> userLawSatistifyReason = userInvestmentService.getUserLawSatistifyReason();
@@ -106,14 +112,23 @@ public class PojectRegistrationContoller {
         return "user/projectRegistration/investment/invest_judge_insert";
     }
 
-    //투자 프로젝트 공고 등록 페이지
-    @GetMapping(value = {"/investment/insert"})
-    public String investmentRegistrationPage(Model model) {
+    // 투자 프로젝트 등록
+    @PostMapping(value = {"/investment/judge"})
+    public String investmentRegistrationPage(InvestmentJudge investmentJudge, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession httpSession){
+        userInvestmentService.addInvestmentJudge(investmentJudge);
+        userInvestmentService.addInvestment(investmentInfo);
+        userInvestmentService.addInvestmentContent(investmentContent);
 
-        model.addAttribute("title", "투자펀딩 공고 등록 페이지");
+        investmentInfo.setInvestmentRequestJudgeCode(investmentJudge.getInvestmentRequestJudgeCode());
+        investmentInfo.setInvestmentSubject(investmentJudge.getInvestmentRequestSubject());
+        investmentContent.setInvestmentCode(investmentInfo.getInvestmentCode());
 
-        return "user/projectRegistration/investment/invest_insert";
+        String memberId = (String) httpSession.getAttribute("SID");
+        investmentJudge.setMemberIdSeller(memberId);
+
+        return "redirect:/user/projectRegistration/investment/success";
     }
+
     //투자 프로젝트 등록 완료 페이지
     @GetMapping(value = "investment/success")
     public String investmentRegistrationSuccessPage(){

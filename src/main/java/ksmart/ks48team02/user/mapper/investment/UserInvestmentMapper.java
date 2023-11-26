@@ -8,8 +8,14 @@ import java.util.List;
 @Mapper
 public interface UserInvestmentMapper {
 
+    // 투자 심사요청 등록
+    public int addInvestmentJudge(InvestmentJudge investmentJudge);
+
     // 투자 프로젝트 등록
     public int addInvestment(InvestmentInfo investmentInfo);
+
+    // 투자 프로젝트 상세내용 등록
+    public int addInvestmentContent(InvestmentContent investmentContent);
 
     // 투자 프로젝트 조회
     public List<InvestmentInfo> getInvestmentInfo();
@@ -20,8 +26,7 @@ public interface UserInvestmentMapper {
     // 추천순, 최신순, 인기순, 모집금액순, 마감임박순 정렬
     public List<InvestmentInfo> getSortedList(String orderBy);
 
-    // 투자 심사요청 등록
-    public int addInvestmentJudge(InvestmentJudge investmentJudge);
+
 
     // 투자 업종 조회
     public List<UserCompanyBusinessType> getUserCompanyBusinessType();

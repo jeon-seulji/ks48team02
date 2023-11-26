@@ -135,10 +135,25 @@
             for (const listItem of listItems) {
                 listItem.classList.remove("selected");
             }
-
             element.classList.add("selected");
-        }
+            let $selectedEle = element.querySelector('p');
+            let selectedCategoryName = $selectedEle.textContent;
+            $('#projectCateName').text(selectedCategoryName);
+            console.log(selectedCategoryName);
+            $('.donation-item-box').each(function (){
+                let cateName = $(this).children().first().val();
+                if(selectedCategoryName == '전체'){
+                    $(this).css('display' ,'block');
+                }else{
+                    $(this).css('display' ,'block');
+                    if(cateName != selectedCategoryName) {
+                        $(this).css('display', 'none');
+                    }
+                }
 
+            })
+
+        }
         // 초기 스타일이 적용되도록 직접 호출
         document.addEventListener("DOMContentLoaded", function() {
             const sortItemWrap = document.querySelector("#sort-item-wrap li:first-child");
@@ -172,6 +187,7 @@
         $('.donation-item-span-second').each(function (){
             $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
         });
+
     </script>
 
 </th:block>
@@ -242,7 +258,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex col">
-                    <p style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
+                    <p id="projectCateName" style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 5px">전체</p>
                     <div id="sort-item-wrap" class="d-flex" style="margin-left: auto">
                         <select style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
                             <option>전체</option>
@@ -263,6 +279,7 @@
                     <div class="row">
                         <div class="col donation-item-box col-lg-4" th:if="${l.donationCondition == 3}" th:each="l : ${allDonationInfo}"
                             th:onclick="|location.href='@{/user/donation/detail(donationCode=${l.donationCode})}'|">
+                            <input class="categoryName" hidden="hidden" th:value="${l.categoryName}">
                             <div class="donation-item-first-child">
                                 <img class="donation-item-third-child-image" th:src="|@{/summernoteImage/}${l.donationImage}|">
                             </div>

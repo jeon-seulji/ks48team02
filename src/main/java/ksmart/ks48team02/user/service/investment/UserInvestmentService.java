@@ -16,6 +16,38 @@ public class UserInvestmentService {
         this.userInvestmentMapper = userInvestmentMapper;
     }
 
+    // 투자 심사요청 등록
+    public void addInvestmentJudge(InvestmentJudge investmentJudge){
+
+        System.out.println(investmentJudge);
+        int addInvestmentJudge = userInvestmentMapper.addInvestmentJudge(investmentJudge);
+        if (addInvestmentJudge <= 0) {
+            System.out.println("투자 심사요청 등록에 실패했습니다.");
+        }
+
+    }
+
+    // 투자 프로젝트 등록
+    public void addInvestment(InvestmentInfo investmentInfo){
+
+        System.out.println(investmentInfo);
+        int addInvestment = userInvestmentMapper.addInvestment(investmentInfo);
+        if (addInvestment <= 0) {
+            System.out.println("투자 프로젝트 등록에 실패했습니다.");
+        }
+
+    }
+
+    // 투자 프로젝트 상세 등록
+    public void addInvestmentContent(InvestmentContent investmentContent){
+
+        System.out.println(investmentContent);
+        int addInvestmentContent = userInvestmentMapper.addInvestmentContent(investmentContent);
+        if (addInvestmentContent <= 0) {
+            System.out.println("투자 프로젝트 상세 등록에 실패했습니다.");
+        }
+    }
+
     public List<InvestmentInfo> getInvestmentInfo(){
         List<InvestmentInfo> investmentInfo = userInvestmentMapper.getInvestmentInfo();
         return investmentInfo;
