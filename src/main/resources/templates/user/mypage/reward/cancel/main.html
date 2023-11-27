@@ -150,10 +150,12 @@
                 <div class="col-lg-12 text-dark">
                     <hr style="color: #5a6268;">
                     <p class="font-weight-bold ml-lg-2">취소 사유 제목 입력</p>
-                    <input id="refundTitle" type="text">
+                    <label for="refundTitle" hidden="hidden">취소 사유 제목</label>
+                    <input class="refundComent w-100" id="refundTitle" type="text">
 
                     <p class="font-weight-bold ml-lg-2">취소 상세 사유 입력</p>
-                    <textarea id="cancelReasonDetail" rows="5" class="w-100 rounded"></textarea>
+                    <label for="cancelReasonDetail" hidden="hidden">취소 상세 사유</label>
+                    <textarea id="cancelReasonDetail" rows="5" class="refundComent w-100 rounded"></textarea>
 
                     <hr style="color: #5a6268; size:1px">
 
@@ -202,48 +204,74 @@
     <script th:inline="javascript">
         $(function(){
 
+            //유효성 검사 validationCheck 함수
+            function validationCheck(data) {
+                let isValid =true;
+
+                //1.인수 값이 객체일 경우
+                if(typeof data =='object') {
+
+                    $.each(data, function(){
+                        let checkValue = $(this).val();
+                        if(checkValue === null || checkValue === '' || checkValue === 'undefined') {
+                            isValid = false;
+                            let eleId = $(this).attr('id');
+                            let cate = $(`label[for="${eleId}"]`).text();
+                            alert(`${cate} 필수 입력 항목입니다.`);
+                            $(this).focus();
+                            return isValid;
+                        }
+                    });
+                    //2.인수 값이 객체가 아닐 경우
+                }else{
+                    if(data === null || data === '' || data === 'undefined') {
+                        isValid = false;
+                    }
+                }
+                return isValid;
+            }
+
             $('.cancelBtn').click(function(){
                 let refundSubejct = $('input[type="radio"]:checked').val();
                 let refundTitle = $('#refundTitle').val();
                 let refundComments = $('#cancelReasonDetail').val();
                 let isValid = true;
-                if(cancelReasonDetail === null || cancelReasonDetail === 'undefined' || cancelReasonDetail ==='') {
-                    alert('상세 사유를 입력해 주세요.');
-                    isValid = false;
-                    return isValid
-                } else if (cancelReasonDetail.length <= 10) {
-                    alert('열글자 이상 입력해 주세요.');
-                    isValid = false;
-                    return isValid
+                let validCheck = $('.refundComent');
+
+                isValid =validationCheck(validCheck);
+
+                if(isValid){
+                    if(refundComments.length <= 10) {
+                        alert('열글자 이상 입력해 주세요.');
+                        isValid = false;
+                        return isValid
+                    } else {
+                        const orderInfo = [[${orderInfo}]];
+                        orderInfo.refundTitle = refundTitle;
+                        orderInfo.refundComments = refundComments;
+                        orderInfo.refundSubejct = refundSubejct;
+                        orderInfo.changeCategory = '주문취소';
+                        console.log(orderInfo);
+
+                        const request = $.ajax({
+                            type: 'POST',
+                            traditional: true,
+                            url: '/user/mypage/reward/cancel',
+                            contentType: 'application/json',
+                            data: JSON.stringify(orderInfo),
+                            dataType: 'text'
+                        });
+                        request.done(function(response){
+                            let redirectURI = response;
+                            location.href = redirectURI;
+                        });
+                        request.fail(function(err){
+                            console.log(err);
+                            console.log('ajax 에러');
+                        });
+                    }
                 }
-                if(isValid) {
 
-                    const orderInfo = [[${orderInfo}]];
-                    orderInfo.refundTitle = refundTitle;
-                    orderInfo.refundComments = refundComments;
-                    orderInfo.refundSubejct = refundSubejct;
-                    orderInfo.changeCategory = '주문취소';
-                    console.log(orderInfo);
-
-                    const request = $.ajax({
-                        type: 'POST',
-                        traditional: true,
-                        url: '/user/mypage/refund/cancel',
-                        contentType: 'application/json',
-                        data: JSON.stringify(orderInfo),
-                        dataType: 'text'
-                    });
-
-                    //DB작업 완료
-                    request.done(function(response){
-                        let redirectURI = response;
-                        location.href = redirectURI;
-                    });
-                    request.fail(function(err){
-                        console.log(err);
-                        console.log('ajax 에러');
-                    });
-                }
             })
 
 

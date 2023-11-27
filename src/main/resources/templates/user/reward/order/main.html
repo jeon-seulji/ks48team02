@@ -47,9 +47,9 @@
         //토스페이에 담을 주문 상품 정보
         const products =[];
         //등급 별 할인율
-        let orderMemberDiscount = Number([[${orderMemberInfo.rewardCustomerRank.discountRate}]]/100);
+        let orderMemberDiscount = Number([[${orderMemberInfo.rewardCustomerRank.discountRate}]]);
         //등급 별 적립 포인트
-        let orderMemberSavePoint = Number([[${orderMemberInfo.rewardCustomerRank.pointSavingRate}]]/100);
+        let orderMemberSavePoint = Number([[${orderMemberInfo.rewardCustomerRank.pointSavingRate}]]);
         //회원 보유 포인트
         let havePoint = [[${orderMemberInfo.customer.customerPoint}]];
         //주문자 회원 정보
@@ -585,7 +585,7 @@
                                             <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                             <span class="ml-2">발송 시작일</span>
-                                            <span class ="optionDeliverDate font-weight-bold float-right mr-2" th:text="${#temporals.format(l.optionEstimatedDeliveryDate,'yyyy.MM.dd')}"></span>
+                                            <span class ="optionDeliverDate font-weight-bold float-right mr-2" th:text="${l.optionEstimatedDeliveryDate}"></span>
                                             <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                             <span class="ml-2">제한 수량</span>

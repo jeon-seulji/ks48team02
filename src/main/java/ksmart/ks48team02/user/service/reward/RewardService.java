@@ -125,9 +125,6 @@ public class RewardService {
             System.out.println("포인트사용 로그 등록 완료");
         }
 
-        //포인트 적립
-        rewardMapper.customerSavePoint(paymentResult);
-
         if(paymentResult.getUseCouponCode() != null) {
 
             // 쿠폰 사용 내역 인서트
@@ -172,5 +169,10 @@ public class RewardService {
         getRewardOptionByCode = rewardMapper.getRewardOptionByCode(rewardProjectCode);
         return getRewardOptionByCode;
 
+    }
+
+    //프로젝트 찜 여부 조회
+    public int projectGreatCheck(String rewardProjectCode, String loginMemberId) {
+        return rewardMapper.projectGreatCheck(rewardProjectCode,loginMemberId);
     }
 }
