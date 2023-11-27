@@ -49,7 +49,7 @@
             },
         });
     </script>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
         // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 코드
         let rewardProjectCode = '[[${rewardProject.rewardProjectCode}]]';
         // 썸네일 이미지 경로 지정
@@ -80,18 +80,29 @@
         } else {
             $('#deadLine').text(daysRemaining + '일남음');
         }
-
         // 회사 이름 설정
         $('#company').text('[[${rewardProject.regCompany}]]');
         // 달성 금액 설정
         $('#achievementMoney').text(`[[${rewardProject.projectAchievementMoney}]]`.replace(/\B(?=(\d{3})+(?!\d))/g, ","))
 
+        //찜하기 여부에 따라 찜하기 아이콘 변화
+        let greatCheck = [[${greatCheck}]];
+        if(greatCheck > 0) {
+            $('#likeBtn').find('svg').attr('fill','currentColor');
+        } else {
+            $('#likeBtn').find('svg').attr('fill','lightGrey');
+        }
+        //찜하기 누를때마다 아이콘 변화, 찜하기 진행.
         $('#likeBtn').click(function(){
             let fill = $(this).find('svg').attr('fill');
             if(fill === 'currentColor') {
+                //찜하기 취소
                 $(this).find('svg').attr('fill','lightGrey');
+                window.location.href = `/user/reward/great?rewardProjectCode=${rewardProjectCode}&greatCheck=${greatCheck}`;
             } else {
+                //찜하기 진행
                 $(this).find('svg').attr('fill','currentColor');
+                location.href=`/user/reward/great?rewardProjectCode=${rewardProjectCode}&greatCheck=${greatCheck}`;
             }
         })
 

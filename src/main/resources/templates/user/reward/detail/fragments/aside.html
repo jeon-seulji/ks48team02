@@ -54,7 +54,7 @@
                     <span class="rewardOptionName ml-2" th:text="${l.optionName}"></span>
                     <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                    <span class="rewardOptionContents ml-2" th:text="${l.optionContents}">옵션1 상세 내용~~~</span>
+                    <span class="rewardOptionContents ml-2" th:text="${l.optionContents}"></span>
                     <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                     <span class="ml-2">배송비</span>
@@ -63,7 +63,7 @@
                     <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                     <span class="ml-2">발송 시작일</span>
-                    <span class="rewardDeliverDate font-weight-bold float-right mr-2" th:text="${#temporals.format(l.optionEstimatedDeliveryDate, 'yyyy.MM.dd')}"></span>
+                    <span class="rewardDeliverDate font-weight-bold float-right mr-2" th:text="${l.optionEstimatedDeliveryDate}"></span>
                     <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                     <span class="ml-2">제한 수량</span>

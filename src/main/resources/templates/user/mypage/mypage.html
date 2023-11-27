@@ -359,8 +359,9 @@
                                             <div style="display: flex; justify-content: end; margin:0;">
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_001'}">
                                                     <!--리워드 프로젝트 주문 완료-->
-                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a onclick="return confirm('정말로 구매확정 하시겠습니까?')"
+                                                            th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                     <a th:href="@{/user/mypage/reward/cancel(orderCode=${l.orderCode})}" class="orderCancelBtn submitBtn_black">주문 취소</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_002'}">
@@ -377,26 +378,29 @@
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_004'}">
                                                     <!--리워드 배송 대기-->
-                                                    <a href="#" class="confirmBtn submitBtn_white" >구매 확정</a>
-                                                    <a href="#" class="payDetailBtn submitBtn_white" >결제 내역</a>
-                                                    <a href="#" class="orderCancelBtn submitBtn_black" data-toggle="modal" data-target="#exampleModal3" data-what="hello">주문 취소</a>
+                                                    <a onclick="return confirm('정말로 구매확정 하시겠습니까?')"
+                                                       th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/cancel(orderCode=${l.orderCode})}" class="orderCancelBtn submitBtn_black">주문 취소</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_015'}">
                                                     <!--리워드 배송 중-->
-                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a onclick="return confirm('정말로 구매확정 하시겠습니까?')"
+                                                       th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
                                                     <a href="#" class="submitBtn_white" >배송 정보</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_005'}">
                                                     <!--리워드 배송 완료-->
-                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a onclick="return confirm('정말로 구매확정 하시겠습니까?')"
+                                                       th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                     <a th:href="@{/user/mypage/refund}" class="submitBtn_black" >환불 신청</a>
                                                     <a th:href="@{/user/mypage/refund/cancel}" class="submitBtn_black" >교환 신청</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_006'}">
                                                     <!--리워드 주문 확정-->
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_007'}">
                                                     <!--기부 주문 확정-->
@@ -411,32 +415,32 @@
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_009'}">
                                                     <!--리워드 환불 진행 중-->
                                                     <a href="#" class="submitBtn_white" >환불 상세</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_010'}">
                                                     <!--리워드 환불 처리 완료-->
                                                     <a href="#" class="submitBtn_white" >환불 내역</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_011'}">
                                                     <!--리워드 교환 진행 중-->
                                                     <a href="#" class="submitBtn_white" >교환 상세</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_012'}">
                                                     <!--리워드 교환 완료-->
                                                     <a href="#" class="submitBtn_white" >교환 내역</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_013'}">
                                                     <!--리워드 프로젝트 실패로 주문 취소-->
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">취소 내역</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='취소내역')}" class="payDetailBtn submitBtn_white">취소 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_014'}">
                                                     <!--리워드 구매자 신청으로 주문 취소-->
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">취소 내역</a>
-                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='취소내역')}" class="payDetailBtn submitBtn_white">취소 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
                                                 </th:block>
                                             </div>
                                     </form>
