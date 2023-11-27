@@ -78,7 +78,7 @@
         .donation-item-span-second{
             margin-left: 5px;
         }
-        .donation-item-span-third{
+        .donation-item-span-third-parent{
             margin-left: auto;
             color: #235FD9;
             background: #cce5ff;
@@ -128,6 +128,14 @@
             }
 
             element.classList.add("selected");
+
+            // TODO: 정렬 기능 추가 하기
+            $divEles = [];
+            $('#itemParent').each(function (){
+               $divEles.push($(this).children('div'));
+            });
+
+
         }
         function cateItemClickedStyle(element) {
             const listItems = document.querySelectorAll("#category-wrap li");
@@ -161,6 +169,7 @@
 
             const categoryItemWrap = document.querySelector("#category-wrap li:first-child");
             categoryItemWrap.classList.add("selected");
+
         });
 
         $('.donation-item-span-third').each(function (){
@@ -172,7 +181,7 @@
             // 차이를 일(day) 단위로 변환
             let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
             // 남은 일 수
-            $(this).text(daysRemaining + "일 남음");
+            $(this).text(daysRemaining);
         });
 
         $('.donation-item-span-first').each(function (){
@@ -266,18 +275,18 @@
                             <option>종료됨</option>
                         </select>
                         <ul class="d-flex" style="margin-top: 5px">
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">추천순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
                             <li class="ml-3" onclick="sortItemClickedStyle(this)">마감임박순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">조회순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
+                            <!-- <li class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>-->
                         </ul>
                     </div>
                 </div>
 
                 <div class="container" style="width: 100%; height: 100%">
-                    <div class="row">
-                        <div class="col donation-item-box col-lg-4" th:if="${l.donationCondition == 3}" th:each="l : ${allDonationInfo}"
+                    <div id="itemParent" class="row">
+                        <div class="col donation-item-box col-lg-4" th:if="${l.donationCondition == 3 || l.donationCondition == 4 || l.donationCondition == 5}" th:each="l : ${allDonationInfo}"
                             th:onclick="|location.href='@{/user/donation/detail(donationCode=${l.donationCode})}'|">
                             <input class="categoryName" hidden="hidden" th:value="${l.categoryName}">
                             <div class="donation-item-first-child">
@@ -287,7 +296,9 @@
                                 <span class="donation-item-span-first"></span>
                                 <input class="donation-item-goalMoney" th:value="${l.donationGoalMoney}" hidden="hidden"/>
                                 <span class="donation-item-span-second" th:text="${l.donationAchievementMoney}"></span>
-                                <span class="donation-item-span-third" th:text="${l.donationEndDate}"></span>
+                                <div class="donation-item-span-third-parent">
+                                    <span class="donation-item-span-third" th:text="${l.donationEndDate}"></span><span>일 남음</span>
+                                </div>
                             </div>
                             <div class="donation-item-third-child">
                                 <p th:text="${l.donationSubject}"></p>
