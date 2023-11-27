@@ -73,8 +73,6 @@ public interface RewardMapper {
     //포인트 사용 시 보유 포인트에서 차감
     public int customerUsePoint(PaymentResult paymentResult);
 
-    //포인트 적립
-    public int customerSavePoint(PaymentResult paymentResult);
 
     //쿠폰 사용 내역 인서트
     public int useCouponLogInsert (PaymentResult paymentResult);
@@ -94,5 +92,7 @@ public interface RewardMapper {
     //대댓글 달기
     public int addReplyComment (String reply, String rewardProjectCode, String parentCommentCode,  String memberId, String memberName);
 
+    //프로젝트 찜 여부 조회
+    public int projectGreatCheck(String rewardProjectCode, String loginMemberId);
 
 }

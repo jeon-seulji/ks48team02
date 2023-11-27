@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MypageRewardService {
 
     private final MypageRewardMapper mypageRewardMapper;
+
     //리워드 주문, 결제 정보 조회.
     public MypageReward rewardOrderInfo (String orderCode){
         MypageReward mypageReward = mypageRewardMapper.rewardOrderInfo(orderCode);
@@ -20,9 +21,10 @@ public class MypageRewardService {
         return mypageReward;
     }
 
+    //주문 취소
     public void orderCancel (MypageReward orderInfo){
         // 주문 테이블 업데이트
-        mypageRewardMapper.orderCancel(orderInfo);
+        mypageRewardMapper.orderCategoryChange(orderInfo);
         // 환불 테이블 인서트
         mypageRewardMapper.refundInsert(orderInfo);
         // 결제 테이블 업데이트
@@ -45,6 +47,34 @@ public class MypageRewardService {
 
         //프로젝트 달성 금액, 달성률 업데이트
         mypageRewardMapper.projectAchievementMoney(orderInfo);
+    }
+
+    // 주문 확정
+    public void orderConfirm(MypageReward orderInfo) {
+
+        //주문 테이블 카테고리 변경
+        mypageRewardMapper.orderCategoryChange(orderInfo);
+
+        //포인트, 플로버 적립률 계산
+        double discountRate = orderInfo.getDiscountRate();
+        double floverSavingRate = orderInfo.getFloverSavingRate();
+        int orderPrice = orderInfo.getOrderPrice();
+        int discountPrice = (int) (discountRate * orderPrice);
+        int floverSavingPrice = (int) (floverSavingRate * orderPrice);
+        orderInfo.setSavingPoint(discountPrice);
+        orderInfo.setSavingFlover(floverSavingPrice);
+        //포인트 적립.
+        mypageRewardMapper.customerPoint(orderInfo);
+        //플로버 적립
+        mypageRewardMapper.cumstomerFolver(orderInfo);
+        //주문 확정 테이블에 insert
+        mypageRewardMapper.orderConfirmLogUpdate(orderInfo);
+        //포인트 적립 내역 insert
+        mypageRewardMapper.returnPointLogInsert(orderInfo);
+        //플로버 적립 내역 insert
+        mypageRewardMapper.savingFloverLogInsert(orderInfo);
 
     }
+
+
 }

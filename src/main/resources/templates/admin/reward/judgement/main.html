@@ -126,8 +126,8 @@
                         <td>
                             <div style="float:left;"><span class="goal-money" th:text="|${#numbers.formatInteger(l.projectGoalMoney,0,'COMMA')} 원|"></span> </div>
                         </td>
-                        <td class="table-data-center" th:text="${#temporals.format(l.projectRegDate,'yyyy-MM-dd')}"></td>
-                        <td class="table-data-center" th:text="${#temporals.format(l.projectEndDate,'yyyy-MM-dd')}"></td>
+                        <td class="table-data-center" th:text="${l.projectRegDate}"></td>
+                        <td class="table-data-center" th:text="${l.projectEndDate}"></td>
 
                         <td class="table-data-center start-project-date" th:if="${l.projectCondition == 1}">
                             <button type="button" class="startBtn" style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>
