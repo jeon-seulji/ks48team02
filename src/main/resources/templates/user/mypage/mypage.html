@@ -505,6 +505,31 @@
                                     </strong>
                                 </div>
                                 </div>
+                            <table>
+                                <thead>
+                                <tr>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${memberHaveCouponList == null}">
+                                    <td colspan="4">등록된 쿠폰이 없습니다</td>
+                                </tr>
+                                <tr th:unless="${memberHaveCouponList == null}" th:each=" l : ${memberHaveCouponList}">
+                                    <td th:text="${l.couponName}"></td>
+                                    <th:block th:if="${l.couponDiscountAmount} >0">
+                                        <td th:text="${l.couponDiscountAmount}"></td>
+                                    </th:block>
+                                    <th:block th:if="${l.couponDiscountRate} > 0">
+                                        <td th:text="${l.couponDiscountRate}"></td>
+                                    </th:block>
+                                    <td th:text="${l.memberCoupon.couponRegDate}"></td>
+                                    <td th:text="${l.memberCoupon.couponEndDate}"></td>
+                                </tr>
+                                </tbody>
+
+
+                            </table>
 
                         </div>
 
