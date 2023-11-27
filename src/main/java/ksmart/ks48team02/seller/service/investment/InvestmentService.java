@@ -1,6 +1,9 @@
 package ksmart.ks48team02.seller.service.investment;
 
 import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueBond;
+import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueStock;
+import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
 import ksmart.ks48team02.seller.mapper.investment.SellerInvestmentMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,8 +105,8 @@ public class InvestmentService {
     }
 
     // 판매자 특정 투자펀딩 공고 조회
-    public AdminInvestment getInvestementByCode(String investmentCode) {
-        AdminInvestment investmentInfo = sellerInvestmentMapper.getInvestementByCode(investmentCode);
+    public AdminInvestment getInvestementByCode(String memberIdSeller, String investmentCode) {
+        AdminInvestment investmentInfo = sellerInvestmentMapper.getInvestementByCode(memberIdSeller, investmentCode);
 
         return investmentInfo;
     }
@@ -187,9 +190,63 @@ public class InvestmentService {
         return resultMap;
     }
 
+    // 판매자 투자후 기업정보 공개(주식) 목록 조회
+    public  Map<String, Object> getAfterFundRevenueStockList(String memberId, int currentPage) {
+
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = sellerInvestmentMapper.getAfterFundRevenueStockCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<SellerAfterFundRevenueStock> SellerAfterFundRevenueStockList = sellerInvestmentMapper.getAfterFundRevenueStockList(memberId, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("SellerAfterFundRevenueStockList", SellerAfterFundRevenueStockList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+    }
+
+    // 판매자 투자후 기업정보 공개(채권) 목록 조회
+    public  Map<String, Object> getAfterFundRevenueBondList(String memberId, int currentPage) {
+
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = sellerInvestmentMapper.getAfterFundRevenueBondCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<SellerAfterFundRevenueBond> SellerAfterFundRevenueBondList = sellerInvestmentMapper.getAfterFundRevenueBondList(memberId, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("SellerAfterFundRevenueBondList", SellerAfterFundRevenueBondList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+    }
+
     // 판매자 특정 투자펀딩 심사요청 조회
-    public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String investmentRequestJudgeCode) {
-        AdminInvestmentRequestJudge investmentRequestJudgeInfo = sellerInvestmentMapper.getInvestmentRequestJudgeByCode(investmentRequestJudgeCode);
+    public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String memberIdSeller, String investmentRequestJudgeCode) {
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = sellerInvestmentMapper.getInvestmentRequestJudgeByCode(memberIdSeller, investmentRequestJudgeCode);
 
         return investmentRequestJudgeInfo;
     }
@@ -215,9 +272,26 @@ public class InvestmentService {
         return  corporateValueEvaluationInfo;
     }
 
+    // 판매자 투자펀딩 공고 수정
+    public void modifyInvestment(AdminInvestment adminInvestment) {
+        sellerInvestmentMapper.modifyInvestment(adminInvestment);
+    }
+
+    // 판매자 투자펀딩 공고 상세 수정
+    public void modifyInvestmentContent(SellerInvestmentContent sellerInvestmentContent) {
+        sellerInvestmentMapper.modifyInvestmentContent(sellerInvestmentContent);
+    }
+
     // 판매자 투자펀딩 심사요청 수정
     public void modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge) {
         sellerInvestmentMapper.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
+    }
+
+    // 판매자 투자펀딩 공고 삭제
+    public void removeInvestment(String investmentCode, String investmentContentCode) {
+
+        sellerInvestmentMapper.removeInvestmentContent(investmentContentCode);
+        sellerInvestmentMapper.removeInvestment(investmentCode);
     }
 
     // 판매자 투자펀딩 심사요청 삭제

@@ -66,53 +66,52 @@
         // 쿠폰 수정 기능
             $(document).ready(function() {
 
-            $('.CouponBtn').on('click', function(e) {
-                const formInputs = $('#modifyCouponForm input');
+                $('.CouponBtn').on('click', function () {
+                    const formInputs = $('#modifyCouponForm input');
 
-                const formDataObj = [...formInputs].reduce( (acc, cur) => {
-                    let objKey = $(cur).attr('name');
-                    let objValue = $(cur).val();
-                    acc[objKey] = objValue;
-                    return acc
-                }, {});
-                console.log(formDataObj);
+                    const formDataObj = [...formInputs].reduce((acc, cur) => {
+                        let objKey = $(cur).attr('name');
+                        let objValue = $(cur).val();
+                        acc[objKey] = objValue;
+                        return acc
+                    }, {});
+                    console.log(formDataObj);
 
 
-                // 숫자 필드가 빈 문자열인지 확인
-                if (formDataObj.couponDiscountRate === "" || formDataObj.couponDiscountAmount === "") {
-                    alert("할인율과 할인금액 필드는 비워둘 수 없습니다.");
-                    return;
-                }
+                    // 숫자 필드가 빈 문자열인지 확인
+                    if (formDataObj.couponDiscountRate === "" || formDataObj.couponDiscountAmount === "") {
+                        alert("할인율과 할인금액 필드는 비워둘 수 없습니다.");
+                        return;
+                    }
 
-                // 숫자 필드가 숫자로 변환할 수 있는지 확인
-                if (isNaN(Number(formDataObj.couponDiscountRate)) || isNaN(Number(formDataObj.couponDiscountAmount))) {
-                    alert("할인율과 할인금액 필드는 숫자만 입력할 수 있습니다.");
-                    return;
-                }
+                    // 숫자 필드가 숫자로 변환할 수 있는지 확인
+                    if (isNaN(Number(formDataObj.couponDiscountRate)) || isNaN(Number(formDataObj.couponDiscountAmount))) {
+                        alert("할인율과 할인금액 필드는 숫자만 입력할 수 있습니다.");
+                        return;
+                    }
 
-                /*
+                    /*
                 var formData = $(this).serialize();  // 폼 데이터를 serialize
                 console.log(formData);  // 콘솔에 출력하여 확인
                 */
-                $.ajax({
-                    type: 'POST',
-                    url: '/admin/board/couponAdd',
-                    contentType: 'application/json',
-                    data: JSON.stringify(formDataObj),
-                    dataType: 'JSON',
-                    success: function(response){
-                        console.log(response);
-                        if(response.status == 200){
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/board/couponAdd',
+                        contentType: 'application/json',
+                        data: JSON.stringify(formDataObj),
+                        dataType: 'JSON',
+                        success: function (response) {
+                            console.log(response);
                             alert('쿠폰이 성공적으로 수정되었습니다.');
                             window.location.href = '/admin/board/coupon';  // 수정 후 원하는 페이지로 리다이렉트
-                        }else{
-                            alert("쿠폰 수정에 실패 했습니다. 다시 시도해주세요.");
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+                            alert("쿠폰 수정에 실패 했습니다.");
                         }
-
-                    }
+                    });
                 });
             });
-        });
     </script>
 </head>
 <body>

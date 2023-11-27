@@ -3,6 +3,7 @@ package ksmart.ks48team02.user.controller.donation;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.Donation;
 import ksmart.ks48team02.admin.dto.DonationInfo;
@@ -233,8 +234,10 @@ public class DonationController {
     public String paymentChargePage(@RequestParam(name = "orderAmount")String orderAmount,
                                     @RequestParam(name = "floverCount")String floverCount,
                                     @RequestParam(name = "memberId")String memberId,
+                                    HttpServletRequest request,
                                     HttpSession session){
         try {
+            String serverName = request.getServerName();
             URL addr = new URL("https://kapi.kakao.com/v1/payment/ready");
             HttpURLConnection serverConnect = (HttpURLConnection) addr.openConnection();// 서버 연결하는 클래스
             serverConnect.setRequestMethod("POST");
@@ -249,9 +252,9 @@ public class DonationController {
                     + "&quantity=" + URLEncoder.encode(floverCount, "UTF-8")
                     + "&total_amount=" + URLEncoder.encode(orderAmount, "UTF-8")
                     + "&tax_free_amount=" + URLEncoder.encode("0", "UTF-8")
-                    + "&approval_url=" + URLEncoder.encode("http://localhost:8088/user/donation/payment/success?memberId="+memberId, "UTF-8")
-                    + "&fail_url=" + URLEncoder.encode("http://localhost:8088/user/donation/payment/fail", "UTF-8")
-                    + "&cancel_url=" + URLEncoder.encode("http://localhost:8088/user/donation/payment/cancel", "UTF-8");
+                    + "&approval_url=" + URLEncoder.encode("http://"+serverName+":8088/user/donation/payment/success?memberId="+memberId, "UTF-8")
+                    + "&fail_url=" + URLEncoder.encode("http://"+serverName+":8088/user/donation/payment/fail", "UTF-8")
+                    + "&cancel_url=" + URLEncoder.encode("http://"+serverName+":8088/user/donation/payment/cancel", "UTF-8");
             OutputStream outputStream = serverConnect.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             dataOutputStream.writeBytes(parameter);
@@ -397,6 +400,7 @@ public class DonationController {
     }
     @GetMapping("/payment/cancel")
     public String paymentCancel(@RequestParam(name = "pg_token")String pgToken){
+
         return "user/donation/payment/cancel";
     }
 

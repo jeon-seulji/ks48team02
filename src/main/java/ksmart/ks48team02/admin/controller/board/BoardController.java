@@ -95,7 +95,8 @@ public class BoardController {
 
     // 쿠폰 수정 post
     @PostMapping("/couponAdd")
-    public String couponAddPost(Model model, Coupon coupon){
+    public String couponAddPost(Model model, @RequestBody Coupon coupon){
+        log.info("쿠폰 수정: {}", coupon);
         adminCouponService.updateCoupon(coupon);
         model.addAttribute("title", " 쿠폰 수정");
 
