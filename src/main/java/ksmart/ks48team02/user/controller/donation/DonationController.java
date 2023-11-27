@@ -238,7 +238,9 @@ public class DonationController {
                                     HttpSession session){
         try {
             String serverName = request.getServerName();
+            String osName = System.getProperty("os.name").toLowerCase();
             int localPort = request.getLocalPort();
+            if(osName.contains("linux")) localPort = 80;
             URL addr = new URL("https://kapi.kakao.com/v1/payment/ready");
             HttpURLConnection serverConnect = (HttpURLConnection) addr.openConnection();// 서버 연결하는 클래스
             serverConnect.setRequestMethod("POST");
