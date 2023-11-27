@@ -24,6 +24,25 @@ public class DonationRegistration {
     private int searchCount;
     private int donationCondition;
 
+    private String storeName;
+    private String categoryName;
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("DonationRegistration{");

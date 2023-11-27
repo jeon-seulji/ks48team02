@@ -36,7 +36,7 @@ public class InvestmentInfo {
     private InvestmentContent investmentContent;
     private InvestmentJudge investmentJudge;
 
-
+    private String categoryName;
 
 
 
