@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -114,21 +116,27 @@ public class PojectRegistrationContoller {
 
     // 투자 프로젝트 등록
     @PostMapping(value = {"/investment/judge"})
-    public String investmentRegistrationPage(InvestmentJudge investmentJudge, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession httpSession){
-        userInvestmentService.addInvestmentJudge(investmentJudge);
-        userInvestmentService.addInvestment(investmentInfo);
-        userInvestmentService.addInvestmentContent(investmentContent);
-
-        investmentInfo.setInvestmentRequestJudgeCode(investmentJudge.getInvestmentRequestJudgeCode());
-        investmentInfo.setInvestmentSubject(investmentJudge.getInvestmentRequestSubject());
-        investmentContent.setInvestmentCode(investmentInfo.getInvestmentCode());
+    public String investmentRegistrationPage(@Validated @ModelAttribute InvestmentJudge investmentJudge, BindingResult result, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession httpSession){
 
         String memberId = (String) httpSession.getAttribute("SID");
         investmentJudge.setMemberIdSeller(memberId);
 
+        String companyBusinessTypeCode = (String) httpSession.getAttribute("companyBusinessTypeCode");
+        investmentJudge.setCompanyBusinessTypeCode(companyBusinessTypeCode);
+
+        System.out.println(investmentJudge);
+
+        userInvestmentService.addInvestmentJudge(investmentJudge);
+
+        investmentInfo.setInvestmentRequestJudgeCode(investmentJudge.getInvestmentRequestJudgeCode());
+        investmentInfo.setInvestmentSubject(investmentJudge.getInvestmentRequestSubject());
+        userInvestmentService.addInvestment(investmentInfo);
+
+        investmentContent.setInvestmentCode(investmentInfo.getInvestmentCode());
+        userInvestmentService.addInvestmentContent(investmentContent);
+
         return "redirect:/user/projectRegistration/investment/success";
     }
-
     //투자 프로젝트 등록 완료 페이지
     @GetMapping(value = "investment/success")
     public String investmentRegistrationSuccessPage(){
