@@ -76,7 +76,7 @@
             }else{
                 if (floverCount > curMyFlover){
                     if (confirm('Flover가 부족합니다.\n충전하시겠습니까?')){
-                        var url = 'http://localhost:8088/user/donation/payment/charge/main?memberId='+'[[${SID}]]';
+                        var url = '/user/donation/payment/charge/main?memberId='+'[[${SID}]]';
                         var name = "popup test";
                         var option = "width = 500, height = 700, top = 100, left = 200, location = no"
                         window.open(url, name, option);
