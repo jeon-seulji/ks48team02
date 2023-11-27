@@ -339,10 +339,7 @@
                 AND
                 apc_code LIKE CONCAT('%', #{searchValue}, '%')
             </if>
-            <if test="searchKey != null and searchKey == 'apcCode'">
-                AND
-                apc_code LIKE CONCAT('%', #{searchValue}, '%')
-            </if>
+
             <!-- session store code 값과 일치하는 공고 한정 조회 -->
             <if test="sstorecode != 'empty'">
                 AND
