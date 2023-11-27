@@ -12,5 +12,6 @@ public class RewardOrderDetail {
     private int optionPrice;
     private int optionTotalPrice;
     private String optionName;
+    private String optionContents;
 
 }

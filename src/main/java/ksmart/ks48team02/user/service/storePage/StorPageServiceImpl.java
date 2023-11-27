@@ -11,9 +11,10 @@ import java.util.List;
 @AllArgsConstructor
 public class StorPageServiceImpl implements StorePageService {
     StorePageMapper storePageMapper;
+
     @Override
-    public List<StorePageDto> storePageNewsList(){
-      return storePageMapper.storePageNewsList();
+    public List<StorePageDto> storePageNewsList(String storeCode){
+      return storePageMapper.storePageNewsList(storeCode);
    }
 
 //    @Override

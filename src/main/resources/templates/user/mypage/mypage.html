@@ -129,12 +129,33 @@
             border: 1px solid #191919;
             font-size: 12px;
             transition: background 0.3s;
+            margin-left: 7px;
         }
 
         .submitBtn_white:hover {
             background: var(--maincolor);
             border: 1px solid var(--maincolor);
             color: #fff;
+        }
+
+        /* 흰 버튼 */
+        .submitBtn_blue {
+            background: var(--maincolor);
+            padding: 7px 23px;
+            transition: all .4s;
+            color: #fff;
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid #191919;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-left: 7px;
+        }
+
+        .submitBtn_blue:hover {
+            background: #fff;
+            border: 1px solid #191919;;
+            color: #191919;
         }
 
         .nav-link{
@@ -225,8 +246,8 @@
 
                     <!--  펀딩 종류 select  -->
                     <div id="selectContainer">
-                        <select name="" class="form-select form-select-lg" id="selectFund">
-                            <option class="fundCategory" value="viewAll" selected>전체</option>
+                        <select id="selectFund" class="form-select form-select-lg" >
+                            <option class="fundCategory" value="viewAll">전체</option>
                             <option class="fundCategory" value="reward">리워드</option>
                             <option class="fundCategory" value="investment">투자</option>
                             <option class="fundCategory" value="donation">기부</option>
@@ -241,7 +262,7 @@
                         <div class="contentsContainer mb-lg-5" th:each="l : ${mypageOrderList}">
                             <div class="card" style="width: 48rem;">
                                 <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header" th:text="${l.orderCategoryDetail}">결제 완료</h5>
+                                <h5 class="card-header" th:text="${l.orderCategoryDetail}"></h5>
                                 <!-- 내역 내용 -->
                                 <div class="card-body" style="display: flex">
                                     <!-- 이미지  -->
@@ -252,21 +273,95 @@
 
                                     <!-- 설명 / 버튼 -->
                                     <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                        <p class="orderApplicationDate" th:text="${l.orderApplicationDate}">2023.10.30 결제</p>
-                                        <h5 class="orderName" th:text="${l.orderName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
-                                        <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
-                                            <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
-                                            <span th:text="|주문 수량 : ${rl.orderOptionAmount} 개|"></span>
-                                        </th:block>
-
-                                        <div style="display: flex; justify-content: end; margin:0;">
-                                            <a href="#" class="submitBtn_white"
-                                               data-toggle="modal"
-                                               data-target="#exampleModal3"
-                                               data-what="hello"
-                                            >주문취소</a>
-                                            <a href="#" class="submitBtn_black" >결제상세</a>
-                                        </div>
+                                            <p class="orderApplicationDate" th:text="${l.orderApplicationDate}">2023.10.30 결제</p>
+                                            <h5 class="orderName" th:text="${l.orderFundingName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
+                                            <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
+                                                <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
+                                                <span th:text="|주문 수량 : ${rl.orderOptionAmount} 개|"></span>
+                                            </th:block>
+                                            <div style="display: flex; justify-content: end; margin:0;">
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_001'}">
+                                                    <!--리워드 프로젝트 주문 완료-->
+                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/cancel(orderCode=${l.orderCode})}" class="orderCancelBtn submitBtn_black">주문 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_002'}">
+                                                    <!--기부 프로젝트 주문 완료-->
+                                                    <a href="#" class="payDetailBtn submitBtn_white" >기부 내역</a>
+                                                    <!--기부 취소는 기부 주문 후 7일 이내 가능하도록.-->
+                                                    <a href="#" class="payDetailBtn orderCancelBtn submitBtn_black">기부 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_003'}">
+                                                    <!--투자 프로젝트 주문 완료, 청약 신청 중-->
+                                                    <a href="#" class="submitBtn_white">투자 현황</a>
+                                                    <a href="#" class="payDetailBtn submitBtn_white">투자 내역</a>
+                                                    <a href="#" class="orderCancelBtn submitBtn_black">투자 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_004'}">
+                                                    <!--리워드 배송 대기-->
+                                                    <a href="#" class="confirmBtn submitBtn_white" >구매 확정</a>
+                                                    <a href="#" class="payDetailBtn submitBtn_white" >결제 내역</a>
+                                                    <a href="#" class="orderCancelBtn submitBtn_black" data-toggle="modal" data-target="#exampleModal3" data-what="hello">주문 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_015'}">
+                                                    <!--리워드 배송 중-->
+                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a href="#" class="submitBtn_white" >배송 정보</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_005'}">
+                                                    <!--리워드 배송 완료-->
+                                                    <a th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/refund}" class="submitBtn_black" >환불 신청</a>
+                                                    <a th:href="@{/user/mypage/refund/cancel}" class="submitBtn_black" >교환 신청</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_006'}">
+                                                    <!--리워드 주문 확정-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_007'}">
+                                                    <!--기부 주문 확정-->
+                                                    <a href="#" class="submitBtn_white" >기부 현황</a>
+                                                    <a href="#" class="submitBtn_white" >기부 상세</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_008'}">
+                                                    <!--투자 주문 확정, 납입일 도래-->
+                                                    <a href="#" class="submitBtn_white" >투자 현황</a>
+                                                    <a href="#" class="submitBtn_white" >투자 상세</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_009'}">
+                                                    <!--리워드 환불 진행 중-->
+                                                    <a href="#" class="submitBtn_white" >환불 상세</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_010'}">
+                                                    <!--리워드 환불 처리 완료-->
+                                                    <a href="#" class="submitBtn_white" >환불 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_011'}">
+                                                    <!--리워드 교환 진행 중-->
+                                                    <a href="#" class="submitBtn_white" >교환 상세</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_012'}">
+                                                    <!--리워드 교환 완료-->
+                                                    <a href="#" class="submitBtn_white" >교환 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_013'}">
+                                                    <!--리워드 프로젝트 실패로 주문 취소-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">취소 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_014'}">
+                                                    <!--리워드 구매자 신청으로 주문 취소-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">취소 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                            </div>
                                     </form>
                                 </div>
                             </div>
@@ -289,7 +384,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -315,7 +409,7 @@
                                 <div class="mb-6">
                                     <p class="user-info-list">ID</p>
                                     <div class="user-info">
-                                    <div>id001</div>
+                                    <div th:text="${loginId}">id001</div>
                                     </div>
                                 </div>
                                 <div class="h4 pb-2 mb-4 text-danger border-bottom border-grey" style="width: auto"></div>
@@ -371,12 +465,12 @@
                                 <div class="mb-6">
                                     <div style="display: flex; justify-content: space-between;">
                                         <p class="user-info-list">휴대폰 번호</p>
-                                        <!-- 변경 버튼 클릭시 edit-pw div가 floating  -->
+                                        <!-- 변경 버튼 클릭시 div가 floating  -->
                                         <button id="edit-phone-btn" type="button" data-target="edit-phone" class="btn btn-secondary btn-sm edit">변경</button>
                                     </div>
                                     <div>
                                         <div id="edit-phone" class="info-box" style="margin: 10px 50px 0 50px; display: none;">
-                                            <input class="form-control" placeholder="휴대폰 번호 입력" id="phone-input"
+                                            <input class="form-control" placeholder="휴대폰 번호 11자리 숫자만 입력" id="phone-input"
                                                    style="height: 10px; border: 1px solid black; margin: 15px 40px 10px 15px;"/>
                                             <div id="phone-alert" class="form-text" style="color:red; font-size:13px; margin: 0 0 5px 15px;"></div>
                                             <button id="phone-edit-btn" type="button" class="submitBtn_black" style="margin-left:15px; margin-bottom: 10px;">저장</button>
@@ -395,6 +489,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -420,8 +515,8 @@
 
 
 
-      document.getElementById('lead-drop-page').addEventListener('focus', ()=>{
-      })
+        document.getElementById('lead-drop-page').addEventListener('focus', ()=>{
+        })
 
 
       /* 내 정보 tab 🔽 */
@@ -450,7 +545,7 @@
               const $targetDivId = button.getAttribute('data-target');
               const $targetDiv= document.getElementById($targetDivId);
 
-              // $targetDiv의 부모로 가서 existing-value 찾기
+              // $targetDiv의 부모로 가서 (기존 정보 보여 주는) existing-value 찾기
               const $existingDiv = $targetDiv.parentNode.nextSibling.nextSibling;
 
               if($targetDiv.style.display === 'none'){
@@ -461,7 +556,7 @@
 
                   $targetInput.focus();
 
-                  $targetInput.value=$existingDiv.textContent.replaceAll(' ','');
+                  $targetInput.value=$existingDiv.textContent.replaceAll(' ',''); // 기존 회원 정보를 표시
                   button.textContent = '취소';
                   button.style.backgroundColor = 'white';
                   button.style.color = 'black';
@@ -518,7 +613,7 @@
           console.log(isValid);
           if(!isValid){
               $pwCheckAlert.textContent = '유효한 값을 입력해 주세요';
-          } else{
+          } else {
               // 2. 기존 비밀번호와 동일하진 않은지 확인
               if($pwInput.value === $newPw.value){
                   $pwCheckAlert.textContent = '기존 비밀번호와 다른 값을 입력해 주세요';
@@ -555,12 +650,73 @@
       })
 
 
-
       /* 이메일 저장 버튼 클릭시 update */
+      let $newEmail = document.getElementById('email-input');
+      $emailEditBtn.addEventListener('click',function (){
+          $newEmail.nextElementSibling.textContent = '';
+          // 유효성 검사
+          if(validationCheck($newEmail)){
+              // 비밀번호 UPDATE
+              $.ajax({
+                  url : '/user/mypage/emailModify',
+                  method : 'POST',
+                  data : { 'memberEmail': $newEmail.value },
+              })
+                  .done(function(){
+                      alert('이메일이 정상적으로 변경되었습니다.');
+                  })
 
+                  .fail(function(jqXHR, textStatus){
+                      alert('통신 중 오류가 발생하였습니다');
+                      console.log(`Request failed: ${textStatus}`);
+                  })
+          }
+      })
+
+      /* 휴대폰 번호 keydown 이벤트 리스너 등록 */
+      let $newContact = document.getElementById('phone-input');
+      $newContact.addEventListener('keydown',function (event){
+          // 입력된 키가 숫자가 아니면 무시
+          const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'ArrowLeft', 'ArrowRight'];
+
+          if (!allowedKeys.includes(event.key)) {
+              event.preventDefault();
+          }
+
+          let phoneNumber = event.target.value;
+          if (phoneNumber.length > 6) {
+              phoneNumber = phoneNumber.replace(/(\d{3})(\d{4})(\d{1,4})/, '$1-$2-$3');
+          }
+          event.target.value = phoneNumber;
+
+          // 길이가 13자 이상이면 초과 부분을 잘라냄
+          if (phoneNumber.length > 13) {
+              phoneNumber = phoneNumber.substring(0, 12);
+          }
+          event.target.value = phoneNumber;
+      })
 
       /* 휴대폰번호 저장 버튼 클릭시 update */
+      $phoneEditBtn.addEventListener('click',function (){
+          $newContact.nextElementSibling.textContent = '';
+          // 유효성 검사
+          if(validationCheck($newContact)){
+              // 비밀번호 UPDATE
+              $.ajax({
+                  url : '/user/mypage/contactInfoModify',
+                  method : 'POST',
+                  data : { 'memberEmail': $newContact.value },
+              })
+                  .done(function(){
+                      alert('휴대폰 번호가 정상적으로 변경되었습니다.');
+                  })
 
+                  .fail(function(jqXHR, textStatus){
+                      alert('통신 중 오류가 발생하였습니다');
+                      console.log(`Request failed: ${textStatus}`);
+                  })
+          }
+      })
       /* 입력란 유효성 검사 함수 */
       function validationCheck(input){
           let isValid = true;
@@ -570,6 +726,24 @@
           }
           return isValid;
       }
+
+
+        //====================상민======================
+
+        let selectFund = [[${selectFund}]];
+
+        $('.fundCategory').each((idx,item)=>{
+            if($(item).val() === selectFund) {
+                $(item).prop('selected',true);
+                return false;
+            }
+        })
+        //펀딩 내역 셀렉트 박스
+        $('#selectFund').change(function(){
+            selectFund = $(this).val();
+            console.log(selectFund);
+            location.href = `/user/mypage/?selectFund=${selectFund}`;
+        })
 
     </script>
 </th:block>

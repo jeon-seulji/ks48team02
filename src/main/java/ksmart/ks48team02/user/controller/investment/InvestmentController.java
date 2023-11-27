@@ -77,11 +77,11 @@ public class InvestmentController {
     }
 
     @GetMapping("/order")
-    public String orderPage(Model model, HttpSession session) {
+    public String orderPage(Model model, HttpSession httpSession) {
 
         model.addAttribute("title", "투자 주문 페이지");
 
-        String memberId = (String) session.getAttribute("SID");
+        String memberId = (String) httpSession.getAttribute("SID");
 
         if(memberId == null) {
             return "user/account/login";

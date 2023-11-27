@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/default}">
+          xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+          layout:decorate="|@{${(session.STYPECODE == 'mem_type_02'
+                                || session.STYPECODE == 'mem_type_03'
+                                || session.STYPECODE == 'mem_type_04')? '/seller/layout/default'
+                                :(session.STYPECODE == 'mem_type_01')? '/admin/layout/default':''}}|">
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
@@ -12,45 +15,13 @@
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
     <script th:src="@{/common/js/ajaxJs.js}"></script>
+    <script th:src="@{/common/js/admin-commonJs.js}"></script>
+    <script th:src="@{/common/js/submenuJs.js}"></script>
 </th:block>
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script type="text/javascript">
-
-
-
-        // 기간 선택 min value setting
-        $('input[name="amDateSettStartDate"]').on('change', function(){
-            let startDate = $(this).val();
-            $('input[name="amDateSettEndDate"]').prop('min',startDate);
-        });
-
-
-
-
-        let startDateValue = startDate(nowDateSet);
-        let endDateValue = `${nowDateSet.getFullYear()}-${String(nowDateSet.getMonth() + 1).padStart(2, '0')}-${String(nowDateSet.getDate()).padStart(2, '0')}`;
-
-        console.log(startDateValue, '<-- start value');
-        console.log(endDateValue, '<-- end value');
-
-        $('input[name="amDateSettStartDate"]').val(startDateValue);
-        $('input[name="amDateSettEndDate"]').val(endDateValue);
-
-
-
-
-
-        // loaded category checkbox all checked
-        const $categoryEls = $('.order-category-select input');
-        $($categoryEls).prop('checked', true);
-
-        // price form
-        const priceEls = $('input[name="orderPrice"]');
-        payFormat(priceEls);
-
-
         /* ajax */
         const queryString = {};
 
@@ -327,6 +298,7 @@
                         <option value="projecting_o">프로젝트 공고중</option>
                         <option value="projectFail_o">프로젝트 실패</option>
                         <option value="deliveryWait_o">배송대기중</option>
+                        <option value="delivering_o">배송중</option>
                         <option value="deliveryCompleted_o">배송완료</option>
                         <option value="swapping_o">교환 신청</option>
                         <option value="refunding_o">환불 신청</option>

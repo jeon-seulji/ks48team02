@@ -123,7 +123,6 @@
                     <th>쿠폰 남은 갯수</th>
                     <th>쿠폰 사용 가능 기간</th>
                     <th>쿠폰 사용 조건</th>
-                    <th>관리자 ID</th>
                     <th>쿠폰 관리</th>
                 </tr>
                 </thead>
@@ -143,7 +142,6 @@
                     <td th:text="${c.numberCouponsRemaining}"></td>
                     <td th:text="${c.couponValidPeriod}"></td>
                     <td th:text="${c.couponTermsUse}"></td>
-                    <td th:text="${c.memberId}"></td>
                     <td>
                         <ul STYLE="display: flex; align-items: center; gap: 5px; height: 100%; margin: 0;">
                             <li><a th:href="@{/admin/board/couponAdd(couponCode=${c.couponCode})}" class="modify">수정</a></li>

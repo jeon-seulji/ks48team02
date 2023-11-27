@@ -48,7 +48,7 @@
                 <div class="option mb-2" style="border: 3px solid #f3f4f5; border-radius: 5px; cursor: pointer;" th:unless="${rewardProject == null}" th:each="l : ${rewardProject.rewardOptionList}"
                      th:onclick="|location.href='@{/user/reward/order(rewardProjectCode=${rewardProject.rewardProjectCode}, rewardOptionCode=${l.rewardOptionCode})}'|">
                     <span class="font-weight-bold ml-2" th:text="|${#numbers.formatInteger(l.optionPrice, 0, 'COMMA')} 원|"></span>
-                    <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" class="rewardOptionLeftAmount" th:text="|${#numbers.formatInteger(l.optionLimitQuantity - l.totalOrderQuantity, 0, 'COMMA')} 개 남음|"></span>
+                    <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" class="rewardOptionLeftAmount" th:text="|${#numbers.formatInteger(l.optionLimitQuantity - l.totalOrderQuantity, 3, 'COMMA')} 개 남음|"></span>
                     <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                     <span class="rewardOptionName ml-2" th:text="${l.optionName}"></span>
@@ -89,7 +89,7 @@
                 <div class="row justify-content-center">
                     <div class="ProfileImage"
                          style="width: 40px; height: 40px; background: #EEE; margin-right: 3%;"></div>
-                    <div class="" style="color: black; font-weight: bold; font-size: 20px;" th:text="${rewardProject.regCompany}"></div>
+                    <a th:href="@{/user/storePage/{storeCode}(storeCode=${rewardProject.storeCode})}"><div class="" style="color: black; font-weight: bold; font-size: 20px;" th:text="${rewardProject.regCompany}"></div></a>
                 </div>
                 <div style="color: #002a80; font-weight: bold; font-size: 15px;">2320명이 팔로우 중</div>
                 <div><a th:href="@{#}" class="btn btn-secondary" id="goInquiryBtn">문의하기</a>

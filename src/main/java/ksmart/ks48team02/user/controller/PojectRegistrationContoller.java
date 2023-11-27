@@ -8,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
-import ksmart.ks48team02.user.dto.DonationRegistration;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import ksmart.ks48team02.user.service.reward.RewardService;
@@ -19,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -93,21 +93,49 @@ public class PojectRegistrationContoller {
     }
 
 
-    //투자 프로젝트 심사 요청 페이지
+
+    //투자 프로젝트 심사 요청, 공고등록 페이지
     @GetMapping(value = {"/investment/judge"})
-    public String investmentJudgePage(Model model) {
+    public String investmentJudgePage(Model model, HttpSession httpSession) {
+        String memberId = (String) httpSession.getAttribute("SID");
+
+        if(memberId == null) {
+            return "user/account/login";
+        }
+
+        List<UserCompanyBusinessType> userCompanyBusinessType = userInvestmentService.getUserCompanyBusinessType();
+        List<UserLawSatistifyReason> userLawSatistifyReason = userInvestmentService.getUserLawSatistifyReason();
+
+        model.addAttribute("userCompanyBusinessType", userCompanyBusinessType);
+        model.addAttribute("userLawSatistifyReason", userLawSatistifyReason);
 
         model.addAttribute("title", "투자펀딩 심사 요청 페이지");
 
         return "user/projectRegistration/investment/invest_judge_insert";
     }
-    //투자 프로젝트 공고 등록 페이지
-    @GetMapping(value = {"/investment/insert"})
-    public String investmentRegistrationPage(Model model) {
 
-        model.addAttribute("title", "투자펀딩 공고 등록 페이지");
+    // 투자 프로젝트 등록
+    @PostMapping(value = {"/investment/judge"})
+    public String investmentRegistrationPage(@Validated @ModelAttribute InvestmentJudge investmentJudge, BindingResult result, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession httpSession){
 
-        return "user/projectRegistration/investment/invest_insert";
+        String memberId = (String) httpSession.getAttribute("SID");
+        investmentJudge.setMemberIdSeller(memberId);
+
+        String companyBusinessTypeCode = (String) httpSession.getAttribute("companyBusinessTypeCode");
+        investmentJudge.setCompanyBusinessTypeCode(companyBusinessTypeCode);
+
+        System.out.println(investmentJudge);
+
+        userInvestmentService.addInvestmentJudge(investmentJudge);
+
+        investmentInfo.setInvestmentRequestJudgeCode(investmentJudge.getInvestmentRequestJudgeCode());
+        investmentInfo.setInvestmentSubject(investmentJudge.getInvestmentRequestSubject());
+        userInvestmentService.addInvestment(investmentInfo);
+
+        investmentContent.setInvestmentCode(investmentInfo.getInvestmentCode());
+        userInvestmentService.addInvestmentContent(investmentContent);
+
+        return "redirect:/user/projectRegistration/investment/success";
     }
     //투자 프로젝트 등록 완료 페이지
     @GetMapping(value = "investment/success")

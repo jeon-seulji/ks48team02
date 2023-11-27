@@ -6,8 +6,8 @@ import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.user.service.account.AccountService;
 import ksmart.ks48team02.user.service.mypage.MypageService;
 import lombok.AllArgsConstructor;
-import org.mybatis.logging.Logger;
-import org.mybatis.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +21,7 @@ import java.util.Map;
 @RequestMapping("/user/mypage")
 @AllArgsConstructor
 public class MypageController {
+    private static final Logger Log = LoggerFactory.getLogger(MypageController.class);
 
     private final MypageService mypageService;
 
@@ -29,7 +30,7 @@ public class MypageController {
                          @RequestParam(name="selectFund", required = false, defaultValue = "viewAll") String selectFund){
 
         String loginId = (String) session.getAttribute("SID");
-        List<OrderTotal> mypageOrderList = mypageService.mypageOrderList(loginId);
+        List<OrderTotal> mypageOrderList = mypageService.mypageOrderList(loginId, selectFund);
         Map<String, Object> resultMap = mypageService.getMemberInfoById(loginId);
         String memberEmail = (String) resultMap.get("memberEmail");
         String memberContactInfo = (String) resultMap.get("memberContactInfo");
@@ -39,6 +40,7 @@ public class MypageController {
         model.addAttribute("selectFund",selectFund);
         model.addAttribute("memberEmail", memberEmail);
         model.addAttribute("memberContactInfo", memberContactInfo);
+        model.addAttribute("loginId",loginId);
 
         return "user/mypage/mypage";
     }
@@ -62,7 +64,7 @@ public class MypageController {
         String loginId = (String) session.getAttribute("SID");
         int result = mypageService.pwModify(loginId, memberPw);
 
-//        Log.info("비밀번호 업데이트 결과 {}", result); // 1
+        Log.info("비밀번호 변경 결과 {} ", result);
 
         Map<String, Object> modifyResponse = new HashMap<>();
         modifyResponse.put("result", result);
@@ -70,6 +72,20 @@ public class MypageController {
         return modifyResponse;
     }
 
+    // 이메일 변경
+    @PostMapping("/emailModify")
+    @ResponseBody
+    public void emailModify(@RequestParam(name="memberEmail")String memberEmail, HttpSession session){
+        String loginId = (String) session.getAttribute("SID");
+        mypageService.emailModify(loginId,memberEmail);
+    }
+    // 연락처 변경
+    @PostMapping("/contactInfoModify")
+    @ResponseBody
+    public void contactInfoModify(@RequestParam(name="memberContactInfo")String memberContactInfo, HttpSession session){
+        String loginId = (String) session.getAttribute("SID");
+        mypageService.contactInfoModify(loginId,memberContactInfo);
+    }
 
 
 

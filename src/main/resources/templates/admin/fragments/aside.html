@@ -13,19 +13,6 @@
 
     <div class="clearfix"></div>
 
-    <!-- menu profile quick info -->
-    <!-- <div class="profile clearfix">
-      <div class="profile_pic">
-        <img th:src="@{/admin/images/img.jpg}" alt="..." class="img-circle profile_img">
-      </div>
-      <div class="profile_info">
-        <span>Welcome,</span>
-        <h2>John Doe</h2>
-      </div>
-    </div> -->
-    <!-- /menu profile quick info -->
-
-
     <!-- sidebar menu -->
     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
       <div class="menu_section">
@@ -52,13 +39,16 @@
             <a><i class="fa fa-shopping-bag"></i> #주문 관리 (슬지) <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li>
-                <a th:href="@{/admin/order/list}">#주문 목록(슬지)</a>
+                <a th:href="@{/admin/order/list(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#주문 목록(슬지)</a>
               </li>
               <li>
-                <a th:href="@{/admin/order/delivery}">#배송 관리(슬지)</a>
+                <a th:href="@{/admin/order/delivery(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#배송 관리(슬지)</a>
               </li>
               <li>
-                <a th:href="@{/admin/order/refundSwapping}">#교환/환불 신청 관리(슬지)</a>
+                <a th:href="@{/admin/order/refundSwapping(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#교환/환불 신청 관리(슬지)</a>
+              </li>
+              <li>
+                <a th:href="@{/admin/order/autorfnd(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#자동 환불 관리(슬지)</a>
               </li>
               <li>
                 <a th:href="@{/admin/order/completedList}">#주문 확정 목록(슬지)</a>
@@ -138,6 +128,9 @@
             <ul class="nav child_menu">
               <li>
                 <a th:href="@{/admin/inquiry/main}">!1:1 문의 관리 (진현)</a>
+              </li>
+              <li>
+                <a th:href="@{/admin/inquiry/inquiryAnswer}">!문의 답변 관리(진현)</a>
               </li>
               <li><a th:href="@{/admin/inquiry/report}">!신고 관리 (진현)</a></li>
             </ul>

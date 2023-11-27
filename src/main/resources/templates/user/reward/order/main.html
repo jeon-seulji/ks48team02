@@ -482,6 +482,7 @@
                                     data: JSON.stringify(paymentParam),
                                     dataType: 'text'
                                 });
+                                //
                                 //DB작업 완료 되었다면 결제 완료 페이지로 이동.
                                 request.done(function(response){
                                     let redirectURI = response;
@@ -749,7 +750,7 @@
                                         <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">포인트 사용 금액</span>
-                                        <span id="totalOrderPoint"  class=" font-weight-bold float-right mr-lg-2">0원</span>
+                                        <span id="totalOrderPoint" class=" font-weight-bold float-right mr-lg-2">0원</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">쿠폰 할인 금액</span>

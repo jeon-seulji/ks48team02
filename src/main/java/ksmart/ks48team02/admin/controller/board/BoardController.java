@@ -7,6 +7,7 @@ import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -94,7 +95,8 @@ public class BoardController {
 
     // 쿠폰 수정 post
     @PostMapping("/couponAdd")
-    public String couponAddPost(Model model, Coupon coupon){
+    public String couponAddPost(Model model, @RequestBody Coupon coupon){
+        log.info("쿠폰 수정: {}", coupon);
         adminCouponService.updateCoupon(coupon);
         model.addAttribute("title", " 쿠폰 수정");
 
@@ -103,13 +105,13 @@ public class BoardController {
 
     //쿠폰 수정
     @GetMapping("/couponAdd")
-    public String couponAddPage(@RequestParam(name = "couponCode", required = false) String couponCode,
+    public String couponAddPage(@RequestParam(name = "couponCode") String couponCode,
                                 Model model){
 
         log.info("couponCode: {}", couponCode);
 
-        List<Coupon> couponAdd = adminCouponService.getCouponCodeById(couponCode);
-        log.info("특정쿠폰 정보조회: {}", couponAdd);
+        Coupon couponAdd = adminCouponService.getCouponCodeById(couponCode);
+        log.info("couponAdd: {}", couponAdd);
         model.addAttribute("couponAdd", couponAdd);
         return "admin/board/couponAdd";
     }

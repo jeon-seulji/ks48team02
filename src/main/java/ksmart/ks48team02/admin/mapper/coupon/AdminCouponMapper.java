@@ -12,7 +12,7 @@ public interface AdminCouponMapper {
     void deleteCoupon(String couponCode);
 
     // 쿠폰 수정
-    void updateCoupon(Coupon coupon);
+    int updateCoupon(Coupon coupon);
 
     // 쿠폰 등록
     void insertCoupon(Coupon coupon);
@@ -24,6 +24,6 @@ public interface AdminCouponMapper {
     public List<Coupon> MemberHaveCouponById(String memberId);
 
     // 특정 쿠폰 조회
-    public List<Coupon> getCouponCodeById(String couponCode);
+    public Coupon getCouponCodeById(String couponCode);
 
 }
