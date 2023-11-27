@@ -813,7 +813,7 @@ Fax: 02)0000-0000
             })
 
             if(isValid){
-                    // 2. 모든 input이 올바른 값인지 검사 (빨간 경고 있으면 회원가입 안 되게)
+                    // 2. 모든 input이 유효한 값인지 검사 (빨간 경고 있으면 회원가입 불가)
                     const $formEles = document.querySelectorAll('.form-text');
                     let haveRed = 0;
                     $formEles.forEach((ele)=>{
