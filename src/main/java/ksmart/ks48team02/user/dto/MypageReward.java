@@ -38,7 +38,18 @@ public class MypageReward {
     private String refundCode;
     private String storeCode;
     private int savingPoint;
+    private int savingFlover;
     private String couponIssueCode;
+    private String pointLogCode;
+    private String addReserveCode;
+    private String orderConfirmationCode;
+    private String addFloverCode;
+    private double discountRate;
+    private double floverSavingRate;
+    private String floverLogCode;
+    private String orderConfirmDate;
+    private String orderCancelDate;
+
 
 
     private List<RewardOrderDetail> rewardOrderDetailList;

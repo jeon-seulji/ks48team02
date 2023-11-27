@@ -30,6 +30,10 @@
         <result property="rewardProjectCode" column="reward_project_code"/>
         <result property="projectSubject" column="project_subject"/>
         <result property="storeCode" column="store_code"/>
+        <result property="discountRate" column="discount_rate"/>
+        <result property="floverSavingRate" column="flover_saving_rate"/>
+        <result property="orderConfirmDate" column="order_confirm_date"/>
+        <result property="orderCancelDate" column="order_cancell_date"/>
 
         <collection property="rewardOrderDetailList" javaType="list" ofType="RewardOrderDetail">
             <id property="rewardOrderDetailCode" column="rd_order_detail_code"/>
@@ -42,7 +46,6 @@
             <result property="optionContents" column="option_contents"/>
         </collection>
     </resultMap>
-<!--    ㅇㅁㄹㄴ-->
     <!--구매자 주문, 결제정보 조회 -->
     <select id="rewardOrderInfo" parameterType="String" resultMap="rewardOrderInfoMap">
         SELECT
@@ -73,8 +76,12 @@
             r.store_code,
             ro.option_price ,
             ro.order_option_amount ,
+            o.order_confirm_date ,
+            o.order_cancell_date ,
             rp.option_name ,
-            rp.option_contents
+            rp.option_contents,
+            rc.discount_rate,
+            rd.flover_saving_rate
         FROM
             reward_payment AS p
         INNER JOIN
@@ -85,6 +92,18 @@
             reward_project AS r
         ON
             r.reward_project_code = o.goods_code
+        INNER JOIN
+            customer as c
+        ON
+            p.member_id =c.member_id
+        INNER JOIN
+            reward_customer_rank AS rc
+        ON
+            c.reward_rank_code = rc.reward_rank_code
+        INNER JOIN
+            donation_customer_rank AS rd
+        ON
+            c.donation_rank_code = rd.donation_rank_code
         LEFT JOIN
             reward_order_detail AS ro
         ON
@@ -98,12 +117,13 @@
     </select>
 
     <!--주문 취소,환불,교환 시 주문테이블 업데이트-->
-    <update id="orderCancel" parameterType="MypageReward">
+    <update id="orderCategoryChange" parameterType="MypageReward">
         UPDATE order_table
         <set>
             <if test = "changeCategory == '주문취소'">
                 order_category_code = 'ORDC_014',
-                order_category_detail = '주문 취소-구매자 신청'
+                order_category_detail = '주문 취소-구매자 신청',
+                order_cancell_date = NOW()
             </if>
             <if test = "changeCategory == '환불'">
                 order_category_code = 'ORDC_009',
@@ -115,7 +135,8 @@
             </if>
             <if test = "changeCategory == '구매확정'">
                 order_category_code = 'ORDC_006',
-                order_category_detail = '주문 확정-리워드 프로젝트 주문 확정'
+                order_category_detail = '주문 확정-리워드 프로젝트 주문 확정',
+                order_confirm_date = NOW()
             </if>
         </set>
         WHERE
@@ -175,9 +196,19 @@
             </if>
         </set>
         WHERE
-            member_id = #{orderMemberId};
+            member_id = #{memberId};
     </update>
 
+    <!--주문 확정 시 플로버 적립-->
+    <update id="cumstomerFolver" parameterType="MypageReward">
+        UPDATE
+        customer
+        <set>
+            customer_flover = customer_flover + #{savingFlover}
+        </set>
+        WHERE
+            member_id = #{memberId};
+    </update>
     <!--포인트 적립 내역 인서트-->
     <insert id="returnPointLogInsert" parameterType="MypageReward">
 
@@ -197,17 +228,13 @@
         INSERT INTO point_log
             (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
         VALUES
+        <if test="changeCategory == '주문취소'">
             (#{pointLogCode}, #{memberId}, #{useReservePrice}, '주문취소', CURDATE(), #{useReserveCode})
+        </if>
+        <if test="changeCategory == '구매확정'">
+            (#{pointLogCode}, #{memberId}, #{savingPoint}, '주문취소', CURDATE(), #{addReserveCode})
+        </if>
     </insert>
-
-<!--    <select id="getCouponIssueCode" parameterType="MypageReward" resultType="MypageReward">-->
-<!--        SELECT-->
-<!--            u.coupon_issue_code AS couponIssueCode-->
-<!--        FROM-->
-<!--            use_coupon_log as u-->
-<!--        WHERE-->
-<!--            u.reward_payment_code = #{paymentCode};-->
-<!--    </select>-->
 
     <!--주푼 취소 시 사용한 쿠폰 돌려주기-->
     <update id="couponReturn" parameterType="MypageReward">
@@ -235,10 +262,94 @@
             project_achievement_money = project_achievement_money - #{orderPrice},
             project_achievement_percent = ROUND(project_achievement_money / project_goal_money * 100)
         WHERE
-            reward_project_code = #{rewardProjectcode};
+            reward_project_code = #{rewardProjectCode};
     </update>
 
+<!--    &lt;!&ndash;회원 등급 별 적립률 조회&ndash;&gt;-->
+<!--    <select id="savingPointRate" parameterType="orderInfo" resultType="_double">-->
+<!--        SELECT-->
+<!--            r.discount_rate AS discountRate,-->
+<!--            d.flover_saving_rate AS floverSavingRate-->
+<!--        FROM-->
+<!--            customer AS c-->
+<!--        INNER JOIN-->
+<!--            reward_customer_rank AS r-->
+<!--        ON-->
+<!--            c.reward_rank_code = r.reward_rank_code-->
+<!--        INNER JOIN-->
+<!--            donation_customer_rank AS d-->
+<!--        ON-->
+<!--            c.donation_rank_code = d.donation_rank_code-->
+<!--        WHERE-->
+<!--            c.member_id = #{memberID};-->
+<!--    </select>-->
 
+    <!--주문 확정 시 주문확정 로그 테이블 update-->
+    <update id ="orderConfirmLogUpdate" parameterType="MypageReward">
+        <selectKey keyProperty="orderConfirmationCode,addReserveCode,addFloverCode" resultType="hashmap" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(o.order_confirmation_log_code) = 0  THEN CONCAT('OCL_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('OCL_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(o.order_confirmation_log_code,'_',-1)AS UNSIGNED )+1))
+                END) AS orderConfirmationCode,
+            (SELECT
+                (CASE
+                    WHEN
+                        COUNT(o.add_reserve_code) = 0  THEN CONCAT('RWDP_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('RWDP_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(o.add_reserve_code,'_',-1)AS UNSIGNED )+1))
+                END)
+            FROM
+                order_confirmation_log as o
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(o.add_reserve_code,'_',2),'_',-1) = CURDATE()+0) AS addReserveCode,
+            (SELECT
+                (CASE
+                    WHEN
+                        COUNT(o.add_flover_code) = 0  THEN CONCAT('RWDF_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('RWDF_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(o.add_flover_code,'_',-1)AS UNSIGNED )+1))
+                END)
+            FROM
+                order_confirmation_log as o
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(o.add_flover_code,'_',2),'_',-1) = CURDATE()+0) AS addFloverCode
+            FROM
+                order_confirmation_log as o
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(o.order_confirmation_log_code,'_',2),'_',-1)  = CURDATE()+0
+        </selectKey>
+        INSERT INTO order_confirmation_log
+            (order_confirmation_log_code, member_id, project_partition, order_code, project_code,
+            order_confirmation_date, order_price_total, add_reserve_price, add_flover,
+            add_reserve_code, add_flover_code)
+        VALUES
+            (#{orderConfirmationCode}, #{memberId}, 'rwd', #{orderCode}, #{rewardProjectCode}, NOW(),
+            #{orderPrice}, #{savingPoint}, #{savingFlover} , #{addReserveCode}, #{addFloverCode});
+    </update>
 
+    <!--플로버 적립 내역 insert-->
+    <insert id="savingFloverLogInsert" parameterType="MypageReward">
+        <selectKey keyProperty="floverLogCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(f.flover_log_code) = 0  THEN CONCAT('FL_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('FL_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(f.flover_log_code,'_',-1)AS UNSIGNED )+1))
+                END) AS floverLogCode
+            FROM
+                flover_log AS f
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(f.flover_log_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO flover_log
+            (flover_log_code, member_id, change_category, flover_charging_type, charging_account_number,
+            change_number, change_datetime, flover_change_group_code)
+        VALUES
+            (#{floverLogCode}, #{memberId}, '적립-리워드구매', '자동 적립', NULL,  #{savingFlover} ,NOW(), #{addFloverCode});
+    </insert>
 
 </mapper>

@@ -14,6 +14,7 @@ import ksmart.ks48team02.user.service.donation.DonationService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import java.util.*;
 
 @Controller("userDonationController")
 @RequestMapping("/user/donation")
+@Slf4j
 public class DonationController {
     private final DonationService donationService;
     private final KaKaoPayProperties kaKaoPayProperties;
@@ -239,8 +241,8 @@ public class DonationController {
         try {
             String serverName = request.getServerName();
             String osName = System.getProperty("os.name").toLowerCase();
-            int localPort = request.getLocalPort();
-            if(osName.contains("linux")) localPort = 80;
+            String localPort = ":"+request.getLocalPort();
+            if(osName.contains("linux")) localPort = "";
             URL addr = new URL("https://kapi.kakao.com/v1/payment/ready");
             HttpURLConnection serverConnect = (HttpURLConnection) addr.openConnection();// 서버 연결하는 클래스
             serverConnect.setRequestMethod("POST");
@@ -255,9 +257,9 @@ public class DonationController {
                     + "&quantity=" + URLEncoder.encode(floverCount, "UTF-8")
                     + "&total_amount=" + URLEncoder.encode(orderAmount, "UTF-8")
                     + "&tax_free_amount=" + URLEncoder.encode("0", "UTF-8")
-                    + "&approval_url=" + URLEncoder.encode("http://"+serverName+":"+localPort+"/user/donation/payment/success?memberId="+memberId, "UTF-8")
-                    + "&fail_url=" + URLEncoder.encode("http://"+serverName+":"+localPort+"/user/donation/payment/fail", "UTF-8")
-                    + "&cancel_url=" + URLEncoder.encode("http://"+serverName+":"+localPort+"/user/donation/payment/cancel", "UTF-8");
+                    + "&approval_url=" + URLEncoder.encode("http://"+serverName+localPort+"/user/donation/payment/success?memberId="+memberId, "UTF-8")
+                    + "&fail_url=" + URLEncoder.encode("http://"+serverName+localPort+"/user/donation/payment/fail", "UTF-8")
+                    + "&cancel_url=" + URLEncoder.encode("http://"+serverName+localPort+"/user/donation/payment/cancel", "UTF-8");
             OutputStream outputStream = serverConnect.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             dataOutputStream.writeBytes(parameter);
@@ -286,6 +288,7 @@ public class DonationController {
                 String tid = element.getAsJsonObject().get("tid").getAsString();
                 String nextRedirectPcUrl = element.getAsJsonObject().get("next_redirect_pc_url").getAsString();
 
+                log.info("responseElement:{}", element);
                 // 세션에 tid를 저장합니다.
                 session.setAttribute("tid", tid);
 
