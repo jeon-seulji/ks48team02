@@ -36,7 +36,7 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-  <script>
+  <script type="text/javascript">
     $(document).ready(function() {
       // 증권 구분 셀렉트 박스의 변경 이벤트 핸들러 등록
       $('#securitiesClassification').change(function() {
@@ -53,15 +53,15 @@
           // 현재 주식 수와 발행 예정 주식 수 필드 표시
           stockNumberInput.show();
           issueStockNumberInput.show();
-          // 현금 보유량 입력 필드 숨기고 유효성 검사 제거
-          cashReservesInput.hide().find('input').prop('required', true);
+          // 현금 보유량 입력 필드 숨기고 유효성 검사 제거, 값 0으로 설정
+          cashReservesInput.hide().find('input').prop('required', false).val('0');
         } else if (selectedValue === '2') {
           // 채권형이 선택된 경우
           // 현금 보유량 입력 필드 표시
-          cashReservesInput.show();
-          // 현재 주식 수와 발행 예정 주식 수 입력 필드 숨기고 유효성 검사 제거
-          stockNumberInput.hide().find('input').prop('required', true);
-          issueStockNumberInput.hide().find('input').prop('required', true);
+          cashReservesInput.show().find('input').val('');
+          // 현재 주식 수와 발행 예정 주식 수 입력 필드 숨기고 유효성 검사 제거, 값 0으로 설정
+          stockNumberInput.hide().find('input').prop('required', false).val('0');
+          issueStockNumberInput.hide().find('input').prop('required', false).val('0');
         }
       });
     });
@@ -291,7 +291,7 @@
 
                   <div class="row g-3">
                     <!-- 세션에서 로그인 한 아이디 가져오기 -->
-                    <input type="hidden" class="form-control" id="memberId" name="memberId" th:value="httpSession.SID" >
+                    <input type="hidden" class="form-control" id="memberId" name="memberId" th:value="${httpSession.SID}" >
 
                     <div class="my-2 col-12">
                       <label for="securitiesClassification" class="form-label fw-bord text-dark">증권 구분</label>

@@ -15,7 +15,6 @@ public class InvestmentJudge {
     private String investmentRequestSubject;
     private String investmentRequestContent;
     private String investmentCompany;
-    private String businessType;
     private int investmentAchievementMoney;
     private int businessProfits;
     private int depreciation;

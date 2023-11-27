@@ -48,6 +48,11 @@ public class UserInvestmentService {
         }
     }
 
+    public List<InvestmentJudge> getInvestmentJudge(){
+        List<InvestmentJudge> investmentJudge = userInvestmentMapper.getInvestmentJudge();
+        return investmentJudge;
+    }
+
     public List<InvestmentInfo> getInvestmentInfo(){
         List<InvestmentInfo> investmentInfo = userInvestmentMapper.getInvestmentInfo();
         return investmentInfo;
