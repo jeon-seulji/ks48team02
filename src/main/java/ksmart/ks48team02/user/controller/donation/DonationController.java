@@ -230,6 +230,7 @@ public class DonationController {
 
     @RequestMapping("/payment/charge")
     @ResponseBody
+    @CrossOrigin(origins = "*")
     public String paymentChargePage(@RequestParam(name = "orderAmount")String orderAmount,
                                     @RequestParam(name = "floverCount")String floverCount,
                                     @RequestParam(name = "memberId")String memberId,
@@ -397,6 +398,7 @@ public class DonationController {
     }
     @GetMapping("/payment/cancel")
     public String paymentCancel(@RequestParam(name = "pg_token")String pgToken){
+
         return "user/donation/payment/cancel";
     }
 
