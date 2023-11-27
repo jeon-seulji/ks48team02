@@ -60,15 +60,18 @@ public class RewardController {
     //리워드 상세 페이지
     @GetMapping("/detail")
     public String detailPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
-                             @RequestParam(name = "searchCnt" , required = false) boolean searchCnt) {
+                             @RequestParam(name = "searchCnt" , required = false) boolean searchCnt,
+                             HttpSession httpSession) {
 
         //메인 페이지에서 상세페이지 진입 시에만 조회수 증가 하도록.
         if(searchCnt) {
             rewardService.searchCnt(rewardProjectCode);
         }
-
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        String loginMemberId = (String) httpSession.getAttribute("SID");
+        int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,loginMemberId);
 
+        model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("rewardProject",rewardProject);
         log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
 
@@ -277,13 +280,15 @@ public class RewardController {
         return"user/reward/detail/refundPolicy";
     }
 
+    //찜하기
+    @GetMapping("/great")
+    public String great (@RequestParam(name="rewardProjectCode") String rewardProjectCode,
+                         @RequestParam(name="greatCheck") int greatCheck){
+        System.out.println(rewardProjectCode);
+        System.out.println(greatCheck);
 
-
-
-
-
-
-
+        return "user/reward/detail";
+    }
 
 
 

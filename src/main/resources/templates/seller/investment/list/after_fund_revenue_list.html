@@ -25,10 +25,41 @@
     <div th:include="~{admin/judgement/investment/search/invest_jduge_search :: searchFragment}"></div>
     <br>
     <div class="admin-content-wrapper">
+
+        <div class="data-info">
+            <div class="list-count-area">
+                <ul>
+                    <li>심사 요청 총 <span class="count-data total-list">0</span>건</li>
+                    <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
+                </ul>
+            </div>
+            <div class="list-count-selector">
+                <select name="security">
+                    <option value="stock">주식</option>
+                    <option value="bond">채권</option>
+                </select>
+                <select name="orderby">
+                    <option value="regist_d">신청일 순</option>
+                    <option value="regist_a">신청일 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">요청 코드순</option>
+                    <option value="project_name_a">요청 코드 역순</option>
+                    <option>-----------------</option>
+                    <option value="project_name_d">심사요청 제목순</option>
+                    <option value="project_name_a">심사요청 제목역순</option>
+                </select>
+                <select name="rowPerpage">
+                    <option value="15">15개씩 보기</option>
+                    <option value="20">20개씩 보기</option>
+                    <option value="30">30개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
         <table>
             <thead>
             <tr>
-                <th>투자펀딩후 진행정보 코드</th>
+                <th>투자후 기업정보 공개 코드</th>
                 <th>대표자 아이디</th>
                 <th>투자펀딩 공고코드</th>
                 <th>진행 후 펀딩 달성금액 가치</th>
@@ -50,13 +81,11 @@
                 <th>매출기준기간(시작)</th>
                 <th>매출기준기간(종료)</th>
                 <th>등록일시</th>
-                <th>수정</th>
-                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
             <tr th:if="${afterFundrevenueList == null}">
-                <td colspan="24">투자후 기업정보 공개 목록이 없습니다.</td>
+                <td colspan="22">투자후 기업정보 공개 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${afterFundrevenueList == null}" th:each="l : ${afterFundrevenueList}">
                 <td>
@@ -96,15 +125,6 @@
         </table>
         <br>
 
-        <button type="button" class="submitBtn"
-                th:onclick="|location.href='@{/seller/investment/insert/after-fund-revenue}'|">
-            등록하기
-        </button>
-        <button type="button" class="submitBtn"
-                th:onclick="|location.href='@{/seller/investment/update/after-fund-revenue}'|">
-            수정하기
-        </button>
-
         <div class="board-page-area">
             <div class="list-controller-inner">
                 <ul>
@@ -126,6 +146,21 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="btn-area">
+        <ul>
+            <li>
+                <button type="button" class="submitBtn"
+                        th:onclick="|location.href='@{/seller/investment/insert/after-fund-revenue}'|">
+                    등록하기
+                </button>
+                <button type="button" class="submitBtn"
+                        th:onclick="|location.href='@{/seller/investment/update/after-fund-revenue}'|">
+                    수정하기
+                </button>
+            </li>
+        </ul>
     </div>
 
 </th:block>

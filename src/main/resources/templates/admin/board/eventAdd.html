@@ -14,17 +14,17 @@
 
     <style>
         .inputTitleText{
-            width: 700px;
+            width: 100%;
         }
-        .titleEvent{
-            text-align: center;
-            background-color: #FAEDEC;
-            color: #EEE;
+        .RW{
+            background: #e5dddd;
+            text-align: left;
         }
     </style>
 </head>
 
 
+<body>
 
 
 <th:block layout:fragment="customContents">
@@ -46,20 +46,21 @@
                 <form class="editForm">
                     <div class="formText">
                         <tr>
-                            <th scope="row" class="titleEvent">제목</th>
+                            <th scope="row" class="RW">제목</th>
                             <td>
                                 <input id="subject" name="subject" class="inputTitleText" type="text">
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row" class="titleEvent">내용</th>
+                            <th scope="row" class="RW">내용</th>
                             <td>
                                 <div id="summernote"></div>
                                 <script>
                                     $('#summernote').summernote({
-                                        placeholder: '이벤트 내용을 입력 해주세요.',
+                                        placeholder: '공지사항을 입력 해주세요.',
                                         tabsize: 2,
-                                        height: 100
+                                        height: 300,
+                                        width: 700
                                     });
                                 </script>
                             </td>
@@ -74,6 +75,21 @@
 
 </th:block>
 <div class="boardBtn">
-    <a class="cancel">취소</a> <a class="registration">글 등록</a>
+    <a href="#" class="cancel">취소</a> <a href="#" class="registration">글 등록</a>
 </div>
+<script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
+<script>
+    // 취소 버튼 누르면 알림창
+    $('.cancel').click(function (e){
+        //  취소 누르면 뒤로가기
+        e.preventDefault();
+        if(confirm('정말 취소하시겠습니까?')){
+            // 확인 누르면 실행될 내용 작성
+            // 창이 사라진다.
+            console.log(11);
+            window.close();
+        }
+    })
+</script>
+</body>
 </html>

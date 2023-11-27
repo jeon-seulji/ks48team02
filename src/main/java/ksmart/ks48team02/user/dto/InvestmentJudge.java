@@ -17,7 +17,6 @@ public class InvestmentJudge {
     private String investmentCompany;
     private String businessType;
     private int investmentAchievementMoney;
-    private String lawSatistifyReason;
     private int businessProfits;
     private int depreciation;
     private int netDebt;
@@ -27,12 +26,8 @@ public class InvestmentJudge {
     private String investmentRequestDate;
     private String investJudgeDate;
     private int investJudgeResult;
-    private String projectPlan;
 
 
-
-    private String securitiesClassification;
-    private String investmentSubject;
 
 
 }

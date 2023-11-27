@@ -37,7 +37,7 @@ public class MypageRewardController {
         return"user/mypage/reward/cancel/main";
     }
 
-    //취소 진행
+    //주문취소 진행
     @PostMapping("/cancel")
     @ResponseBody
     public String orderCancel(@RequestBody MypageReward orderInfo){
@@ -52,14 +52,25 @@ public class MypageRewardController {
     @GetMapping("/orderConfirm")
     public String OrderConfirm (@RequestParam(name="orderCode", required = true) String orderCode) {
 
+        //주문 정보 조회
+        MypageReward orderInfo = mypageRewardService.rewardOrderInfo(orderCode);
+        orderInfo.setChangeCategory("구매확정");
+        mypageRewardService.orderConfirm(orderInfo);
+
         return "redirect:/user/mypage";
     }
 
     //결제, 환불, 취소 내역 페이지
     @GetMapping("/detailInfo")
-    public String detailPage(@RequestParam(name="orderCode", required = true) String orderCode) {
-
-
+    public String detailPage(@RequestParam(name="orderCode", required = true) String orderCode,
+                             @RequestParam(name="detailCategory", required = true) String detailCategory,
+                             HttpSession httpSession,
+                             Model model) {
+        String memberName = (String) httpSession.getAttribute("SNAME");
+        MypageReward orderInfo = mypageRewardService.rewardOrderInfo(orderCode);
+        orderInfo.setChangeCategory(detailCategory);
+        model.addAttribute("memberName",memberName);
+        model.addAttribute("orderInfo",orderInfo);
         return "user/mypage/reward/detailInfo";
     }
 
