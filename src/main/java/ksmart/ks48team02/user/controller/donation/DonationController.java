@@ -238,6 +238,7 @@ public class DonationController {
                                     HttpSession session){
         try {
             String serverName = request.getServerName();
+            int localPort = request.getLocalPort();
             URL addr = new URL("https://kapi.kakao.com/v1/payment/ready");
             HttpURLConnection serverConnect = (HttpURLConnection) addr.openConnection();// 서버 연결하는 클래스
             serverConnect.setRequestMethod("POST");
@@ -252,9 +253,9 @@ public class DonationController {
                     + "&quantity=" + URLEncoder.encode(floverCount, "UTF-8")
                     + "&total_amount=" + URLEncoder.encode(orderAmount, "UTF-8")
                     + "&tax_free_amount=" + URLEncoder.encode("0", "UTF-8")
-                    + "&approval_url=" + URLEncoder.encode("http://"+serverName+":8088/user/donation/payment/success?memberId="+memberId, "UTF-8")
-                    + "&fail_url=" + URLEncoder.encode("http://"+serverName+":8088/user/donation/payment/fail", "UTF-8")
-                    + "&cancel_url=" + URLEncoder.encode("http://"+serverName+":8088/user/donation/payment/cancel", "UTF-8");
+                    + "&approval_url=" + URLEncoder.encode("http://"+serverName+":"+localPort+"/user/donation/payment/success?memberId="+memberId, "UTF-8")
+                    + "&fail_url=" + URLEncoder.encode("http://"+serverName+":"+localPort+"/user/donation/payment/fail", "UTF-8")
+                    + "&cancel_url=" + URLEncoder.encode("http://"+serverName+":"+localPort+"/user/donation/payment/cancel", "UTF-8");
             OutputStream outputStream = serverConnect.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             dataOutputStream.writeBytes(parameter);
