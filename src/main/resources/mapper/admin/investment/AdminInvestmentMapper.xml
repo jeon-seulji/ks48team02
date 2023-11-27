@@ -343,7 +343,6 @@
             i.investment_company,
             s.representative_name,
             c.business_type AS cbtBusinessType,
-            i.business_type,
             i.investment_request_content,
             i.investment_achievement_money,
             i.business_profits,
