@@ -114,7 +114,11 @@
                        th:href="@{/seller/investment/view/investment(investmentCode=${l.investmentCode})}"
                        th:text="${l.investmentCode}"></a>
                 </td>
-                <td th:text="${l.investmentRequestJudgeCode}"></td>
+                <td>
+                    <a class="detail-link"
+                       th:href="@{/seller/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}"
+                       th:text="${l.investmentRequestJudgeCode}"></a>
+                </td>
                 <td th:text="${l.memberIdSeller}"></td>
                 <td th:text="${l.investmentSubject}"></td>
                 <td th:text="${l.investmentLike}"></td>

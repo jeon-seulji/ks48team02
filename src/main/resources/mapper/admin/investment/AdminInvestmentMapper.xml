@@ -241,7 +241,7 @@
         SELECT
             COUNT(1)
         FROM
-            investment_request_judge
+            investment_request_judge;
     </select>
 
     <!-- 검색조건에 따른 투자펀딩 심사요청 목록 조회 -->
@@ -780,7 +780,7 @@
             SELECT
                 MAX(c.corporate_value_evaluation_code) AS corporateValueEvaluationCode
             FROM
-                corporate_value_evaluation AS c
+                corporate_value_evaluation AS c;
         </selectKey>
         /* 기업가치 평과결과 등록 후 심사요청 외래키 수정 */
         UPDATE
@@ -788,7 +788,7 @@
         SET
             corporate_value_evaluation_code = #{corporateValueEvaluationCode}
         WHERE
-            investment_request_judge_code = #{investmentRequestJudgeCode}
+            investment_request_judge_code = #{investmentRequestJudgeCode};
     </update>
 
     <!-- 자본시장법 범위충족기준 등록 -->
