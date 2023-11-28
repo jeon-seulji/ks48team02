@@ -45,54 +45,10 @@
             height: 100%;
             object-fit: cover;
         }
-        .story-body{
-            overflow: auto;
-            overflow-x: hidden;
-            height: 800px;
-        }
-        #rewardBtn {
-            width: 300px;
-            height: 90px;
-
-            /* 상자 디자인 큰틀*/
-            margin-bottom: 30px;
-            border: 0px;
-            background-color: #E4EBF5;
-            outline-color: #235FD9;
-            outline-width: 1px;
-
-            /* 그림자 */
-            border-radius: 10px;
-            box-shadow:.8rem .5rem 1.4rem  #BEC5D0, -.3rem -.4rem .8rem #FBFBFB;
-            /* box-shadow:-.2rem -.2rem 1.8rem white, .8rem .8rem 1.4rem  #AAB7CB; */
-
-            /* 글씨 */
-            color: #333333;
-            font-size: 1.7em;
-            font-weight: bold;
-
-            animation-name: keybtn-language;
-            animation-duration: .2s;
-
-        }
-        /*버튼 눌리는 효과*/
-        #rewardBtn:active {
-            box-shadow: inset -.3rem -.1rem 1.4rem  #FBFBFB, inset .3rem .4rem .8rem #BEC5D0;
-            cursor: pointer;
-        }
-
         ul.d-flex li:hover {
             cursor: pointer;
         }
 
-        .option:hover {
-            background-color: #fdfdfe;
-            opacity: 90%;
-            transition: 0.1s;
-            color: #0b44d7;
-        }
-
-        donation-comments
 
     </style>
 
@@ -127,151 +83,19 @@
         <!-- Swiper -->
         <div class="swiper contents-area">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
 
-                    </div>
+                <div class="swiper-slide" th:each="l : ${recommendProjectList}"
+                     th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode},searchCnt='true')}'|">
+                    <img class="slide-thumb" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                         th:onerror="|this.src='@{/user/images/no-image.svg}'|"/>
                     <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
+                        <div class="product-main-title" th:text="${l.projectSubject}"></div>
                         <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
+                            <span class="funding-percent" th:text="|${l.projectAchievementPercent}%|"></span>
+                            <span class="category" th:text="${l.categoryName}"></span>
                         </div>
                     </div>
                 </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slide-thumb">
-
-                    </div>
-                    <div class="description">
-                        <div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-                        <div class="product-detail-info">
-                            <span class="funding-percent">350%</span>
-                            <span class="category">테크·가전</span>
-                        </div>
-                    </div>
-                </div>
-
 
             </div>
 

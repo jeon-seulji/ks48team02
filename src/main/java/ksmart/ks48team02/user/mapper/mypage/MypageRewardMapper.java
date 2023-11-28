@@ -1,7 +1,10 @@
 package ksmart.ks48team02.user.mapper.mypage;
 
 import ksmart.ks48team02.user.dto.MypageReward;
+import ksmart.ks48team02.user.dto.RewardProject;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface MypageRewardMapper {
@@ -33,14 +36,14 @@ public interface MypageRewardMapper {
     //주문 확정 시 주문확정 로그 테이블 update
     public int orderConfirmLogUpdate(MypageReward orderInfo);
 
-    //적립률 조회
-//    public double savingPointRate(MypageReward orderInfo);
-
     //주문 확정 시 플로버 적립
     public int cumstomerFolver(MypageReward orderInfo);
 
     //플로버 적립 내역 인서트
     public int savingFloverLogInsert(MypageReward orderInfo);
+
+    //리워드 프로젝트 찜 목록 조회
+    public List<RewardProject> rewardProjectGreatList(String loginMemberId);
 
 
 

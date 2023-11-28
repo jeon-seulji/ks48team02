@@ -44,8 +44,8 @@
               <li><a th:href="@{/seller/reward/products}">프로젝트 목록#</a></li>
               <li><a th:href="@{/seller/reward/news}">새소식#</a></li>
               <li><a th:href="@{/seller/reward/products/preExperienceRecruit}">사전체험단#</a></li>
-              <li><a th:href="@{/seller/reward/products/searchTagModify}">태그 관리#</a></li>
-              <li><a th:href="@{/seller/reward/products/comment}">댓글 관리#</a></li>
+<!--              <li><a th:href="@{/seller/reward/products/searchTagModify}">태그 관리#</a></li>-->
+<!--              <li><a th:href="@{/seller/reward/products/comment}">댓글 관리#</a></li>-->
             </ul>
           </li>
           <li><a><i class="fa fa-edit"></i> !기부 프로젝트 관리(정민)<span class="fa fa-chevron-down"></span></a>
@@ -73,16 +73,16 @@
                 <a><i class="fa fa-shopping-bag"></i> #주문 관리 (슬지) <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li>
-                        <a th:href="@{/admin/order/list(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#주문 목록(슬지)</a>
+                        <a th:href="@{/admin/order/list}">#주문 목록(슬지)</a>
                     </li>
                     <li>
-                        <a th:href="@{/admin/order/delivery(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#배송 관리(슬지)</a>
+                        <a th:href="@{/admin/order/delivery}">#배송 관리(슬지)</a>
                     </li>
                     <li>
-                        <a th:href="@{/admin/order/refundSwapping(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#교환/환불 신청 관리(슬지)</a>
+                        <a th:href="@{/admin/order/refundSwapping}">#교환/환불 신청 관리(슬지)</a>
                     </li>
                     <li>
-                        <a th:href="@{/admin/order/autorfnd(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#자동 환불 관리(슬지)</a>
+                        <a th:href="@{/admin/order/autorfnd}">#자동 환불 관리(슬지)</a>
                     </li>
                 </ul>
             </li>

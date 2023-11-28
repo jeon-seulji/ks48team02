@@ -78,7 +78,7 @@
         .donation-item-span-second{
             margin-left: 5px;
         }
-        .donation-item-span-third{
+        .donation-item-span-third-parent{
             margin-left: auto;
             color: #235FD9;
             background: #cce5ff;
@@ -128,6 +128,131 @@
             }
 
             element.classList.add("selected");
+
+            switch (element.textContent) {
+                case '마감임박순':{
+
+                    // donation-item-box 클래스를 가진 요소들을 선택합니다.
+                    const boxes = document.querySelectorAll('.donation-item-box');
+                    const proceeding = [];
+                    const progressEnded = [];
+
+                    boxes.forEach(function(box) {
+                        var fifthSpan = box.querySelector('.donation-item-span-fifth');
+                        if (fifthSpan && fifthSpan.textContent.trim() == '3') {
+                            proceeding.push(box);
+                        }else{
+                            progressEnded.push(box);
+                        }
+                    });
+
+                    // 선택된 요소들을 배열로 변환하여 정렬합니다.
+                    var sortedBoxes = proceeding.sort(function(a, b) {
+                        // 각 요소 내부의 donation-item-span-third 클래스를 가진 요소의 값을 비교합니다.
+                        var spanA = a.querySelector('.donation-item-span-third');
+                        var spanB = b.querySelector('.donation-item-span-third');
+
+                        if (spanA && spanB) {
+                            var valueA = parseInt(spanA.textContent) || 0; // 숫자가 아닌 경우 0으로 처리
+                            var valueB = parseInt(spanB.textContent) || 0; // 숫자가 아닌 경우 0으로 처리
+                            return valueA - valueB;
+                        } else {
+                            // 존재하지 않는 요소에 접근하는 경우, 오류 방지를 위해 기본값 0 반환
+                            return 0;
+                        }
+                    });
+
+                    // 정렬된 요소들을 부모 요소에 추가합니다.
+                    var parentElement = document.querySelector('#itemParent');
+                    sortedBoxes.forEach(function(box) {
+                        parentElement.appendChild(box);
+                    });
+                    progressEnded.forEach(function (box){
+                        parentElement.appendChild(box);
+                    });
+                }
+                    break;
+                case '모집금액순':
+                    // donation-item-box 클래스를 가진 요소들을 선택합니다.
+                    var boxes = document.querySelectorAll('.donation-item-box');
+
+                    // 선택된 요소들을 배열로 변환하여 정렬합니다.
+                    var sortedBoxes = Array.from(boxes).sort(function(a, b) {
+                        // 각 요소 내부의 donation-item-span-second 클래스를 가진 요소의 값을 비교합니다.
+                        var valueA = parseInt(a.querySelector('.donation-item-span-second').textContent);
+                        var valueB = parseInt(b.querySelector('.donation-item-span-second').textContent);
+                        return valueB - valueA;
+                    });
+
+                    // 정렬된 요소들을 부모 요소에 추가합니다.
+                    var parentElement = document.querySelector('#itemParent');
+                    sortedBoxes.forEach(function(box) {
+                        parentElement.appendChild(box);
+                    });
+                    break;
+                case '조회순':
+                    // donation-item-box 클래스를 가진 요소들을 선택합니다.
+                    var boxes = document.querySelectorAll('.donation-item-box');
+
+                    // 선택된 요소들을 배열로 변환하여 정렬합니다.
+                    var sortedBoxes = Array.from(boxes).sort(function(a, b) {
+                        // 각 요소 내부의 donation-item-span-third 클래스를 가진 요소의 값을 비교합니다.
+                        var valueA = parseInt(a.querySelector('.donation-item-span-fourth').textContent);
+                        var valueB = parseInt(b.querySelector('.donation-item-span-fourth').textContent);
+                        return valueB - valueA;
+                    });
+
+                    // 정렬된 요소들을 부모 요소에 추가합니다.
+                    var parentElement = document.querySelector('#itemParent');
+                    sortedBoxes.forEach(function(box) {
+                        parentElement.appendChild(box);
+                    });
+                    break;
+                case '최신순':{
+                    // donation-item-box 클래스를 가진 요소들을 선택합니다.
+                    const boxes = document.querySelectorAll('.donation-item-box');
+                    const proceeding = [];
+                    const progressEnded = [];
+
+                    boxes.forEach(function(box) {
+                        var fifthSpan = box.querySelector('.donation-item-span-fifth');
+                        if (fifthSpan && fifthSpan.textContent.trim() == '3') {
+                            proceeding.push(box);
+                        }else{
+                            progressEnded.push(box);
+                        }
+                    });
+
+                    // 선택된 요소들을 배열로 변환하여 정렬합니다.
+                    var sortedBoxes = proceeding.sort(function(a, b) {
+                        // 각 요소 내부의 donation-item-span-third 클래스를 가진 요소의 값을 비교합니다.
+                        var spanA = a.querySelector('.donation-item-span-third');
+                        var spanB = b.querySelector('.donation-item-span-third');
+
+                        if (spanA && spanB) {
+                            var valueA = parseInt(spanA.textContent) || 0; // 숫자가 아닌 경우 0으로 처리
+                            var valueB = parseInt(spanB.textContent) || 0; // 숫자가 아닌 경우 0으로 처리
+                            return valueB - valueA;
+                        } else {
+                            // 존재하지 않는 요소에 접근하는 경우, 오류 방지를 위해 기본값 0 반환
+                            return 0;
+                        }
+                    });
+
+                    // 정렬된 요소들을 부모 요소에 추가합니다.
+                    var parentElement = document.querySelector('#itemParent');
+                    sortedBoxes.forEach(function(box) {
+                        parentElement.appendChild(box);
+                    });
+                    progressEnded.forEach(function (box){
+                        parentElement.appendChild(box);
+                    });
+                }
+                    break;
+            }
+
+
+
         }
         function cateItemClickedStyle(element) {
             const listItems = document.querySelectorAll("#category-wrap li");
@@ -139,19 +264,20 @@
             let $selectedEle = element.querySelector('p');
             let selectedCategoryName = $selectedEle.textContent;
             $('#projectCateName').text(selectedCategoryName);
-            console.log(selectedCategoryName);
             $('.donation-item-box').each(function (){
                 let cateName = $(this).children().first().val();
                 if(selectedCategoryName == '전체'){
                     $(this).css('display' ,'block');
                 }else{
-                    $(this).css('display' ,'block');
-                    if(cateName != selectedCategoryName) {
+                    if(cateName == selectedCategoryName) {
+                        $(this).css('display' ,'block');
+
+                    }else{
                         $(this).css('display', 'none');
                     }
                 }
-
-            })
+            });
+            $('#selectSort').val(0);
 
         }
         // 초기 스타일이 적용되도록 직접 호출
@@ -161,19 +287,80 @@
 
             const categoryItemWrap = document.querySelector("#category-wrap li:first-child");
             categoryItemWrap.classList.add("selected");
+
+            $('.donation-item-span-third').each(function (){
+                let currentDate = new Date();
+                // 비교 대상 날짜 설정
+                let targetDate = new Date($(this).text());
+                // 두 날짜 간의 차이 계산 (밀리초 단위)
+                let timeDifference = targetDate - currentDate;
+                // 차이를 일(day) 단위로 변환
+                let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+                // 남은 일 수
+                let $condition = $(this).parent().next().next().text();
+
+                if (daysRemaining <= 0 && $condition == 4){
+                    $(this).text('종료:성공');
+                    $(this).next().remove();
+                    $(this).addClass('donation-item-span-third-success');
+                    $(this).removeClass('donation-item-span-third');
+                    // $(this).parent().removeClass('donation-item-span-third-parent');
+                }else if(daysRemaining <= 0 && $condition == 5){
+                    $(this).text('종료:실패');
+                    $(this).addClass('donation-item-span-third-fail');
+                    $(this).next().remove();
+                    $(this).removeClass('donation-item-span-third');
+                    $(this).parent().css('background', 'rgba(255,1,15,0.32)');
+                    $(this).parent().css('color', 'rgba(255,1,15,0.77)');
+
+                }else {
+                    $(this).text(daysRemaining);
+                }
+
+            });
+
+            // donation-item-box 클래스를 가진 요소들을 선택합니다.
+            const boxes = document.querySelectorAll('.donation-item-box');
+            const proceeding = [];
+            const progressEnded = [];
+
+            boxes.forEach(function(box) {
+                var fifthSpan = box.querySelector('.donation-item-span-fifth');
+                if (fifthSpan && fifthSpan.textContent.trim() == '3') {
+                    proceeding.push(box);
+                }else{
+                    progressEnded.push(box);
+                }
+            });
+
+            // 선택된 요소들을 배열로 변환하여 정렬합니다.
+            var sortedBoxes = proceeding.sort(function(a, b) {
+                // 각 요소 내부의 donation-item-span-third 클래스를 가진 요소의 값을 비교합니다.
+                var spanA = a.querySelector('.donation-item-span-third');
+                var spanB = b.querySelector('.donation-item-span-third');
+
+                if (spanA && spanB) {
+                    var valueA = parseInt(spanA.textContent) || 0; // 숫자가 아닌 경우 0으로 처리
+                    var valueB = parseInt(spanB.textContent) || 0; // 숫자가 아닌 경우 0으로 처리
+                    return valueA - valueB;
+                } else {
+                    // 존재하지 않는 요소에 접근하는 경우, 오류 방지를 위해 기본값 0 반환
+                    return 0;
+                }
+            });
+
+            // 정렬된 요소들을 부모 요소에 추가합니다.
+            var parentElement = document.querySelector('#itemParent');
+            sortedBoxes.forEach(function(box) {
+                parentElement.appendChild(box);
+            });
+            progressEnded.forEach(function (box){
+                parentElement.appendChild(box);
+            });
+
         });
 
-        $('.donation-item-span-third').each(function (){
-            let currentDate = new Date();
-            // 비교 대상 날짜 설정
-            let targetDate = new Date($(this).text());
-            // 두 날짜 간의 차이 계산 (밀리초 단위)
-            let timeDifference = targetDate - currentDate;
-            // 차이를 일(day) 단위로 변환
-            let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-            // 남은 일 수
-            $(this).text(daysRemaining + "일 남음");
-        });
+
 
         $('.donation-item-span-first').each(function (){
             let goalMoney = parseInt($(this).next().val());
@@ -186,6 +373,60 @@
         // 달성 금액 설정
         $('.donation-item-span-second').each(function (){
             $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+        });
+
+        $('#selectSort').change(function (){
+            if($(this).val() == 0){
+                $('.donation-item-box').each(function (){
+                    const $itemBox = $(this);
+                    if ($('#category-wrap').children('.selected').text().trim() == '전체') {
+                        $itemBox.css('display', 'block');
+                    }else if($('#category-wrap').children('.selected').text().trim() == $itemBox.children().first().val()){
+                        $itemBox.css('display', 'block');
+                    }
+
+                });
+            }else if($(this).val() == 1){
+                $('.donation-item-box').each(function (){
+                    const $itemBox = $(this);
+                    $itemBox.css('display', 'block');
+                    if ($('#category-wrap').children('.selected').text().trim() == '전체'){
+                        if ($itemBox.children('.donation-item-second-child').children('.donation-item-span-fifth').text().trim() == '3'){
+                            $itemBox.css('display', 'block');
+                        }else{
+                            $itemBox.css('display', 'none');
+                        }
+                    }else if($('#category-wrap').children('.selected').text().trim() == $itemBox.children().first().val()){
+                        if ($itemBox.children('.donation-item-second-child').children('.donation-item-span-fifth').text().trim() == '3'){
+                            $itemBox.css('display', 'block');
+                        }else{
+                            $itemBox.css('display', 'none');
+                        }
+                    }else{
+                        $itemBox.css('display', 'none');
+                    }
+                });
+            }else if($(this).val() == 2){
+                $('.donation-item-box').each(function (){
+                    const $itemBox = $(this);
+                    $itemBox.css('display', 'block');
+                    if ($('#category-wrap').children('.selected').text().trim() == '전체'){
+                        if ($itemBox.children('.donation-item-second-child').children('.donation-item-span-fifth').text().trim() != '3'){
+                            $itemBox.css('display', 'block');
+                        }else{
+                            $itemBox.css('display', 'none');
+                        }
+                    }else if($('#category-wrap').children('.selected').text().trim() == $itemBox.children().first().val()){
+                        if ($itemBox.children('.donation-item-second-child').children('.donation-item-span-fifth').text().trim() != '3'){
+                            $itemBox.css('display', 'block');
+                        }else{
+                            $itemBox.css('display', 'none');
+                        }
+                    }else{
+                        $itemBox.css('display', 'none');
+                    }
+                });
+            }
         });
 
     </script>
@@ -260,24 +501,24 @@
                 <div class="d-flex col">
                     <p id="projectCateName" style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 5px">전체</p>
                     <div id="sort-item-wrap" class="d-flex" style="margin-left: auto">
-                        <select style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
-                            <option>전체</option>
-                            <option>진행중</option>
-                            <option>종료됨</option>
+                        <select id="selectSort" style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
+                            <option value="0">전체</option>
+                            <option value="1">진행중</option>
+                            <option value="2">종료됨</option>
                         </select>
                         <ul class="d-flex" style="margin-top: 5px">
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">추천순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>
-                            <li class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
                             <li class="ml-3" onclick="sortItemClickedStyle(this)">마감임박순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">모집금액순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">조회순</li>
+                            <li class="ml-3" onclick="sortItemClickedStyle(this)">최신순</li>
+                            <!-- <li class="ml-3" onclick="sortItemClickedStyle(this)">인기순</li>-->
                         </ul>
                     </div>
                 </div>
 
                 <div class="container" style="width: 100%; height: 100%">
-                    <div class="row">
-                        <div class="col donation-item-box col-lg-4" th:if="${l.donationCondition == 3}" th:each="l : ${allDonationInfo}"
+                    <div id="itemParent" class="row">
+                        <div class="col donation-item-box col-lg-4" th:if="${l.donationCondition == 3 || l.donationCondition == 4 || l.donationCondition == 5}" th:each="l : ${allDonationInfo}"
                             th:onclick="|location.href='@{/user/donation/detail(donationCode=${l.donationCode})}'|">
                             <input class="categoryName" hidden="hidden" th:value="${l.categoryName}">
                             <div class="donation-item-first-child">
@@ -287,7 +528,11 @@
                                 <span class="donation-item-span-first"></span>
                                 <input class="donation-item-goalMoney" th:value="${l.donationGoalMoney}" hidden="hidden"/>
                                 <span class="donation-item-span-second" th:text="${l.donationAchievementMoney}"></span>
-                                <span class="donation-item-span-third" th:text="${l.donationEndDate}"></span>
+                                <div class="donation-item-span-third-parent">
+                                    <span class="donation-item-span-third" th:text="${l.donationEndDate}"></span><span>일 남음</span>
+                                </div>
+                                <span hidden="hidden" class="donation-item-span-fourth" th:text="${l.searchCount}"></span>
+                                <span hidden="hidden" class="donation-item-span-fifth" th:text="${l.donationCondition}"></span>
                             </div>
                             <div class="donation-item-third-child">
                                 <p th:text="${l.donationSubject}"></p>

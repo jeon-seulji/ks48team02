@@ -1,6 +1,6 @@
 package ksmart.ks48team02.user.service.main;
 
-import ksmart.ks48team02.user.dto.OrderRank;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.mapper.main.UserMainMapper;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +20,46 @@ public class UserMainService {
      * rank list contents
      */
     public List<OrderRank> getRankList(String rankCategory){
-        List<OrderRank> rankList = null;
-        rankList = userMainMapper.getRankList(rankCategory);
+        List<OrderRank> rankList = userMainMapper.getRankList(rankCategory);
         return rankList;
     }
+
+
+    /**
+     * get reward list for main
+     * @return rewardPrjList
+     */
+    public List<RewardProject> getRewardPrjList(){
+        List<RewardProject> rewardPrjList = userMainMapper.getRewardPrjList();
+        return rewardPrjList;
+    }
+
+    /**
+     * get donation list for main
+     * @return donationPrjList
+     */
+    public List<DonationRegistration> getDonationPrjList(){
+      List<DonationRegistration> donationPrjList= userMainMapper.getDonationPrjList();
+      return donationPrjList;
+    };
+
+    /**
+     * get investment list for main
+     * @return investPrjList
+     */
+    public List<InvestmentInfo> getInvestPrjList(){
+        List<InvestmentInfo> investPrjList = userMainMapper.getInvestPrjList();
+        return investPrjList;
+    }
+
+
+    /**
+     * get store rank list for main
+     * @return storePrjList
+     */
+    public List<StoreProject> getStorePrjList(){
+        List<StoreProject> storePrjList = userMainMapper.getStorePrjList();
+        return storePrjList;
+    }
+
 }

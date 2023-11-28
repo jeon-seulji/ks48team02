@@ -352,4 +352,28 @@
             (#{floverLogCode}, #{memberId}, '적립-리워드구매', '자동 적립', NULL,  #{savingFlover} ,NOW(), #{addFloverCode});
     </insert>
 
+    <!--찜한 리워드 프로젝트 목록 조회.-->
+    <select id="rewardProjectGreatList" parameterType="String" resultType="RewardProject">
+        SELECT
+            r.reward_project_code AS rewardProjectCode,
+            r.project_achievement_money AS projectAchievementMoney,
+            r.project_achievement_percent AS projectAchievementPercent,
+            r.project_thumbnail_image AS projectThumbnailImage,
+            r.project_subject AS projectSubject,
+            r.reg_company AS regCompany,
+            r.project_start_date AS projectStartDate,
+            r.project_end_date AS projectEndDate,
+            g.reward_great_date AS rewardGreatDate
+        FROM
+            reward_great AS g
+        INNER JOIN
+            reward_project AS r
+        ON
+            g.reward_project_code = r.reward_project_code
+        WHERE
+            g.member_id = #{loginMemberId}
+        ORDER BY
+            g.reward_great_date DESC
+    </select>
+
 </mapper>

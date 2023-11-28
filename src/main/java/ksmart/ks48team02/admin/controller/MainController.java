@@ -17,6 +17,7 @@ public class MainController {
 		// 세션 기본값 설정
 		String getSid = (String) session.getAttribute("SID");
 		String getStype = (String) session.getAttribute("STYPECODE");
+		session.removeAttribute("SSTORECODE");
 
 		if(getSid == null){
 			session.setAttribute("SID", "id001");
@@ -25,7 +26,6 @@ public class MainController {
 		if(getStype != null && !getStype.equals("mem_type_01")){
 			session.removeAttribute("SID");
 			session.removeAttribute("STYPECODE");
-			session.removeAttribute("SSTORECODE");
 			session.removeAttribute("SNAME");
 			session.setAttribute("SID", "id001");
 			session.setAttribute("STYPECODE", "mem_type_01");

@@ -43,7 +43,7 @@
             cursor: pointer;
         }
         .reward-item-first-child{
-            background: grey;
+            background: #eee; /* 수정 */
             width: 350px;
             height: 200px;
             border-radius: 5px;
@@ -299,7 +299,7 @@
                              th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode},searchCnt='true')}'|">
                             <div class="reward-item-first-child">
                                 <img class="reward-item-third-child-image" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
-                                     onerror="this.src = 'https://st2.depositphotos.com/3904951/8925/v/450/depositphotos_89250312-stock-illustration-photo-picture-web-icon-in.jpg';">
+                                     th:onerror="|this.src='@{/user/images/no-image.svg}'|">
                             </div>
                             <div class="reward-item-second-child">
                                 <span class="reward-item-span-first"></span>

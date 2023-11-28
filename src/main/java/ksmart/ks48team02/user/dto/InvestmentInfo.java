@@ -35,7 +35,7 @@ public class InvestmentInfo {
 
 
 
-
+    private String categoryName;
 
 
 
