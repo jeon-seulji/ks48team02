@@ -77,19 +77,24 @@
         let timeDifference = targetDate - currentDate;
         // 차이를 일(day) 단위로 변환
         let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-        // 남은 일 수
-        $('#deadLine').text(daysRemaining + '일남음');
+
+        const $condition = '[[${donationInfo.donationCondition}]]';
+
+        if (daysRemaining <= 0 && $condition == 4){
+            $('#deadLine').text('종료:성공');
+        }else if(daysRemaining <= 0 && $condition == 5){
+            $('#deadLine').text('종료:실패');
+            $('#deadLine').css('background', 'rgba(255,1,15,0.32)');
+            $('#deadLine').css('color', 'rgba(255,1,15,0.77)');
+        }else {
+            // 남은 일 수
+            $('#deadLine').text(daysRemaining + '일남음');
+        }
 
         // 카테고리 이름 설정
         $('#category').text('[[${cateAndCompany.categoryName}]]' + ' >');
         // 회사 이름 설정
         $('#company').text('[[${cateAndCompany.storeName}]]');
-
-        // 기부버튼 눌렀을 시 작동
-        $('#donationBtn').click(function (){
-            const SID = '[[${SID}]]';
-            console.log(SID)
-        });
 
         $('#achievementPercent').text($('#achievementPercent').text()+'%');
 
