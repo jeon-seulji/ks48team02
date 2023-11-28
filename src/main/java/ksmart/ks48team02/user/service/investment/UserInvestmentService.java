@@ -48,9 +48,12 @@ public class UserInvestmentService {
         }
     }
 
-    public List<InvestmentJudge> getInvestmentJudge(){
-        List<InvestmentJudge> investmentJudge = userInvestmentMapper.getInvestmentJudge();
-        return investmentJudge;
+    // 투자 프로젝트 상세페이지
+    public InvestmentInfo investmentProjectDetail(String investmentCode){
+
+        InvestmentInfo investmentInfo = userInvestmentMapper.investmentProjectDetail(investmentCode);
+
+        return investmentInfo;
     }
 
     public List<InvestmentInfo> getInvestmentInfo(){
@@ -58,10 +61,7 @@ public class UserInvestmentService {
         return investmentInfo;
     }
 
-    public List<InvestmentContent> getInvestmentContent(){
-        List<InvestmentContent> investmentContent = userInvestmentMapper.getInvestmentContent();
-        return investmentContent;
-    }
+
 
     public List<InvestmentInfo> getSortedList(String orderBy) {
         return userInvestmentMapper.getSortedList(orderBy);
