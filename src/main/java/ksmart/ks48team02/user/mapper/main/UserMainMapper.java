@@ -1,9 +1,6 @@
 package ksmart.ks48team02.user.mapper.main;
 
-import ksmart.ks48team02.user.dto.DonationRegistration;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.OrderRank;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -33,4 +30,6 @@ public interface UserMainMapper {
      * @return investPrjList
      */
     public List<InvestmentInfo> getInvestPrjList();
+
+    public List<StoreProject> getStorePrjList();
 }

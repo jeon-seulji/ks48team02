@@ -4,12 +4,13 @@ import lombok.Data;
 
 @Data
 public class StoreProject {
-    public String projectCode;
-    public String categoryCode;
-    public String subject;
-    public String storeCode;
-    public String projectType;
-    public int achievementPercent;
-    public String storeName;
-    public String categoryName;
+    private String projectCode;
+    private String categoryCode;
+    private String projectImage;
+    private String subject;
+    private String storeCode;
+    private String projectType;
+    private int achievementPercent;
+    private String storeName;
+    private String categoryName;
 }

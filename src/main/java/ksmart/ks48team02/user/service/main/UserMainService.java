@@ -1,9 +1,6 @@
 package ksmart.ks48team02.user.service.main;
 
-import ksmart.ks48team02.user.dto.DonationRegistration;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.OrderRank;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.mapper.main.UserMainMapper;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +50,16 @@ public class UserMainService {
     public List<InvestmentInfo> getInvestPrjList(){
         List<InvestmentInfo> investPrjList = userMainMapper.getInvestPrjList();
         return investPrjList;
+    }
+
+
+    /**
+     * get store rank list for main
+     * @return storePrjList
+     */
+    public List<StoreProject> getStorePrjList(){
+        List<StoreProject> storePrjList = userMainMapper.getStorePrjList();
+        return storePrjList;
     }
 
 }
