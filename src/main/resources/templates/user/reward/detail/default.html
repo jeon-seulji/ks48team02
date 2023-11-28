@@ -86,7 +86,8 @@
 
                 <div class="swiper-slide" th:each="l : ${recommendProjectList}"
                      th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode},searchCnt='true')}'|">
-                    <img class="slide-thumb" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"/>
+                    <img class="slide-thumb" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                         th:onerror="|this.src='@{/user/images/no-image.svg}'|"/>
                     <div class="description">
                         <div class="product-main-title" th:text="${l.projectSubject}"></div>
                         <div class="product-detail-info">

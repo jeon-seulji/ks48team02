@@ -43,7 +43,7 @@
             cursor: pointer;
         }
         .reward-item-first-child{
-            background: grey;
+            background: #eee;
             width: 350px;
             height: 200px;
             border-radius: 5px;
@@ -303,7 +303,7 @@
                              th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode},searchCnt='true')}'|">
                             <div class="reward-item-first-child">
                                 <img class="reward-item-third-child-image" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
-                                     onerror="this.src = '';">
+                                     th:onerror="|this.src='@{/user/images/no-image.svg}'|">
                             </div>
                             <div class="reward-item-second-child">
                                 <span class="reward-item-span-first"></span>

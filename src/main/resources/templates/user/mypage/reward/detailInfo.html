@@ -73,10 +73,10 @@
                     <hr style="color: #5a6268; size:1px">
                     <ul>
                         <li th:each="l : ${orderInfo.rewardOrderDetailList}">
-                            <div class="options my-lg-2 ml-lg-3 row">
+                            <div class="options  row">
                                 <img th:src="|@{/summernoteImage/}${orderInfo.projectThumbnailImage}|"
-                                     onerror="this.src = 'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg';"
-                                     class="rounded-circle ml-lg-2" style="height: 80px; width: 80px">
+                                     th:onerror="|this.src='@{/user/images/no-image.svg}'|"
+                                     class="rounded-circle ml-lg-3" style="height: 80px; width: 80px; border: #8a8a8a solid ">
                                 <span class="text-dark ml-lg-3">
                                 <p class="rewardOptionName" th:text="${l.optionName}">프로젝트 옵션1 이름</p>
                                 <p class="rewardOrderPrice font-weight-bold" th:text="|${#numbers.formatInteger(l.optionPrice,0,'COMMA')} 원|"></p>
