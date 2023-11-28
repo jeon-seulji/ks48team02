@@ -11,12 +11,16 @@
 					<div class="swiper-slide" th:unless="${rewardProjectList == null}" th:each="rl : ${rewardProjectList}">
 						<a th:href="@{/user/reward/detail(rewardProjectCode=${rl.rewardProjectCode}, searchCnt=true)}">
 							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/${rl.projectThumbnailImage}} +');'"></div>
+								<div th:style="'background-image: url(' + |@{/summernoteImage/}${rl.projectThumbnailImage}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
+
 							</div>
 							<div class="description">
 								<div class="product-main-title">[[${rl.projectSubject}]]</div>
 								<div class="product-detail-info">
-									<span class="funding-percent">[[${rl.projectAchievementPercent + '%'}]]</span>
+									<span class="funding-percent">
+										<em>[[${rl.projectAchievementPercent}]]</em>
+										%
+									</span>
 									<span class="category">
 										[[${rl.categoryName}]]
 										·
@@ -45,12 +49,15 @@
 					<div class="swiper-slide" th:unless="${donationPrjList == null}" th:each="dl : ${donationPrjList}">
 						<a th:href="@{/user/donation/detail(donationCode=${dl.donationCode})}">
 							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/${dl.donationImage}} +');'"></div>
+								<div th:style="'background-image: url(' + |@{/summernoteImage/}${dl.donationImage}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
 							</div>
 							<div class="description">
 								<div class="product-main-title">[[${dl.donationSubject}]]</div>
 								<div class="product-detail-info">
-									<span class="funding-percent">[[${dl.donationAchievementPercent + '%'}]]</span>
+									<span class="funding-percent">
+										<em>[[${dl.donationAchievementPercent}]]</em>
+										%
+									</span>
 									<span class="category">
 										[[${dl.categoryName}]]
 										·
@@ -80,185 +87,20 @@
 					<div class="swiper-slide" th:unless="${investPrjList == null}" th:each="il : ${investPrjList}">
 						<a th:href="@{/user/investment/detail/main(investmentCode=${il.investmentCode})}">
 							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ ${il.investmentImage} +');'"></div>
+								<div th:style="'background-image: url(' + |@{/summernoteImage/}${il.investmentImage}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
 							</div>
 							<div class="description">
 								<div class="product-main-title">[[${il.investmentSubject}]]</div>
 								<div class="product-detail-info">
-									<span class="funding-percent">[[${il.investAchievementPercent + '%'}]]</span>
+									<span class="funding-percent">
+										<em>[[${il.investAchievementPercent}]]</em>
+										%
+									</span>
 									<span class="category">
 										[[${il.categoryName}]]
 										·
 										[[${il.investmentCompany}]]
 									</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="swiper-slide">
-						<a th:href="@{#}">
-							<div class="slide-thumb">
-								<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-							</div>
-							<div class="description">
-								<div class="product-main-title">내 손안의 스마트한 스튜디오, 저스트모바일 셔터그립2</div>
-								<div class="product-detail-info">
-									<span class="funding-percent">350%</span>
-									<span class="category">테크·가전</span>
 								</div>
 							</div>
 						</a>
@@ -273,4 +115,43 @@
 
 </th:block>
 
+<th:block th:fragment="storeSwiperFragment">
+	<section id="storeInnerGroup" class="content-wrap scroll-action-area">
+		<div class="main-section container">
+			<h3 class="main-title">스토어 추천</h3>
+			<!-- Swiper -->
+			<div class="swiper mySwiper contents-area">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide" th:unless="${storeList == null}" th:each="sl : ${storeList}">
+						<a th:href="|${(sl.projectType == '리워드')? '@{/user/reward/detail(rewardProjectCode=${sl.projectCode}, searchCnt=true)}':
+						(sl.projectType == '기부')? '@{/user/donation/detail(donationCode=${sl.projectCode})}':'/user/investment/detail/main(investmentCode=${sl.projectCode})'}|">
+							<div class="slide-thumb">
+								<div th:style="'background-image: url(' + |@{/summernoteImage/}${sl.projectImage}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
+							</div>
+							<div class="description">
+								<div class="store-name">
+									[[${sl.storeName}]]
+								</div>
+								<div class="product-main-title">[[${sl.subject}]]</div>
+								<div class="product-detail-info">
+									<span class="funding-percent">
+										<em>[[${sl.achievementPercent}]]</em>
+										%
+									</span>
+									<span class="category">
+										[[${sl.categoryName}]]
+
+									</span>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+		</div>
+
+	</section>
+</th:block>
 </html>
