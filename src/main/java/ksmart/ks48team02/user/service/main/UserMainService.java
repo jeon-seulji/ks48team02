@@ -27,6 +27,7 @@ public class UserMainService {
         return rankList;
     }
 
+
     /**
      * get reward list for main
      * @return rewardPrjList

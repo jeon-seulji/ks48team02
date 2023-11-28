@@ -51,6 +51,8 @@ public class MainController {
 		log.info("랭크 데이터 :{}", rankList);
 		model.addAttribute("rankList", rankList);
 
+		// 스토어 추천
+
 		// 리워드 추천 프로젝트
 		List<RewardProject> getRewardProjectList = userMainService.getRewardPrjList();
 
