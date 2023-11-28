@@ -5,7 +5,9 @@ import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.Coupon;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
 import ksmart.ks48team02.common.dto.OrderTotal;
+import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.account.AccountService;
+import ksmart.ks48team02.user.service.mypage.MypageRewardService;
 import ksmart.ks48team02.user.service.mypage.MypageService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -26,6 +28,7 @@ public class MypageController {
     private static final Logger Log = LoggerFactory.getLogger(MypageController.class);
 
     private final MypageService mypageService;
+    private final MypageRewardService mypageRewardService;
     private final AdminCouponService adminCouponService;
 
     @GetMapping(value={"","/"})
@@ -37,6 +40,7 @@ public class MypageController {
         Map<String, Object> resultMap = mypageService.getMemberInfoById(loginId);
         String memberEmail = (String) resultMap.get("memberEmail");
         String memberContactInfo = (String) resultMap.get("memberContactInfo");
+        List<RewardProject> rewardGreatList = mypageRewardService.rewardProjectGreatList(loginId);
 
 
         List<Coupon> memberHaveCouponList = adminCouponService.MemberHaveCouponById(loginId);
@@ -47,6 +51,7 @@ public class MypageController {
         model.addAttribute("memberEmail", memberEmail);
         model.addAttribute("memberContactInfo", memberContactInfo);
         model.addAttribute("loginId",loginId);
+        model.addAttribute("rewardGreatList",rewardGreatList);
 
         return "user/mypage/mypage";
     }

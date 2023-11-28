@@ -61,6 +61,11 @@ public class PojectRegistrationContoller {
         String memberType = (String)session.getAttribute("STYPECODE");
         String returnAddr = "user/account/login";
 
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+
+        model.addAttribute("recommendProjectList",recommendProjectList);
+
         return "user/projectRegistration/main";
     }
 
@@ -116,22 +121,22 @@ public class PojectRegistrationContoller {
 
     // 투자 프로젝트 등록
     @PostMapping(value = {"/investment/judge"})
-    public String investmentRegistrationPage(@Validated @ModelAttribute InvestmentJudge investmentJudge, BindingResult result, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession httpSession){
+    public String investmentRegistrationPage(InvestmentJudge investmentJudge, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession httpSession){
 
         String memberId = (String) httpSession.getAttribute("SID");
         investmentJudge.setMemberIdSeller(memberId);
 
-        String companyBusinessTypeCode = (String) httpSession.getAttribute("companyBusinessTypeCode");
-        investmentJudge.setCompanyBusinessTypeCode(companyBusinessTypeCode);
-
         System.out.println(investmentJudge);
 
+        // 투자 심사 요청 등록
         userInvestmentService.addInvestmentJudge(investmentJudge);
 
+        // 투자 프로젝트 등록
         investmentInfo.setInvestmentRequestJudgeCode(investmentJudge.getInvestmentRequestJudgeCode());
         investmentInfo.setInvestmentSubject(investmentJudge.getInvestmentRequestSubject());
         userInvestmentService.addInvestment(investmentInfo);
 
+        // 투자 프로젝트 상세내용 등록
         investmentContent.setInvestmentCode(investmentInfo.getInvestmentCode());
         userInvestmentService.addInvestmentContent(investmentContent);
 

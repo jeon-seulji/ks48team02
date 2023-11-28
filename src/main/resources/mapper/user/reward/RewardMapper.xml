@@ -691,7 +691,57 @@
             r.reward_project_code = #{rewardProjectCode} AND r.member_id = #{loginMemberId}
     </select>
 
+    <!--찜하기 insert-->
+    <insert id="greatInsert" parameterType="String">
+        <selectKey  keyProperty="reardGreatCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(r.reward_great_code) = 0  THEN CONCAT('RG_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('RG_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(r.reward_great_code,'_',-1)AS UNSIGNED )+1))
+            END) AS reardGreatCode
+            FROM
+                reward_great AS r
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(r.reward_great_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO reward_great
+            (reward_great_code, reward_project_code, member_id, reward_great_date)
+        VALUES
+            (#{reardGreatCode}, #{rewardProjectCode}, #{loginMemberId}, NOW());
+    </insert>
 
+    <!--찜하기 취소-->
+    <delete id ="greatCancel" parameterType="String">
+        DELETE
+            reward_great
+        FROM
+            reward_great
+        WHERE
+            member_id = #{loginMemberId} AND reward_project_code =#{rewardProjectCode}
+    </delete>
+
+    <!--프로젝트 추천 목록 리스트 조회-->
+    <select id="projectRecommendList" resultMap="RewardResultMap">
+        SELECT
+            r.reward_project_code,
+            r.project_thumbnail_image,
+            r.project_achievement_percent,
+            r.project_subject,
+            t.category_name
+        FROM
+            reward_project AS r
+        INNER JOIN
+            total_category AS t
+        ON
+            r.total_cagegory_code = t.total_category_code
+        WHERE
+            r.project_condition = 3
+        ORDER BY
+            r.project_achievement_percent DESC
+        LIMIT 10
+    </select>
 
 
 

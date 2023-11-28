@@ -298,8 +298,7 @@
                         <div class="col-lg-4 mb-lg-3 reward-item-box" th:unless="${#lists.size(rewardProjectList) == 0}" th:each="l : ${rewardProjectList}"
                              th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode},searchCnt='true')}'|">
                             <div class="reward-item-first-child">
-                                <img class="reward-item-third-child-image"
-                                     th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                                <img class="reward-item-third-child-image" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
                                      th:onerror="|this.src='@{/user/images/no-image.svg}'|">
                             </div>
                             <div class="reward-item-second-child">
