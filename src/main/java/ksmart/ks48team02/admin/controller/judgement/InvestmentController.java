@@ -28,15 +28,6 @@ public class InvestmentController {
         this.investmentService = investmentService;
     }
 
-    @GetMapping("/judge-main")
-    public String getInvestJudgeMain(Model model){
-
-        model.addAttribute("title", "투자 심사 관리");
-        model.addAttribute("contentsTitle","투자 심사 관리");
-
-        return "admin/judgement/investment/invest_judge_main";
-    }
-
     @GetMapping("/search/judge")
     public String getInvestmentJudgeList(Model model
                                         ,@RequestParam(name = "searchKey", required = false) String searchKey
@@ -288,16 +279,13 @@ public class InvestmentController {
     }
 
     @GetMapping("/insert/corporate-value")
-    public String addCorporateValueEvaluation(Model model, @RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage){
+    public String addCorporateValueEvaluation(Model model) {
 
-        Map<String, Object> resultMap = investmentService.getInvestmentRequestJudgeList(currentPage);
-
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = (List<AdminInvestmentRequestJudge>) resultMap.get("investmentRequestJudgeList");
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeListOnly();
 
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 등록");
         model.addAttribute("contentsTitle","기업가치 평가 결과 등록");
         model.addAttribute("investmentRequestJudgeList",investmentRequestJudgeList);
-        model.addAttribute("currentPage", currentPage);
 
         return "admin/judgement/investment/insert/corporate_value_evaluation_insert";
     }

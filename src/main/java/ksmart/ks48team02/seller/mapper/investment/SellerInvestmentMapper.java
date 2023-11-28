@@ -41,12 +41,24 @@ public interface SellerInvestmentMapper {
     // 판매자 투자후 기업정보 공개(주식) 전체 행의 갯수
     public int getAfterFundRevenueStockCnt();
 
+    // 판매자 검색조건에 따른 투자후 기업정보 공개(주식) 목록 조회
+    public List<SellerAfterFundRevenueStock> getAfterFundRevenueStockListBySearch(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int startRowNum, int rowPerPage);
+
+    // 판매자 특정 기업정보 공개(주식) 조회
+    public SellerAfterFundRevenueStock getAfterFundRevenueStockByCode(String memberId, String afterFundRevenueStockCode);
+
     // 판매자 투자후 기업정보 공개(채권) 목록 조회
     public List<SellerAfterFundRevenueBond> getAfterFundRevenueBondList(String memberId, int startRowNum, int rowPerPage);
 
     // 판매자 투자후 기업정보 공개(채권) 전체 행의 갯수
     public int getAfterFundRevenueBondCnt();
 
+    // 판매자 검색조건에 따른 투자후 기업정보 공개(채권) 목록 조회
+    public List<SellerAfterFundRevenueBond> getAfterFundRevenueBondListBySearch(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int startRowNum, int rowPerPage);
+
+    // 판매자 특정 기업정보 공개(채권) 조회
+    public SellerAfterFundRevenueBond getAfterFundRevenueBondByCode(String memberId, String afterFundRevenueBondCode);
+    
     // 판매자 자본시장법 범위충족기준 목록 조회
     public List<AdminLawSatistifyReason> getLawSatistifyList();
 

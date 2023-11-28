@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller("sellerInvestmentController")
 @RequestMapping("/seller/investment")
@@ -131,22 +132,48 @@ public class InvestmentController {
                                          ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
                                          ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
                                          ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
-                                         ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
                                          ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage
+                                         ,@RequestParam(name = "security", required = false, defaultValue = "stock") String security
                                          ,HttpSession session) {
 
         String loginId = (String) session.getAttribute("SID");
 
         Map<String, Object> resultMap = null;
 
-        List<SellerAfterFundRevenueStock> SellerAfterFundRevenueStockList = null;
+        List<SellerAfterFundRevenueStock> sellerAfterFundRevenueStockList = null;
 
-        List<SellerAfterFundRevenueBond> SellerAfterFundRevenueBondList = null;
+        List<SellerAfterFundRevenueBond> sellerAfterFundRevenueBondList = null;
 
+        if(searchKey != null && Objects.equals(security, "stock")) {
+            resultMap = investmentService.getAfterFundRevenueStockList(loginId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, currentPage);
+            sellerAfterFundRevenueStockList = (List<SellerAfterFundRevenueStock>) resultMap.get("sellerAfterFundRevenueStockList");
+        }else if(searchKey != null && Objects.equals(security, "bond")) {
+            resultMap =  investmentService.getAfterFundRevenueBondList(loginId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, currentPage);
+            sellerAfterFundRevenueBondList = (List<SellerAfterFundRevenueBond>) resultMap.get("sellerAfterFundRevenueBondList");
+        }else if(searchKey == null && Objects.equals(security, "stock")) {
+            resultMap = investmentService.getAfterFundRevenueStockList(loginId, currentPage);
+            sellerAfterFundRevenueStockList = (List<SellerAfterFundRevenueStock>) resultMap.get("sellerAfterFundRevenueStockList");
+        }else if(searchKey == null && Objects.equals(security, "bond")) {
+            resultMap = investmentService.getAfterFundRevenueBondList(loginId, currentPage);
+            sellerAfterFundRevenueBondList = (List<SellerAfterFundRevenueBond>) resultMap.get("sellerAfterFundRevenueBondList");
+        }
 
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
 
         model.addAttribute("title", "투자후 기업정보 공개 목록");
         model.addAttribute("contentsTitle","투자후 기업정보 공개 목록");
+        model.addAttribute("sellerAfterFundRevenueStockList", sellerAfterFundRevenueStockList);
+        model.addAttribute("sellerAfterFundRevenueBondList", sellerAfterFundRevenueBondList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
 
         return "seller/investment/list/after_fund_revenue_list";
     }
@@ -209,10 +236,26 @@ public class InvestmentController {
     }
 
     @GetMapping("/view/after-fund-revenue")
-    public String getAfterFundRevenue(Model model) {
+    public String getAfterFundRevenue(@RequestParam(name = "afterFundRevenueStockCode", required = false) String afterFundRevenueStockCode
+                                     ,@RequestParam(name = "afterFundRevenueBondCode", required = false) String afterFundRevenueBondCode
+                                     ,Model model, HttpSession session) {
+
+        String loginId = (String) session.getAttribute("SID");
+
+        SellerAfterFundRevenueStock afterFundRevenueStockInfo = null;
+
+        SellerAfterFundRevenueBond afterFundRevenueBondInfo = null;
+
+        if(afterFundRevenueStockCode != null) {
+            afterFundRevenueStockInfo = investmentService.getAfterFundRevenueStockByCode(loginId, afterFundRevenueStockCode);
+        } else if(afterFundRevenueBondCode != null) {
+            afterFundRevenueBondInfo = investmentService.getAfterFundRevenueBondByCode(loginId, afterFundRevenueBondCode);
+        }
 
         model.addAttribute("title", "투자후 기업정보 공개");
         model.addAttribute("contentsTitle","투자후 기업정보 공개");
+        model.addAttribute("afterFundRevenueStockInfo", afterFundRevenueStockInfo);
+        model.addAttribute("afterFundRevenueBondInfo", afterFundRevenueBondInfo);
 
         return "seller/investment/view/after_fund_revenue_view";
     }
