@@ -16,6 +16,7 @@
         <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
         <div>
             <p style="font-weight: bold; font-size: 20px; color: black" th:text="${rewardProject.projectSubject}"></p>
+            <p id="subContens"></p>
         </div>
         <div>
             <div>
@@ -45,7 +46,7 @@
         <div style="border: 3px solid #f3f4f5; border-radius: 5px; overflow: auto; overflow-x: hidden; width: 100%; height: 600px; padding: 10px;">
 
 
-                <div class="option mb-2" style="border: 3px solid #f3f4f5; border-radius: 5px; cursor: pointer;" th:unless="${rewardProject == null}" th:each="l : ${rewardProject.rewardOptionList}"
+                <div class="option mb-2 text-dark" style="border: 3px solid #f3f4f5; border-radius: 5px; cursor: pointer;" th:unless="${rewardProject == null}" th:each="l : ${rewardProject.rewardOptionList}"
                      th:onclick="|location.href='@{/user/reward/order(rewardProjectCode=${rewardProject.rewardProjectCode}, rewardOptionCode=${l.rewardOptionCode})}'|">
                     <span class="font-weight-bold ml-2" th:text="|${#numbers.formatInteger(l.optionPrice, 0, 'COMMA')} 원|"></span>
                     <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" class="rewardOptionLeftAmount" th:text="|${#numbers.formatInteger(l.optionLimitQuantity - l.totalOrderQuantity, 3, 'COMMA')} 개 남음|"></span>
@@ -63,7 +64,7 @@
                     <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                     <span class="ml-2">발송 시작일</span>
-                    <span class="rewardDeliverDate font-weight-bold float-right mr-2" th:text="${l.optionEstimatedDeliveryDate}"></span>
+                    <span class="rewardDeliverDate font-weight-bold float-right mr-2" th:text="${#strings.substring(l.optionEstimatedDeliveryDate,0,10)}"></span>
                     <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                     <span class="ml-2">제한 수량</span>

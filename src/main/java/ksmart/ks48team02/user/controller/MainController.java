@@ -1,6 +1,9 @@
 package ksmart.ks48team02.user.controller;
 
+import ksmart.ks48team02.user.dto.DonationRegistration;
+import ksmart.ks48team02.user.dto.InvestmentInfo;
 import ksmart.ks48team02.user.dto.OrderRank;
+import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.main.UserMainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,15 +38,34 @@ public class MainController {
 //		System.out.println(list);
 		return list;
 	}
+
 	@GetMapping(value = {"" , "/"})
 	public String mainPage(Model model,
 						   @RequestParam(name="rankCategory",
 								   		 required = false,
 								   		 defaultValue = "achievementPercent") String rankCategory) {
+
+		// 랭크 데이터
 		List<OrderRank> rankList = userMainService.getRankList(rankCategory);
 
 		log.info("랭크 데이터 :{}", rankList);
 		model.addAttribute("rankList", rankList);
+
+		// 리워드 추천 프로젝트
+		List<RewardProject> getRewardProjectList = userMainService.getRewardPrjList();
+
+		log.info("getRewardProjectList {}", getRewardProjectList);
+		model.addAttribute("rewardProjectList", getRewardProjectList);
+
+		// 기부 추천 프로젝트
+		List<DonationRegistration> getDonationPrjList = userMainService.getDonationPrjList();
+		log.info("getDonationPrjList {}", getDonationPrjList);
+		model.addAttribute("donationPrjList", getDonationPrjList);
+
+		// 투자 추천 프로젝트
+		List<InvestmentInfo> getInvestPrjList = userMainService.getInvestPrjList();
+		log.info("getInvestPrjList {}", getInvestPrjList);
+		model.addAttribute("investPrjList", getInvestPrjList);
 		return "user/index";
 	}
 

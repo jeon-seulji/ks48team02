@@ -309,7 +309,7 @@
         <div id="tabContainer">
             <ul class="nav nav-tabs nav-justified justify-content-center" id="tabList">
                 <li class="nav-item"><a href="#menu1" class="nav-link active" data-toggle="tab">후원한 펀딩</a></li>
-                <li class="nav-item"><a href="#menu2" class="nav-link " data-toggle="tab">찜한 펀딩</a></li>
+                <li class="nav-item"><a href="#menu2" class="nav-link " data-toggle="tab">찜한 리워드 펀딩</a></li>
                 <li class="nav-item"><a href="#menu5" class="nav-link" data-toggle="tab">적립금/쿠폰/</a></li>
                 <li class="nav-item"><a href="#menu6" class="nav-link" data-toggle="tab">내 정보</a></li>
             </ul>
@@ -344,13 +344,13 @@
                                 <div class="card-body" style="display: flex">
                                     <!-- 이미지  -->
                                     <div>
-                                        <img class="card-img-top" style="width: 160px; height: 160px;" alt="..." th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
-                                             onerror="this.src = 'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg';">
+                                        <img class="card-img-top" style="width: 160px; height: 160px; border:#8a8a8a solid 1px;" alt="..." th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                                             th:onerror="|this.src='@{/user/images/no-image.svg}'|">
                                     </div>
 
                                     <!-- 설명 / 버튼 -->
                                     <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                            <p class="orderApplicationDate" th:text="${l.orderApplicationDate}">2023.10.30 결제</p>
+                                            <p class="orderApplicationDate" th:text="${#strings.substring(l.orderApplicationDate,0,10)}">2023.10.30 결제</p>
                                             <h5 class="orderName" th:text="${l.orderFundingName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
                                             <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
                                                 <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
@@ -448,29 +448,40 @@
                             </div>
                         </div>
 
-                        <!-- 모달팝업 -->
-                        <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-
-                                    <!-- 팝업창 내용 -->
-                                    <div class="modal-body detail">
-                                        <p>정말로 취소하시겠습니까?</p>
-                                    </div>
-
-                                    <div class="modal-footer" >
-                                        <button type="submit" class="submitBtn_white" data-dismiss="modal">취소</button>
-                                        <button type="submit" class="submitBtn_black">확인</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
                 <div id="menu2" class="container tab-pane ">
                     <div class="titleContainer">
-                        <div class="tabTitle">찜한 펀딩</div>
+                        <div class="tabTitle">찜한 리워드 펀딩</div>
+                    </div>
+                    <div class="bodyContainer" id="rewardGreatProject">
+                        <!--  내역 리스트 항목 -->
+                        <div class="contentsContainer mb-lg-5 text-dark" th:each="l : ${rewardGreatList}"
+                             th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode})}'|">
+                            <div class="card" style="width: 48rem;">
+                                <!-- 내역 상태 ( 주문 상태 상세 )  -->
+                                <h5 class="card-header" th:text="${l.projectSubject}"></h5>
+                                <!-- 내역 내용 -->
+                                <div class="card-body" style="display: flex">
+                                    <!-- 이미지  -->
+                                    <div>
+                                        <img class="card-img-top" style="width: 160px; height: 160px; border:#8a8a8a solid 1px;" alt="..." th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                                             th:onerror="|this.src='@{/user/images/no-image.svg}'|">
+                                    </div>
+
+                                    <!-- 설명 / 버튼 -->
+                                    <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
+                                        <span style=" font-weight: bold; font-size: 20px; color: #235FD9;" th:text="|${l.projectAchievementPercent}% 달성|"></span>
+                                        <span>펀딩 목표 금액 : <span class="text-primary" th:text="${#numbers.formatInteger(l.projectGoalMoney,0,'COMMA')}"></span> 원</span>
+                                        <span>펀딩 달성 금액 : <span class="text-primary" th:text="${#numbers.formatInteger(l.projectAchievementMoney,0,'COMMA')}"></span> 원</span>
+                                        <span>펀딩 마감 일자 : <span class="reward-item-span-third" th:text="${#strings.substring(l.projectEndDate,0,10)}"></span></span>
+                                        <div class="reward-item-fourth-child" th:text="${l.regCompany}"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

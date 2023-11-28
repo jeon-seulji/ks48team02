@@ -3,6 +3,7 @@ package ksmart.ks48team02.user.controller.investment;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.user.dto.InvestmentContent;
 import ksmart.ks48team02.user.dto.InvestmentInfo;
+import ksmart.ks48team02.user.dto.InvestmentJudge;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +43,11 @@ public class InvestmentController {
 
     @GetMapping("/detail/main")
     public String getDetailMainPage(Model model) {
+        List<InvestmentJudge> investmentJudge = userInvestmentService.getInvestmentJudge();
+        model.addAttribute("investmentJudge", investmentJudge);
+
+        List<InvestmentInfo> investmentInfo = userInvestmentService.getInvestmentInfo();
+        model.addAttribute("investmentInfo", investmentInfo);
 
         List<InvestmentContent> investmentContent = userInvestmentService.getInvestmentContent();
         model.addAttribute("investmentContent", investmentContent);
