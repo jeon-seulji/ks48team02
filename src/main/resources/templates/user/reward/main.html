@@ -180,12 +180,16 @@
         $('#projectArrange').children().each((idx,item)=>{
             if($(item).data('arrange') == projectArrange) {
                 sortItemClickedStyle(item);
+                return false;
             }
         });
 
         $('.category-li').each((idx,item)=>{
             if($(item).data('category') == category) {
+                let categoryName = $(item).find('p').text();
+                $('#categoryName').text(categoryName);
                 cateItemClickedStyle(item);
+                return false;
             }
         });
 
@@ -274,7 +278,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex col">
-                    <p style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
+                    <p id="categoryName" style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
                     <div id="sort-item-wrap" class="d-flex" style="margin-left: auto">
                         <select id="projectProgress" style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
                             <option value="all" th:selected="${projectStatus == 'all'}">전체</option>
@@ -299,13 +303,13 @@
                              th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode},searchCnt='true')}'|">
                             <div class="reward-item-first-child">
                                 <img class="reward-item-third-child-image" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
-                                     onerror="this.src = 'https://st2.depositphotos.com/3904951/8925/v/450/depositphotos_89250312-stock-illustration-photo-picture-web-icon-in.jpg';">
+                                     onerror="this.src = '';">
                             </div>
                             <div class="reward-item-second-child">
                                 <span class="reward-item-span-first"></span>
                                 <input class="reward-item-goalMoney" th:value="${l.projectGoalMoney}" hidden="hidden"/>
                                 <span class="reward-item-span-second" th:text="${l.projectAchievementMoney}"></span>
-                                <span class="reward-item-span-third" th:text="${l.projectEndDate}"></span>
+                                <span class="reward-item-span-third" th:text="${#strings.substring(l.projectEndDate,0,10)}"></span>
                             </div>
                             <div class="reward-item-third-child">
                                 <p th:text="${l.projectSubject}"></p>

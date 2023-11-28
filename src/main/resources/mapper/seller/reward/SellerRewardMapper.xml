@@ -70,9 +70,7 @@
         FROM
             reward_project AS r
         <where>
-            <if test="sellerID != null">
-                AND r.member_id = #{sellerID}
-            </if>
+                AND r.member_id = #{sellerId}
             <if test="projectCondition != null and !projectCondition.equals('')">
                 AND r.project_condition = #{projectCondition}
             </if>
@@ -91,9 +89,7 @@
         FROM
             reward_project as r
         <where>
-            <if test="sellerID != null">
-                AND r.member_id = #{sellerID}
-            </if>
+                AND r.member_id = #{sellerId}
             <if test="projectCondition != null and !projectCondition.equals('')">
                 AND r.project_condition = #{projectCondition}
             </if>

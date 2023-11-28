@@ -61,6 +61,11 @@ public class PojectRegistrationContoller {
         String memberType = (String)session.getAttribute("STYPECODE");
         String returnAddr = "user/account/login";
 
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+
+        model.addAttribute("recommendProjectList",recommendProjectList);
+
         return "user/projectRegistration/main";
     }
 
