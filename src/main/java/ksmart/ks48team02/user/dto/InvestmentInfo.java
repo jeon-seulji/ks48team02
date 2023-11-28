@@ -48,6 +48,9 @@ public class InvestmentInfo {
     private int issueStockNumber;
 
 
+    private String categoryName;
+
+
 
 
 
