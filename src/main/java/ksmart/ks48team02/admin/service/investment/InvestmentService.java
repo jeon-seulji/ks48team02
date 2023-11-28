@@ -29,6 +29,13 @@ public class InvestmentService {
     }
 
     // 투자펀딩 심사요청 목록 조회
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListOnly() {
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeInfoOnly = adminInvestmentMapper.getInvestmentRequestJudgeListOnly();
+
+        return investmentRequestJudgeInfoOnly;
+    }
+
+    // 투자펀딩 심사요청 목록 조회(페이징)
     public Map<String, Object> getInvestmentRequestJudgeList(int currentPage) {
 
         // 보여줄 행의 갯수

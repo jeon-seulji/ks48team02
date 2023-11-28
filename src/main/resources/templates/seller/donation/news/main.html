@@ -240,7 +240,7 @@
 <th:block layout:fragment="customContents">
     <div class="container">
         <div class="row">
-            <div class="donation-item-box col-lg-4" th:if="${l.donationCondition == 3}" th:each="l : ${allDonationInfo}">
+            <div class="donation-item-box col-lg-4" th:if="${l.donationCondition == 3 || l.donationCondition == 4 || l.donationCondition == 5}" th:each="l : ${allDonationInfo}">
                 <div class="item-hover" th:onclick="|location.href='@{/user/donation/detail(donationCode=${l.donationCode})}'|">
                     <div class="donation-item-first-child">
                         <img class="donation-item-third-child-image" th:src="|@{/summernoteImage/}${l.donationImage}|">

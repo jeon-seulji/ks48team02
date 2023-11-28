@@ -32,4 +32,13 @@ public class CouponController {
 
         return "user/coupon/main";
     }
+
+    @GetMapping("/couponZone")
+    public String userCouponZone(Model model){
+        model.addAttribute("title", "쿠폰존");
+
+
+        return "user/coupon/couponZone";
+    }
+
 }

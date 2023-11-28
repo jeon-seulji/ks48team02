@@ -13,6 +13,9 @@ import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
 public interface AdminInvestmentMapper {
 
     // 투자펀딩 심사요청 목록 조회
+    public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListOnly();
+
+    // 투자펀딩 심사요청 목록 조회(페이징)
     public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeList(int startRowNum, int rowPerPage);
 
     // 투자펀딩 심사요청 전체 행의 갯수

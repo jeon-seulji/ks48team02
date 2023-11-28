@@ -190,6 +190,13 @@ public class InvestmentService {
         return resultMap;
     }
 
+    // 판매자 특정 투자펀딩 심사요청 조회
+    public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String memberIdSeller, String investmentRequestJudgeCode) {
+        AdminInvestmentRequestJudge investmentRequestJudgeInfo = sellerInvestmentMapper.getInvestmentRequestJudgeByCode(memberIdSeller, investmentRequestJudgeCode);
+
+        return investmentRequestJudgeInfo;
+    }
+
     // 판매자 투자후 기업정보 공개(주식) 목록 조회
     public  Map<String, Object> getAfterFundRevenueStockList(String memberId, int currentPage) {
 
@@ -206,15 +213,61 @@ public class InvestmentService {
         int startPageNum = pagingInfo.get("startPageNum");
         int endPageNum = pagingInfo.get("endPageNum");
 
-        List<SellerAfterFundRevenueStock> SellerAfterFundRevenueStockList = sellerInvestmentMapper.getAfterFundRevenueStockList(memberId, startRowNum, rowPerpage);
+        List<SellerAfterFundRevenueStock> sellerAfterFundRevenueStockList = sellerInvestmentMapper.getAfterFundRevenueStockList(memberId, startRowNum, rowPerpage);
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("SellerAfterFundRevenueStockList", SellerAfterFundRevenueStockList);
+        resultMap.put("sellerAfterFundRevenueStockList", sellerAfterFundRevenueStockList);
         resultMap.put("lastPage", lastPage);
         resultMap.put("startPageNum", startPageNum);
         resultMap.put("endPageNum", endPageNum);
 
         return resultMap;
+    }
+
+    // 판매자 검색조건에 따른 투자후 기업정보 공개(주식) 목록 조회
+    public  Map<String, Object> getAfterFundRevenueStockList(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int currentPage) {
+
+        switch (searchKey) {
+            case "afterFundRevenueCode":
+                searchKey = "af.after_fund_revenue_stock_code";
+                break;
+            case "memberId":
+                searchKey = "af.member_id";
+                break;
+            case "investmentCode":
+                searchKey = "af.investment_code";
+                break;
+        }
+
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = sellerInvestmentMapper.getAfterFundRevenueStockCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<SellerAfterFundRevenueStock> sellerAfterFundRevenueStockList = sellerInvestmentMapper.getAfterFundRevenueStockListBySearch(memberId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("sellerAfterFundRevenueStockList", sellerAfterFundRevenueStockList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+    }
+
+    // // 판매자 특정 기업정보 공개(주식) 조회
+    public SellerAfterFundRevenueStock getAfterFundRevenueStockByCode(String memberId, String afterFundRevenueStockCode) {
+        SellerAfterFundRevenueStock afterFundRevenueStockInfo = sellerInvestmentMapper.getAfterFundRevenueStockByCode(memberId, afterFundRevenueStockCode);
+
+        return afterFundRevenueStockInfo;
     }
 
     // 판매자 투자후 기업정보 공개(채권) 목록 조회
@@ -233,10 +286,10 @@ public class InvestmentService {
         int startPageNum = pagingInfo.get("startPageNum");
         int endPageNum = pagingInfo.get("endPageNum");
 
-        List<SellerAfterFundRevenueBond> SellerAfterFundRevenueBondList = sellerInvestmentMapper.getAfterFundRevenueBondList(memberId, startRowNum, rowPerpage);
+        List<SellerAfterFundRevenueBond> sellerAfterFundRevenueBondList = sellerInvestmentMapper.getAfterFundRevenueBondList(memberId, startRowNum, rowPerpage);
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("SellerAfterFundRevenueBondList", SellerAfterFundRevenueBondList);
+        resultMap.put("sellerAfterFundRevenueBondList", sellerAfterFundRevenueBondList);
         resultMap.put("lastPage", lastPage);
         resultMap.put("startPageNum", startPageNum);
         resultMap.put("endPageNum", endPageNum);
@@ -244,11 +297,50 @@ public class InvestmentService {
         return resultMap;
     }
 
-    // 판매자 특정 투자펀딩 심사요청 조회
-    public AdminInvestmentRequestJudge getInvestmentRequestJudgeByCode(String memberIdSeller, String investmentRequestJudgeCode) {
-        AdminInvestmentRequestJudge investmentRequestJudgeInfo = sellerInvestmentMapper.getInvestmentRequestJudgeByCode(memberIdSeller, investmentRequestJudgeCode);
+    // 판매자 투자후 기업정보 공개(채권) 목록 조회
+    public  Map<String, Object> getAfterFundRevenueBondList(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int currentPage) {
 
-        return investmentRequestJudgeInfo;
+        switch (searchKey) {
+            case "afterFundRevenueCode":
+                searchKey = "af.after_fund_revenue_bond_code";
+                break;
+            case "memberId":
+                searchKey = "af.member_id";
+                break;
+            case "investmentCode":
+                searchKey = "af.investment_code";
+                break;
+        }
+
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = sellerInvestmentMapper.getAfterFundRevenueBondCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<SellerAfterFundRevenueBond> sellerAfterFundRevenueBondList = sellerInvestmentMapper.getAfterFundRevenueBondListBySearch(memberId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("sellerAfterFundRevenueBondList", sellerAfterFundRevenueBondList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+    }
+
+    // 판매자 특정 기업정보 공개(채권) 조회
+    public SellerAfterFundRevenueBond getAfterFundRevenueBondByCode(String memberId, String afterFundRevenueBondCode) {
+        SellerAfterFundRevenueBond afterFundRevenueBondInfo = sellerInvestmentMapper.getAfterFundRevenueBondByCode(memberId, afterFundRevenueBondCode);
+
+        return afterFundRevenueBondInfo;
     }
 
     // 판매자 자본시장법 범위충족기준 목록 조회
