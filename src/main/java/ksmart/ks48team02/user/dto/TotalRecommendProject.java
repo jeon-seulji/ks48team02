@@ -3,7 +3,7 @@ package ksmart.ks48team02.user.dto;
 import lombok.Data;
 
 @Data
-public class StoreProject {
+public class TotalRecommendProject {
     private String projectCode;
     private String categoryCode;
     private String projectImage;

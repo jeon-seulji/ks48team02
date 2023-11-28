@@ -118,6 +118,8 @@
 		<!-- main swiper slide end -->
 
 		<div class="main-wrap">
+
+			<!-- recommend project list -->
 			<section class="main-section main-contents-1">
 				<div class="container">
 					<div id="mdJoinProject">
@@ -130,151 +132,25 @@
 						<!-- Swiper -->
 						<div class="swiper mySwiper">
 							<div class="swiper-wrapper">
-								<div class="swiper-slide">
-									<a th:href="@{#}">
+								<div class="swiper-slide" th:unless="${getRecommendPjgList == null}" th:each="rpl : ${getRecommendPjgList}">
+									<a th:href="|${(rpl.projectType == '리워드')? '@{/user/reward/detail(rewardProjectCode=${rpl.projectCode}, searchCnt=true)}':
+						(rpl.projectType == '기부')? '@{/user/donation/detail(donationCode=${rpl.projectCode})}':'/user/investment/detail/main(investmentCode=${rpl.projectCode})'}|">
 										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
+											<div th:style="'background-image: url(' + |@{/summernoteImage/}${rpl.projectImage}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
 										</div>
 										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션! 지금 구매하면 한정 에디션 구매 선착 500명</div>
+											<div class="product-main-title">[[${rpl.subject}]]</div>
 											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
+									<span class="funding-percent">
+										<em>[[${rpl.achievementPercent}]]</em>
+										%
+									</span>
+												<span class="category">
+										[[${rpl.categoryName}]]
+										·
+										[[${rpl.storeName}]]
+									</span>
 											</div>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a th:href="@{#}">
-										<div class="slide-img">
-											<div th:style="'background-image: url('+ @{/user/images/thumb/thumb_img_1.jpg} +');'"></div>
-										</div>
-										<div class="description">
-											<div class="product-main-title">[글로벌23억] 보이지 않는 터치패드! 모키보 퓨전키보드 화이트 에디션!</div>
-											<div class="product-detail-info">
-												<span class="funding-percent">350%</span>
-												<span class="category">테크·가전</span>
-											</div>
-
 										</div>
 									</a>
 								</div>
