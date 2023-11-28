@@ -16,16 +16,16 @@
                 <div class="collapse navbar-collapse" id="ftco-nav-detail">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item" id="story">
-                            <a th:href="@{/user/investment/detail/main}" class="nav-link">온라인IR</a>
+                            <a th:href="@{/user/investment/detail/main(investmentCode=${investmentInfo.investmentCode})}" class="nav-link">온라인IR</a>
                         </li>
                         <li class="nav-item" id="news">
-                            <a th:href="@{/user/investment/detail/news}" class="nav-link">새소식</a>
+                            <a th:href="@{/user/investment/detail/news(investmentCode=${investmentInfo.investmentCode})}" class="nav-link">새소식</a>
                         </li>
                         <li class="nav-item" id="comments">
-                            <a th:href="@{/user/investment/detail/comment}" class="nav-link">커뮤니티</a>
+                            <a th:href="@{/user/investment/detail/comment(investmentCode=${investmentInfo.investmentCode})}" class="nav-link">커뮤니티</a>
                         </li>
                         <li class="nav-item" id="investor">
-                            <a th:href="@{/user/investment/detail/investor}" class="nav-link">투자자</a>
+                            <a th:href="@{/user/investment/detail/investor(investmentCode=${investmentInfo.investmentCode})}" class="nav-link">투자자</a>
                         </li>
                     </ul>
 
