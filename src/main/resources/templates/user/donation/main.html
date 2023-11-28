@@ -299,13 +299,13 @@
                 // 남은 일 수
                 let $condition = $(this).parent().next().next().text();
 
-                if (daysRemaining+1 <= 0 && $condition == 4){
+                if (daysRemaining <= 0 && $condition == 4){
                     $(this).text('종료:성공');
                     $(this).next().remove();
                     $(this).addClass('donation-item-span-third-success');
                     $(this).removeClass('donation-item-span-third');
                     // $(this).parent().removeClass('donation-item-span-third-parent');
-                }else if(daysRemaining+1 <= 0 && $condition == 5){
+                }else if(daysRemaining <= 0 && $condition == 5){
                     $(this).text('종료:실패');
                     $(this).addClass('donation-item-span-third-fail');
                     $(this).next().remove();
@@ -314,7 +314,7 @@
                     $(this).parent().css('color', 'rgba(255,1,15,0.77)');
 
                 }else {
-                    $(this).text(daysRemaining+1);
+                    $(this).text(daysRemaining);
                 }
 
             });
