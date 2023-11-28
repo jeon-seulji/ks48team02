@@ -165,7 +165,7 @@
           <div class="swiper-slide" th:each="l : ${recommendProjectList}"
                th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode},searchCnt='true')}'|">
             <img class="slide-thumb" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
-                 onerror="this.src = 'https://st2.depositphotos.com/3904951/8925/v/450/depositphotos_89250312-stock-illustration-photo-picture-web-icon-in.jpg';"/>
+                 th:onerror="|this.src='@{/user/images/no-image.svg}'|"/>
             <div class="description">
               <div class="product-main-title" th:text="${l.projectSubject}"></div>
               <div class="product-detail-info">
