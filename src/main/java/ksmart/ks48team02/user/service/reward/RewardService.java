@@ -175,4 +175,18 @@ public class RewardService {
     public int projectGreatCheck(String rewardProjectCode, String loginMemberId) {
         return rewardMapper.projectGreatCheck(rewardProjectCode,loginMemberId);
     }
+
+    //찜하기 진행
+    public void greatInsert(String rewardProjectCode, String loginMemberId){
+        rewardMapper.greatInsert(rewardProjectCode, loginMemberId);
+    }
+    //찜하기 취소
+    public void greatCancel(String rewardProjectCode, String loginMemberId){
+        rewardMapper.greatCancel(rewardProjectCode, loginMemberId);
+    }
+
+    //프로젝트 추천 리스트 조회
+    public List<RewardProject> projectRecommendList() {
+        return rewardMapper.projectRecommendList();
+    }
 }

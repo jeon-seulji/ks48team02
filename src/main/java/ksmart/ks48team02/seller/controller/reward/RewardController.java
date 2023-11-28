@@ -61,7 +61,7 @@ public class RewardController {
         return "seller/reward/products/main";
     }
 
-    //현황 별 프로젝트 조회 ajax
+    //현황 별 프로젝트 조회 ajax방법. 현재는 사용하지 않음. ajax 아닌 get방식으로 구현
     @PostMapping ("/products")
     @ResponseBody
     public String productsPage(HttpSession httpSession,
@@ -95,7 +95,7 @@ public class RewardController {
         return "redirect:/seller/reward/products";
     }
 
-    //프로젝트 시작
+    //프로젝트 수정.
     @GetMapping("/products/modify")
     public String productModifyPage(Model model,
                                     @RequestParam(name="rewardProjectCode") String rewardProjectCode){
@@ -110,16 +110,17 @@ public class RewardController {
     }
 
 
-    // 판매자 상품 검색태그 수정 패이지
+    // 판매자 사전체험단 관리 페이지
     @GetMapping("/products/preExperienceRecruit")
     public String preExperienceRecruitPage(Model model) {
 
         return "seller/reward/products/pre_experience_recruit";
     }
 
-    // 판매자 사전체험단 관리 페이지
+    // 판매자 상품 검색태그 수정 패이지
     @GetMapping("/products/searchTagModify")
     public String serchTagModifyPage(Model model) {
+
 
         return "seller/reward/products/search_tag_modify";
     }
@@ -134,7 +135,6 @@ public class RewardController {
 
         return "seller/reward/news/main";
     }
-
 
     //판매자 댓글 관리
     @GetMapping("/products/comment")

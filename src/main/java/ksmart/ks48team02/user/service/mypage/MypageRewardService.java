@@ -2,10 +2,13 @@ package ksmart.ks48team02.user.service.mypage;
 
 
 import ksmart.ks48team02.user.dto.MypageReward;
+import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.mapper.mypage.MypageRewardMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -73,8 +76,13 @@ public class MypageRewardService {
         mypageRewardMapper.returnPointLogInsert(orderInfo);
         //플로버 적립 내역 insert
         mypageRewardMapper.savingFloverLogInsert(orderInfo);
-
     }
+
+    //리워드 프로젝트 찜 목록 조회
+    public List<RewardProject> rewardProjectGreatList(String loginMemberId) {
+        return mypageRewardMapper.rewardProjectGreatList(loginMemberId);
+    }
+
 
 
 }

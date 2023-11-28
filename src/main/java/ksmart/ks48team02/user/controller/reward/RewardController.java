@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URI;
@@ -47,7 +48,7 @@ public class RewardController {
                            @RequestParam(name="projectArrange", required = false, defaultValue = "like") String projectArrange,
                            @RequestParam(name="category", required = false, defaultValue = "allCategory") String category) {
 
-
+        //리워드 진행중인 전체 리워드 프로젝트 조회
         List<RewardProject> rewardProjectList = rewardService.rewardProjectList(projectStatus, projectArrange, category);
         model.addAttribute("rewardProjectList",rewardProjectList);
         model.addAttribute("projectStatus",projectStatus);
@@ -67,12 +68,19 @@ public class RewardController {
         if(searchCnt) {
             rewardService.searchCnt(rewardProjectCode);
         }
+        //리워드 상세페이지 정보 조회
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //로그인 한 회원 아이디 조회
         String loginMemberId = (String) httpSession.getAttribute("SID");
+        // 회원이 프로젝트 찜 했는지 조회
         int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,loginMemberId);
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
 
         model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("rewardProject",rewardProject);
+        model.addAttribute("recommendProjectList",recommendProjectList);
+
         log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
 
         return "user/reward/detail/main";
@@ -89,7 +97,10 @@ public class RewardController {
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
         //댓글 리스트 조회
         List<RewardComment> rewardCommentList = rewardService.getCommentList(rewardProjectCode);
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
 
+        model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("memberId", memberId);
         model.addAttribute("rewardCommentList", rewardCommentList);
@@ -163,9 +174,14 @@ public class RewardController {
     @GetMapping("/detail/news")
     public String newsPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
 
+        //프로젝트 상세정보 조회
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //프로젝트 새소식 조회
         List<NewsList> newsList = donationService.getNewsList(rewardProjectCode);
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
 
+        model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("newsList",newsList);
 
@@ -178,9 +194,14 @@ public class RewardController {
                                  @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
                                  @RequestParam(name = "newCode") String newsCode){
 
+        //프로젝트 상제정보 조회
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //프로젝트 새소식 조회
         NewsList newsList = donationService.getDetailNews(newsCode);
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
 
+        model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("newsList", newsList);
 
@@ -214,6 +235,7 @@ public class RewardController {
         model.addAttribute("rewardOrderInfo", rewardOrderInfo);
         model.addAttribute("orderMemberInfo", orderMemberInfo);
         model.addAttribute("memberHaveCouponList", memberHaveCouponList);
+        model.addAttribute("rewardOptionCode",rewardOptionCode);
 
         return "user/reward/order/main";
     }
@@ -272,8 +294,12 @@ public class RewardController {
     @GetMapping("/detail/refundPolicy")
     public String refundPolicyPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode){
 
+        //프로젝트 상세정보 조회
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
 
+        model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
 
@@ -283,11 +309,18 @@ public class RewardController {
     //찜하기
     @GetMapping("/great")
     public String great (@RequestParam(name="rewardProjectCode") String rewardProjectCode,
-                         @RequestParam(name="greatCheck") int greatCheck){
-        System.out.println(rewardProjectCode);
-        System.out.println(greatCheck);
+                         @RequestParam(name="greatCheck") int greatCheck,
+                         HttpSession httpSession,
+                         RedirectAttributes reattr){
+        reattr.addAttribute("rewardProjectCode",rewardProjectCode);
+        String loginMemberId = (String) httpSession.getAttribute("SID");
+        if(greatCheck > 0) {
+            rewardService.greatCancel(rewardProjectCode, loginMemberId);
+        } else {
+            rewardService.greatInsert(rewardProjectCode, loginMemberId);
+        }
 
-        return "user/reward/detail";
+        return "redirect:/user/reward/detail";
     }
 
 
