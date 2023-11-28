@@ -42,15 +42,12 @@ public class InvestmentController {
 
 
     @GetMapping("/detail/main")
-    public String getDetailMainPage(Model model) {
-        List<InvestmentJudge> investmentJudge = userInvestmentService.getInvestmentJudge();
-        model.addAttribute("investmentJudge", investmentJudge);
+    public String getDetailMainPage(Model model,
+                                    @RequestParam(name = "investmentCode") String investmentCode) {
 
-        List<InvestmentInfo> investmentInfo = userInvestmentService.getInvestmentInfo();
+        InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
+
         model.addAttribute("investmentInfo", investmentInfo);
-
-        List<InvestmentContent> investmentContent = userInvestmentService.getInvestmentContent();
-        model.addAttribute("investmentContent", investmentContent);
 
         model.addAttribute("title", "투자 상세 페이지");
 

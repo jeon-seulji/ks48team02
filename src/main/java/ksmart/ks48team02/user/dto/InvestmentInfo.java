@@ -35,7 +35,17 @@ public class InvestmentInfo {
 
 
 
-    private String categoryName;
+    private String investmentContentCode;
+    private String projectIntroduction;
+    private String marketAnalysis;
+    private String majorFinancialInformation;
+    private String risk;
+    private String majorManpower;
+    private String patentAwardDetails;
+    private String etcInvestContent;
+    private String companyBusinessTypeCode;
+    private int stockNumber;
+    private int issueStockNumber;
 
 
 
