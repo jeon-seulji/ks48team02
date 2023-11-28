@@ -29,7 +29,8 @@ public class UserManagementController {
     // 로그인 로그 조회
     @PostMapping("/getLoginLog")
     @ResponseBody
-    public List<UserManagement> getLoginLog(@RequestParam(name="memberId") String memberId,
+    public List<UserManagement> getLoginLog(@RequestParam(name="memberId", required = false) String memberId,
+
                                             @RequestParam(name="startDate") String startDate,
                                             @RequestParam(name="endDate") String endDate){
         List<UserManagement> loginLogs = userManagementService.getLoginLogById(memberId, startDate, endDate);
@@ -37,6 +38,7 @@ public class UserManagementController {
         log.info("로그인 로그 {}", loginLogs);
 
         return loginLogs;
+
     }
 
     @GetMapping("/loginLog")

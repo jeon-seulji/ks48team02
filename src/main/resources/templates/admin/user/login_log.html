@@ -32,17 +32,18 @@
             </tr>
             <tr>
                 <td>
-                    회원 ID
+                    검색 조건
                 </td>
                 <td class="member-category-select">
-                    <select name="sellerSearchKey">
+                    <select name="sellerSearchKey" id="select-condition">
                         <option value="total">전체</option>
                         <option value="seller">일반 판매자</option>
                         <option value="representative">대표 판매자</option>
                         <option value="employee">직원 판매자 </option>
                         <option value="orderFundingName">구매자</option>
+                        <option value="member-id">ID</option>
                     </select>
-                    <input type="text" style="padding: 5px; width: 250px;" name="userSearchable" id="search-id">
+                    <input type="text" style="padding: 5px; width: 250px;" name="userSearchable" id="search-id" placeholder=" id 미입력시 전체 검색">
                 </td>
             </tr>
             </tbody>
@@ -87,7 +88,6 @@
                     <th style="width:10%;">식별 코드</th>
                     <th style="width:10%;">ID</th>
                     <th style="width:10%;">로그인 일시</th>
-                    <th style="width:10%;">로그아웃 일시</th>
                     <th style="width:10%;">접속 IP</th>
                 </tr>
                 </thead>
@@ -113,10 +113,13 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
+        let $selectCondition = document.getElementById('select-condition').value;
+
         let $searchId = document.getElementById('search-id');
         let $searchIdBtn = document.querySelector('.orderSearchBtn.submitBtn');
         const numFormat = num => num < 10 ? `0${num}` : num;
-        const dateFormat = targetDate => {
+        // 데이터 포맷 함수
+        const dateFormat = targetDate => { // Date 객체 전달시
             let year = targetDate.getFullYear();
             let month = numFormat(targetDate.getMonth()+1);
             let date = numFormat(targetDate.getDate());
@@ -125,71 +128,82 @@
             let seconds = numFormat(targetDate.getSeconds());
             return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
         }
+
+
+
+        /* 검색 버튼 클릭 이벤트 설정 */
         $searchIdBtn.addEventListener('click',function (){
+            // 선택된 날짜 객체화
             let selectedStartDate = dateFormat(new Date(document.getElementById('start-date').value));
             let selectedEndDate = dateFormat(new Date(document.getElementById('end-date').value));
             console.log('포맷 입히기 전: ',new Date(document.getElementById('end-date').value));
-            console.log(selectedStartDate);
-            console.log(selectedEndDate);
-            /* 유효성 검사  */
-                if( $searchId.value.trim() === '' || typeof $searchId === 'undefined' || $searchId.value == null ) {
-                    alert('회원 아이디를 입력해 주세요');
-                }else{
-                    $.ajax({
-                        url : '/admin/user/getLoginLog',
-                        method : 'POST',
-                        data : {'memberId' : $searchId.value, 'startDate': selectedStartDate, 'endDate' : selectedEndDate },
-                        dataType : 'json'
-                    })
-                        .done(function(response){
-                            //$('.login-log tbody').empty();
-                            if(document.querySelector('.login-log tbody').childElementCount>1){
-                                document.querySelector('.login-log tbody').replaceChildren();
-                            }
-                            console.log(response)
-                            // 표시할 데이터가 들어있는 HTML 코드를 생성
-                            let html = '';
-                            // 0.선택된 날짜 객체화
-                            let selectedStartDate = new Date(document.getElementById('start-date').value);
-                            let selectedEndDate = new Date(document.getElementById('end-date').value);
+                // 검색조건으로 아이디 선택시
+                if($selectCondition == 'member-id') {
+                    if ($searchId.value.trim() === '' || typeof $searchId === 'undefined' || $searchId.value == null) {
+                        alert('회원 아이디를 입력해 주세요');
+                    } else {
+                        $.ajax({
+                            url: '/admin/user/getLoginLog',
+                            method: 'POST',
+                            data: {
+                                'memberId': $searchId.value,
+                                'startDate': selectedStartDate,
+                                'endDate': selectedEndDate
+                            },
+                            dataType: 'json'
+                        })
+                            .done(function (response) {
+                                // 기존 검색 결과가 있다면 지우기
+                                if (document.querySelector('.login-log tbody').childElementCount > 1) {
+                                    document.querySelector('.login-log tbody').replaceChildren();
+                                }
 
-                            if(response.length > 0){
-                                // 1. 선택한 날짜에 해당하는 기간만 필터링
-                               let filteredData = response.filter(function (data){ // 반환값 true만 배열에 포함
-                                   let loginTimeData = new Date(data.loginTime);
-                                   let logoutTimeData = new Date(data.logoutTime);
-                                   loginTimeData.setHours(0, 0, 0, 0);
-                                   logoutTimeData.setHours(0, 0, 0, 0);
-                                   let loginResult = (selectedStartDate <= loginTimeData && loginTimeData <= selectedEndDate);
-                                   let logoutResult = (selectedStartDate <= logoutTimeData && logoutTimeData <= selectedEndDate);
-                                   return loginResult || logoutResult;
-                               });
+                                // 표시할 데이터가 들어 있는 HTML 코드를 생성
+                                let html = '';
 
-                                // 2. 필터링된 데이터만 렌더링
-                                filteredData.forEach(function (data) {
+                                if (response.length > 0) {
+                                    // 1. 선택한 날짜에 해당하는 기간만 필터링
+                                    let filteredData = response.filter(function (data) { // 반환값 true만 배열에 포함
+
+                                        let beforeFormat = new Date(data.loginTime);
+                                        console.log('beforeFormat: setHours 메소드 사용 전 ', beforeFormat);
+                                        beforeFormat.setHours(0, 0, 0, 0); // 선택된 날짜들이 오전 9시로 되어 있으므로 비교시 그 이후 시간에 들어간 데이터들은 그날분으로 나오지 않는다 -> 데이터들의 시간을 0시 0분 0초로 설정하기
+                                        console.log('beforeFormat:  setHours 메소드 사용 후 ', beforeFormat);
+
+                                        let loginTimeData = dateFormat(beforeFormat);
+
+                                        console.log(`포맷된 login 일시`, loginTimeData);
+
+                                        let loginResult = (selectedStartDate <= loginTimeData && loginTimeData <= selectedEndDate);
+                                        console.log(`login result`, loginResult);
+                                        return loginResult;
+                                    });
+
+                                    // 2. 필터링된 데이터만 렌더링
+                                    filteredData.forEach(function (data) {
+                                        html += '<tr>';
+                                        html += '<td class="table-data-center"><input type="checkbox" name="selectList"></td>';
+                                        html += '<td class="table-data-center">' + (data.loginLogCode) + '</td>';
+                                        html += '<td class="table-data-center">' + (data.memberId) + '</td>';
+                                        html += '<td class="table-data-center">' + (data.loginTime !== null && data.loginTime !== undefined ? data.loginTime : '-') + '</td>';
+                                        html += '<td class="table-data-center">' + (data.clientNetAddress) + '</td>';
+                                        html += '</tr>';
+                                    });
+                                } else { // 해당하는 데이터 없는 경우
                                     html += '<tr>';
-                                    html += '<td class="table-data-center"><input type="checkbox" name="selectList"></td>';
-                                    html += '<td class="table-data-center">' + (data.loginLogCode )+ '</td>';
-                                    html += '<td class="table-data-center">' + (data.memberId )+ '</td>';
-                                    html += '<td class="table-data-center">' + (data.loginTime !== null && data.loginTime !== undefined ? data.loginTime : '-')+ '</td>';
-                                    html += '<td class="table-data-center">' + (data.logoutTime !== null && data.logoutTime !== undefined ? data.logoutTime : '-')+ '</td>';
-                                    html += '<td class="table-data-center">' + (data.clientNetAddress ) + '</td>';
+                                    html += '<td colSpan="6" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>';
                                     html += '</tr>';
-                                });
-                            }else{ // 해당하는 데이터 없는 경우
-                                html += '<tr>';
-                                html += '<td colSpan="6" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>';
-                                html += '</tr>';
-                            }
+                                }
 
-                            // 표시할 위치에 HTML 코드를 삽입
-                            $('.login-log tbody').html(html);
-                        })
+                                // 표시할 위치에 HTML 코드를 삽입
+                                $('.login-log tbody').html(html);
+                            })
 
-                        .fail(function (jqXHR, textStatus){
-                            alert('통신 중 오류가 발생하였습니다');
-                            console.log(`Request failed: ${textStatus}`);
-                        })
+                            .fail(function (jqXHR, textStatus) {
+                                alert('통신 중 오류가 발생하였습니다');
+                                console.log(`Request failed: ${textStatus}`);
+                            })
+                    }
                 }
         })
 

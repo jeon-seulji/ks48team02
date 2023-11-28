@@ -8,9 +8,6 @@ public class UserManagement {
     private String loginLogCode;
     private String memberId;
     private String loginTime;
-    private String logoutTime;
     private String clientNetAddress;
-    private int logType;
-
 
 }

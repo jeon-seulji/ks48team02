@@ -63,37 +63,13 @@
         </selectKey>
         /* 로그인 로그 인서트 */
         INSERT INTO login_log
-            (login_log_code, member_id, login_time, client_net_address, log_type)
+            (login_log_code, member_id, login_time, client_net_address)
         VALUES
             (#{loginLogCode},
             #{memberId},
             SYSDATE(),
-            #{clientIp},
-            1);
+            #{clientIp});
     </insert>
 
-    <!-- 로그아웃시 로그아웃 로그 업데이트   -->
-    <insert id="addLogoutLog" parameterType="map">
-        <selectKey keyProperty="logOutCode" resultType="String" order="BEFORE">
-            /* 로그인 로그 코드 자동 증가 쿼리문 */
-            SELECT
-                (CASE
-                    WHEN COUNT(l.login_log_code) = 0
-                        THEN 'lg_inout_0001'
-                    WHEN MAX(CAST(SUBSTRING_INDEX(l.login_log_code,'_',-1)AS UNSIGNED))+1 > 9999
-                        THEN CONCAT('lg_inout_', MAX(CAST(SUBSTRING_INDEX(l.login_log_code,'_',-1) AS UNSIGNED))+1)
-                        ELSE CONCAT('lg_inout_', LPAD(MAX(CAST(SUBSTRING_INDEX(l.login_log_code,'_',-1)AS UNSIGNED))+1,4,'0'))
-                END) AS logOutCode
-            FROM
-                login_log AS l;
-        </selectKey>
-        INSERT INTO login_log
-            (login_log_code, member_id, logout_time, client_net_address, log_type)
-        VALUES
-            (#{logOutCode},
-            #{loginId},
-            SYSDATE(),
-            #{clientIp},
-            0);
-    </insert>
+
 </mapper>

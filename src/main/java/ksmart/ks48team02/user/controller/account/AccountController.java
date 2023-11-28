@@ -123,13 +123,7 @@ public class AccountController {
             clientIp = /* address.getHostName() + "/" + */ address.getHostAddress();
         }
 
-
         return clientIp;
-
-
-
-
-
 
     }
 

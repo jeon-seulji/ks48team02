@@ -11,40 +11,41 @@
         <result property="loginTime" column="login_time"/>
         <result property="logoutTime" column="logout_time"/>
         <result property="clientNetAddress" column="client_net_address"/>
+        <association property="member" javaType="Member">
+            <id property="memberId" column="member_id"/>
+            <result property="memberTypeCode" column="member_type_code"/>
+            <result property="memberName" column="member_name"/>
+            <result property="memberPw" column="member_pw"/>
+            <result property="memberRegDate" column="member_reg_date"/>
+            <result property="memberEmail" column="member_email"/>
+            <result property="memberContactInfo" column="contact_info"/>
+            <result property="unRegDate" column="unreg_date"/>
+            <result property="unRegStatus" column="unreg_status"/>
+        </association>
     </resultMap>
-
-<!--    &lt;!&ndash;회원 resultMap &ndash;&gt;-->
-<!--    <resultMap type="Member" id="memberResultMap">-->
-<!--        <id property="memberId" column="member_id"/>-->
-<!--        <result property ="memberTypeCode" column="member_type_code"/>-->
-<!--        <result property="memberName" column="member_name"/>-->
-<!--        <result property="memberPw" column="member_pw"/>-->
-<!--        <result property="memberRegDate" column="member_reg_date"/>-->
-<!--        <result property="memberEmail" column="member_email"/>-->
-<!--        <result property="memberContactInfo" column="contact_info"/>-->
-<!--        <result property="unRegDate" column="unreg_date"/>-->
-<!--        <result property="unRegStatus" column="unreg_status"/>-->
-<!--    </resultMap>-->
 
     <!-- 회원 아이디로 로그인 정보 조회-->
     <select id="getLoginLogById" parameterType="String" resultMap="loginLogResultMap">
         SELECT
-            login_log_code,
-            member_id,
-            login_time,
-            logout_time,
-            client_net_address
+            l.login_log_code,
+            l.member_id,
+            l.login_time,
+            l.client_net_address
         FROM
-            login_log
+            login_log AS l
+            INNER JOIN
+            member AS m
+            on
+            l.member_id = m.member_id
         <where>
             <if test="memberId != null and memberId != ''">
-                member_id = #{memberId}
+                l.member_id = #{memberId}
             </if>
             <if test="startDate != null and startDate != ''">
-                AND login_time >= #{startDate}
+                AND l.login_time <![CDATA[>=]]> #{startDate}
             </if>
-            <if test="endDate != null and endDate != ''">
-                AND logout_time <![CDATA[<=]]> #{endDate}
+            <if test="memberTypeCode != null and memberTypeCode != ''">
+                AND m.member_type_code = #{memberType}
             </if>
         </where>
 
