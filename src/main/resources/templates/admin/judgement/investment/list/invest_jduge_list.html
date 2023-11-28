@@ -85,27 +85,27 @@
              class="sett-total-data admin-content-wrapper form-table">
             <div class="sett-total-item">
                 <h5>오늘 들어온 심사 요청</h5>
-                <div class="sett-total-item-data"><a class="today-add-count" th:href="@{#}"
-                                                     th:text="${l.todayRequestCnt}"></a>건
+                <div class="sett-total-item-data"><span class="today-add-count" th:href="@{#}"
+                                                     th:text="${l.todayRequestCnt}"></span>건
                 </div>
             </div>
             <div class="sett-total-item">
                 <h5>처리중</h5>
-                <div class="sett-total-item-data"><a class="progress-add-count" th:href="@{#}"
-                                                     th:text="${l.standbyCnt}">0</a>건
+                <div class="sett-total-item-data"><span class="progress-add-count" th:href="@{#}"
+                                                     th:text="${l.standbyCnt}">0</span>건
                 </div>
             </div>
             <div class="sett-total-item">
                 <h5>오늘 처리 완료</h5>
-                <div class="sett-total-item-data"><a class="progress-completed-count" th:href="@{#}"
-                                                     th:text="${l.todayProceedCnt}">0</a>건
+                <div class="sett-total-item-data"><span class="progress-completed-count" th:href="@{#}"
+                                                     th:text="${l.todayProceedCnt}">0</span>건
                 </div>
             </div>
             <div class="sett-total-item">
                 <h5>심사 반려</h5>
-                <div class="sett-total-item-data"><a class="progress-error-count"
+                <div class="sett-total-item-data"><span class="progress-error-count"
                                                      th:href="@{/admin/investment/search/judge(investJudgeResult=0)}"
-                                                     th:text="${l.rejectCnt}">0</a>건
+                                                     th:text="${l.rejectCnt}">0</span>건
                 </div>
             </div>
         </div>
