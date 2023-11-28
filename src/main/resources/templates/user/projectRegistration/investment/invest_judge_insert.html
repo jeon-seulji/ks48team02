@@ -375,15 +375,15 @@
 
                   <div class="row g-3">
                     <!-- 세션에서 로그인 한 아이디 가져오기 -->
-                    <input type="hidden" class="form-control" id="memberId" name="memberId" th:value="${memberId}" >
+                    <input type="hidden" class="form-control" id="memberId" name="memberId" th:value="${session.SID}" >
 
                     <div class="my-2 col-12">
                       <label for="securitiesClassification" class="form-label fw-bord text-dark">증권 구분</label>
                       <div class="input-group mb-3">
                         <select class="custom-select" id="securitiesClassification" name="securitiesClassification">
                           <option value="" disabled="disabled" selected="selected">증권 구분</option>
-                          <option class="stock" value="1">주식형</option>
-                          <option class="bond" value="2">채권형</option>
+                          <option class="stock" value="주식">주식형</option>
+                          <option class="bond" value="채권">채권형</option>
                         </select>
                       </div>
                     </div>

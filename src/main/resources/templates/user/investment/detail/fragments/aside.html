@@ -27,14 +27,14 @@
         </div>
         <div>
             <div>
-                <span style="font-size: 20px; color: #235FD9; font-weight: bold">337</span>
+                <span style="font-size: 20px; color: #235FD9; font-weight: bold" th:text="${investmentInfo.investCount}"></span>
                 <span style="color: #235FD9">명 참여</span>
-                <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">11일남음</span>
+                <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" th:text="|${investmentInfo.investmentDeadlineCnt}일남음|"></span>
             </div>
             <div>
-                <span style="font-size: 20px; color: black; font-weight: bold;">480,200</span>
+                <span style="font-size: 20px; color: black; font-weight: bold;" th:text="${investmentInfo.investmentAmount}"></span>
                 <span style="color: black">원 달성</span>
-                <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;">34% 달성</span>
+                <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" th:text="|${investmentInfo.investAchievementPercent}% 달성|"></span>
             </div>
         </div>
         <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
@@ -50,8 +50,8 @@
         </div>-->
         <div style="border: 3px solid #f3f4f5; border-radius: 5px; padding: 20px; text-align: center">
             <div>
-                <div style="color: black; font-weight: bold; font-size: 20px">세종아이콘</div>
-                <div>세종아이콘(주)은 23년 업력의 디자인, 홍보, 영상, IT, 비즈니스플랫폼 사업을 수행하는 사회적기업입니다. 스페셜티 커피 온라인 쇼핑플랫폼 '커핑커피', 임산물 전용 '숲살림' 서비스를 운영하고 있습니다.</div>
+                <div style="color: black; font-weight: bold; font-size: 20px" th:text="${investmentInfo.investmentCompany}"></div>
+                <div>회사 소개문</div>
             </div>
         </div>
 

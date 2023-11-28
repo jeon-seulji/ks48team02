@@ -24,6 +24,10 @@ public interface UserInvestmentMapper {
 
     public InvestmentInfo investmentProjectDetail(String investmentCode);
 
+    public SecuritiesIssuanceStock securitiesStock(String securitiesStock);
+    public SecuritiesIssuanceBond securitiesBond(String securitiesBond);
+
+
 
     // 추천순, 최신순, 인기순, 모집금액순, 마감임박순 정렬
     public List<InvestmentInfo> getSortedList(String orderBy);
