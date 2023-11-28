@@ -51,10 +51,7 @@
     </script>
     <script type="text/javascript" th:inline="javascript">
         // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 코드
-        let rewardProjectCode = '[[${rewardProject.rewardProjectCode}]]';
-        // 썸네일 이미지 경로 지정
-        let thumbNailImageSrc = $('#thumbNailImage').attr('src');
-        $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${rewardProject.projectThumbnailImage}]]');
+        let rewardProjectCode = [[${rewardProject.rewardProjectCode}]];
 
         // 스토리에서 앞에 부분만 잘라서 공백포함 155글자만 가져옴 그뒤는 ... 으로 다자름
         let storyBodyText = $('#storyBody').children('p:eq(0)').text();
@@ -92,16 +89,14 @@
         } else {
             $('#likeBtn').find('svg').attr('fill','lightGrey');
         }
-        //찜하기 누를때마다 아이콘 변화, 찜하기 진행.
+        //찜하기 누를때마다 찜하기 진행, 취소.
         $('#likeBtn').click(function(){
             let fill = $(this).find('svg').attr('fill');
             if(fill === 'currentColor') {
                 //찜하기 취소
-                $(this).find('svg').attr('fill','lightGrey');
                 window.location.href = `/user/reward/great?rewardProjectCode=${rewardProjectCode}&greatCheck=${greatCheck}`;
             } else {
                 //찜하기 진행
-                $(this).find('svg').attr('fill','currentColor');
                 location.href=`/user/reward/great?rewardProjectCode=${rewardProjectCode}&greatCheck=${greatCheck}`;
             }
         })
@@ -122,7 +117,8 @@
                 <div class="swiper mySwiper" style="height: 400px; border-radius: 10px;">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <img id="thumbNailImage"/>
+                            <img id="thumbNailImage"
+                                 th:src="|@{/summernoteImage/}${rewardProject.projectThumbnailImage}|"/>
                         </div>
                     </div>
                     <div class="swiper-button-next"></div>

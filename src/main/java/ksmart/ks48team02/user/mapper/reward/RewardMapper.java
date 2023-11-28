@@ -95,4 +95,13 @@ public interface RewardMapper {
     //프로젝트 찜 여부 조회
     public int projectGreatCheck(String rewardProjectCode, String loginMemberId);
 
+    // 찜하기 진행
+    public int greatInsert(String rewardProjectCode, String loginMemberId);
+
+    // 찜하기 취소
+    public int greatCancel(String rewardProjectCode, String loginMemberId);
+
+    //프로젝트 추천 리스트 조회
+    public List<RewardProject> projectRecommendList();
+
 }
