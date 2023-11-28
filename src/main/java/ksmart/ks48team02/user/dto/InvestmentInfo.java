@@ -15,8 +15,8 @@ public class InvestmentInfo {
     private String investmentSubject;
     private String investmentImage;
     private int investmentLike;
-    private int investmentAmount;
-    private int investmentAchievementMoney;
+    private Long investmentAmount;
+    private Long investmentAchievementMoney;
     private int investAchievementPercent;
     private String investmentCompany;
     private int searchCount;

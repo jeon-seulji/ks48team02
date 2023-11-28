@@ -56,6 +56,16 @@ public class UserInvestmentService {
         return investmentInfo;
     }
 
+    public SecuritiesIssuanceStock securitiesStock(String securitiesStock){
+        SecuritiesIssuanceStock securitiesIssuanceStock = userInvestmentMapper.securitiesStock(securitiesStock);
+        return securitiesIssuanceStock;
+    }
+
+    public SecuritiesIssuanceBond securitiesBond(String securitiesBond){
+        SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentMapper.securitiesBond(securitiesBond);
+        return securitiesIssuanceBond;
+    }
+
     public List<InvestmentInfo> getInvestmentInfo(){
         List<InvestmentInfo> investmentInfo = userInvestmentMapper.getInvestmentInfo();
         return investmentInfo;
