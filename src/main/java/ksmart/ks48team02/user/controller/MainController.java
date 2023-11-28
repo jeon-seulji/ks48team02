@@ -1,9 +1,6 @@
 package ksmart.ks48team02.user.controller;
 
-import ksmart.ks48team02.user.dto.DonationRegistration;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.OrderRank;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.main.UserMainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +47,11 @@ public class MainController {
 
 		log.info("랭크 데이터 :{}", rankList);
 		model.addAttribute("rankList", rankList);
+
+		// 스토어 추천
+		List<StoreProject> getStorePrjList = userMainService.getStorePrjList();
+		log.info("getStorePrjList {}", getStorePrjList);
+		model.addAttribute("storeList", getStorePrjList);
 
 		// 리워드 추천 프로젝트
 		List<RewardProject> getRewardProjectList = userMainService.getRewardPrjList();
