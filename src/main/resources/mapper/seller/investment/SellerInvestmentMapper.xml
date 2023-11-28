@@ -734,6 +734,7 @@
     <!-- 판매자 특정 기업정보 공개(채권) 조회 -->
     <select id="getAfterFundRevenueBondByCode" resultMap="sellerAfterFundRevenueBondListMap">
         /* 판매자 특정 기업정보 공개(채권) 조회 */
+        SELECT
             af.after_fund_revenue_bond_code,
             af.member_id,
             af.investment_code,
@@ -750,6 +751,8 @@
             af.revenue_period_start,
             af.revenue_period_end,
             af.upload_date
+        FROM
+            after_fund_revenue_bond AS af
         WHERE
             af.member_id = #{memberId}
             AND

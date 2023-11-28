@@ -36,6 +36,43 @@
                 searchSelect.value = '';
             }
         }
+
+        // 현재 URL 가져오기
+        let currentUrl = window.location.href;
+
+        // 특정 키와 값 설정
+        let searchKey = 'searchKey';
+        let searchValue = 'searchValue';
+        let amDateSettStartDate = 'amDateSettStartDate';
+        let amDateSettEndDate = 'amDateSettEndDate';
+        let searchSelectValue = 'searchSelectValue';
+        let currentPage = 'currentPage';
+        let lastPage = 'lastPage';
+        let startPageNum = 'startPageNum';
+        let endPageNum = 'endPageNum';
+
+        // URL 파싱하여 쿼리스트링 맵으로 변환
+        let urlParams = new URLSearchParams(window.location.search);
+
+        // 특정 키와 값 제거
+        urlParams.delete(searchKey);
+        urlParams.delete(searchValue);
+        urlParams.delete(amDateSettStartDate);
+        urlParams.delete(amDateSettEndDate);
+        urlParams.delete(searchSelectValue);
+        urlParams.delete(currentPage);
+        urlParams.delete(lastPage);
+        urlParams.delete(startPageNum);
+        urlParams.delete(endPageNum);
+
+        // 수정된 쿼리스트링을 URL에 반영
+        let newUrl = currentUrl.split('?')[0] + '?' + urlParams.toString();
+
+        if (window.location.href !== newUrl) {
+
+            // history.replaceState를 사용하여 주소창에서 쿼리스트링 숨기기
+            history.replaceState({}, document.title, newUrl);
+        }
     </script>
 </th:block>
 

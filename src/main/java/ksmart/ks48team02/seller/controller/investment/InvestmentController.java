@@ -236,19 +236,26 @@ public class InvestmentController {
     }
 
     @GetMapping("/view/after-fund-revenue")
-    public String getAfterFundRevenue(@RequestParam(name = "afterFundRevenueStockCode") String afterFundRevenueStockCode
-                                     ,@RequestParam(name = "afterFundRevenueBondCode") String afterFundRevenueBondCode
+    public String getAfterFundRevenue(@RequestParam(name = "afterFundRevenueStockCode", required = false) String afterFundRevenueStockCode
+                                     ,@RequestParam(name = "afterFundRevenueBondCode", required = false) String afterFundRevenueBondCode
                                      ,Model model, HttpSession session) {
 
         String loginId = (String) session.getAttribute("SID");
 
-        SellerAfterFundRevenueStock afterFundRevenueStockInfo = investmentService.getAfterFundRevenueStockByCode(loginId, afterFundRevenueStockCode);
-        SellerAfterFundRevenueBond afterFundRevenueBond = investmentService.getAfterFundRevenueBondByCode(loginId, afterFundRevenueBondCode);
+        SellerAfterFundRevenueStock afterFundRevenueStockInfo = null;
+
+        SellerAfterFundRevenueBond afterFundRevenueBondInfo = null;
+
+        if(afterFundRevenueStockCode != null) {
+            afterFundRevenueStockInfo = investmentService.getAfterFundRevenueStockByCode(loginId, afterFundRevenueStockCode);
+        } else if(afterFundRevenueBondCode != null) {
+            afterFundRevenueBondInfo = investmentService.getAfterFundRevenueBondByCode(loginId, afterFundRevenueBondCode);
+        }
 
         model.addAttribute("title", "투자후 기업정보 공개");
         model.addAttribute("contentsTitle","투자후 기업정보 공개");
         model.addAttribute("afterFundRevenueStockInfo", afterFundRevenueStockInfo);
-        model.addAttribute("afterFundRevenueBond", afterFundRevenueBond);
+        model.addAttribute("afterFundRevenueBondInfo", afterFundRevenueBondInfo);
 
         return "seller/investment/view/after_fund_revenue_view";
     }

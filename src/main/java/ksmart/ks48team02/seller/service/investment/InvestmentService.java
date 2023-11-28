@@ -265,7 +265,7 @@ public class InvestmentService {
 
     // // 판매자 특정 기업정보 공개(주식) 조회
     public SellerAfterFundRevenueStock getAfterFundRevenueStockByCode(String memberId, String afterFundRevenueStockCode) {
-        SellerAfterFundRevenueStock afterFundRevenueStockInfo = getAfterFundRevenueStockByCode(memberId, afterFundRevenueStockCode);
+        SellerAfterFundRevenueStock afterFundRevenueStockInfo = sellerInvestmentMapper.getAfterFundRevenueStockByCode(memberId, afterFundRevenueStockCode);
 
         return afterFundRevenueStockInfo;
     }

@@ -176,10 +176,64 @@
         <result property="registrationDate" column="registration_date"/>
     </resultMap>
 
-
     <!-- 투자펀딩 심사요청 목록 조회 -->
-    <select id="getInvestmentRequestJudgeList" resultMap="adminInvestmentRequestJudgeListMap">
+    <select id="getInvestmentRequestJudgeListOnly" resultMap="adminInvestmentRequestJudgeListMap">
         /* 투자펀딩 심사요청 목록 조회 */
+        SELECT
+        i.investment_request_judge_code,
+        i.investment_request_subject,
+        i.member_id_seller,
+        s.store_name,
+        s.corporate_name AS corporateName,
+        i.investment_company,
+        s.representative_name,
+        i.investment_achievement_money,
+        i.investment_request_date,
+        i.invest_judge_date,
+        i.member_id,
+        i.invest_judge_result,
+        (SELECT
+        COUNT(i.invest_judge_result)
+        FROM
+        investment_request_judge AS i
+        WHERE
+        DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
+        ) AS todayRequestCnt,
+        (SELECT
+        COUNT(i.invest_judge_result)
+        FROM
+        investment_request_judge AS i
+        WHERE
+        i.invest_judge_result = 0) AS standbyCnt,
+        (SELECT
+        COUNT(i.invest_judge_result)
+        FROM
+        investment_request_judge AS i
+        WHERE
+        (i.invest_judge_result = 1
+        OR
+        i.invest_judge_result = 2)
+        AND
+        DATE_FORMAT(i.invest_judge_date, '%Y-%m-%d') = CURDATE()
+        ) AS todayProceedCnt,
+        (SELECT
+        COUNT(i.invest_judge_result)
+        FROM
+        investment_request_judge AS i
+        WHERE
+        i.invest_judge_result = 2) AS rejectCnt
+        FROM
+        investment_request_judge AS i
+        INNER JOIN
+        store AS s
+        ON
+        i.store_code = s.store_code
+        ORDER BY i.investment_request_judge_code DESC
+    </select>
+
+    <!-- 투자펀딩 심사요청 목록 조회(페이징) -->
+    <select id="getInvestmentRequestJudgeList" resultMap="adminInvestmentRequestJudgeListMap">
+        /* 투자펀딩 심사요청 목록 조회(페이징) */
         SELECT
             i.investment_request_judge_code,
             i.investment_request_subject,
