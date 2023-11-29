@@ -73,8 +73,8 @@ public class UserInvestmentService {
 
 
 
-    public List<InvestmentInfo> getSortedList(String orderBy) {
-        return userInvestmentMapper.getSortedList(orderBy);
+    public List<InvestmentInfo> getSortedList(String status, String securities, String orderBy) {
+        return userInvestmentMapper.getSortedList(status, securities, orderBy);
     }
 
     public List<UserCompanyBusinessType> getUserCompanyBusinessType(){

@@ -34,16 +34,16 @@ public class InvestmentController {
 
     @PostMapping("/ajax/sortedList")
     @ResponseBody
-    public List<InvestmentInfo> getSortedList(@RequestParam(name = "orderBy") String orderBy) {
-        return userInvestmentService.getSortedList(orderBy);
+    public List<InvestmentInfo> getSortedList(@RequestParam(name = "status") String status,
+                                              @RequestParam(name = "securities") String securities,
+                                              @RequestParam(name = "orderBy") String orderBy) {
+        return userInvestmentService.getSortedList(status, securities, orderBy);
     }
 
 
     @GetMapping("/detail/main")
     public String getDetailMainPage(Model model,
                                     @RequestParam(name = "investmentCode") String investmentCode,
-                                    @RequestParam(name = "securitiesStock", required=false) String securitiesStock,
-                                    @RequestParam(name = "securitiesBond", required=false) String securitiesBond,
                                     HttpSession session) {
 
         String loginMemberId = (String) session.getAttribute("SID");
@@ -64,8 +64,6 @@ public class InvestmentController {
     @GetMapping("/detail/comment")
     public String detailCommentPage(Model model,
                                     @RequestParam(name = "investmentCode") String investmentCode,
-                                    @RequestParam(name = "securitiesStock", required=false) String securitiesStock,
-                                    @RequestParam(name = "securitiesBond", required=false) String securitiesBond,
                                     HttpSession session) {
 
         String memberId = (String)session.getAttribute("SID");
@@ -76,6 +74,11 @@ public class InvestmentController {
         model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
         SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
         model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
+        if(memberId == null || memberId == "" || memberId == "null"){
+            model.addAttribute("memberId", "noSession");
+        }else {
+            model.addAttribute("memberId", memberId);
+        }
 
         model.addAttribute("title", "투자 상세 댓글");
 
@@ -85,8 +88,6 @@ public class InvestmentController {
     @GetMapping("/detail/investor")
     public String detailInvestorPage(Model model,
                                      @RequestParam(name = "investmentCode") String investmentCode,
-                                     @RequestParam(name = "securitiesStock", required=false) String securitiesStock,
-                                     @RequestParam(name = "securitiesBond", required=false) String securitiesBond,
                                      HttpSession session) {
 
         String memberId = (String)session.getAttribute("SID");
@@ -98,7 +99,7 @@ public class InvestmentController {
         SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
         model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
 
-        model.addAttribute("title", "투자 상세 투자자 목록");
+        model.addAttribute("title", "투자 위험 고지");
 
         return "user/investment/detail/investor";
     }
@@ -106,8 +107,6 @@ public class InvestmentController {
     @GetMapping("/detail/news")
     public String detailNewsPage(Model model,
                                  @RequestParam(name = "investmentCode") String investmentCode,
-                                 @RequestParam(name = "securitiesStock", required=false) String securitiesStock,
-                                 @RequestParam(name = "securitiesBond", required=false) String securitiesBond,
                                  HttpSession session) {
 
         String memberId = (String)session.getAttribute("SID");

@@ -2,6 +2,8 @@ package ksmart.ks48team02.user.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class SecuritiesIssuanceBond {
     private String securitiesIssuanceBondCode;
@@ -14,11 +16,11 @@ public class SecuritiesIssuanceBond {
     private String maturity;
     private String subscriptionAllocationRanking;
     private String bondType;
-    private String subscriptionDate;
-    private String subscriptionDeadline;
-    private String maturityDate;
-    private String estimatedIssueDate;
-    private String allocationConfirmationDate;
-    private String paymentDate;
+    private LocalDateTime subscriptionDate;
+    private LocalDateTime subscriptionDeadline;
+    private LocalDateTime maturityDate;
+    private LocalDateTime estimatedIssueDate;
+    private LocalDateTime allocationConfirmationDate;
+    private LocalDateTime paymentDate;
     private String accountToBeIssued;
 }

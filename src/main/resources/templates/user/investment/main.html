@@ -124,6 +124,8 @@
 
         });
 
+
+
         // Ajax 요청 함수
         function sortedListAjax(orderBy, status, securities, callback) {
             const request = $.ajax({
@@ -182,7 +184,7 @@
                 if(item.investJudgeSituation == 3 || item.investJudgeSituation == 4 || item.investJudgeSituation == 5) {
                     listElement += `<div class="col investment-item-box col-lg-4" onclick="location.href='/user/investment/detail/main?investmentCode=${item.investmentCode}'">`;
                     listElement += `    <div class="investment-item-first-child">`;
-                    listElement += `        <img class="investment-item-third-child-image" src="${item.investmentImage}">`;
+                    listElement += `        <img class="investment-item-third-child-image" src="/summernote/${item.investmentImage}">`;
                     listElement += `    </div>`;
                     listElement += `    <div class="investment-item-second-child">`;
                     listElement += `        <span class="investment-item-span-first">${item.investAchievementPercent}%</span>`;
