@@ -213,7 +213,6 @@
             i.investment_code = #{projectCode}
     </select>
 
-    <select id="investmentProjectDetail" parameterType="String" resultMap="InvestmentInfoResultMap">
     <select id="investmentProjectDetail" parameterType="String">
         SELECT
             i.investment_code AS investmentCode,
