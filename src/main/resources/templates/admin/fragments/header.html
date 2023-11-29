@@ -3,7 +3,7 @@
         <div class="top_nav" th:fragment="headerFragment">
           <div class="nav_menu">
           	<div class="user-welcome-message">
-          		<span class="session-name">김플루</span>님 <span class="session-level">관리자</span> 권한으로 로그인
+          		<span class="session-name">[[${session.SNAME}]]</span>님 <span class="session-level">관리자</span> 권한으로 로그인
           		<span class="log-data">마지막 접속일자 : 2023/10/12 00:00:00</span>
           	</div>
             <nav>

@@ -52,15 +52,19 @@
             }
             $(list).each((idx, l) => {
                 let detailLink = '';
+                let partitionValue = '';
                 switch (l.projectPartition) {
                     case 'rwd':
                         detailLink = '<a class="detail-link" target="_blank" href="/user/reward/detail?rewardProjectCode=' + l.projectCode + '">';
+                        partitionValue = '리워드';
                         break;
                     case 'don':
                         detailLink = '<a class="detail-link" target="_blank" href="/user/donation/detail?donationCode=' + l.projectCode + '">';
+                        partitionValue = '기부';
                         break;
                     case 'inv':
                         detailLink = '<a class="detail-link" target="_blank" href="/user/investment/detail/main?investmentCode=' + l.projectCode + '">';
+                        partitionValue = '투자';
                         break;
                 }
                 $('.settlement-log tbody').append(`
@@ -85,7 +89,7 @@
                                 ${l.orderTotal.orderFundingName}
                             </td>
                             <td class="table-data-center">
-                                ${l.projectPartition}
+                                ${partitionValue}
                             </td>
                             <td class="table-data-center">
                                 <a class="detail-link" href="/admin/order/detail?orderCode=${l.orderCode}&goodsPartition=${l.projectPartition}}">${l.orderCode}</a>
@@ -344,8 +348,11 @@
                             <td class="table-data-center">
                                 [[${l.orderTotal.orderFundingName}]]
                             </td>
-                            <td class="table-data-center">
-                                [[${l.projectPartition}]]
+                            <td class="table-data-center" th:switch="${l.projectPartition}">
+                                <span th:case="rwd">리워드</span>
+                                <span th:case="don">기부</span>
+                                <span th:case="inv">투자</span>
+
                             </td>
                             <td class="table-data-center">
                                 <a class="detail-link" th:href="@{/admin/order/detail(orderCode=${l.orderCode}, goodsPartition=${l.projectPartition})}">[[${l.orderCode}]]</a>
@@ -368,9 +375,9 @@
                 </table>
 
             <!-- list pager -->
-            <!-- pagenation start -->
-<!--            <th:block th:replace="~{common/fragments/adminPagenation :: adminPagenation}"></th:block>-->
-            <!-- pagenation end -->
+<!--             pagenation start -->
+            <th:block th:replace="~{common/fragments/adminPagenation :: adminPagenation}"></th:block>
+<!--             pagenation end -->
         </div>
 
     </div>

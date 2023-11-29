@@ -184,8 +184,8 @@
             // ajax 호출
             adminDeliveryAjax(queryString, function(list){
                 // list count
-                $('.total-list').text(list.orderList.length);
-                setOrderData(list.orderList);
+                $('.total-list').text(list.deliveryList.length);
+                setOrderData(list.deliveryList);
 
                 // pager setting
                 const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
@@ -240,8 +240,9 @@
 
             adminDeliveryAjax(queryString, function(list) {
                 // list count
-                $('.total-list').text(list.orderList.length);
-                setOrderData(list.orderList);
+
+                $('.total-list').text(list.deliveryList.length);
+                setOrderData(list.deliveryList);
 
                 // pager setting
                 setPagerData(numberArr, currentPage, list);
