@@ -242,7 +242,8 @@
             ir.investment_request_judge_code AS investmentRequestJudgeCode,
             ir.company_business_type_code AS companyBusinessTypeCode,
             ir.stock_number AS stockNumber,
-            ir.issue_stock_number AS issueStockNumber
+            ir.issue_stock_number AS issueStockNumber,
+            ir.investment_request_content AS investmentRequestContent
         FROM
             investment AS i
             INNER JOIN
