@@ -287,6 +287,14 @@ public class RewardController {
         return "/user/reward/order/paymentConfirm";
     }
 
+    //결제 완료 페이지
+    @GetMapping("/order/paymentConfirm")
+    public String paymentConfirm (){
+
+        return"user/reward/order/paymentConfirm";
+    }
+
+
     //리워드 환불 정책 페이지
     @GetMapping("/detail/refundPolicy")
     public String refundPolicyPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode){
