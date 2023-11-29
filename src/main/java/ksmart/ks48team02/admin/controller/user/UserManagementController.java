@@ -2,6 +2,7 @@ package ksmart.ks48team02.admin.controller.user;
 
 import ksmart.ks48team02.admin.dto.UserManagement;
 import ksmart.ks48team02.admin.service.user.UserManagementService;
+import ksmart.ks48team02.user.dto.Member;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -30,10 +31,10 @@ public class UserManagementController {
     @PostMapping("/getLoginLog")
     @ResponseBody
     public List<UserManagement> getLoginLog(@RequestParam(name="memberId", required = false) String memberId,
-
+                                            @RequestParam(name="memberTypeCode", required = false) String memberTypeCode,
                                             @RequestParam(name="startDate") String startDate,
                                             @RequestParam(name="endDate") String endDate){
-        List<UserManagement> loginLogs = userManagementService.getLoginLogById(memberId, startDate, endDate);
+        List<UserManagement> loginLogs = userManagementService.getLoginLogById(memberId, startDate, endDate, memberTypeCode);
 
         log.info("로그인 로그 {}", loginLogs);
 
@@ -51,7 +52,7 @@ public class UserManagementController {
 
     @GetMapping("/memberRank")
     public String memberRankPage(Model model){
-        model.addAttribute("contentsTitle", "회원 등급 관리");
+        model.addAttribute("contentsTitle", "프로젝트 유형별 등급 관리");
         return "admin/user/member_rank";
     }
 

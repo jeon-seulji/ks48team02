@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface UserManagementMapper {
     // 회원 로그인 내역 조회
-    public List<UserManagement> getLoginLogById(String memberId, String startDate, String endDate);
+    public List<UserManagement> getLoginLogById(String memberId, String startDate, String endDate, String memberTypeCode);
 
 
 }

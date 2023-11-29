@@ -40,7 +40,8 @@
                         <option value="seller">일반 판매자</option>
                         <option value="representative">대표 판매자</option>
                         <option value="employee">직원 판매자 </option>
-                        <option value="orderFundingName">구매자</option>
+                        <option value="customer">구매자</option>
+                        <option value="admin">관리자</option>
                         <option value="member-id">ID</option>
                     </select>
                     <input type="text" style="padding: 5px; width: 250px;" name="userSearchable" id="search-id" placeholder=" id 미입력시 전체 검색">
@@ -67,10 +68,6 @@
                     </ul>
                 </div>
                 <div class="list-count-selector">
-                    <select name="orderby">
-                        <option value="order_a">최신 가입일순</option>
-                        <option value="orderCompleted">가입일 역순</option>
-                    </select>
                     <select name="count-select">
                         <option value="15">15개씩 보기</option>
                         <option value="20">20개씩 보기</option>
@@ -87,6 +84,7 @@
                     </th>
                     <th style="width:10%;">식별 코드</th>
                     <th style="width:10%;">ID</th>
+                    <th style="width:10%;">회원 유형</th>
                     <th style="width:10%;">로그인 일시</th>
                     <th style="width:10%;">접속 IP</th>
                 </tr>
@@ -105,6 +103,7 @@
                 </tr>
                 </tbody>
             </table>
+
         </div>
     </div>
 
@@ -113,12 +112,16 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        let $selectCondition = document.getElementById('select-condition').value;
-
-        let $searchId = document.getElementById('search-id');
         let $searchIdBtn = document.querySelector('.orderSearchBtn.submitBtn');
         const numFormat = num => num < 10 ? `0${num}` : num;
-        // 데이터 포맷 함수
+
+        /* fail 함수 */
+        function failFn(jqXHR, textStatus){
+            alert('통신 중 오류가 발생하였습니다');
+            console.log(`Request failed: ${textStatus}`);
+        }
+
+        /* 데이터 포맷 함수 */
         const dateFormat = targetDate => { // Date 객체 전달시
             let year = targetDate.getFullYear();
             let month = numFormat(targetDate.getMonth()+1);
@@ -130,15 +133,19 @@
         }
 
 
-
         /* 검색 버튼 클릭 이벤트 설정 */
         $searchIdBtn.addEventListener('click',function (){
+
+            let $searchId = document.getElementById('search-id');
+            let $selectCondition = document.getElementById('select-condition').value;
             // 선택된 날짜 객체화
+            console.log(typeof document.getElementById('start-date').value); // string -> Date 객체 아니므로 dateFormat 함수에 넣으려면 객체화시켜야 함
             let selectedStartDate = dateFormat(new Date(document.getElementById('start-date').value));
             let selectedEndDate = dateFormat(new Date(document.getElementById('end-date').value));
-            console.log('포맷 입히기 전: ',new Date(document.getElementById('end-date').value));
-                // 검색조건으로 아이디 선택시
-                if($selectCondition == 'member-id') {
+            console.log('selectedStartDate의 타입: ' ,typeof selectedStartDate); // string
+
+                /* 검색 옵션 : ID */
+                if($selectCondition === 'member-id') {
                     if ($searchId.value.trim() === '' || typeof $searchId === 'undefined' || $searchId.value == null) {
                         alert('회원 아이디를 입력해 주세요');
                     } else {
@@ -153,6 +160,7 @@
                             dataType: 'json'
                         })
                             .done(function (response) {
+
                                 // 기존 검색 결과가 있다면 지우기
                                 if (document.querySelector('.login-log tbody').childElementCount > 1) {
                                     document.querySelector('.login-log tbody').replaceChildren();
@@ -162,29 +170,19 @@
                                 let html = '';
 
                                 if (response.length > 0) {
+                                    console.log(`시작일${selectedStartDate}`);
+                                    console.log(`마감일${selectedEndDate}`);
+
+                                    console.log(response);
                                     // 1. 선택한 날짜에 해당하는 기간만 필터링
-                                    let filteredData = response.filter(function (data) { // 반환값 true만 배열에 포함
-
-                                        let beforeFormat = new Date(data.loginTime);
-                                        console.log('beforeFormat: setHours 메소드 사용 전 ', beforeFormat);
-                                        beforeFormat.setHours(0, 0, 0, 0); // 선택된 날짜들이 오전 9시로 되어 있으므로 비교시 그 이후 시간에 들어간 데이터들은 그날분으로 나오지 않는다 -> 데이터들의 시간을 0시 0분 0초로 설정하기
-                                        console.log('beforeFormat:  setHours 메소드 사용 후 ', beforeFormat);
-
-                                        let loginTimeData = dateFormat(beforeFormat);
-
-                                        console.log(`포맷된 login 일시`, loginTimeData);
-
-                                        let loginResult = (selectedStartDate <= loginTimeData && loginTimeData <= selectedEndDate);
-                                        console.log(`login result`, loginResult);
-                                        return loginResult;
-                                    });
 
                                     // 2. 필터링된 데이터만 렌더링
-                                    filteredData.forEach(function (data) {
+                                    response.forEach(function (data) {
                                         html += '<tr>';
                                         html += '<td class="table-data-center"><input type="checkbox" name="selectList"></td>';
                                         html += '<td class="table-data-center">' + (data.loginLogCode) + '</td>';
                                         html += '<td class="table-data-center">' + (data.memberId) + '</td>';
+                                        html += '<td class="table-data-center">' + (data.member.memberTypeDetail) + '</td>';
                                         html += '<td class="table-data-center">' + (data.loginTime !== null && data.loginTime !== undefined ? data.loginTime : '-') + '</td>';
                                         html += '<td class="table-data-center">' + (data.clientNetAddress) + '</td>';
                                         html += '</tr>';
@@ -199,11 +197,120 @@
                                 $('.login-log tbody').html(html);
                             })
 
-                            .fail(function (jqXHR, textStatus) {
-                                alert('통신 중 오류가 발생하였습니다');
-                                console.log(`Request failed: ${textStatus}`);
-                            })
+                            .fail(failFn);
                     }
+                /* 검색 옵션 : 전체 */
+                } else if($selectCondition === 'total'){
+                    $.ajax({
+                        url: '/admin/user/getLoginLog',
+                        method: 'POST',
+                        data: {
+                            'memberId': $searchId.value,
+                            'startDate': selectedStartDate,
+                            'endDate': selectedEndDate
+                        },
+                        dataType: 'json'
+                    })
+                        .done((response)=>{
+
+                            // 기존 검색 결과가 있다면 지우기
+                            if (document.querySelector('.login-log tbody').childElementCount > 1) {
+                                document.querySelector('.login-log tbody').replaceChildren();
+                            }
+
+                            // 표시할 데이터가 들어 있는 HTML 코드를 생성
+                            let html = '';
+
+                            if (response.length > 0) {
+                                console.log(`시작일${selectedStartDate}`);
+                                console.log(`마감일${selectedEndDate}`);
+
+                                response.forEach(function (data) {
+                                    html += '<tr>';
+                                    html += '<td class="table-data-center"><input type="checkbox" name="selectList"></td>';
+                                    html += '<td class="table-data-center">' + (data.loginLogCode) + '</td>';
+                                    html += '<td class="table-data-center">' + (data.memberId) + '</td>';
+                                    html += '<td class="table-data-center">' + (data.member.memberTypeDetail) + '</td>';
+                                    html += '<td class="table-data-center">' + (data.loginTime !== null && data.loginTime !== undefined ? data.loginTime : '-') + '</td>';
+                                    html += '<td class="table-data-center">' + (data.clientNetAddress) + '</td>';
+                                    html += '</tr>';
+                                });
+                            } else { // 해당하는 데이터 없는 경우
+                                html += '<tr>';
+                                html += '<td colSpan="6" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>';
+                                html += '</tr>';
+                            }
+
+                            // 표시할 위치에 HTML 코드를 삽입
+                            $('.login-log tbody').html(html);
+
+                        })
+                        .fail(failFn);
+
+                /* 검색 옵션 : 회원 등급 */
+                } else {
+                    let memberTypeCode
+                    // option
+                    switch ($selectCondition){
+                        case('admin')           : memberTypeCode = 'mem_type_01';
+                                            break;
+                        case('seller')          : memberTypeCode = 'mem_type_02';
+                                            break;
+                        case('representative')  : memberTypeCode = 'mem_type_03';
+                                            break;
+                        case('employee')        : memberTypeCode = 'mem_type_04';
+                                            break;
+                        case('customer')        : memberTypeCode = 'mem_type_05';
+                                            break;
+                    }
+
+                    $.ajax({
+                        url: '/admin/user/getLoginLog',
+                        method: 'POST',
+                        data: {
+                            'memberId': $searchId.value,
+                            'startDate': selectedStartDate,
+                            'endDate': selectedEndDate,
+                            'memberTypeCode' : memberTypeCode
+                        },
+                        dataType: 'json'
+                    })
+                        .done((response)=>{
+
+                            // 기존 검색 결과가 있다면 지우기
+                            if (document.querySelector('.login-log tbody').childElementCount > 1) {
+                                document.querySelector('.login-log tbody').replaceChildren();
+                            }
+
+                            // 표시할 데이터가 들어 있는 HTML 코드를 생성
+                            let html = '';
+
+                            if (response.length > 0) {
+                                console.log(`시작일${selectedStartDate}`);
+                                console.log(`마감일${selectedEndDate}`);
+
+                                response.forEach(function (data) {
+                                    html += '<tr>';
+                                    html += '<td class="table-data-center"><input type="checkbox" name="selectList"></td>';
+                                    html += '<td class="table-data-center">' + (data.loginLogCode) + '</td>';
+                                    html += '<td class="table-data-center">' + (data.memberId) + '</td>';
+                                    html += '<td class="table-data-center">' + (data.member.memberTypeDetail) + '</td>';
+                                    html += '<td class="table-data-center">' + (data.loginTime !== null && data.loginTime !== undefined ? data.loginTime : '-') + '</td>';
+                                    html += '<td class="table-data-center">' + (data.clientNetAddress) + '</td>';
+                                    html += '</tr>';
+                                });
+                            } else { // 해당하는 데이터 없는 경우
+                                html += '<tr>';
+                                html += '<td colSpan="6" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>';
+                                html += '</tr>';
+                            }
+
+                            // 표시할 위치에 HTML 코드를 삽입
+                            $('.login-log tbody').html(html);
+
+                        })
+
+                        .fail(failFn);
                 }
         })
 

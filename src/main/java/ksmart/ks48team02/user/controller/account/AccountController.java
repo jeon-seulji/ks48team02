@@ -130,11 +130,6 @@ public class AccountController {
     //로그아웃  기능
     @GetMapping("/logout")
     public String logout(HttpSession session, HttpServletRequest request) throws UnknownHostException {
-        // 로그아웃시 로그인 로그 업데이트
-        String loginId = (String) session.getAttribute("SID");
-        String clientIp = getClientIp(request);
-        userMemberService.addLogoutLog(clientIp, loginId);
-
 
         session.invalidate();
         return "redirect:/user";

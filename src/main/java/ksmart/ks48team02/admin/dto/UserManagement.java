@@ -1,5 +1,6 @@
 package ksmart.ks48team02.admin.dto;
 
+import ksmart.ks48team02.user.dto.Member;
 import lombok.Data;
 
 @Data
@@ -10,4 +11,6 @@ public class UserManagement {
     private String loginTime;
     private String clientNetAddress;
 
+    // member dto
+    private Member member;
 }
