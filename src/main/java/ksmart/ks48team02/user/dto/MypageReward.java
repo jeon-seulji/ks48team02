@@ -49,6 +49,8 @@ public class MypageReward {
     private String floverLogCode;
     private String orderConfirmDate;
     private String orderCancelDate;
+    private String paymentKey;
+    private String cancelReason;
 
 
 
