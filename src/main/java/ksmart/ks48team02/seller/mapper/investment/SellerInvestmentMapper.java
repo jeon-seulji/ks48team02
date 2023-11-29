@@ -4,6 +4,7 @@ import ksmart.ks48team02.admin.dto.*;
 import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueBond;
 import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueStock;
 import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
+import ksmart.ks48team02.seller.dto.SellersecuritiesIssuanceStock;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -52,6 +53,9 @@ public interface SellerInvestmentMapper {
 
     // 판매자 투자후 기업정보 공개(채권) 목록 조회
     public List<SellerAfterFundRevenueBond> getAfterFundRevenueBondList(String memberId, int startRowNum, int rowPerPage);
+
+    // 판매자 특정 증권발행조건(주식) 조회
+    public SellersecuritiesIssuanceStock getsecuritiesIssuanceStockListByCode(String memberId, String investmentCode);
 
     // 판매자 투자후 기업정보 공개(채권) 전체 행의 갯수
     public int getAfterFundRevenueBondCnt();

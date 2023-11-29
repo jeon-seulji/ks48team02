@@ -1,13 +1,10 @@
 package ksmart.ks48team02.seller.service.investment;
 
 import ksmart.ks48team02.admin.dto.*;
-import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueBond;
-import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueStock;
-import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
+import ksmart.ks48team02.seller.dto.*;
 import ksmart.ks48team02.seller.mapper.investment.SellerInvestmentMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ksmart.ks48team02.seller.dto.SellerLawSatistifyReason;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +23,14 @@ public class InvestmentService {
         this.sellerInvestmentMapper = sellerInvestmentMapper;
     }
 
-    // 판매자 투자펀딩 공고 조회 페이징
+    //  판매자 투자펀딩 공고 목록 조회(페이징 x)
+    public List<AdminInvestment> getInvestmentListOnly(String memberIdSeller) {
+        List<AdminInvestment> investmentListOnly = sellerInvestmentMapper.getInvestmentListOnly(memberIdSeller);
+
+        return investmentListOnly;
+    }
+
+    // 판매자 투자펀딩 공고 목록 조회
     public Map<String, Object> getInvestmentList(String memberIdSeller, int currentPage) {
 
         // 보여줄 행의 갯수
@@ -341,6 +345,13 @@ public class InvestmentService {
         SellerAfterFundRevenueBond afterFundRevenueBondInfo = sellerInvestmentMapper.getAfterFundRevenueBondByCode(memberId, afterFundRevenueBondCode);
 
         return afterFundRevenueBondInfo;
+    }
+
+    // 판매자 특정 증권발행조건(주식) 조회
+    public SellersecuritiesIssuanceStock getsecuritiesIssuanceStockListByCode(String memberId, String investmentCode) {
+        SellersecuritiesIssuanceStock securitiesIssuanceStockInfo = sellerInvestmentMapper.getsecuritiesIssuanceStockListByCode(memberId, investmentCode);
+
+        return securitiesIssuanceStockInfo;
     }
 
     // 판매자 자본시장법 범위충족기준 목록 조회
