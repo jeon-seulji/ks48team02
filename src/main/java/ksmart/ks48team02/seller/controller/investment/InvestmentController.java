@@ -5,13 +5,11 @@ import ksmart.ks48team02.admin.dto.*;
 import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueBond;
 import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueStock;
 import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
+import ksmart.ks48team02.seller.dto.SellersecuritiesIssuanceStock;
 import ksmart.ks48team02.seller.service.investment.InvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -301,10 +299,15 @@ public class InvestmentController {
     }
 
     @GetMapping("/insert/after-fund-revenue")
-    public String addAfterFundRevenue(Model model) {
+    public String addAfterFundRevenue(Model model, HttpSession session) {
+
+        String loginId = (String) session.getAttribute("SID");
+
+        List<AdminInvestment> investmentList = investmentService.getInvestmentListOnly(loginId);
 
         model.addAttribute("title", "판매자 : 투자후 기업정보 공개 등록");
         model.addAttribute("contentsTitle","투자후 기업정보 공개 등록");
+        model.addAttribute("investmentList", investmentList);
 
         return "seller/investment/insert/after_fund_revenue_insert";
     }
@@ -543,6 +546,17 @@ public class InvestmentController {
         redirectAttributes.addAttribute("afterFundRevenueBondCode", afterFundRevenueBondCode);
 
         return "redirect:/seller/investment/search/after-fund-revenue";
+    }
+
+    @GetMapping("/check/{investmentCode}")
+    @ResponseBody
+    public AdminInvestment getInvestmentDetail(@PathVariable(value = "investmentCode", required = false) String investmentCode, HttpSession session, Model model) {
+
+        String loginId = (String) session.getAttribute("SID");
+
+        AdminInvestment investmentDetail = investmentService.getInvestementByCode(loginId, investmentCode);
+
+        return investmentDetail;
     }
 
 }

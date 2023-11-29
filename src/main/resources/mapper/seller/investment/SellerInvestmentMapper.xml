@@ -84,6 +84,14 @@
             <result property="etcInvestContentImage" column="etc_invest_content_image"/>
             <result property="registrationDate" column="registration_date"/>
         </association>
+
+        <association property="sellersecuritiesIssuanceStock" javaType="SellersecuritiesIssuanceStock">
+            <id property="securitiesIssuanceStockCode" column="securities_issuance_stock_code"/>
+            <result property="investmentCode" column="investment_code"/>
+            <result property="corpValue" column="corp_value"/>
+            <result property="stockPrice" column="stock_price"/>
+            <result property="minDividendRate" column="min_dividend_rate"/>
+        </association>
     </resultMap>
 
     <resultMap type="AdminInvestmentRequestJudge" id="adminInvestmentRequestJudgeListMap">
@@ -300,10 +308,7 @@
         FROM
         investment AS i
         WHERE
-        i.member_id_seller = #{memberIdSeller}
-        <if test="startRowNum > -1">
-            LIMIT #{startRowNum}, #{rowPerPage};
-        </if>
+        i.member_id_seller = #{memberIdSeller};
     </select>
 
     <!-- 판매자 투자펀딩 공고 목록 조회 -->
@@ -429,7 +434,10 @@
             i.investment_deadline,
             i.basic_fee,
             i.contract_fee_rate,
-            i.invest_judge_situation
+            i.invest_judge_situation,
+            sis.corp_value,
+            sis.stock_price,
+            sis.min_dividend_rate
         FROM
             investment AS i
             INNER JOIN
@@ -444,6 +452,10 @@
             investment_request_judge AS ir
             ON
             i.investment_request_judge_code = ir.investment_request_judge_code
+            LEFT JOIN
+            securities_issuance_stock AS sis
+            ON
+            i.investment_code = sis.investment_code
         WHERE
             i.member_id_seller = #{memberIdSeller}
             AND
@@ -789,6 +801,19 @@
             af.member_id = #{memberId}
             AND
             af.after_fund_revenue_bond_code = #{afterFundRevenueBondCode};
+    </select>
+
+    <select id="getsecuritiesIssuanceStockListByCode" resultType="SellersecuritiesIssuanceStock">
+        SELECT
+            sis.investment_code AS investmentCode,
+            sis.corp_value AS corpValue,
+            sis.stock_price AS stockPrice
+        FROM
+            securities_issuance_stock AS sis
+        WHERE
+            s.member_id = #{memberId}
+        AND
+            s.investment_code = #{investmentCode};
     </select>
 
     <!-- 판매자 자본시장법 범위충족기준 목록 조회 -->
