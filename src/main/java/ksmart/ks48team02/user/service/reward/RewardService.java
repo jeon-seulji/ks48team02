@@ -125,9 +125,6 @@ public class RewardService {
             System.out.println("포인트사용 로그 등록 완료");
         }
 
-        //포인트 적립
-        rewardMapper.customerSavePoint(paymentResult);
-
         if(paymentResult.getUseCouponCode() != null) {
 
             // 쿠폰 사용 내역 인서트
@@ -172,5 +169,24 @@ public class RewardService {
         getRewardOptionByCode = rewardMapper.getRewardOptionByCode(rewardProjectCode);
         return getRewardOptionByCode;
 
+    }
+
+    //프로젝트 찜 여부 조회
+    public int projectGreatCheck(String rewardProjectCode, String loginMemberId) {
+        return rewardMapper.projectGreatCheck(rewardProjectCode,loginMemberId);
+    }
+
+    //찜하기 진행
+    public void greatInsert(String rewardProjectCode, String loginMemberId){
+        rewardMapper.greatInsert(rewardProjectCode, loginMemberId);
+    }
+    //찜하기 취소
+    public void greatCancel(String rewardProjectCode, String loginMemberId){
+        rewardMapper.greatCancel(rewardProjectCode, loginMemberId);
+    }
+
+    //프로젝트 추천 리스트 조회
+    public List<RewardProject> projectRecommendList() {
+        return rewardMapper.projectRecommendList();
     }
 }

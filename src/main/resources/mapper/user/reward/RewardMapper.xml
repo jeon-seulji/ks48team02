@@ -242,8 +242,9 @@
         FROM
             reward_project AS r
                 <where>
+                    AND r.project_condition = 3
                     <if test="projectStatus == 'ing'">
-                        <![CDATA[ AND r.project_end_date >= now() ]]>
+                        <![CDATA[ AND r.project_end_date >= now()]]>
                     </if>
                     <if test="projectStatus == 'end'">
                         <![CDATA[ AND r.project_end_date < now() ]]>
@@ -409,7 +410,7 @@
         </selectKey>
 
         INSERT INTO reward_order_detail
-        (rd_order_detail_code, reward_option_code, order_code, order_option_amount, option_option_price, option_total_price)
+        (rd_order_detail_code, reward_option_code, order_code, order_option_amount, option_price, option_total_price)
         VALUES
         (#{rewardOrderDetailCode}, #{rewardOptionCode}, #{orderCode}, #{orderQuantity}, #{optionPrice}, #{pricePerOption})
     </insert>
@@ -430,7 +431,7 @@
                 SUBSTRING_INDEX(SUBSTRING_INDEX(r.use_reserve_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
         INSERT INTO reward_payment
-            (reward_payment_code, order_code, member_id, reward_refund_code, switching_code, order_price, delivery_price, order_total_price, use_reserve_price, use_reserve_code, discount_rank_price, discount_coupon_price, payment_scheduled_price, payment_method, deposit_name, deposit_account, refund_account, deposit_price, payment_state, payment_deadline_date, payment_completed_date)
+            (reward_payment_code, order_code, member_id, reward_refund_code, switching_code, order_price, delivery_price, order_total_price, use_reserve_price, use_reserve_code, discount_rank_price, discount_coupon_price, payment_scheduled_price, payment_method, deposit_name, deposit_account, refund_account, deposit_price, payment_state, payment_deadline_date, payment_completed_date, tosspay_paymentkey)
         VALUES
             (#{paymentCode}, #{orderCode}, #{orderMemberId}, null, null, #{orderPrice}, #{deliveryPrice}, #{totalPayPrice}, #{usePoint},
         <choose>
@@ -441,7 +442,7 @@
                 #{useReserveCode}
             </otherwise>
         </choose>
-        , #{memberRankDiscount}, #{couponDiscountPrice}, #{totalPayPrice}, #{paymentMethod}, null, null, null, 0, '결제 완료', null, now())
+        , #{memberRankDiscount}, #{couponDiscountPrice}, #{totalPayPrice}, #{paymentMethod}, null, null, null, 0, 'Y', null, now(), #{paymentKey})
 
     </insert>
 
@@ -473,9 +474,9 @@
                 SUBSTRING_INDEX(SUBSTRING_INDEX(p.point_log_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
         INSERT INTO point_log
-        (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
+            (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
         VALUES
-        (#{pointLogCode}, #{orderMemberId}, #{usePoint}, '적립', CURDATE(), #{useReserveCode})
+            (#{pointLogCode}, #{orderMemberId}, #{usePoint}, '적립', CURDATE(), #{useReserveCode})
     </insert>
 
     <!--포인트 사용 내역 인서트-->
@@ -495,9 +496,9 @@
                 SUBSTRING_INDEX(SUBSTRING_INDEX(p.point_log_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
         INSERT INTO point_log
-        (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
+            (point_log_code, member_id, change_amount, change_category, change_datetime, point_log_group_code)
         VALUES
-        (#{pointLogCode}, #{orderMemberId}, #{usePoint}, '사용', NOW(), #{useReserveCode})
+            (#{pointLogCode}, #{orderMemberId}, #{usePoint}, '사용', NOW(), #{useReserveCode})
     </insert>
 
     <!--포인트 사용 시 보유한 포인트에서 차감-->
@@ -510,15 +511,6 @@
             member_id = #{orderMemberId};
     </update>
 
-    <!--포인트 적립-->
-    <update id="customerSavePoint" parameterType="PaymentResult">
-        UPDATE
-        customer
-        SET
-        customer_point = customer_point + #{memberSavePoint}
-        WHERE
-        member_id = #{orderMemberId};
-    </update>
 
     <!--쿠폰 사용 로그 insert-->
     <insert id="useCouponLogInsert" parameterType="PaymentResult">
@@ -689,7 +681,67 @@
     </select>
 
 
+    <!--로그인한 회원의 프로젝트 찜 여부 조회-->
+    <select id="projectGreatCheck" parameterType="String" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            reward_great as r
+        WHERE
+            r.reward_project_code = #{rewardProjectCode} AND r.member_id = #{loginMemberId}
+    </select>
 
+    <!--찜하기 insert-->
+    <insert id="greatInsert" parameterType="String">
+        <selectKey  keyProperty="reardGreatCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(r.reward_great_code) = 0  THEN CONCAT('RG_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('RG_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(r.reward_great_code,'_',-1)AS UNSIGNED )+1))
+            END) AS reardGreatCode
+            FROM
+                reward_great AS r
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(r.reward_great_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO reward_great
+            (reward_great_code, reward_project_code, member_id, reward_great_date)
+        VALUES
+            (#{reardGreatCode}, #{rewardProjectCode}, #{loginMemberId}, NOW());
+    </insert>
+
+    <!--찜하기 취소-->
+    <delete id ="greatCancel" parameterType="String">
+        DELETE
+            reward_great
+        FROM
+            reward_great
+        WHERE
+            member_id = #{loginMemberId} AND reward_project_code =#{rewardProjectCode}
+    </delete>
+
+    <!--프로젝트 추천 목록 리스트 조회-->
+    <select id="projectRecommendList" resultMap="RewardResultMap">
+        SELECT
+            r.reward_project_code,
+            r.project_thumbnail_image,
+            r.project_achievement_percent,
+            r.project_subject,
+            t.category_name
+        FROM
+            reward_project AS r
+        INNER JOIN
+            total_category AS t
+        ON
+            r.total_cagegory_code = t.total_category_code
+        WHERE
+            r.project_condition = 3
+        ORDER BY
+            r.project_achievement_percent DESC
+        LIMIT 10
+    </select>
 
 
 

@@ -39,7 +39,7 @@
             <a><i class="fa fa-shopping-bag"></i> #주문 관리 (슬지) <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li>
-                <a th:href="@{/admin/order/list(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#주문 목록(슬지)</a>
+                <a th:href="@{/admin/order/list}">#주문 목록(슬지)</a>
               </li>
               <li>
                 <a th:href="@{/admin/order/delivery}">#배송 관리(슬지)</a>
@@ -72,6 +72,9 @@
                 <a >!투자 심사 관리(오진)</a>
                 <!-- 3 depth -->
                 <ul class="nav child_menu">
+                  <li class="sub_menu">
+                    <a th:href="@{/admin/investment/search/investment}">!투자 펀딩 공고</a>
+                  </li>
                   <li class="sub_menu">
                     <a th:href="@{/admin/investment/search/judge}">!투자 펀딩 심사 요청</a>
                   </li>

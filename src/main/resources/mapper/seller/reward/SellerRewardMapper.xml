@@ -43,6 +43,36 @@
         </collection>
     </resultMap>
 
+    <!-- reward project info by project code-->
+    <select id="getRwdPrjInfoByCode" parameterType="String" resultMap="RewardResultMap">
+        SELECT
+            r.reward_project_code,
+            r.total_cagegory_code,
+            r.project_judgement_reason_code,
+            r.member_id,
+            r.admin_member_id,
+            r.store_code,
+            r.project_subject,
+            r.project_contents,
+            r.reward_like,
+            r.project_thumbnail_image,
+            r.project_achievement_money,
+            r.project_goal_money,
+            r.project_achievement_percent,
+            r.reg_company,
+            r.project_reg_date,
+            r.search_count,
+            r.project_judgment_reason_detail,
+            r.project_judgment_date,
+            r.project_start_date,
+            r.project_end_date,
+            r.project_condition
+        FROM
+            reward_project AS r
+        WHERE
+            r.reward_project_code = #{projectCode}
+    </select>
+
     <!--판매자 회원 등록 프로젝트 리스트-->
     <select id="projectListBySellerID" resultMap="RewardResultMap" parameterType="hashmap">
         SELECT
@@ -70,9 +100,7 @@
         FROM
             reward_project AS r
         <where>
-            <if test="sellerID != null">
-                AND r.member_id = #{sellerID}
-            </if>
+                AND r.member_id = #{sellerId}
             <if test="projectCondition != null and !projectCondition.equals('')">
                 AND r.project_condition = #{projectCondition}
             </if>
@@ -91,9 +119,7 @@
         FROM
             reward_project as r
         <where>
-            <if test="sellerID != null">
-                AND r.member_id = #{sellerID}
-            </if>
+                AND r.member_id = #{sellerId}
             <if test="projectCondition != null and !projectCondition.equals('')">
                 AND r.project_condition = #{projectCondition}
             </if>

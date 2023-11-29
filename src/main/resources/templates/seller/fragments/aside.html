@@ -44,8 +44,8 @@
               <li><a th:href="@{/seller/reward/products}">프로젝트 목록#</a></li>
               <li><a th:href="@{/seller/reward/news}">새소식#</a></li>
               <li><a th:href="@{/seller/reward/products/preExperienceRecruit}">사전체험단#</a></li>
-              <li><a th:href="@{/seller/reward/products/searchTagModify}">태그 관리#</a></li>
-              <li><a th:href="@{/seller/reward/products/comment}">댓글 관리#</a></li>
+<!--              <li><a th:href="@{/seller/reward/products/searchTagModify}">태그 관리#</a></li>-->
+<!--              <li><a th:href="@{/seller/reward/products/comment}">댓글 관리#</a></li>-->
             </ul>
           </li>
           <li><a><i class="fa fa-edit"></i> !기부 프로젝트 관리(정민)<span class="fa fa-chevron-down"></span></a>
@@ -63,7 +63,6 @@
               <li><a th:href="@{/seller/investment/news}">!새소식(시원)</a></li>
               <li><a th:href="@{/seller/investment/comment}">!댓글관리(시원)</a></li>
               <li><a th:href="@{/seller/investment/search/judge}">!투자 펀딩 심사요청(오진)</a></li>
-              <li><a th:href="@{/seller/investment/search/after-process}">!투자 펀딩후 진행정보(오진)</a></li>
               <li><a th:href="@{/seller/investment/search/after-fund-revenue}">!투자후 기업정보 공개(오진)</a></li>
               <li><a th:href="@{/seller/investment/search/customer-invest}">!운영후 투자자 손익(오진)</a></li>
               <li><a th:href="@{/seller/investment/search/after-invest-division}">!투자 후 분배(오진)</a></li>
@@ -73,7 +72,7 @@
                 <a><i class="fa fa-shopping-bag"></i> #주문 관리 (슬지) <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li>
-                        <a th:href="@{/admin/order/list(sid=${session.SID}, stypecode=${session.STYPECODE}, sstorecode=${session.SSTORECODE})}">#주문 목록(슬지)</a>
+                        <a th:href="@{/admin/order/list}">#주문 목록(슬지)</a>
                     </li>
                     <li>
                         <a th:href="@{/admin/order/delivery}">#배송 관리(슬지)</a>

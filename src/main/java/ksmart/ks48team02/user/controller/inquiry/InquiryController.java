@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class InquiryController {
     // 1:1문의
     @GetMapping(value = {"","/"})
-    public String userInquiryMainPage(){
+    public String userInquiryMainPage(Model model){
+        model.addAttribute("title", "1:1 문의");
 
         return "user/inquiry/main";
     }

@@ -25,18 +25,19 @@ public class RewardProject {
     private int projectGoalMoney;
     private int projectAchievementPercent;
     private String regCompany;
-    private LocalDateTime projectRegDate;
+    private String projectRegDate;
     private int searchCount;
     private String projectJudgmentReason;
-    private LocalDateTime projectJudgementDate;
-    private LocalDateTime projectStartDate;
-    private LocalDateTime projectEndDate;
+    private String projectJudgementDate;
+    private String projectStartDate;
+    private String projectEndDate;
     private int projectCondition;
     private String storeImage;
     private int storeLike;
     private String storeMobile;
     private String categoryName;
     private int totalJoinNumber;
+    private String rewardGreatDate;
 
 
     private List<NewsList> newsLists;

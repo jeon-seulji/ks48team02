@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,6 +61,11 @@ public class PojectRegistrationContoller {
         String memberType = (String)session.getAttribute("STYPECODE");
         String returnAddr = "user/account/login";
 
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+
+        model.addAttribute("recommendProjectList",recommendProjectList);
+
         return "user/projectRegistration/main";
     }
 
@@ -87,13 +94,19 @@ public class PojectRegistrationContoller {
     @GetMapping("/reward/success")
     public String rewardProjectSuccessPage(){
 
-        return "/user/projectRegistration/reward/reward_insert_success";
+        return "user/projectRegistration/reward/reward_insert_success";
     }
 
 
-    //투자 프로젝트 심사 요청 페이지
+
+    //투자 프로젝트 심사 요청, 공고등록 페이지
     @GetMapping(value = {"/investment/judge"})
-    public String investmentJudgePage(Model model) {
+    public String investmentJudgePage(Model model, HttpSession httpSession) {
+        String memberId = (String) httpSession.getAttribute("SID");
+
+        if(memberId == null) {
+            return "user/account/login";
+        }
 
         List<UserCompanyBusinessType> userCompanyBusinessType = userInvestmentService.getUserCompanyBusinessType();
         List<UserLawSatistifyReason> userLawSatistifyReason = userInvestmentService.getUserLawSatistifyReason();
@@ -106,13 +119,29 @@ public class PojectRegistrationContoller {
         return "user/projectRegistration/investment/invest_judge_insert";
     }
 
-    //투자 프로젝트 공고 등록 페이지
-    @GetMapping(value = {"/investment/insert"})
-    public String investmentRegistrationPage(Model model) {
+    // 투자 프로젝트 등록
+    @PostMapping(value = {"/investment/judge"})
+    public String investmentRegistrationPage(InvestmentJudge investmentJudge, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession session){
 
-        model.addAttribute("title", "투자펀딩 공고 등록 페이지");
+        String memberId = (String) session.getAttribute("SID");
+        investmentJudge.setMemberIdSeller(memberId);
 
-        return "user/projectRegistration/investment/invest_insert";
+
+        System.out.println(investmentJudge);
+
+        // 투자 심사 요청 등록
+        userInvestmentService.addInvestmentJudge(investmentJudge);
+
+        // 투자 프로젝트 등록
+        investmentInfo.setInvestmentRequestJudgeCode(investmentJudge.getInvestmentRequestJudgeCode());
+        investmentInfo.setInvestmentSubject(investmentJudge.getInvestmentRequestSubject());
+        userInvestmentService.addInvestment(investmentInfo);
+
+        // 투자 프로젝트 상세내용 등록
+        investmentContent.setInvestmentCode(investmentInfo.getInvestmentCode());
+        userInvestmentService.addInvestmentContent(investmentContent);
+
+        return "redirect:/user/projectRegistration/investment/success";
     }
     //투자 프로젝트 등록 완료 페이지
     @GetMapping(value = "investment/success")

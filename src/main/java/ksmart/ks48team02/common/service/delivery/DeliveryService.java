@@ -60,7 +60,13 @@ public class DeliveryService {
         double rowCnt = deliveryMapper.getDeliveryCnt(paramMap);
 
         // 마지막 페이지 수
-        int lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+        int lastPage = 0;
+
+        if(rowCnt == 0){
+            lastPage = 1;
+        } else {
+            lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+        }
 
         // 보여줄 페이지 번호 초깃값
         int startPageNum = 1;

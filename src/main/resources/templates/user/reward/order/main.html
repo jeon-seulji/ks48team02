@@ -47,9 +47,9 @@
         //토스페이에 담을 주문 상품 정보
         const products =[];
         //등급 별 할인율
-        let orderMemberDiscount = Number([[${orderMemberInfo.rewardCustomerRank.discountRate}]]/100);
+        let orderMemberDiscount = Number([[${orderMemberInfo.rewardCustomerRank.discountRate}]]);
         //등급 별 적립 포인트
-        let orderMemberSavePoint = Number([[${orderMemberInfo.rewardCustomerRank.pointSavingRate}]]/100);
+        let orderMemberSavePoint = Number([[${orderMemberInfo.rewardCustomerRank.pointSavingRate}]]);
         //회원 보유 포인트
         let havePoint = [[${orderMemberInfo.customer.customerPoint}]];
         //주문자 회원 정보
@@ -59,9 +59,25 @@
         let addrDetail = [[${orderMemberInfo.customer.customerAddrDetail}]];
         let id = [[${orderMemberInfo.memberId}]];
 
-        $(function(){
+        //토스 api CustomerKey를 랜덤 생성하기위한 generateUUID 함수
+        function generateUUID() { // Public Domain/MIT
+            var d = new Date().getTime();//Timestamp
+            var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16;//random number between 0 and 16
+                if(d > 0){//Use timestamp until depleted
+                    r = (d + r)%16 | 0;
+                    d = Math.floor(d/16);
+                } else {//Use microseconds since page-load if supported
+                    r = (d2 + r)%16 | 0;
+                    d2 = Math.floor(d2/16);
+                }
+                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+        }
 
-            //유효성 검사 validationCheck 함수
+        //유효성 검사 validationCheck 함수
+        $(function(){
             function validationCheck(data) {
                 let isValid =true;
 
@@ -364,12 +380,13 @@
             });
 
             const clientKey = "test_ck_DpexMgkW36RWA44MXDDN3GbR5ozO"
-
-            const customerKey = crypto.randomUUID(); // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
-
-            // ------  결제위젯 초기화 ------
+            const customerKey = generateUUID();// 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
+            const orderId = generateUUID(); // 내 상점에서 주문을 구분하기 위해 발급한 고유햔 주문 ID
             const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
 
+            console.log(customerKey);
+            console.log(orderId);
+            // ------  결제위젯 초기화 ------
             const paymentMethodWidget = paymentWidget.renderPaymentMethods(
                 "#payment-method",
                 { value:0},
@@ -381,7 +398,6 @@
                 '#agreement',
                 { variantKey: "AGREEMENT" } // 기본 이용약관 UI 렌더링
             );
-
 
             //결제하기 누를 시 필수 약관동의 모두 체크되었는지 확인
             $('.paymentBtn').click(function(){
@@ -421,7 +437,7 @@
 
                         //토스페이API 결제 요청시 필요한 객체
                         const paymentObj = {
-                            orderId: crypto.randomUUID(),
+                            orderId: orderId,
                             orderName: [[${rewardOrderInfo.projectSubject}]],
                             amount: totalPrice,
                             customerEmail: [[${orderMemberInfo.memberEmail}]],
@@ -482,6 +498,7 @@
                                     data: JSON.stringify(paymentParam),
                                     dataType: 'text'
                                 });
+
                                 //DB작업 완료 되었다면 결제 완료 페이지로 이동.
                                 request.done(function(response){
                                     let redirectURI = response;
@@ -513,6 +530,8 @@
 
 
     </script>
+
+
 
 
 
@@ -584,7 +603,7 @@
                                             <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                             <span class="ml-2">발송 시작일</span>
-                                            <span class ="optionDeliverDate font-weight-bold float-right mr-2" th:text="${#temporals.format(l.optionEstimatedDeliveryDate,'yyyy.MM.dd')}"></span>
+                                            <span class ="optionDeliverDate font-weight-bold float-right mr-2" th:text="${#strings.substring(l.optionEstimatedDeliveryDate,0,10)}"></span>
                                             <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                             <span class="ml-2">제한 수량</span>
@@ -749,7 +768,7 @@
                                         <div style="border: 0.2px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">포인트 사용 금액</span>
-                                        <span id="totalOrderPoint"  class=" font-weight-bold float-right mr-lg-2">0원</span>
+                                        <span id="totalOrderPoint" class=" font-weight-bold float-right mr-lg-2">0원</span>
                                         <div style="border: 0.3px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                         <span class="ml-2">쿠폰 할인 금액</span>

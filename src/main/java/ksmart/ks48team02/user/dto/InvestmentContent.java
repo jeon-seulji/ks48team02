@@ -9,7 +9,7 @@ public class InvestmentContent {
     private String investmentContentCode;
     private String memberId;
     private String investmentCode;
-    private String memberIdAdmin;
+    private String memberIdSeller;
     private String projectIntroduction;
     private String marketAnalysis;
     private String majorFinancialInformation;
@@ -18,7 +18,5 @@ public class InvestmentContent {
     private String patentAwardDetails;
     private String etcInvestContent;
     private String registrationDate;
-
-    private List<InvestmentInfo> investmentInfo;
 
 }

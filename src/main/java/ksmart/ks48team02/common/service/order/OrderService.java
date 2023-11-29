@@ -6,6 +6,7 @@ import ksmart.ks48team02.common.mapper.order.OrderMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,13 @@ public class OrderService {
             double rowCnt = orderMapper.getOrderCnt(paramMap);
 
             // 마지막 페이지 수
-            int lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            int lastPage = 0;
+
+            if(rowCnt == 0){
+                lastPage = 1;
+            } else {
+                lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            }
 
             // 보여줄 페이지 번호 초깃값
             int startPageNum = 1;
@@ -135,7 +142,13 @@ public class OrderService {
             double rowCnt = orderMapper.getRfndCnt(paramMap);
 
             // 마지막 페이지 수
-            int lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            int lastPage = 0;
+
+            if(rowCnt == 0){
+                lastPage = 1;
+            } else {
+                lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            }
 
             // 보여줄 페이지 번호 초깃값
             int startPageNum = 1;
@@ -181,16 +194,143 @@ public class OrderService {
 
     }
 
-    public Map<String, Object> getOrderConfLogList(){
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+    // 자동 환불 조회
+    public Map<String, Object> getAutoRefdList(Map<String, Object> paramMap){
+        Map<String, Object> resultMap = null;
 
-        List<OrderConfirmationLog> confLogList = orderMapper.getOrderConfLogList();
+        if(paramMap != null) {
+            String orderby = (String) paramMap.get("orderby");
+            Object currentPageObj = paramMap.get("currentPage");
+            Object rowPerPageObj = paramMap.get("rowPerPage");
+
+            int currentPage = 0;
+            int rowPerPage = 0;
+
+            if (currentPageObj != null) {
+                try {
+                    double currentPageDouble = Double.parseDouble(currentPageObj.toString());
+                    currentPage = (int) currentPageDouble;
+                    double rowPerPageDouble = Double.parseDouble(rowPerPageObj.toString());
+                    rowPerPage = (int) rowPerPageDouble;
+                } catch (NumberFormatException e) {
+                    // currentPageObj가 숫자로 변환될 수 없는 경우의 예외 처리
+
+                }
+            }
+
+            // 행의 시작점
+            int startRowNum = (currentPage - 1) * rowPerPage; // (1 - 1) * 15 = 0
+
+            // 전체 행의 갯수
+            double rowCnt = orderMapper.getAutoRfndCnt(paramMap);
+
+            // 마지막 페이지 수
+            int lastPage = 0;
+
+            if(rowCnt == 0){
+                lastPage = 1;
+            } else {
+                lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            }
 
 
-        log.info("confLogList {}", confLogList);
+            // 보여줄 페이지 번호 초깃값
+            int startPageNum = 1;
 
-        resultMap.put("confLogList", confLogList);
+            // 마지막 페이지 번호
+            int endPageNum = (lastPage < 10) ? lastPage : lastPage * currentPage;
+
+            paramMap.put("startRowNum", startRowNum);
+            paramMap.put("rowCnt", rowCnt);
+            paramMap.put("lastPage", lastPage);
+            paramMap.put("startPageNum", startPageNum);
+            paramMap.put("endPageNum", endPageNum);
+
+            List<RefundApplication> list = orderMapper.getAutoRefdList(paramMap);
+
+            log.info("list {}", list);
+
+            resultMap = new HashMap<String, Object>();
+
+            resultMap.put("list", list); // 조회 객체
+            resultMap.put("lastPage", lastPage); // 마지막 페이지
+            resultMap.put("startPageNum", startPageNum); // 시작 페이지
+            resultMap.put("currentPage", currentPage); // 현재 페이지
+            resultMap.put("endPageNum", endPageNum); // 끝 페이지
+        }
+
+        log.info("resultMap {}", resultMap);
         return resultMap;
     }
 
+
+    // 주문 확정 목록 조회
+    public Map<String, Object> getOrderConfLogList(Map<String, Object> paramMap){
+
+        Map<String, Object> resultMap = null;
+
+        if(paramMap != null) {
+            String orderby = (String) paramMap.get("orderby");
+            Object currentPageObj = paramMap.get("currentPage");
+            Object rowPerPageObj = paramMap.get("rowPerPage");
+
+            int currentPage = 0;
+            int rowPerPage = 0;
+
+            if (currentPageObj != null) {
+                try {
+                    double currentPageDouble = Double.parseDouble(currentPageObj.toString());
+                    currentPage = (int) currentPageDouble;
+                    double rowPerPageDouble = Double.parseDouble(rowPerPageObj.toString());
+                    rowPerPage = (int) rowPerPageDouble;
+                } catch (NumberFormatException e) {
+                    // currentPageObj가 숫자로 변환될 수 없는 경우의 예외 처리
+
+                }
+            }
+
+            // 행의 시작점
+            int startRowNum = (currentPage - 1) * rowPerPage; // (1 - 1) * 15 = 0
+
+            // 전체 행의 갯수
+            double rowCnt = orderMapper.getOrderConfCnt(paramMap);
+
+            // 마지막 페이지 수
+            int lastPage = 0;
+
+            if(rowCnt == 0){
+                lastPage = 1;
+            } else {
+                lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            }
+
+            // 보여줄 페이지 번호 초깃값
+            int startPageNum = 1;
+
+            // 마지막 페이지 번호
+            int endPageNum = (lastPage < 10) ? lastPage : lastPage * currentPage;
+
+            paramMap.put("startRowNum", startRowNum);
+            paramMap.put("rowCnt", rowCnt);
+            paramMap.put("lastPage", lastPage);
+            paramMap.put("startPageNum", startPageNum);
+            paramMap.put("endPageNum", endPageNum);
+
+            List<OrderConfirmationLog> confLogList = orderMapper.getOrderConfLogList(paramMap);
+
+            log.info("confLogList {}", confLogList);
+
+            resultMap = new HashMap<String, Object>();
+
+            resultMap.put("confLogList", confLogList); // 조회 객체
+            resultMap.put("lastPage", lastPage); // 마지막 페이지
+            resultMap.put("startPageNum", startPageNum); // 시작 페이지
+            resultMap.put("currentPage", currentPage); // 현재 페이지
+            resultMap.put("endPageNum", endPageNum); // 끝 페이지
+
+        }
+
+        log.info("resultMap {}", resultMap);
+        return resultMap;
+    }
 }

@@ -25,189 +25,6 @@
 <th:block layout:fragment="customJsCode">
     <script>
 
-        // function sortItemClickedStyle(element) {
-        //     const listItems = document.querySelectorAll("#sort-item-wrap li");
-        //
-        //     for (const listItem of listItems) {
-        //         listItem.classList.remove("selected");
-        //     }
-        //
-        //     element.classList.add("selected");
-        // }
-        // function cateItemClickedStyle(element) {
-        //     const listItems = document.querySelectorAll("#category-wrap li");
-        //
-        //     for (const listItem of listItems) {
-        //         listItem.classList.remove("selected");
-        //     }
-        //
-        //     element.classList.add("selected");
-        // }
-        //
-        // // 심사 여부에 따른 추가 기능들
-        // $('tr').each(function() {
-        //     const judgeText = $(this).find('.table-data-center-judge').text().trim();
-        //     const $judgeCon = $(this).find('.table-data-center-judge');
-        //     const $curGoalMoney = $(this).find('.current-goal-money');
-        //
-        //     // "진행중"인 경우
-        //     if (judgeText === '3') {
-        //         // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
-        //         const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
-        //         const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
-        //         $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
-        //         $judgeCon.text('진행중');
-        //         $modifyImpossible.remove();
-        //     }
-        //
-        //     // "심사완료"인 경우
-        //     if (judgeText === '1') {
-        //         // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
-        //         const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
-        //         const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
-        //         $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
-        //         $modifyImpossible.remove();
-        //
-        //         // 공고 시작 버튼 + 시작 누를 시 진행중으로 변경 +  TODO 공고 시작일자 (DB에 값 넣기) 설정하기
-        //         const $startProjectDate = $(this).find('.table-data-center.start-project-date');
-        //         $startProjectDate.text('');
-        //         $startProjectDate.children();
-        //         const $startButton = $('<button type="button" class="startBtn" style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>');
-        //
-        //         // 시작 버튼을 요소에 추가합니다.
-        //         $startProjectDate.append($startButton);
-        //
-        //         // 시작 버튼에 클릭 이벤트 리스너를 추가.
-        //         $startButton.click(function() {
-        //             let rewardProjectCode = $(this).parent('td').parent('tr').children('td:eq(0)').text();
-        //             $.ajax({
-        //                 method : "POST",
-        //                 url: "/seller/reward/products/startProject",
-        //                 data : {rewardProjectCode : rewardProjectCode},
-        //                 dataType : "text",
-        //                 success: function (){
-        //                     $startButton.remove();
-        //                     location.reload();
-        //                 },
-        //                 error: function (error){
-        //                     console.log("AJAX 요청 실패")
-        //                 }
-        //             });
-        //         });
-        //         $judgeCon.text('심사완료');
-        //     }
-        //
-        //     // "심사반려"인 경우
-        //     if (judgeText === '2') {
-        //         const $startProjectDate = $(this).find('.table-data-center.start-project-date');
-        //         $startProjectDate.text('-');
-        //         $judgeCon.text('심사반려');
-        //     }
-        //
-        //     // "심사중"인 경우
-        //     if (judgeText === '0') {
-        //         const $startProjectDate = $(this).find('.table-data-center.start-project-date');
-        //         $startProjectDate.text('-');
-        //         $judgeCon.text('심사중');
-        //     }
-        //
-        //     // "프로젝트 성공"인 경우
-        //     if (judgeText === '4') {
-        //         // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
-        //         const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
-        //         const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
-        //         $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
-        //         $modifyImpossible.remove();
-        //         $judgeCon.text('성공');
-        //     }
-        //
-        //     // "프로젝트 실패"인 경우
-        //     if (judgeText === '5') {
-        //         // "table-data-center-modify" 클래스의 <a> 태그를 삭제 하고 부모의 td 값에 글로 수정불가로 바꿈.
-        //         const $modifyImpossible = $(this).find('.table-data-center-modify a').text('수정불가')
-        //         const $parentElement = $modifyImpossible.parent(); // 부모 요소 가져오기
-        //         $parentElement.text('수정불가').css('text-decoration-color','red').css('color', 'red');
-        //         $modifyImpossible.remove();
-        //         $judgeCon.text('실패');
-        //     }
-        // });
-        //
-        // /*        $('button').click(function (){
-        //             if($(this).attr('class') == 'startBtn'){
-        //                 let donationCode = $(this).parent('td').parent('tr').children('td:eq(0)').text();
-        //                 window.location.href = "@{/product(donationCode=${donationCode})}";
-        //             }
-        //         });*/
-        //
-        // function isProject(judgeReason){
-        //     if($(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').length == 0){
-        //         $('table.settlement-log tbody tr.not-contents').show();
-        //     }else{
-        //         $(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').show();
-        //         projectTotal = $(`table.settlement-log tbody tr .table-data-center-judge:contains(${judgeReason})`).closest('tr').length;
-        //     }
-        // }
-        //
-        // let projectTotal = 0;
-        //
-        // // 심사 완료 프로젝트, 심사중 프로젝트 셀렉트 박스 기능 구현
-        // $('.project-select').on('change', function() {
-        //     const selectedValue = $(this).val();
-        //
-        //     // 모든 <tr> 요소를 숨깁니다.
-        //     $('table.settlement-log tbody tr').hide();
-        //
-        //     if (selectedValue === '0') {
-        //         // "전체 프로젝트"를 선택한 경우, 모든 행을 표시합니다.
-        //         $('table.settlement-log tbody tr').show();
-        //         projectTotal = $('table.settlement-log tbody tr').length -1;
-        //
-        //         // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-        //         if($('table.settlement-log tbody tr').length == 1){
-        //             $('table.settlement-log tbody tr.not-contents').show();
-        //             projectTotal = 0;
-        //         }else{
-        //             $('table.settlement-log tbody tr.not-contents').hide();
-        //         }
-        //
-        //     } else if (selectedValue === '1') {
-        //         // "심사완료된 프로젝트"를 선택한 경우, "심사완료"인 행을 표시합니다.
-        //         // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-        //         isProject("심사완료");
-        //
-        //     } else if (selectedValue === '2') {
-        //         // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-        //         isProject("심사반려");
-        //     } else if (selectedValue === '3') {
-        //         // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-        //         isProject("심사중");
-        //     }
-        //     else if (selectedValue === '4') {
-        //         // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-        //         isProject("진행중");
-        //     }
-        //     else if (selectedValue === '5') {
-        //         // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-        //         isProject("성공");
-        //     }
-        //     else if (selectedValue === '6') {
-        //         // 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주는 기능
-        //         isProject("실패");
-        //     }
-        //     $('.total-list').text(projectTotal);
-        //
-        // });
-        //
-        // // 목록 진입 시 프로젝트가 1개도 없을 때 검색 결과가 없습니다 값을 띄워주기 위해 설정 (초기화)
-        // if($('table.settlement-log tbody tr').length == 1){
-        //     $('table.settlement-log tbody tr.not-contents').show();
-        // }else{
-        //     $('table.settlement-log tbody tr.not-contents').hide();
-        // }
-        //
-        // // 총 프로젝트 개수 띄우기 초기화
-        // $('.total-list').text($('table.settlement-log tbody tr').length -1);
-
 
         //프로젝트 시작 버튼 누를 시 ajax 요청.
         $(document).on('click', '.startBtn' ,function(){
@@ -230,22 +47,6 @@
             console.log($(this).val());
             let projectCondition = $(this).val();
             location.href = `/seller/reward/products?projectCondition=${projectCondition}`;
-            /*
-            $.ajax({
-                method : 'POST',
-                url : '/seller/reward/products',
-                data : {'projectCondition' : projectCondition},
-                dataType : 'json',
-                success : function(data){
-                    console.log(data)
-                    //location.href = '/seller/reward/products';
-                },
-                error : function(err){
-                    console.log(err);
-                }
-            })
-
-             */
         })
 
     </script>
@@ -261,7 +62,7 @@
         <div class="data-info">
             <div class="list-count-area">
                 <ul>
-                    <li>프로젝트 목록 총 <span class="count-data total-list" th:text="|${rowCnt} 건|"></span></li>
+                    <li>프로젝트 목록 총 <span class="text-primary" th:text="${rowCnt}"></span> 건</li>
                 </ul>
             </div>
             <div class="list-count-selector">
@@ -305,8 +106,8 @@
                     <td colspan="11" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                 </tr>
                 <!-- contents -->
-                <th:block th:unless="${#lists.size(projectList) == 0}" th:each="l : ${projectList}">
-                    <tr class="rewardProject">
+                    <tr class="rewardProject" th:unless="${#lists.size(projectList) == 0}" th:each="l : ${projectList}"
+                        th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode})}'|">
                         <td class="rewardProjectCode" th:text="${l.rewardProjectCode}"></td>
                         <td class="rewardProjectCondition" th:if="${l.projectCondition == 0}">심사 대기중</td>
                         <td class="rewardProjectCondition" th:if="${l.projectCondition == 1}">심사 승인</td>
@@ -321,13 +122,13 @@
                         <td>
                             <div style="float:left;"><span class="goal-money" th:text="|${#numbers.formatInteger(l.projectGoalMoney,0,'COMMA')} 원|"></span> </div>
                         </td>
-                        <td class="table-data-center" th:text="${#temporals.format(l.projectRegDate,'yyyy-MM-dd')}"></td>
-                        <td class="table-data-center" th:text="${#temporals.format(l.projectEndDate,'yyyy-MM-dd')}"></td>
+                        <td class="table-data-center" th:text="${l.projectRegDate}"></td>
+                        <td class="table-data-center" th:text="${#strings.substring(l.projectEndDate,0,10)}"></td>
                         <td class="table-data-center start-project-date" th:if="${l.projectCondition == 1}">
                             <button type="button" class="startBtn" style=" background-color: #235fd9; border-radius: 5px; color: whitesmoke; padding: 5px">프로젝트 시작</button>
                         </td>
                         <td class="table-data-center start-project-date" th:if="${l.projectCondition == 0} OR ${l.projectCondition == 2}">-</td>
-                        <td class="table-data-center start-project-date" th:if="${l.projectCondition >= 3}" th:text="${#temporals.format(l.projectStartDate,'yyyy-MM-dd')}"></td>
+                        <td class="table-data-center start-project-date" th:if="${l.projectCondition >= 3}" th:text="${l.projectStartDate}"></td>
                         <td class="table-data-center-modify">
                             <a th:if="${l.projectCondition} == 0 OR ${l.projectCondition} == 2" th:href="@{/seller/reward/products/modify(rewardProjectCode=${l.rewardProjectCode})}">수정</a>
                             <a th:unless="${l.projectCondition} == 0 OR ${l.projectCondition} == 2" style="text-decoration-color : red ; color : red;">수정불가</a>
@@ -338,7 +139,6 @@
                         <td class="table-data-center" th:if="${l.adminMemberId == null}">-</td>
                         <td class="table-data-center" th:unless="${l.adminMemberId == null}" th:text="${l.adminMemberId}"></td>
                     </tr>
-                </th:block>
                 </tbody>
             </table>
         </form>

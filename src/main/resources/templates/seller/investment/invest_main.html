@@ -36,6 +36,43 @@
                 searchSelect.value = '';
             }
         }
+
+        // 현재 URL 가져오기
+        let currentUrl = window.location.href;
+
+        // 특정 키와 값 설정
+        let searchKey = 'searchKey';
+        let searchValue = 'searchValue';
+        let amDateSettStartDate = 'amDateSettStartDate';
+        let amDateSettEndDate = 'amDateSettEndDate';
+        let searchSelectValue = 'searchSelectValue';
+        let currentPage = 'currentPage';
+        let lastPage = 'lastPage';
+        let startPageNum = 'startPageNum';
+        let endPageNum = 'endPageNum';
+
+        // URL 파싱하여 쿼리스트링 맵으로 변환
+        let urlParams = new URLSearchParams(window.location.search);
+
+        // 특정 키와 값 제거
+        urlParams.delete(searchKey);
+        urlParams.delete(searchValue);
+        urlParams.delete(amDateSettStartDate);
+        urlParams.delete(amDateSettEndDate);
+        urlParams.delete(searchSelectValue);
+        urlParams.delete(currentPage);
+        urlParams.delete(lastPage);
+        urlParams.delete(startPageNum);
+        urlParams.delete(endPageNum);
+
+        // 수정된 쿼리스트링을 URL에 반영
+        let newUrl = currentUrl.split('?')[0] + '?' + urlParams.toString();
+
+        if (window.location.href !== newUrl) {
+
+            // history.replaceState를 사용하여 주소창에서 쿼리스트링 숨기기
+            history.replaceState({}, document.title, newUrl);
+        }
     </script>
 </th:block>
 
@@ -46,33 +83,16 @@
     <div th:include="~{seller/investment/search/investment_search :: searchFragment}"></div>
     <br>
 
-    <h4 class="admin-content-title">투자 공고 목록</h4>
+    <h4 class="admin-content-title">투자 프로젝트 목록</h4>
 
     <div class="admin-content-wrapper">
 
         <div class="data-info">
             <div class="list-count-area">
                 <ul>
-                    <li>심사 요청 총 <span class="count-data total-list">0</span>건</li>
+                    <li>공고 갯수 총 <span class="count-data total-list">0</span>건</li>
                     <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
                 </ul>
-            </div>
-            <div class="list-count-selector">
-                <select name="orderby">
-                    <option value="regist_d">신청일 순</option>
-                    <option value="regist_a">신청일 역순</option>
-                    <option>-----------------</option>
-                    <option value="project_name_d">요청 코드순</option>
-                    <option value="project_name_a">요청 코드 역순</option>
-                    <option>-----------------</option>
-                    <option value="project_name_d">심사요청 제목순</option>
-                    <option value="project_name_a">심사요청 제목역순</option>
-                </select>
-                <select name="rowPerpage">
-                    <option value="15">15개씩 보기</option>
-                    <option value="20">20개씩 보기</option>
-                    <option value="30">30개씩 보기</option>
-                </select>
             </div>
         </div>
 
@@ -103,7 +123,7 @@
                 <td>
                     <input type="checkbox" name="selectList">
                 </td>
-                <td colspan="14">투자 공고 목록이 없습니다.</td>
+                <td colspan="14">투자 프로젝트 목록이 없습니다.</td>
             </tr>
             <tr th:unless="${investmentList == null}" th:each="l : ${investmentList}">
                 <td>
@@ -114,7 +134,11 @@
                        th:href="@{/seller/investment/view/investment(investmentCode=${l.investmentCode})}"
                        th:text="${l.investmentCode}"></a>
                 </td>
-                <td th:text="${l.investmentRequestJudgeCode}"></td>
+                <td>
+                    <a class="detail-link"
+                       th:href="@{/seller/investment/view/judge(investmentRequestJudgeCode=${l.investmentRequestJudgeCode})}"
+                       th:text="${l.investmentRequestJudgeCode}"></a>
+                </td>
                 <td th:text="${l.memberIdSeller}"></td>
                 <td th:text="${l.investmentSubject}"></td>
                 <td th:text="${l.investmentLike}"></td>

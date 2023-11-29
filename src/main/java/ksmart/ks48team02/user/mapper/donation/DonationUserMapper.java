@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.mapper.donation;
 
 import ksmart.ks48team02.admin.dto.DonationInfo;
+import ksmart.ks48team02.common.dto.OrderTableList;
 import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -25,9 +26,12 @@ public interface DonationUserMapper {
     public int getFlover(String memberId);
     public void deductFlover(Map<String,Object> deductData);
     public void addOrderTable(String memberId, String donationCode, String orderTotalPrice);
-    public void addDonationPayemnt(String donationCode, String floverAmount, String floverToMoney);
+    public void addDonationPayment(String donationCode, String floverAmount, String floverToMoney);
     public void updateMoney(String donationCode, String acvMoney, String acvPercent);
-
     public int getNumberOfParticipants(String donationCode);
     public void chargeFlover(String memberId, String floverCount);
+    public void searchCountUpdate(String donationCode, String searchCount);
+    public void removeOrderInfo(String orderCode);
+    public OrderTableList getOrderInfo(String orderCode);
+    public Customer getCustomerInfo(String memberId);
 }

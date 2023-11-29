@@ -22,6 +22,40 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
+        function validationCheck(data) {
+            let isValid = true;
+            if (typeof data == 'object') {
+
+                $.each(data, function () {
+                    let checkValue = $(this).val();
+                    if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
+                        isValid = false;
+                        let eleId = $(this).attr('id');
+                        let cate = $(`label[for="${eleId}"]`).text();
+                        alert(`${cate} 필수 입력 항목입니다.`);
+                        $(this).focus();
+                        return isValid;
+                    }
+                });
+
+            } else {
+                if (data == null || data == '' || typeof data == 'undefined') {
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        $('#settUpdateBtn').click(function () {
+
+                    const formEles = $('#modifyCorporateValueForm input, #modifyCorporateValueForm input:radio, #modifyCorporateValueForm select');
+
+                    let isValid = validationCheck(formEles);
+
+                    if (isValid) $('#modifyCorporateValueForm').submit();
+
+        });
 
         // 입력 값이 변경될 때마다 계산 실행
         $('.corp-value-calc').on('input', function () {
@@ -32,10 +66,10 @@
             let stockNumber = parseFloat($('#stockNumber').val()) || 1;
 
             // 수식 계산
-            let ebitaCalculate = (operatingProfit + depreciation)
-            let convertEvCalculate = ((operatingProfit + depreciation) * evEbitda)
-            let corpCalculate = ((operatingProfit + depreciation) * evEbitda - netDebt)
-            let stockPriceCalculate = (((operatingProfit + depreciation) * evEbitda - netDebt) / stockNumber)
+            let ebitaCalculate = Math.floor(operatingProfit + depreciation)
+            let convertEvCalculate = Math.floor((operatingProfit + depreciation) * evEbitda)
+            let corpCalculate = Math.floor((operatingProfit + depreciation) * evEbitda - netDebt)
+            let stockPriceCalculate = Math.floor(((operatingProfit + depreciation) * evEbitda - netDebt) / stockNumber)
             let ebitaCalculateResult = (operatingProfit + depreciation).toLocaleString('ko-kr') + ' 원';
             let convertEvCalculateResult = ((operatingProfit + depreciation) * evEbitda).toLocaleString('ko-kr') + ' 원';
             let corpCalculateResult = ((operatingProfit + depreciation) * evEbitda - netDebt).toLocaleString('ko-kr') + ' 원';
@@ -254,7 +288,7 @@
                         </tr>
                         <tr>
                             <td>
-                                심사 현황
+                                심사 결과
                             </td>
                             <td id="corpValueFulfill" colspan="5" class="progress-radio-area">
                                 <ul>
@@ -289,7 +323,7 @@
                                 </button>
                             </li>
                             <li>
-                                <button id="settUpdateBtn" class="submitBtn" type="submit">
+                                <button id="settUpdateBtn" class="submitBtn" type="button">
                                     확인
                                 </button>
                             </li>

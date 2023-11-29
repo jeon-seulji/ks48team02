@@ -6,7 +6,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
     <style>
         .login-logo .user-connection-menu {
             display: none;
@@ -129,12 +132,33 @@
             border: 1px solid #191919;
             font-size: 12px;
             transition: background 0.3s;
+            margin-left: 7px;
         }
 
         .submitBtn_white:hover {
             background: var(--maincolor);
             border: 1px solid var(--maincolor);
             color: #fff;
+        }
+
+        /* 흰 버튼 */
+        .submitBtn_blue {
+            background: var(--maincolor);
+            padding: 7px 23px;
+            transition: all .4s;
+            color: #fff;
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid #191919;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-left: 7px;
+        }
+
+        .submitBtn_blue:hover {
+            background: #fff;
+            border: 1px solid #191919;;
+            color: #191919;
         }
 
         .nav-link{
@@ -182,7 +206,81 @@
             color: lightgrey;
         }
 
+        /* 진현 쿠폰 */
+        .couponArea{
+            width: 900px;
+            margin: 0 auto;
+        }
+        ul.couponArea {
+            display: flex;
+            gap: 10px;
+        }
+        ul.couponArea li {
+            padding: 5px 0;
+        }
+        .title{
+            width: 900px;
+            margin: 0 auto;
+            max-width: 1000px;
+            line-height: 36px;
+            color: rgba(0,0,0,.87);
+            font-size: 28px;
+            font-weight: 700;
+            box-sizing: content-box;
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+        .couponHeader{
+            color: #44484b;
+            padding-right: 20px;
+            /*border-bottom: 1px solid rgba(0,0,0,.08);*/
 
+        }
+        .couponTitle{
+            margin-right: 20px;
+        }
+        .myCouponPage{
+            margin-top: 40px;
+            color: black;
+            font-size: 19px;
+            margin-bottom: 50px;
+        }
+        .userCouponAdd{
+            display: flex;
+            background: transparent;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            /*border-bottom: 1px solid ;*/
+        }
+        .userCouponAdd:focus{
+            outline: none;
+        }
+        .downloadArea{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 100px;
+        }
+        .couponPolicy{
+            width: 900px;
+            margin: 0 auto;
+        }
+        .couponPolicy ol,
+        .couponPolicy li {
+            list-style-type: decimal;
+        }
+        .couponPolicy ol {
+            margin-left: 30px;
+        }
+        .modal-dialog{
+            width: 900px;
+            margin-top: 100px;
+        }
+        .couponCode{
+            text-align: center;
+        }
     </style>
 
 </head>
@@ -211,7 +309,7 @@
         <div id="tabContainer">
             <ul class="nav nav-tabs nav-justified justify-content-center" id="tabList">
                 <li class="nav-item"><a href="#menu1" class="nav-link active" data-toggle="tab">후원한 펀딩</a></li>
-                <li class="nav-item"><a href="#menu2" class="nav-link " data-toggle="tab">찜한 펀딩</a></li>
+                <li class="nav-item"><a href="#menu2" class="nav-link " data-toggle="tab">찜한 리워드 펀딩</a></li>
                 <li class="nav-item"><a href="#menu5" class="nav-link" data-toggle="tab">적립금/쿠폰/</a></li>
                 <li class="nav-item"><a href="#menu6" class="nav-link" data-toggle="tab">내 정보</a></li>
             </ul>
@@ -225,8 +323,8 @@
 
                     <!--  펀딩 종류 select  -->
                     <div id="selectContainer">
-                        <select name="" class="form-select form-select-lg" id="selectFund">
-                            <option class="fundCategory" value="viewAll" selected>전체</option>
+                        <select id="selectFund" class="form-select form-select-lg" >
+                            <option class="fundCategory" value="viewAll">전체</option>
                             <option class="fundCategory" value="reward">리워드</option>
                             <option class="fundCategory" value="investment">투자</option>
                             <option class="fundCategory" value="donation">기부</option>
@@ -241,51 +339,112 @@
                         <div class="contentsContainer mb-lg-5" th:each="l : ${mypageOrderList}">
                             <div class="card" style="width: 48rem;">
                                 <!-- 내역 상태 ( 주문 상태 상세 )  -->
-                                <h5 class="card-header" th:text="${l.orderCategoryDetail}">결제 완료</h5>
+                                <h5 class="card-header" th:text="${l.orderCategoryDetail}"></h5>
                                 <!-- 내역 내용 -->
                                 <div class="card-body" style="display: flex">
                                     <!-- 이미지  -->
                                     <div>
-                                        <img class="card-img-top" style="width: 160px; height: 160px;" alt="..." th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
-                                             onerror="this.src = 'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg';">
+                                        <img class="card-img-top" style="width: 160px; height: 160px; border:#8a8a8a solid 1px;" alt="..." th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                                             th:onerror="|this.src='@{/user/images/no-image.svg}'|">
                                     </div>
 
                                     <!-- 설명 / 버튼 -->
                                     <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
-                                        <p class="orderApplicationDate" th:text="${l.orderApplicationDate}">2023.10.30 결제</p>
-                                        <h5 class="orderName" th:text="${l.orderName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
-                                        <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
-                                            <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
-                                            <span th:text="|주문 수량 : ${rl.orderOptionAmount} 개|"></span>
-                                        </th:block>
-
-                                        <div style="display: flex; justify-content: end; margin:0;">
-                                            <a href="#" class="submitBtn_white"
-                                               data-toggle="modal"
-                                               data-target="#exampleModal3"
-                                               data-what="hello"
-                                            >주문취소</a>
-                                            <a href="#" class="submitBtn_black" >결제상세</a>
-                                        </div>
+                                            <p class="orderApplicationDate" th:text="${#strings.substring(l.orderApplicationDate,0,10)}">2023.10.30 결제</p>
+                                            <h5 class="orderName" th:text="${l.orderFundingName}">[9만원대 | 가성비 끝판왕] 누젠 모래시계 가열식 가습기</h5>
+                                            <th:block th:if="${#lists.size(rl) > 0}" th:each="rl : ${l.rewardOrderDetailList}">
+                                                <span class="card-text" th:text="${rl.optionName}">누젠 모래시계 가열식 가습기(화이트)</span>
+                                                <span th:text="|주문 수량 : ${rl.orderOptionAmount} 개|"></span>
+                                            </th:block>
+                                            <div style="display: flex; justify-content: end; margin:0;">
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_001'}">
+                                                    <!--리워드 프로젝트 주문 완료-->
+                                                    <a onclick="return confirm('정말로 구매확정 하시겠습니까?')"
+                                                            th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/cancel(orderCode=${l.orderCode})}" class="orderCancelBtn submitBtn_black">주문 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_002'}">
+                                                    <!--기부 프로젝트 주문 완료-->
+                                                    <a th:href="@{/user/donation/payment/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white" >기부 내역</a>
+                                                    <!--기부 취소는 기부 주문 후 7일 이내 가능하도록.-->
+                                                    <a th:href="@{/user/donation/floverPayment/cancel(orderCode=${l.orderCode})}" id="paymentCancelBtn" class="payDetailBtn orderCancelBtn submitBtn_black">기부 취소</a>
+                                                    <input class="donationOrderCode" hidden="hidden" th:value="${l.orderCode}">
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_003'}">
+                                                    <!--투자 프로젝트 주문 완료, 청약 신청 중-->
+                                                    <a href="#" class="submitBtn_white">투자 현황</a>
+                                                    <a href="#" class="payDetailBtn submitBtn_white">투자 내역</a>
+                                                    <a href="#" class="orderCancelBtn submitBtn_black">투자 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_004'}">
+                                                    <!--리워드 배송 대기-->
+                                                    <a onclick="return confirm('정말로 구매확정 하시겠습니까?')"
+                                                       th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/cancel(orderCode=${l.orderCode})}" class="orderCancelBtn submitBtn_black">주문 취소</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_015'}">
+                                                    <!--리워드 배송 중-->
+                                                    <a onclick="return confirm('정말로 구매확정 하시겠습니까?')"
+                                                       th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a href="#" class="submitBtn_white" >배송 정보</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_005'}">
+                                                    <!--리워드 배송 완료-->
+                                                    <a onclick="return confirm('정말로 구매확정 하시겠습니까?')"
+                                                       th:href="@{/user/mypage/reward/orderConfirm(orderCode=${l.orderCode})}" class="confirmBtn submitBtn_blue">구매 확정</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                    <a th:href="@{/user/mypage/refund}" class="submitBtn_black" >환불 신청</a>
+                                                    <a th:href="@{/user/mypage/refund/cancel}" class="submitBtn_black" >교환 신청</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_006'}">
+                                                    <!--리워드 주문 확정-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_007'}">
+                                                    <!--기부 주문 확정-->
+                                                    <a th:href="@{/user/donation/detail/condition(donationCode=${l.goodsCode})}" class="submitBtn_white" >기부 현황</a>
+                                                    <a th:href="@{/user/donation/detail(donationCode=${l.goodsCode})}" class="submitBtn_white" >기부 상세</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_008'}">
+                                                    <!--투자 주문 확정, 납입일 도래-->
+                                                    <a href="#" class="submitBtn_white" >투자 현황</a>
+                                                    <a href="#" class="submitBtn_white" >투자 상세</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_009'}">
+                                                    <!--리워드 환불 진행 중-->
+                                                    <a href="#" class="submitBtn_white" >환불 상세</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_010'}">
+                                                    <!--리워드 환불 처리 완료-->
+                                                    <a href="#" class="submitBtn_white" >환불 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_011'}">
+                                                    <!--리워드 교환 진행 중-->
+                                                    <a href="#" class="submitBtn_white" >교환 상세</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_012'}">
+                                                    <!--리워드 교환 완료-->
+                                                    <a href="#" class="submitBtn_white" >교환 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_013'}">
+                                                    <!--리워드 프로젝트 실패로 주문 취소-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='취소내역')}" class="payDetailBtn submitBtn_white">취소 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                                <th:block th:if="${l.orderCategoryCode =='ORDC_014'}">
+                                                    <!--리워드 구매자 신청으로 주문 취소-->
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='취소내역')}" class="payDetailBtn submitBtn_white">취소 내역</a>
+                                                    <a th:href="@{/user/mypage/reward/detailInfo(orderCode=${l.orderCode},detailCategory='결제내역')}" class="payDetailBtn submitBtn_white">결제 내역</a>
+                                                </th:block>
+                                            </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 모달팝업 -->
-                        <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-
-                                    <!-- 팝업창 내용 -->
-                                    <div class="modal-body detail">
-                                        <p>정말로 취소하시겠습니까?</p>
-                                    </div>
-
-                                    <div class="modal-footer" >
-                                        <button type="submit" class="submitBtn_white" data-dismiss="modal">취소</button>
-                                        <button type="submit" class="submitBtn_black">확인</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -295,14 +454,164 @@
 
                 <div id="menu2" class="container tab-pane ">
                     <div class="titleContainer">
-                        <div class="tabTitle">찜한 펀딩</div>
+                        <div class="tabTitle">찜한 리워드 펀딩</div>
+                    </div>
+                    <div class="bodyContainer" id="rewardGreatProject">
+                        <!--  내역 리스트 항목 -->
+                        <div class="contentsContainer mb-lg-5 text-dark" th:each="l : ${rewardGreatList}"
+                             th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode})}'|">
+                            <div class="card" style="width: 48rem;">
+                                <!-- 내역 상태 ( 주문 상태 상세 )  -->
+                                <h5 class="card-header" th:text="${l.projectSubject}"></h5>
+                                <!-- 내역 내용 -->
+                                <div class="card-body" style="display: flex">
+                                    <!-- 이미지  -->
+                                    <div>
+                                        <img class="card-img-top" style="width: 160px; height: 160px; border:#8a8a8a solid 1px;" alt="..." th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
+                                             th:onerror="|this.src='@{/user/images/no-image.svg}'|">
+                                    </div>
+
+                                    <!-- 설명 / 버튼 -->
+                                    <form action="" method="post" style="display: flex; flex-direction: column; justify-content:space-between; padding-left:30px; width: 1200px;">
+                                        <span style=" font-weight: bold; font-size: 20px; color: #235FD9;" th:text="|${l.projectAchievementPercent}% 달성|"></span>
+                                        <span>펀딩 목표 금액 : <span class="text-primary" th:text="${#numbers.formatInteger(l.projectGoalMoney,0,'COMMA')}"></span> 원</span>
+                                        <span>펀딩 달성 금액 : <span class="text-primary" th:text="${#numbers.formatInteger(l.projectAchievementMoney,0,'COMMA')}"></span> 원</span>
+                                        <span>펀딩 마감 일자 : <span class="reward-item-span-third" th:text="${#strings.substring(l.projectEndDate,0,10)}"></span></span>
+                                        <div class="reward-item-fourth-child" th:text="${l.regCompany}"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
 
                 <div id="menu5" class="container tab-pane">
                     <div class="titleContainer">
-                        <div class="tabTitle">적립급/쿠폰</div>
+                        <div class="tabTitle">적립금/쿠폰</div>
+                        <div class="couponArea">
+                            <h2 class="title">쿠폰</h2>
+                        </div>
+                        <div class="tab-btn-area">
+                            <ul class="couponArea">
+                                <li>
+                                    <a class="couponTitle" th:href="@{'#'}">나의 쿠폰</a>
+                                </li>
+
+                                <li>
+                                    <a class="couponTitle" th:href="@{/user/coupon/couponZone}">쿠폰존</a>
+                                </li>
+
+                                <li>
+                                    <a class="couponTitle" th:href="@{'#'}">지난 쿠폰 내역</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="couponArea">
+                                <div class="myCouponPage couponArea">
+                                    <strong class="couponPageTitle">
+                                        현재 사용가능 쿠폰
+                                        <span class="couponCount">0장</span>
+                                    </strong>
+                                </div>
+                                </div>
+                            <table>
+                                <thead>
+                                    <tr>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${memberHaveCouponList == null}">
+                                    <td colspan="4">등록된 쿠폰이 없습니다</td>
+                                </tr>
+                                <tr th:unless="${memberHaveCouponList == null}" th:each=" l : ${memberHaveCouponList}">
+                                    <td th:text="${l.couponName}"></td>
+                                    <th:block th:if="${l.couponDiscountAmount} >0">
+                                        <td th:text="${l.couponDiscountAmount}"></td>
+                                    </th:block>
+                                    <th:block th:if="${l.couponDiscountRate} > 0">
+                                        <td th:text="${l.couponDiscountRate}"></td>
+                                    </th:block>
+                                    <td th:text="${l.memberCoupon.couponRegDate}"></td>
+                                    <td th:text="${l.memberCoupon.couponEndDate}"></td>
+                                </tr>
+                                </tbody>
+
+
+                            </table>
+
+                        </div>
+
+                        <div class="downloadArea">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                쿠폰 등록하기
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">쿠폰번호를 입력해주세요</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="field">
+                                                    <label class="couponSerialNum">쿠폰번호</label>
+                                                    <br>
+                                                    <div class="couponCode">
+                                                        <input class="couponCode" name="couponCode" maxlength="15" placeholder="쿠폰번호 입력" type="text">
+                                                        <br>
+                                                        <em class="addCouponModal">최대 10자리 혹은 15자리 (~제외)</em>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                            <button type="button" class="btn btn-primary">등록</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <br><br><br><br><br><br><br><br><br><br><br><br>
+
+                        <div class="couponPolicy">
+                            <strong class="couponMessage">
+                                펀딩 스토어 이용안내
+                            </strong>
+                            <ol>
+                                <li>쿠폰은 리워드・기부 서비스 이용 시 사용할 수 있습니다.</li>
+                                <li>쿠폰은 다른 쿠폰과 중복하여 사용할 수 없습니다.</li>
+                                <li>쿠폰의 구체적인 사용 조건은 발행되는 쿠폰 별로 다를 수 있습니다.</li>
+                                <li>프로젝트가 실패하거나 결제 예약 취소를 한 경우, 쿠폰은 반환됩니다. 단, 반환 시점에 쿠폰 유효기간이 만료된 경우 자동 소멸됩니다.</li>
+                                <li>결제 실패인 경우에는 쿠폰이 반환되지않고, 소멸됩니다.</li>
+                            </ol>
+                            <br><br>
+
+                            <strong>스토어 쿠폰 이용안내</strong>
+                            <ol>
+                                <li>스토어 서비스 이용 시 사용할 수 있습니다.</li>
+                                <li>쿠폰은 다른 쿠폰과 중복하여 사용할 수 없습니다.</li>
+                                <li>쿠폰의 구체적인 사용 조건은 발행되는 쿠폰 별로 다를 수 있습니다.</li>
+                                <li>쿠폰은 배송비를 제외한 주문 상품 금액을 기준으로 적용되며, 쿠폰 금액보다 주문 상품 금액이 낮은 경우 사용할 수 없습니다.</li>
+                                <li>결제 취소(주문 취소, 환불 완료 등) 시 사용한 쿠폰은 자동 복구됩니다. 단, 복구 시점에 쿠폰 유효 기간이 만료된 경우 자동 소멸됩니다.</li>
+                                <li>사용 완료, 기간 만료, 소멸된 쿠폰은 지난 쿠폰 내역에서 확인할 수 있습니다.</li>
+                            </ol>
+                        </div>
+                        <br><br><br><br>
                     </div>
                 </div>
                 <div id="menu6" class="container tab-pane" style="" >
@@ -395,6 +704,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -417,6 +727,11 @@
       $selectFund = document.getElementById('selectFund');
       $donationTab = document.getElementById('donationTab');
       $bodyContainer = document.querySelectorAll('.bodyContainer');
+
+
+
+        document.getElementById('lead-drop-page').addEventListener('focus', ()=>{
+        })
 
 
       /* 내 정보 tab 🔽 */
@@ -625,6 +940,36 @@
           }
           return isValid;
       }
+
+
+        //====================상민======================
+
+        let selectFund = [[${selectFund}]];
+
+        $('.fundCategory').each((idx,item)=>{
+            if($(item).val() === selectFund) {
+                $(item).prop('selected',true);
+                return false;
+            }
+        })
+        //펀딩 내역 셀렉트 박스
+        $('#selectFund').change(function(){
+            selectFund = $(this).val();
+            console.log(selectFund);
+            location.href = `/user/mypage/?selectFund=${selectFund}`;
+        })
+
+
+      $('#paymentCancelBtn').click(function (){
+          if (confirm('기부를 취소하시겠습니까?')){
+              event.preventDefault();
+              console.log($(this).next().val());
+              window.location.href = "/user/donation/floverPayment/cancel?orderCode="+$(this).next().val();
+          }else{
+              return false;
+          }
+      })
+
 
     </script>
 </th:block>

@@ -16,7 +16,7 @@ public class RewardOption {
     private int optionLimitQuantity;
     private String optionName;
     private int optionDeliveryPrice;
-    private LocalDateTime optionEstimatedDeliveryDate;
+    private String optionEstimatedDeliveryDate;
     private String orderCode;
     private int orderQuantity;
     private int pricePerOption;

@@ -3,14 +3,19 @@ package ksmart.ks48team02.user.controller.donation;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.admin.dto.Donation;
 import ksmart.ks48team02.admin.dto.DonationInfo;
+import ksmart.ks48team02.common.dto.OrderTableList;
 import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.*;
+import ksmart.ks48team02.user.scheduler.UserCommonScheduler;
 import ksmart.ks48team02.user.service.donation.DonationService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -28,6 +33,7 @@ import java.util.*;
 
 @Controller("userDonationController")
 @RequestMapping("/user/donation")
+@Slf4j
 public class DonationController {
     private final DonationService donationService;
     private final KaKaoPayProperties kaKaoPayProperties;
@@ -43,7 +49,7 @@ public class DonationController {
     public String mainPage(Model model){
         List<AllDonationInfo> allDonationInfo = donationService.getAllDonationInfo();
         model.addAttribute("allDonationInfo", allDonationInfo);
-
+        
         return "user/donation/main";
     }
 
@@ -66,6 +72,9 @@ public class DonationController {
         }
         int NumberOfParticipants = donationService.getNumberOfParticipants(donationCode);
         model.addAttribute("NumberOfParticipants", NumberOfParticipants);
+
+        int searchCount = donationInfo.getSearchCount() + 1;
+        donationService.searchCountUpdate(donationCode, Integer.toString(searchCount));
       
         return "user/donation/detail/main";
     }
@@ -204,7 +213,7 @@ public class DonationController {
 
             int floverToMoney = floverCount * 100;
             donationService.addOrderTable(SID, donationCode, Integer.toString(floverToMoney));
-            donationService.addDonationPayemnt(donationCode, Integer.toString(floverCount), Integer.toString(floverToMoney));
+            donationService.addDonationPayment(donationCode, Integer.toString(floverCount), Integer.toString(floverToMoney));
             DonationInfo donationInfo = donationService.getDonationInfo(donationCode);
             float acvMoney = donationInfo.getDonationAchievementMoney() + floverToMoney;
             float goalMoney = donationInfo.getDonationGoalMoney();
@@ -228,8 +237,13 @@ public class DonationController {
     public String paymentChargePage(@RequestParam(name = "orderAmount")String orderAmount,
                                     @RequestParam(name = "floverCount")String floverCount,
                                     @RequestParam(name = "memberId")String memberId,
+                                    HttpServletRequest request,
                                     HttpSession session){
         try {
+            String serverName = request.getServerName();
+            String osName = System.getProperty("os.name").toLowerCase();
+            String localPort = ":"+request.getLocalPort();
+            if(osName.contains("linux")) localPort = "";
             URL addr = new URL("https://kapi.kakao.com/v1/payment/ready");
             HttpURLConnection serverConnect = (HttpURLConnection) addr.openConnection();// 서버 연결하는 클래스
             serverConnect.setRequestMethod("POST");
@@ -244,9 +258,9 @@ public class DonationController {
                     + "&quantity=" + URLEncoder.encode(floverCount, "UTF-8")
                     + "&total_amount=" + URLEncoder.encode(orderAmount, "UTF-8")
                     + "&tax_free_amount=" + URLEncoder.encode("0", "UTF-8")
-                    + "&approval_url=" + URLEncoder.encode("http://localhost:8088/user/donation/payment/success?memberId="+memberId, "UTF-8")
-                    + "&fail_url=" + URLEncoder.encode("http://localhost:8088/user/donation/payment/fail", "UTF-8")
-                    + "&cancel_url=" + URLEncoder.encode("http://localhost:8088/user/donation/payment/cancel", "UTF-8");
+                    + "&approval_url=" + URLEncoder.encode("http://"+serverName+localPort+"/user/donation/payment/success?memberId="+memberId, "UTF-8")
+                    + "&fail_url=" + URLEncoder.encode("http://"+serverName+localPort+"/user/donation/payment/fail", "UTF-8")
+                    + "&cancel_url=" + URLEncoder.encode("http://"+serverName+localPort+"/user/donation/payment/cancel", "UTF-8");
             OutputStream outputStream = serverConnect.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             dataOutputStream.writeBytes(parameter);
@@ -275,6 +289,7 @@ public class DonationController {
                 String tid = element.getAsJsonObject().get("tid").getAsString();
                 String nextRedirectPcUrl = element.getAsJsonObject().get("next_redirect_pc_url").getAsString();
 
+                log.info("responseElement:{}", element);
                 // 세션에 tid를 저장합니다.
                 session.setAttribute("tid", tid);
 
@@ -392,7 +407,34 @@ public class DonationController {
     }
     @GetMapping("/payment/cancel")
     public String paymentCancel(@RequestParam(name = "pg_token")String pgToken){
+
         return "user/donation/payment/cancel";
+    }
+
+    @GetMapping("/floverPayment/cancel")
+    public String floverPaymentCancel(@RequestParam(name = "orderCode")String orderCode){
+        OrderTableList getOrderInfo = donationService.getOrderInfo(orderCode);
+        int cancelPrice = getOrderInfo.getOrderTotalPrice();
+        int MoneyToFlover = cancelPrice / 100;
+        String orderMemberId = getOrderInfo.getMemberId();
+        Customer customerInfo = donationService.getCustomerInfo(orderMemberId);
+        int resultFlover = customerInfo.getCustomerFlover() + MoneyToFlover;
+
+        Map<String, Object> deductData = new HashMap<String,Object>();
+        deductData.put("SID", orderMemberId);
+        deductData.put("resultFlover", resultFlover);
+        donationService.deductFlover(deductData);
+        donationService.removeOrderInfo(orderCode);
+
+        return "redirect:/user/mypage";
+    }
+
+    @GetMapping("/payment/detailInfo")
+    public String paymentDetailInfo(@RequestParam(name = "orderCode")String orderCode, Model model){
+        OrderTableList orderInfo = donationService.getOrderInfo(orderCode);
+        model.addAttribute("orderInfo", orderInfo);
+
+        return "user/donation/payment/detailInfo";
     }
 
 
