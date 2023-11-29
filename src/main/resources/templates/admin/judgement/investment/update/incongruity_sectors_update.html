@@ -24,7 +24,42 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
+    <script>
+        function validationCheck(data) {
+            let isValid = true;
+            if (typeof data == 'object') {
 
+                $.each(data, function () {
+                    let checkValue = $(this).val();
+                    if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
+                        isValid = false;
+                        let eleId = $(this).attr('id');
+                        let cate = $(`label[for="${eleId}"]`).text();
+                        alert(`${cate} 필수 입력 항목입니다.`);
+                        $(this).focus();
+                        return isValid;
+                    }
+                });
+
+            } else {
+                if (data == null || data == '' || typeof data == 'undefined') {
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        $('#settUpdateBtn').click(function () {
+
+            const formEles = $('#modifyIncongruitySectorsForm input, #modifyIncongruitySectorsForm select');
+
+            let isValid = validationCheck(formEles);
+
+            if (isValid) $('#modifyIncongruitySectorsForm').submit();
+
+        });
+    </script>
 </th:block>
 
 
@@ -91,7 +126,7 @@
                                 </button>
                             </li>
                             <li>
-                                <button id="settUpdateBtn" class="submitBtn" type="submit">
+                                <button id="settUpdateBtn" class="submitBtn" type="button">
                                     확인
                                 </button>
                             </li>
