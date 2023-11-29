@@ -87,7 +87,7 @@ public class PojectRegistrationContoller {
 
         rewardService.addRewardProject(parameters);
 
-        return "user/projectRegistration/reward/success";
+        return "/user/projectRegistration/reward/success";
     }
 
     //리워드 프로젝트 등록 완료 페이지

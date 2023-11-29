@@ -299,7 +299,7 @@
                     <div class="row ">
                         <h1 class="text-danger ml-lg-5 my-lg-5" th:if="${#lists.size(rewardProjectList) == 0}">등록된 프로젝트가 없습니다.</h1>
 
-                        <div class="col-lg-4 mb-lg-3 reward-item-box" th:unless="${#lists.size(rewardProjectList) == 0}" th:each="l : ${rewardProjectList}"
+                        <div class="col-lg-4 mb-lg-3 reward-item-box" th:unless="${l.rewardProjectCode == 'rwd_20231008_0001'}" th:each="l : ${rewardProjectList}"
                              th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode},searchCnt='true')}'|">
                             <div class="reward-item-first-child">
                                 <img class="reward-item-third-child-image" th:src="|@{/summernoteImage/}${l.projectThumbnailImage}|"
