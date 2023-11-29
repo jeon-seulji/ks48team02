@@ -25,11 +25,39 @@ public class Member {
     private List<MemberCoupon> memberCouponList;
 
 
+
+    // member_type
+    private String memberType;
+    private String memberTypeDetail;
+
+    public String getMemberType() {
+        return memberType;
+    }
+
+    public void setMemberType(String memberType) {
+        this.memberType = memberType;
+    }
+
+    public String getMemberTypeDetail() {
+        return memberTypeDetail;
+    }
+
+    public void setMemberTypeDetail(String memberTypeDetail) {
+        this.memberTypeDetail = memberTypeDetail;
+    }
+
+
+
+
+
+
+
     @Override
     public String toString() {
         return "Member{" +
                 "memberId='" + memberId + '\'' +
                 ", memberTypeCode='" + memberTypeCode + '\'' +
+                ", memberTypeDetail='" + memberTypeDetail + '\'' +
                 ", memberName='" + memberName + '\'' +
                 ", memberPw='" + memberPw + '\'' +
                 ", memberRegDate='" + memberRegDate + '\'' +
@@ -41,6 +69,7 @@ public class Member {
                 ", customer=" + customer +
                 ", couponList=" + couponList +
                 ", memberCouponList=" + memberCouponList +
+
                 '}';
     }
 

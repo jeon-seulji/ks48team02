@@ -9,6 +9,20 @@ import java.util.List;
 public interface UserMainMapper {
 
     /**
+     * get recommend category list by sid
+     * @param sid
+     * @return
+     */
+    public List<RecommendCategory> getRecommendCtList(String sid);
+
+    /**
+     * get recommend project list by category list
+     * @param categoryCodeList
+     * @return
+     */
+    public List<TotalRecommendProject> getRecommendPjgList(List<RecommendCategory> categoryCodeList);
+
+    /**
      * rank list contents
      */
     public List<OrderRank> getRankList(String rankCategory);
@@ -31,5 +45,5 @@ public interface UserMainMapper {
      */
     public List<InvestmentInfo> getInvestPrjList();
 
-    public List<StoreProject> getStorePrjList();
+    public List<TotalRecommendProject> getStorePrjList();
 }

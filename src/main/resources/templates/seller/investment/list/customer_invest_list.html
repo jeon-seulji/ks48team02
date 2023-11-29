@@ -80,8 +80,6 @@
                 <th>주당금액</th>
                 <th>결제금액</th>
                 <th>수익기준일</th>
-                <th>수정</th>
-                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
@@ -104,8 +102,6 @@
                 <td th:text="${l}"></td>
                 <td th:text="${l}"></td>
                 <td th:text="${l}"></td>
-                <td th:text="${l}"></td>
-                <td th:text="${l}"></td>
                 <td>
                     <a th:href="@{/seller/investment/update/customer-invest(customerInvestCode=${l.customerInvestCode})}">수정</a>
                 </td>
@@ -116,15 +112,6 @@
             </tbody>
         </table>
         <br>
-
-        <button type="button" class="submitBtn"
-                th:onclick="|location.href='@{/seller/investment/insert/customer-invest}'|">
-            등록하기
-        </button>
-        <button type="button" class="submitBtn"
-                th:onclick="|location.href='@{/seller/investment/update/customer-invest}'|">
-            수정하기
-        </button>
 
         <div class="board-page-area">
             <div class="list-controller-inner">
@@ -148,6 +135,17 @@
         </div>
 
     </div>
+
+<!--    <div class="btn-area">-->
+<!--        <ul>-->
+<!--            <li>-->
+<!--                <button type="button" class="submitBtn"-->
+<!--                        th:onclick="|location.href='@{/seller/investment/insert/customer-invest}'|">-->
+<!--                    등록하기-->
+<!--                </button>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
 
 </th:block>
 </html>

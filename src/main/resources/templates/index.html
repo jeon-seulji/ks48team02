@@ -4,30 +4,168 @@
 	<meta charset="UTF-8">
 	<title>project infomation</title>
 	<link rel="stylesheet" th:href="@{/common/css/intro-css.css}">
+	<link rel="stylesheet" th:href="@{/common/css/common-css.css}">
 	<link rel="stylesheet" th:href="@{/common/css/font/font.css}">
+	<style>
+		#wrap {
+			margin: 50px 0;
+
+		}
+		* {
+			text-align: center;
+			margin: 0;
+			padding: 0;
+		}
+		table, tr, td {
+			border: 1px solid var(--borderColor);
+			border-collapse : collapse;
+			font-size: 13px;
+		}
+		td {
+			padding: 20px;
+		}
+		ul, li,
+		ul p {
+			text-align : left;
+
+		}
+
+		.info-table {
+			width: 600px;
+			margin: 0 auto;
+		}
+		.table-th {
+			background: #eee;
+			width: 20%;
+			font-weight: 700;
+		}
+		#title {
+			font-size: 36px;
+			margin: 5px 0 20px;
+		}
+	</style>
 </head>
 <body>
 	<div id="wrap">
 		<div class="info-title-area">
 			<h3>한국스마트정보교육원 48기 2팀</h3>
 			<h1 id="title">
-				<span style="--variable-index : 0">크</span>
-				<span style="--variable-index : 1">라</span>
-				<span style="--variable-index : 2">우</span>
-				<span style="--variable-index : 3">드</span>
-				<span style="--variable-index : 4">펀</span>
-				<span style="--variable-index : 5">딩</span>
-				<span style="--variable-index : 6"></span>
-				<span style="--variable-index : 7">플</span>
-				<span style="--variable-index : 8">랫</span>
-				<span style="--variable-index : 9">폼</span>
-				<span style="--variable-index : 10"></span>
-				<span style="--variable-index : 11">프</span>
-				<span style="--variable-index : 12">로</span>
-				<span style="--variable-index : 13">젝</span>
-				<span style="--variable-index : 14">트</span>
+				크라우드 펀딩 플랫폼 프로젝트
 			</h1>
 		</div>
+
+
+	<table class="info-table"  style="margin-top: 15px;">
+		<tbody>
+			<tr>
+				<td class="table-th">
+					관리자 계정
+
+				</td>
+				<td class="table-th">
+					판매자 계정
+				</td>
+				<td class="table-th">
+					구매자 계정
+				</td>
+			</tr>
+			<tr>
+				<td>
+					아이디 : id001<br>
+					비밀번호 : pw001<br>
+				</td>
+				<td>
+					아이디 : id003<br>
+					비밀번호 : pw003<br>
+				</td>
+				<td>
+					아이디 : id005<br>
+					비밀번호 : pw005<br>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="info-table" style="margin-top: 30px;">
+		<tbody>
+			<tr>
+				<td class="table-th">
+					전슬지 (팀장)
+				</td>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td class="table-th">
+					강오진
+				</td>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td class="table-th">
+					김상민
+				</td>
+				<td colspan="2">
+					<ul>
+						<p>프로세스 요약 [구매자 리워드 메인 페이지 -> 구매자 리워드 상세 페이지-> 리워드 주문 페이지(구매자 로그인, 주문할 리워드 선택) -> 리워드 결제 페이지(배송정보,약관동의) -> 결제 진행 -> 리워드 결제완료 페이지] </p>
+						<li><a href="./user/reward" target="_blank">!리워드 메인 페이지</a></li>
+						<li><a href="./user/reward/detail?rewardProjectCode=RWD_20231128_1&searchCnt=true" target="_blank">!리워드 상세 페이지</a></li>
+						<li><a href="./user/reward/order?rewardProjectCode=RWD_20231128_1" target="_blank">!리워드 주문 페이지</a></li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td class="table-th">
+					김시원
+				</td>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td class="table-th">
+					김정민
+				</td>
+				<td colspan="2">
+					<ul>
+						<p>프로세스 요약 [판매자 프로젝트 등록 페이지[판매자 로그인 필요] -> 관리자 심사 승인 페이지 -> 판매자 페이지에서 프로젝트 시작[판매자 로그인 필요] -> 구매자 구매[구매자 로그인 필요]</p>
+						<li><a href="./user/donation" target="_blank">! 기부 메인 화면</a></li>
+						<li><a href="./user/donation/detail?donationCode=don_20231117_0001" target="_blank">! 기부 상세 화면[스토리, 새소식, 기부금 사용현황, 댓글 작성 // 댓글 작성은 구매자 로그인 필요]</a></li>
+						<li><p>! 기부 상세 화면[기부금 모금하기] -> [ 상세 페이지에서 구매자로 로그인 후 모금하기 클릭 ] <br>
+							-> 기부금 모금하기에서 결제할 Flover가 현재 나의 Flover보다 없으면 !기부 재화 충전 페이지로 이동 [ 구매자 로그인 필요 ] 재화충전 KaKaoPay API 연동</p></li>
+						<li><a href="./user/projectRegistration/donation" target="_blank">! 기부 프로젝트 등록 [ 등록 시 판매자 로그인 필요 ]</a></li>
+						<li><a href="./seller/donation/products" target="_blank">! 기부 프로젝트 목록 [ 판매자 로그인 필요 ]</a></li>
+						<li><a href="./seller/donation/news" target="_blank">! 기부 프로젝트 새소식 관리 [ 판매자 로그인 필요 ]</a></li>
+						<li><a href="./seller/donation/condition" target="_blank">! 기부 프로젝트 진행현황 관리 [ 판매자 로그인 필요 ]</a></li>
+						<li><a href="./admin/projectManagement" target="_blank">! 관리자 페이지 프로젝트 관리 </a></li>
+						<li><a href="./admin/donation/judgement" target="_blank">! 관리자 페이지 (심사 관리 -> 기부 심사 관리) </a></li>
+						<li><a href="./user/mypage" target="_blank">! 마이페이지 [기부 취소, 기부 내역, 기부 현황, 기부 상세] < 구매자 로그인 필요 ></a></li>
+
+					</ul>
+
+				</td>
+			</tr>
+			<tr>
+				<td class="table-th">
+					김진현
+				</td>
+				<td colspan="2">
+					<ul>
+						<li><a href="./user/mypage" target="_blank">! 마이페이지(쿠폰)(진현)</a></li>
+						<li><a href="./user/board" target="_blank">! 공지사항,이벤트 통합 (진현)</a></li>
+						<li><a href="./user/inquiry" target="_blank">! 1:1문의 (진현)</a></li>
+						<li><a href="./user/inquiry/report" target="_blank">! 신고하기 팝업 (진현)</a></li>
+						<li><a href="./admin/site/category" target="_blank">! 관리자 사이트(카테고리) (진현)</a></li>
+						<li><a href="./admin/board/main" target="_blank">! 관리자 게시판 관리 (진현)</a></li>
+						<li><a href="./admin/inquiry/main" target="_blank">! 관리자 문의관리 (진현)</a></li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td class="table-th">
+					홍설아
+				</td>
+				<td colspan="2"></td>
+			</tr>
+
+		</tbody>
+	</table>
 	</div>
 
 	<ul>

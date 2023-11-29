@@ -26,31 +26,76 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
-        // 입력 값이 변경될 때마다 계산 실행
-        $('.after-fund-calc').on('input', function () {
-            let salesBaseStockPrice = parseFloat($('#salesBaseStockPrice').val()) || 0;
-            let issuePrice = parseFloat($('#issuePrice').val()) || 0;
-            let dividendAmount = parseFloat($('#dividendAmount').val()) || 0;
-            let totalStockNumber = parseFloat($('#totalStockNumber').val()) || 1;
+        function validationCheck(data) {
+            let isValid = true;
+            if (typeof data == 'object') {
 
-            // 수식 계산
-            let earningsPerShareCalculate = (salesBaseStockPrice - issuePrice)
-            let dividendPerStockCalculate = (dividendAmount / totalStockNumber)
-            let salesDateEnterpriseValueCalculate = (salesBaseStockPrice * totalStockNumber)
-            let earningsPerShareResult = (salesBaseStockPrice - issuePrice).toLocaleString('ko-kr') + ' 원';
-            let dividendPerStockResult = (dividendAmount / totalStockNumber).toLocaleString('ko-kr') + ' 원';
-            let salesDateEnterpriseValueResult = (salesBaseStockPrice * totalStockNumber).toLocaleString('ko-kr') + ' 원';
+                $.each(data, function () {
+                    let checkValue = $(this).val();
+                    if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
+                        isValid = false;
+                        let eleId = $(this).attr('id');
+                        let cate = $(`label[for="${eleId}"]`).text();
+                        alert(`${cate} 필수 입력 항목입니다.`);
+                        $(this).focus();
+                        return isValid;
+                    }
+                });
 
-            // 계산 결과를 화면에 표시
-            $('#earningsPerShareResult').text(earningsPerShareResult);
-            $('#dividendPerStockResult').text(dividendPerStockResult);
-            $('#salesDateEnterpriseValueResult').text(salesDateEnterpriseValueResult);
+            } else {
+                if (data == null || data == '' || typeof data == 'undefined') {
+                    isValid = false;
+                }
+            }
 
-            // 계산 결과를 input에 반영
-            $('#earningsPerShare').val(earningsPerShareCalculate);
-            $('#dividendPerStock').val(dividendPerStockCalculate);
-            $('#salesDateEnterpriseValue').val(salesDateEnterpriseValueCalculate);
+            return isValid;
+        }
+
+        $('#settUpdateBtn').click(function () {
+
+            const formEles = $('#modifyAfterFundRevenueStockForm input, #modifyAfterFundRevenueStockForm select');
+
+            let isValid = validationCheck(formEles);
+
+            if (isValid) $('#modifyAfterFundRevenueStockForm').submit();
+
         });
+
+        $('#settUpdateBtn2').click(function () {
+
+            const formEles = $('#modifyAfterFundRevenueBondForm input, #modifyAfterFundRevenueBondForm select');
+
+            let isValid = validationCheck(formEles);
+
+            if (isValid) $('#modifyAfterFundRevenueBondForm').submit();
+
+        });
+
+    // 입력 값이 변경될 때마다 계산 실행
+    $('.after-fund-calc').on('input', function () {
+    let salesBaseStockPrice = parseFloat($('#salesBaseStockPrice').val()) || 0;
+    let issuePrice = parseFloat($('#issuePrice').val()) || 0;
+    let dividendAmount = parseFloat($('#dividendAmount').val()) || 0;
+    let totalStockNumber = parseFloat($('#totalStockNumber').val()) || 1;
+
+    // 수식 계산
+    let earningsPerShareCalculate = (salesBaseStockPrice - issuePrice)
+    let dividendPerStockCalculate = (dividendAmount / totalStockNumber)
+    let salesDateEnterpriseValueCalculate = (salesBaseStockPrice * totalStockNumber)
+    let earningsPerShareResult = (salesBaseStockPrice - issuePrice).toLocaleString('ko-kr') + ' 원';
+    let dividendPerStockResult = (dividendAmount / totalStockNumber).toLocaleString('ko-kr') + ' 원';
+    let salesDateEnterpriseValueResult = (salesBaseStockPrice * totalStockNumber).toLocaleString('ko-kr') + ' 원';
+
+    // 계산 결과를 화면에 표시
+    $('#earningsPerShareResult').text(earningsPerShareResult);
+    $('#dividendPerStockResult').text(dividendPerStockResult);
+    $('#salesDateEnterpriseValueResult').text(salesDateEnterpriseValueResult);
+
+    // 계산 결과를 input에 반영
+    $('#earningsPerShare').val(earningsPerShareCalculate);
+    $('#dividendPerStock').val(dividendPerStockCalculate);
+    $('#salesDateEnterpriseValue').val(salesDateEnterpriseValueCalculate);
+    });
     </script>
 </th:block>
 
@@ -58,7 +103,7 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
-    <form id="modifyAfetrFundRevenueStockForm" th:action="@{/seller/investment/update/after-fund-revenue-stock}"
+    <form id="modifyAfterFundRevenueStockForm" th:action="@{/seller/investment/update/after-fund-revenue-stock}"
           method="post">
         <div id="afterFundRevenueStock" class="admin-wrapper" th:unless="${afterFundRevenueStockInfo == null}"
              th:object="${afterFundRevenueStockInfo}">
@@ -67,10 +112,13 @@
                 <div class="project-info-title">
                     <h5>기업정보 공개 코드</h5>
                     <p th:text="*{afterFundRevenueStockCode}" style="color: var(--maincolor);"></p>
-                    <input type="text" name="afterFundRevenueStockCode" th:value="*{afterFundRevenueStockCode}" hidden="hidden">
-                    <input type="number" id="earningsPerShare" name="earningsPerShare" class="after-fund-calc" th:value="*{earningsPerShare}"
+                    <input type="text" name="afterFundRevenueStockCode" th:value="*{afterFundRevenueStockCode}"
                            hidden="hidden">
-                    <input type="number" id="dividendPerStock" name="dividendPerStock" class="after-fund-calc" th:value="*{dividendPerStock}"
+                    <input type="number" id="earningsPerShare" name="earningsPerShare" class="after-fund-calc"
+                           th:value="*{earningsPerShare}"
+                           hidden="hidden">
+                    <input type="number" id="dividendPerStock" name="dividendPerStock" class="after-fund-calc"
+                           th:value="*{dividendPerStock}"
                            hidden="hidden">
                     <input type="number" id="salesDateEnterpriseValue" name="salesDateEnterpriseValue"
                            class="after-fund-calc" th:value="*{salesDateEnterpriseValue}" hidden="hidden">
@@ -235,7 +283,7 @@
                                 </button>
                             </li>
                             <li>
-                                <button id="settUpdateBtn" class="submitBtn" type="submit">
+                                <button id="settUpdateBtn" class="submitBtn" type="button">
                                     확인
                                 </button>
                             </li>
@@ -246,7 +294,8 @@
         </div>
     </form>
 
-    <form id="modifyAfetrFundRevenueBondForm" th:action="@{/seller/investment/update/after-fund-revenue-bond}" method="post">
+    <form id="modifyAfterFundRevenueBondForm" th:action="@{/seller/investment/update/after-fund-revenue-bond}"
+          method="post">
         <div id="afterFundRevenueBond" class="admin-wrapper" th:unless="${afterFundRevenueBondInfo == null}"
              th:object="${afterFundRevenueBondInfo}">
 
@@ -254,7 +303,8 @@
                 <div class="project-info-title">
                     <h5>기업정보 공개 코드</h5>
                     <p th:text="*{afterFundRevenueBondCode}" style="color: var(--maincolor);"></p>
-                    <input type="text" name="afterFundRevenueBondCode" th:value="*{afterFundRevenueBondCode}" hidden="hidden">
+                    <input type="text" name="afterFundRevenueBondCode" th:value="*{afterFundRevenueBondCode}"
+                           hidden="hidden">
                 </div>
                 <br>
 
@@ -370,7 +420,7 @@
                                 </button>
                             </li>
                             <li>
-                                <button id="settUpdateBtn" class="submitBtn" type="submit">
+                                <button id="settUpdateBtn2" class="submitBtn" type="button">
                                     확인
                                 </button>
                             </li>
