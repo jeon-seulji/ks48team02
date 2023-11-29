@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{seller/layout/default}">
+      layout:decorate="~{admin/layout/default}">
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
@@ -24,7 +24,7 @@
         $('#settDeleteBtn').click(function () {
             let deleteConfirm = confirm('정말로 삭제하시겠습니까?');
             if (deleteConfirm) {
-                window.location.href = `[[@{/seller/investment/delete/investment(investmentCode=${investmentInfo.investmentCode})}]]`;
+                window.location.href = `[[@{/admin/investment/delete/investment(investmentCode=${investmentInfo.investmentCode})}]]`;
                 alert('삭제되었습니다');
             } else {
                 alert('취소되었습니다');
@@ -97,7 +97,7 @@
                 <div class="project-info-title-area">
                     <div class="project-info-title">
                         <h5>투자 심사요청 코드</h5>
-                        <a th:href="@{/seller/investment/view/judge(investmentRequestJudgeCode=*{adminInvestmentRequestJudge.investmentRequestJudgeCode})}"
+                        <a th:href="@{/admin/investment/view/judge(investmentRequestJudgeCode=*{adminInvestmentRequestJudge.investmentRequestJudgeCode})}"
                            th:text="*{adminInvestmentRequestJudge.investmentRequestJudgeCode}"
                            class="detail-link" style="color: var(--maincolor);"></a>
                     </div>
@@ -290,28 +290,20 @@
                         </td>
                     </tr>
                     <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
-                        <td style="height: 35px; width: 17%;">목표펀딩금액</td>
+                        <td style="height: 35px; width: 17%;" colspan="2">목표펀딩금액</td>
                         <td style="height: 35px; width: 17%;">펀딩 달성 금액</td>
                         <td style="height: 35px; width: 17%;">달성율</td>
                         <td style="height: 35px;">증권 구분</td>
                         <td style="height: 35px;">투자자수</td>
-                        <td style="height: 35px;">프로젝트 현황</td>
                     </tr>
                     <tr>
-                        <td style="background: #fff;"><span
+                        <td style="background: #fff;" colspan="2"><span
                                 th:text="*{#numbers.formatInteger(invInvestmentAchievementMoney,3,'COMMA')}"></span> 원
                         </td>
                         <td><span th:text="*{#numbers.formatInteger(investmentAmount,3,'COMMA')}"></span> 원</td>
                         <td><span th:text="*{investAchievementPercent}"></span>%</td>
                         <td th:text="*{securitiesClassification}"></td>
                         <td th:text="*{investCount}"></td>
-                        <td th:if="*{investJudgeSituation == 0}">심사 대기</td>
-                        <td th:if="*{investJudgeSituation == 1}">심사 승인</td>
-                        <td th:if="*{investJudgeSituation == 2}">심사 반려</td>
-                        <td th:if="*{investJudgeSituation == 3}">프로젝트 진행</td>
-                        <td th:if="*{investJudgeSituation == 4}">프로젝트 성공</td>
-                        <td th:if="*{investJudgeSituation == 5}">프로젝트 실패</td>
-
                     </tr>
                     <tr class="sub-table-area sub-table sub-table-tr" style="height: auto;">
                         <td style="height: 35px;">조회수</td>
@@ -329,6 +321,45 @@
                         <td><span th:text="*{#numbers.formatInteger(basicFee,3,'COMMA')}"></span> 원</td>
                         <td><span th:text="*{contractFeeRate*100}"></span>%</td>
                     </tr>
+                    <tr>
+                        <td>
+                            프로젝트 현황
+                        </td>
+                        <td id="investJudgeSituation" colspan="5" class="progress-radio-area">
+                            <ul>
+                                <li>
+                                    <input id="preProgress" type="radio" name="investJudgeSituation"
+                                           th:checked="*{investJudgeSituation == 0}" value="0" onclick="return false;">
+                                    <label for="preProgress">심사 대기</label>
+                                </li>
+                                <li>
+                                    <input id="Progress" type="radio" name="investJudgeSituation"
+                                           th:checked="*{investJudgeSituation == 1}" value="1" onclick="return false;">
+                                    <label for="Progress">심사 승인</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="investJudgeSituation"
+                                           th:checked="*{investJudgeSituation == 2}" value="2" onclick="return false;">
+                                    <label for="ProgressReject">심사 반려</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="investJudgeSituation"
+                                           th:checked="*{investJudgeSituation == 3}" value="3" onclick="return false;">
+                                    <label for="ProgressReject">프로젝트 진행</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="investJudgeSituation"
+                                           th:checked="*{investJudgeSituation == 4}" value="4" onclick="return false;">
+                                    <label for="ProgressReject">프로젝트 성공</label>
+                                </li>
+                                <li>
+                                    <input id="ProgressReject" type="radio" name="investJudgeSituation"
+                                           th:checked="*{investJudgeSituation == 5}" value="5" onclick="return false;">
+                                    <label for="ProgressReject">프로젝트 실패</label>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -340,7 +371,7 @@
                         </li>
                         <li>
                             <button id="settUpdateBtn" class="submitBtn" type="button"
-                                    th:onclick="|location.href='@{/seller/investment/update/investment(investmentCode=*{investmentCode})}'|">
+                                    th:onclick="|location.href='@{/admin/investment/update/investment(investmentCode=*{investmentCode})}'|">
                                 수정
                             </button>
                         </li>

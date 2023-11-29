@@ -15,6 +15,7 @@ public class SellerAfterFundRevenueBond {
     private int visitorsNumber;
     private int accountPrice;
     private float interestRate;
+    private int totalBondNumber;
     private int earningsPerAccount;
     private String revenuePeriodStart;
     private String revenuePeriodEnd;
@@ -26,6 +27,39 @@ public class SellerAfterFundRevenueBond {
 
     public void setAfterFundRevenueBondCode(String afterFundRevenueBondCode) {
         this.afterFundRevenueBondCode = afterFundRevenueBondCode;
+    }
+
+    public int getTotalBondNumber() {
+        return totalBondNumber;
+    }
+
+    public void setTotalBondNumber(int totalBondNumber) {
+        this.totalBondNumber = totalBondNumber;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("SellerAfterFundRevenueBond{");
+        sb.append("afterFundRevenueBondCode='").append(afterFundRevenueBondCode).append('\'');
+        sb.append(", memberId='").append(memberId).append('\'');
+        sb.append(", investmentCode='").append(investmentCode).append('\'');
+        sb.append(", securitiesIssuanceBondCode='").append(securitiesIssuanceBondCode).append('\'');
+        sb.append(", afterInvestmentAmount=").append(afterInvestmentAmount);
+        sb.append(", investmentAmount=").append(investmentAmount);
+        sb.append(", take=").append(take);
+        sb.append(", profit=").append(profit);
+        sb.append(", cost=").append(cost);
+        sb.append(", netIncome=").append(netIncome);
+        sb.append(", visitorsNumber=").append(visitorsNumber);
+        sb.append(", accountPrice=").append(accountPrice);
+        sb.append(", interestRate=").append(interestRate);
+        sb.append(", totalBondNumber=").append(totalBondNumber);
+        sb.append(", earningsPerAccount=").append(earningsPerAccount);
+        sb.append(", revenuePeriodStart='").append(revenuePeriodStart).append('\'');
+        sb.append(", revenuePeriodEnd='").append(revenuePeriodEnd).append('\'');
+        sb.append(", uploadDate='").append(uploadDate).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     public String getMemberId() {
@@ -156,27 +190,4 @@ public class SellerAfterFundRevenueBond {
         this.uploadDate = uploadDate;
     }
 
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("SellerAfterFundRevenueBond{");
-        sb.append("afterFundRevenueBondCode='").append(afterFundRevenueBondCode).append('\'');
-        sb.append(", memberId='").append(memberId).append('\'');
-        sb.append(", investmentCode='").append(investmentCode).append('\'');
-        sb.append(", securitiesIssuanceBondCode='").append(securitiesIssuanceBondCode).append('\'');
-        sb.append(", afterInvestmentAmount=").append(afterInvestmentAmount);
-        sb.append(", investmentAmount=").append(investmentAmount);
-        sb.append(", take=").append(take);
-        sb.append(", profit=").append(profit);
-        sb.append(", cost=").append(cost);
-        sb.append(", netIncome=").append(netIncome);
-        sb.append(", visitorsNumber=").append(visitorsNumber);
-        sb.append(", accountPrice=").append(accountPrice);
-        sb.append(", interestRate=").append(interestRate);
-        sb.append(", earningsPerAccount=").append(earningsPerAccount);
-        sb.append(", revenuePeriodStart='").append(revenuePeriodStart).append('\'');
-        sb.append(", revenuePeriodEnd='").append(revenuePeriodEnd).append('\'');
-        sb.append(", uploadDate='").append(uploadDate).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }

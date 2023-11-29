@@ -124,13 +124,19 @@
 
         });
 
-        // ajax
-        function sortedListAjax(orderBy, callback) {
+
+
+        // Ajax 요청 함수
+        function sortedListAjax(orderBy, status, securities, callback) {
             const request = $.ajax({
                 url: '/user/investment/ajax/sortedList',
                 method: 'POST',
                 async: false,
-                data: { "orderBy": orderBy },
+                data: {
+                    "orderBy": orderBy,
+                    "status": status,
+                    "securities": securities
+                },
                 dataType: 'json'
             });
 
@@ -142,19 +148,43 @@
                 console.log(err);
             });
         }
-        // 정렬 항목 클릭 시 호출
-        $('.d-flex li').on('click', function () {
-            // 클릭된 항목에 따라 서버에서 데이터를 가져와 화면 업데이트
+
+        // 정렬 항목 클릭 이벤트
+        $('#sort-item-wrap li').on('click', function () {
             const sortType = $(this).attr('id');
-            sortedListAjax(sortType, function (list) {
+            const status = $('#status').val();
+            const securities = $('#securities').val();
 
-                $('.investmentBox').empty();
+            sortedListAjax(sortType, status, securities, function (list) {
+                updateInvestmentBox(list);
+            });
+        });
 
-                let listElement = ''
-                $(list).each((idx, item) => {
+        // select 값 변경 이벤트
+        $('#status, #securities').on('change', function () {
+            const sortType = $('#sort-item-wrap .selected').attr('id');
+            const status = $('#status').val();
+            const securities = $('#securities').val();
+
+            sortedListAjax(sortType, status, securities, function (list) {
+                updateInvestmentBox(list);
+            });
+        });
+
+        // 투자 박스 업데이트 함수
+        function updateInvestmentBox(list) {
+            $('.investmentBox').empty();
+
+            let listElement = '';
+            $(list).each((idx, item) => {
+                // item 출력
+                console.log(item);
+
+                // investJudgeSituation의 값이 3, 4, 5인 경우에만 박스 생성
+                if(item.investJudgeSituation == 3 || item.investJudgeSituation == 4 || item.investJudgeSituation == 5) {
                     listElement += `<div class="col investment-item-box col-lg-4" onclick="location.href='/user/investment/detail/main?investmentCode=${item.investmentCode}'">`;
                     listElement += `    <div class="investment-item-first-child">`;
-                    listElement += `        <img class="investment-item-third-child-image" src="${item.investmentImage}">`; // src="${item.investmentImage}"
+                    listElement += `        <img class="investment-item-third-child-image" src="/summernote/${item.investmentImage}">`;
                     listElement += `    </div>`;
                     listElement += `    <div class="investment-item-second-child">`;
                     listElement += `        <span class="investment-item-span-first">${item.investAchievementPercent}%</span>`;
@@ -166,25 +196,15 @@
                     listElement += `    </div>`;
                     listElement += `    <div class="investment-item-fourth-child">${item.investmentCompany}</div>`;
                     listElement += `</div>`;
-
-                });
-                // 새로운 항목을 컨테이너에 추가
-                $('.investmentBox').append(listElement);
-
-                // 달성 금액 설정
-                $('.investment-item-span-second').each(function (){
-                    $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
-                });
+                }
             });
-        });
 
+            $('.investmentBox').append(listElement);
 
-
-
-
-
-
-
+            $('.investment-item-span-second').each(function () {
+                $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+            });
+        }
     </script>
 
 </th:block>
@@ -202,15 +222,15 @@
                 <div class="d-flex col">
                     <p style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
                     <div id="sort-item-wrap" class="d-flex" style="margin-left: auto">
-                        <select style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
-                            <option>전체</option>
-                            <option>진행중</option>
-                            <option>종료됨</option>
+                        <select id="status" style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
+                            <option value="">전체</option>
+                            <option value="ing">진행중</option>
+                            <option value="end">종료됨</option>
                         </select>
-                        <select style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
-                            <option>증권 종류</option>
-                            <option>주식</option>
-                            <option>채권</option>
+                        <select id="securities" style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
+                            <option value="">증권 종류</option>
+                            <option value="stock">주식</option>
+                            <option value="bond">채권</option>
                         </select>
                         <ul class="d-flex" style="margin-top: 5px">
                             <li id="recommendation" class="ml-3" onclick="sortItemClickedStyle(this)">추천순</li>
@@ -224,10 +244,10 @@
 
                 <div class="container stretch" style="width: 100%; height: 100%">
                     <div class="row investmentBox">
-                        <div class="col investment-item-box col-lg-4" th:if="${investmentInfo != null}" th:each="l : ${investmentInfo}"
+                        <div class="col investment-item-box col-lg-4" th:if="${l.investJudgeSituation == 3 || l.investJudgeSituation == 4 || l.investJudgeSituation == 5}" th:each="l : ${investmentInfo}"
                              th:onclick="|location.href='@{/user/investment/detail/main(investmentCode=${l.investmentCode})}'|">
                             <div class="investment-item-first-child">
-                                <img class="investment-item-third-child-image" th:src="|@{${l.investmentImage}}|">
+                                <img class="investment-item-third-child-image" th:src="|@{/summernoteImage/}${l.investmentImage}|">
                             </div>
                             <div class="investment-item-second-child">
                                 <span class="investment-item-span-first" th:text="|${#numbers.formatInteger(l.investAchievementPercent,0,'COMMA')}% 달성|"></span>

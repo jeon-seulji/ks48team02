@@ -139,10 +139,26 @@
         $(this).parents('.info-contents-area').prev().show();
       });
 
-
-      $(document).ready(function() {
-        $('#summernote').summernote();
+      //썸네일 이미지 추가 시, 이미지 표시
+      $('#thumbnailImage').change(function () {
+        if ($(this).val() != null) {
+          $('.img-thumbnail').css('display', 'block');
+          setImageFromFile(this, '.img-thumbnail');
+        }
       });
+
+      function setImageFromFile(input, expression) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $(expression).attr('src', e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+
+
 
       //summerNote API 설정.
       $('.summernote').summernote({
@@ -151,7 +167,7 @@
         maxHeight: null,             // 최대 높이
         focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
         lang: "ko-KR",					// 한글 설정
-        placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
+        placeholder: '내용을 작성해 주세요.',	//placeholder 설정
         callbacks: {	//이미지 첨부 함수
           onImageUpload : function(files) {
             uploadSummernoteImageFile(files[0],this);
@@ -195,6 +211,46 @@
         e.preventDefault();
       })
 
+      // 썸네일 이미지 저장
+      $('#confirmBtn').click(function( ) {
+        if($('#thumbnailImage').val() == '' || typeof $('#thumbnailImage').val() == 'undefined' || $('#thumbnailImage').val() == null){
+          alert('썸네일을 넣어주세요!');
+          return;
+        }
+
+        $('#confirmBtn').css('display', 'none');
+        $('#confirmMessage').css('display', 'block');
+        $('#thumbnailImage').css('display', 'none');
+        let formData = new FormData();	//FormData 객체 생성
+        let inputFile = $("input[type='file']"); //input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+        let files = inputFile[0].files;
+        //files : 선택한 모든 파일을 나열하는 FileList 객체입니다.
+        //multiple 특성을 지정하지 않닸다면 두 개 이상의 파일을 포함하지 않습니다.
+        for (let i = 0; i < files.length; i++) {
+          console.log(files[i]);
+          formData.append("file", files[i]);//키,값으로 append
+        }
+
+        //실제 사진 파일 업로드
+        //upload ajax
+        $.ajax({
+          url: '/user/projectRegistration/uploadSummernoteImageFile',	//경로
+          processData: false,	//기본값은 true
+          //ajax 통신을 통해 데이터를 전송할 때, 기본적으로 key와 value값을 Query String으로 변환해서 보냅니다.
+          contentType: false,	// multipart/form-data타입을 사용하기위해 false 로 지정합니다.
+          data: formData,
+          type: 'POST',
+          dataType:'json',
+          success: function(result){
+            console.log(result.fileName);
+            $('#investmentImage').val(result.fileName); // 이미지 이름 DB 에 저장
+          },
+          error: function(jqXHR, textStatus, errorThrown){	//오류 메시지 판정
+            console.log(textStatus);
+          }
+        }); //$.ajax
+      });
+
       //약관 체크 모두 될 시 모두 동의에 체크.
       $('.essential').not('#agreeNews').click(function(){
         let checkLength = $('.essential').not('#agreeNews').length;
@@ -231,16 +287,9 @@
       });
     });
 
+
     $('.registrationBtn').click(function(){
       let isValid = true;
-      $('.essential').each(function(idx,item){
-        if(!$(item).prop('checked')) {
-          alert('필수 약관에 모두 동의해주세요');
-          $(item).focus();
-          isValid =false;
-          return false;
-        }
-      });
 
       // 콤마 제거 및 빈 문자열을 null로 변환
       const fields = ['investmentAchievementMoney', 'businessProfits', 'depreciation', 'netDebt', 'stockNumber', 'issueStockNumber', 'cashReserves'];
@@ -256,9 +305,42 @@
         input.val(value);
       });
 
-      const $registrationBtn = $(this);
+      // 추가적인 유효성 검사
+      const additionalFields = ['projectIntroduction', 'risk', 'investmentRegDate', 'investmentDeadline', 'thumbnailImage', 'contractFile', 'investmentReport'];
+      $.each(additionalFields, function(index, field) {
+        let input = $('#' + field);
+        if(input.val() === '' && isValid) { // 앞서 발생한 유효성 검사 문제가 없을 때만 경고창 띄움
+          let label = $("label[for='" + field + "']").text();
+          alert(label + '는 필수 입력 항목입니다.');
+          input.focus();
+          isValid = false;
+          return false;
+        }
+      });
+
+      $('.essential').each(function(idx,item){
+        if(!$(item).prop('checked') && isValid) { // 앞서 발생한 유효성 검사 문제가 없을 때만 경고창 띄움
+          alert('필수 약관에 모두 동의해주세요');
+          $(item).focus();
+          isValid =false;
+          return false;
+        }
+      });
+
+      // // Summernote 글자수 검사
+      // let isOverLimit = false;
+      // $('.summernote').each(function() {
+      //   if($(this).val().length > 2048) {
+      //     isOverLimit = true;
+      //   }
+      // });
+      // if(isOverLimit && isValid) { // 앞서 발생한 유효성 검사 문제가 없을 때만 경고창 띄움
+      //   alert('입력하신 내용 중 2048자를 넘어가는 항목이 있습니다. 내용을 줄여주세요.');
+      //   isValid = false;
+      // }
+
       if(isValid && confirm('프로젝트를 등록하시겠습니까??')){
-        $registrationBtn.submit();
+        $(this).submit();
       }else{
         return false;
       }
@@ -291,15 +373,15 @@
 
                   <div class="row g-3">
                     <!-- 세션에서 로그인 한 아이디 가져오기 -->
-                    <input type="hidden" class="form-control" id="memberId" name="memberId" th:value="${memberId}" >
+                    <input type="hidden" class="form-control" id="memberId" name="memberId" th:value="${session.SID}" >
 
                     <div class="my-2 col-12">
                       <label for="securitiesClassification" class="form-label fw-bord text-dark">증권 구분</label>
                       <div class="input-group mb-3">
                         <select class="custom-select" id="securitiesClassification" name="securitiesClassification">
                           <option value="" disabled="disabled" selected="selected">증권 구분</option>
-                          <option class="stock" value="1">주식형</option>
-                          <option class="bond" value="2">채권형</option>
+                          <option class="stock" value="주식">주식형</option>
+                          <option class="bond" value="채권">채권형</option>
                         </select>
                       </div>
                     </div>
@@ -464,12 +546,12 @@
                     </div>
 
                     <div class="my-2 col-12">
-                      <label for="investmentRegDate">프로젝트 시작 날짜:</label>
+                      <label for="investmentRegDate">프로젝트 시작 날짜</label>
                       <input type="date" id="investmentRegDate" name="investmentRegDate" >
                     </div>
 
                     <div class="my-2 col-12">
-                      <label for="investmentDeadline">프로젝트 마감 날짜:</label>
+                      <label for="investmentDeadline">프로젝트 마감 날짜</label>
                       <input type="date" id="investmentDeadline" name="investmentDeadline" >
                     </div>
 
@@ -501,10 +583,26 @@
 
 
 
-                  <div class="form-group">
-                    <label for="investmentImage">프로젝트 대표 이미지 업로드</label>
-                    <input type="file" class="form-control-file" id="investmentImage" name="investmentImage">
+                  <div class="mb-3">
+                    <label for="thumbnailImage" class="form-label fw-bord text-dark">대표 이미지를 등록</label>
+                    <br>
+                    <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
+                      <img src="" class="img-thumbnail" alt="썸네일이미지" style="height: 200px; width: 350px; display: none;">
+                    </div>
+                    <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
                   </div>
+                  <label for="investmentImage">대표 이미지 확정을 해주세요</label>
+                  <input id="investmentImage" name="investmentImage" style="display: none">
+                  <div class="mb-3">
+                    <button id="confirmBtn" type="button" style="border-radius: 5px; background-color: #0b44d7; color: whitesmoke; padding: 5px">대표 이미지 확정</button>
+                  </div>
+                  <div id="confirmMessage" style="background: #ddfffc; border-radius: 5px; padding: 10px; font-size: 12px; color: black; display: none">
+                    <p>
+                      <b>대표 이미지가 확정 되었습니다!</b><br>
+                    </p>
+                  </div>
+
+                  <hr class="my-4">
 
                   <div class="form-group">
                     <label for="contractFile">프로젝트 계약서 업로드</label>

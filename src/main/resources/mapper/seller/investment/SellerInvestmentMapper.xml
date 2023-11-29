@@ -163,6 +163,7 @@
         <result property="subscriptionEnterpriseValue" column="subscription_enterprise_value"/>
         <result property="salesBaseStockPrice" column="sales_base_stock_price"/>
         <result property="issuePrice" column="issue_price"/>
+        <result property="totalStockNumber" column="total_stock_number"/>
         <result property="dividendAmount" column="dividend_amount"/>
         <result property="dividendRate" column="dividend_rate"/>
         <result property="dividendPerStock" column="dividend_per_stock"/>
@@ -186,6 +187,7 @@
         <result property="visitorsNumber" column="visitors_number"/>
         <result property="accountPrice" column="account_price"/>
         <result property="interestRate" column="interest_rate"/>
+        <result property="totalBondNumber" column="total_bond_number"/>
         <result property="earningsPerAccount" column="earnings_per_account"/>
         <result property="revenuePeriodStart" column="revenue_period_start"/>
         <result property="revenuePeriodEnd" column="revenue_period_end"/>
@@ -275,6 +277,34 @@
         <result property="etcInvestContentImage" column="etc_invest_content_image"/>
         <result property="registrationDate" column="registration_date"/>
     </resultMap>
+
+    <!-- 판매자 투자펀딩 공고 목록 조회(페이징x) -->
+    <select id="getInvestmentListOnly" resultMap="adminInvestmentListMap">
+        /* 판매자 투자펀딩 공고 목록 조회(페이징x) */
+        SELECT
+        i.investment_code,
+        i.investment_request_judge_code,
+        i.member_id_seller,
+        i.investment_subject,
+        i.investment_like,
+        i.investment_amount,
+        i.investment_achievement_money AS invInvestmentAchievementMoney,
+        i.invest_achievement_percent,
+        i.investment_company,
+        i.search_count,
+        i.invest_count,
+        i.securities_classification,
+        i.investment_display_date,
+        i.investment_deadline,
+        i.invest_judge_situation
+        FROM
+        investment AS i
+        WHERE
+        i.member_id_seller = #{memberIdSeller}
+        <if test="startRowNum > -1">
+            LIMIT #{startRowNum}, #{rowPerPage};
+        </if>
+    </select>
 
     <!-- 판매자 투자펀딩 공고 목록 조회 -->
     <select id="getInvestmentList" resultMap="adminInvestmentListMap">
@@ -529,7 +559,6 @@
             i.investment_company,
             s.representative_name,
             c.business_type AS cbtBusinessType,
-            i.business_type,
             i.investment_request_content,
             i.investment_achievement_money,
             i.business_profits,
@@ -565,7 +594,9 @@
             i.investment_request_judge_code = #{investmentRequestJudgeCode};
     </select>
 
+    <!-- 판매자 투자후 기업정보 공개(주식) 목록 조회 -->
     <select id="getAfterFundRevenueStockList" resultMap="sellerAfterFundRevenueStockListMap">
+        /* 판매자 투자후 기업정보 공개(주식) 목록 조회 */
         SELECT
             af.after_fund_revenue_stock_code,
             af.member_id,
@@ -582,7 +613,7 @@
         FROM
             after_fund_revenue_stock AS af
         WHERE
-            af.member_id = #{memberIdSeller};
+            af.member_id = #{memberId};
     </select>
 
     <!-- 판매자 투자후 기업정보 공개(주식) 전체 행의 갯수 -->
@@ -594,7 +625,80 @@
             after_fund_revenue_stock;
     </select>
 
+    <!-- 판매자 검색조건에 따른 투자후 기업정보 공개(주식) 목록 조회 -->
+    <select id="getAfterFundRevenueStockListBySearch" resultMap="sellerAfterFundRevenueStockListMap">
+        /* 판매자 검색조건에 따른 투자후 기업정보 공개(주식) 목록 조회 */
+        SELECT
+            af.after_fund_revenue_stock_code,
+            af.member_id,
+            af.investment_code,
+            af.after_investment_amount,
+            af.investment_amount,
+            af.take,
+            af.operating_profit,
+            af.net_income,
+            af.sales_date_enterprise_value,
+            af.sales_base_stock_price,
+            af.dividend_amount,
+            af.upload_date
+        FROM
+            after_fund_revenue_stock AS af
+        <where>
+            <if test="amDateSettStartDate != null and amDateSettStartDate != ''">
+                DATE_FORMAT(i.investment_request_date, '%Y-%m-%d') >= #{amDateSettStartDate}
+                AND
+            </if>
+            <if test="amDateSettEndDate != null and amDateSettEndDate != ''">
+                #{amDateSettEndDate} >= DATE_FORMAT(i.investment_request_date, '%Y-%m-%d')
+                AND
+            </if>
+            <if test="searchKey != null and searchKey != ''">
+                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+                AND
+            </if>
+            af.member_id = #{memberId};
+        </where>
+    </select>
+
+    <!-- 판매자 특정 기업정보 공개(주식) 조회 -->
+    <select id="getAfterFundRevenueStockByCode" resultMap="sellerAfterFundRevenueStockListMap">
+        /* 판매자 특정 기업정보 공개(주식) 조회 */
+        SELECT
+            af.after_fund_revenue_stock_code,
+            af.member_id,
+            af.investment_code,
+            af.securities_issuance_stock_code,
+            af.after_investment_amount,
+            af.investment_amount,
+            af.take,
+            af.cost_of_sales,
+            af.gross_profit,
+            af.operating_profit,
+            af.operating_cost,
+            af.net_income,
+            af.sales_date_enterprise_value,
+            af.subscription_enterprise_value,
+            af.sales_base_stock_price,
+            af.issue_price,
+            af.total_stock_number,
+            af.dividend_amount,
+            af.dividend_rate,
+            af.dividend_per_stock,
+            af.earnings_per_share,
+            af.revenue_period_start,
+            af.revenue_period_end,
+            af.upload_date
+        FROM
+            after_fund_revenue_stock AS af
+        WHERE
+            af.member_id = #{memberId}
+            AND
+            af.after_fund_revenue_stock_code = #{afterFundRevenueStockCode};
+    </select>
+
+    <!-- 판매자 투자후 기업정보 공개(채권) 목록 조회 -->
     <select id="getAfterFundRevenueBondList" resultMap="sellerAfterFundRevenueBondListMap">
+        /* 판매자 투자후 기업정보 공개(채권) 목록 조회 */
         SELECT
             af.after_fund_revenue_bond_code,
             af.member_id,
@@ -611,7 +715,7 @@
         FROM
             after_fund_revenue_bond AS af
         WHERE
-            af.member_id = #{memberIdSeller};
+            af.member_id = #{memberId};
     </select>
 
     <!-- 판매자 투자후 기업정보 공개(채권) 전체 행의 갯수 -->
@@ -621,6 +725,70 @@
             COUNT(1)
         FROM
             after_fund_revenue_bond;
+    </select>
+
+    <!-- 판매자 검색조건에 따른 투자후 기업정보 공개(채권) 목록 조회 -->
+    <select id="getAfterFundRevenueBondListBySearch" resultMap="sellerAfterFundRevenueBondListMap">
+        /* 판매자 검색조건에 따른 투자후 기업정보 공개(채권) 목록 조회 */
+        SELECT
+            af.after_fund_revenue_bond_code,
+            af.member_id,
+            af.investment_code,
+            af.after_investment_amount,
+            af.investment_amount,
+            af.take,
+            af.profit,
+            af.net_income,
+            af.account_price,
+            af.interest_rate,
+            af.earnings_per_account,
+            af.upload_date
+        FROM
+            after_fund_revenue_bond AS af
+        <where>
+            <if test="amDateSettStartDate != null and amDateSettStartDate != ''">
+                DATE_FORMAT(i.investment_request_date, '%Y-%m-%d') >= #{amDateSettStartDate}
+                AND
+            </if>
+            <if test="amDateSettEndDate != null and amDateSettEndDate != ''">
+                #{amDateSettEndDate} >= DATE_FORMAT(i.investment_request_date, '%Y-%m-%d')
+                AND
+            </if>
+            <if test="searchKey != null and searchKey != ''">
+                ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+                AND
+            </if>
+            af.member_id = #{memberId};
+        </where>
+    </select>
+
+    <!-- 판매자 특정 기업정보 공개(채권) 조회 -->
+    <select id="getAfterFundRevenueBondByCode" resultMap="sellerAfterFundRevenueBondListMap">
+        /* 판매자 특정 기업정보 공개(채권) 조회 */
+        SELECT
+            af.after_fund_revenue_bond_code,
+            af.member_id,
+            af.investment_code,
+            af.after_investment_amount,
+            af.investment_amount,
+            af.take,
+            af.profit,
+            af.cost,
+            af.net_income,
+            af.visitors_number,
+            af.account_price,
+            af.interest_rate,
+            af.total_bond_number,
+            af.earnings_per_account,
+            af.revenue_period_start,
+            af.revenue_period_end,
+            af.upload_date
+        FROM
+            after_fund_revenue_bond AS af
+        WHERE
+            af.member_id = #{memberId}
+            AND
+            af.after_fund_revenue_bond_code = #{afterFundRevenueBondCode};
     </select>
 
     <!-- 판매자 자본시장법 범위충족기준 목록 조회 -->
@@ -811,6 +979,103 @@
             investment_request_judge_code = #{investmentRequestJudgeCode};
     </update>
 
+    <!-- 판매자 투자후 기업정보 공개(주식) 수정 -->
+    <update id="modifyAfterFundRevenueStock" parameterType="String">
+        /* 판매자 투자후 기업정보 공개(주식) 수정 */
+        UPDATE after_fund_revenue_stock
+        <set>
+            <if test="afterInvestmentAmount != null and afterInvestmentAmount != ''">
+                after_investment_amount = #{afterInvestmentAmount},
+            </if>
+            <if test="salesDateEnterpriseValue != null and salesDateEnterpriseValue != ''">
+                sales_date_enterprise_value = #{salesDateEnterpriseValue},
+            </if>
+            <if test="salesBaseStockPrice != null and salesBaseStockPrice != ''">
+                sales_base_stock_price = #{salesBaseStockPrice},
+            </if>
+            <if test="issuePrice != null and issuePrice != ''">
+                issue_price = #{issuePrice},
+            </if>
+            <if test="totalStockNumber != null and totalStockNumber != ''">
+                total_stock_number = #{totalStockNumber},
+            </if>
+            <if test="dividendAmount != null and dividendAmount != ''">
+                dividend_amount = #{dividendAmount},
+            </if>
+            <if test="take != null and take != ''">
+                take = #{take},
+            </if>
+            <if test="costOfSales != null and costOfSales != ''">
+                cost_of_sales = #{costOfSales},
+            </if>
+            <if test="grossProfit != null and grossProfit != ''">
+                gross_profit = #{grossProfit},
+            </if>
+            <if test="operatingProfit != null and operatingProfit != ''">
+                operating_profit = #{operatingProfit},
+            </if>
+            <if test="operatingCost != null and operatingCost != ''">
+                operating_cost = #{operatingCost},
+            </if>
+            <if test="netIncome != null and netIncome != ''">
+                net_income = #{netIncome},
+            </if>
+            <if test="dividendPerStock != null and dividendPerStock != ''">
+                dividend_per_stock = #{dividendPerStock},
+            </if>
+            <if test="earningsPerShare != null and earningsPerShare != ''">
+                earnings_per_share = #{earningsPerShare},
+            </if>
+             <if test="revenuePeriodStart != null and revenuePeriodStart != ''">
+                 revenue_period_start = #{revenuePeriodStart},
+            </if>
+             <if test="revenuePeriodEnd != null and revenuePeriodEnd != ''">
+                 revenue_period_end = #{revenuePeriodEnd}
+            </if>
+        </set>
+        WHERE
+            after_fund_revenue_stock_code = #{afterFundRevenueStockCode};
+    </update>
+
+    <update id="modifyAfterFundRevenueBond" parameterType="String">
+        /* 판매자 투자후 기업정보 공개(채권) 수정 */
+        UPDATE after_fund_revenue_bond
+        <set>
+            <if test="afterInvestmentAmount != null and afterInvestmentAmount != ''">
+                after_investment_amount = #{afterInvestmentAmount},
+            </if>
+            <if test="take != null and take != ''">
+                take = #{take},
+            </if>
+            <if test="profit != null and profit != ''">
+                profit = #{profit},
+            </if>
+            <if test="visitorsNumber != null and visitorsNumber != ''">
+                visitors_number = #{visitorsNumber},
+            </if>
+            <if test="interestRate != null and interestRate != ''">
+                interest_rate = #{interestRate},
+            </if>
+            <if test="cost != null and cost != ''">
+                cost = #{cost},
+            </if>
+            <if test="netIncome != null and netIncome != ''">
+                net_income = #{netIncome},
+            </if>
+            <if test="earningsPerAccount != null and earningsPerAccount != ''">
+                earnings_per_account = #{earningsPerAccount},
+            </if>
+            <if test="revenuePeriodStart != null and revenuePeriodStart != ''">
+                revenue_period_start = #{revenuePeriodStart},
+            </if>
+            <if test="revenuePeriodEnd != null and revenuePeriodEnd != ''">
+                revenue_period_end = #{revenuePeriodEnd}
+            </if>
+        </set>
+        WHERE
+            after_fund_revenue_bond_code = #{afterFundRevenueBondCode};
+    </update>
+
     <!-- 판매자 투자펀딩 공고 삭제 -->
     <delete id="removeInvestment" parameterType="String">
         /* 판매자 투자펀딩 공고 삭제 */
@@ -837,6 +1102,26 @@
             investment_request_judge
         WHERE
             investment_request_judge_code = #{investmentRequestJudgeCode};
+    </delete>
+
+    <!-- 판매자 투자후 기업정보 공개(주식) 삭제 -->
+    <delete id="removeAfterFundRevenueStock" parameterType="String">
+        /* 판매자 투자후 기업정보 공개(주식) 삭제 */
+        DELETE
+        FROM
+            after_fund_revenue_stock
+        WHERE
+            after_fund_revenue_stock_code = #{afterFundRevenueStockCode};
+    </delete>
+
+    <!-- 판매자 투자후 기업정보 공개(채권) 삭제 -->
+    <delete id="removeAfterFundRevenueBond" parameterType="String">
+        /* 판매자 투자후 기업정보 공개(채권) 삭제 */
+        DELETE
+        FROM
+        after_fund_revenue_bond
+        WHERE
+        after_fund_revenue_bond_code = #{afterFundRevenueBondCode};
     </delete>
 
 </mapper>
