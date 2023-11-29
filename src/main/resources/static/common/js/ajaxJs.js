@@ -24,7 +24,13 @@ $('#rankReload').on('click', function(){
             // append 로 수정해보기
             let listElement = "";
             listElement += "<li>";
-            listElement += `	<a href='/user/donation/detail?projectCode=${item.projectCode}'>`;
+            if(item.projectCode == '리워드'){
+                listElement += `<a href="/user/reward/detail?rewardProjectCode=${item.projectCode}">`;
+            } else if(item.projectCode == '기부'){
+                listElement += `<a href="/user/donation/detail?donationCode=${item.projectCode}">`;
+            } else {
+                listElement += `<a href="/user/investment/detail/main?investmentCode=${item.projectCode}">`;
+            }
             listElement += `      <em>${item.rankCount}</em>`;
             listElement += `      <div>`;
             listElement += `        <h5>${item.subject}</h5>`;

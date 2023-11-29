@@ -3,6 +3,26 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ksmart.ks48team02.seller.mapper.donation.SellerDonationMapper">
+
+    <select id="getDonPrjInfoByCode" parameterType="String" resultType="DonationList">
+        SELECT
+            d.donation_code AS donationCode,
+            d.member_id AS memberId,
+            d.donation_condition AS donationCondition,
+            d.donation_subject AS donationSubject,
+            d.donation_achievement_money AS donationAchievementMoney,
+            d.donation_goal_money AS donationGoalMoney,
+            d.donation_achievement_percent AS donationAchievementPercent,
+            d.donation_reg_date AS donationRegDate,
+            d.donation_end_date AS donationEndDate,
+            d.donation_start_date AS donationStartDate,
+            d.donation_judgment_reason_detail AS donationJudgmentReasonDetail,
+            d.admin_member_id AS adminMemberId
+        FROM
+            donation AS d
+        WHERE
+            d.donation_code = #{projectCode}
+    </select>
     <select id="getDonationProjectList" resultType="DonationList">
         SELECT
             d.donation_code AS donationCode,

@@ -8,6 +8,8 @@ import java.util.List;
 @Mapper
 public interface UserInvestmentMapper {
 
+    public InvestmentInfo getInvPrjInfoByCode(String projectCode);
+
     // 투자 심사요청 등록
     public int addInvestmentJudge(InvestmentJudge investmentJudge);
 

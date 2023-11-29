@@ -20,4 +20,6 @@ public interface SellerDonationMapper {
     public String modifyCondition(String donationCode);
     public void updateCondition(String detailComent, String donationCode);
     public int isCondition(String donationCode);
+
+    public DonationList getDonPrjInfoByCode(String projectCode);
 }

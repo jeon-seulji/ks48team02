@@ -16,6 +16,28 @@ public class UserMainService {
         this.userMainMapper = userMainMapper;
     }
 
+
+    /**
+     * get recommend category list by sid
+     * @param sid
+     * @return recommendCtList
+     */
+    public List<RecommendCategory> getRecommendCtList(String sid){
+        List<RecommendCategory> recommendCtList = userMainMapper.getRecommendCtList(sid);
+        return recommendCtList;
+    }
+
+    /**
+     * get recommend project list by category list
+     * @param categoryCodeList
+     * @return recommendPjgList
+     */
+    public List<TotalRecommendProject> getRecommendPjgList(List<RecommendCategory> categoryCodeList){
+        List<TotalRecommendProject> recommendPjgList = userMainMapper.getRecommendPjgList(categoryCodeList);
+        return recommendPjgList;
+    }
+
+
     /**
      * rank list contents
      */
@@ -57,8 +79,8 @@ public class UserMainService {
      * get store rank list for main
      * @return storePrjList
      */
-    public List<StoreProject> getStorePrjList(){
-        List<StoreProject> storePrjList = userMainMapper.getStorePrjList();
+    public List<TotalRecommendProject> getStorePrjList(){
+        List<TotalRecommendProject> storePrjList = userMainMapper.getStorePrjList();
         return storePrjList;
     }
 

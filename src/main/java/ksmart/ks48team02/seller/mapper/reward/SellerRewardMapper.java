@@ -20,4 +20,12 @@ public interface SellerRewardMapper {
 
     //프로젝트 시작하기.
     public void startProject(String rewardProjectCode);
+
+    /**
+     * get project info by project code
+     * @param projectCode
+     * @return
+     */
+    public RewardProject getRwdPrjInfoByCode(String projectCode);
+
 }
