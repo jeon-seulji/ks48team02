@@ -47,7 +47,7 @@ public class UserManagementController {
         // 로그인 로그에서 유저 아이디 작성하고 검색 버튼 클릭시 리스트 반환
 
         model.addAttribute("contentsTitle", "회원 로그인 이력");
-        return "/admin/user/login_log";
+        return "admin/user/login_log";
     }
 
     @GetMapping("/memberRank")
