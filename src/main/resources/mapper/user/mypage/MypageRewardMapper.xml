@@ -34,6 +34,7 @@
         <result property="floverSavingRate" column="flover_saving_rate"/>
         <result property="orderConfirmDate" column="order_confirm_date"/>
         <result property="orderCancelDate" column="order_cancell_date"/>
+        <result property="paymentKey" column="tosspay_paymentkey"/>
 
         <collection property="rewardOrderDetailList" javaType="list" ofType="RewardOrderDetail">
             <id property="rewardOrderDetailCode" column="rd_order_detail_code"/>
@@ -70,6 +71,7 @@
             p.payment_state ,
             p.payment_deadline_date ,
             p.payment_completed_date ,
+            p.tosspay_paymentkey ,
             r.project_thumbnail_image ,
             r.reward_project_code ,
             r.project_subject ,
@@ -189,7 +191,7 @@
             customer
         <set>
             <if test="changeCategory == '주문취소'">
-                customer_point = customer_point + #{usePoint}
+                customer_point = customer_point + #{useReservePrice}
             </if>
             <if test="changeCategory == '구매확정'">
                 customer_point = customer_point + #{savingPoint}
