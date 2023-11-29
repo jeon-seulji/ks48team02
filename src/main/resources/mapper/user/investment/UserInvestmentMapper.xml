@@ -181,6 +181,38 @@
             investment AS i
     </select>
 
+    <select id="getInvPrjInfoByCode" parameterType="String" resultMap="InvestmentInfoResultMap">
+        SELECT
+            i.investment_code,
+            i.member_id,
+            i.store_code,
+            i.investment_request_judge_code,
+            i.total_category_code,
+            i.member_id_seller,
+            i.investment_image,
+            i.investment_like,
+            i.investment_achievement_money,
+            i.search_count,
+            i.invest_count,
+            i.securities_classification,
+            i.investment_display_date,
+            i.investment_reg_date,
+            i.investment_report,
+            i.basic_fee,
+            i.contract_fee_rate,
+            i.contract_file,
+            i.invest_judge_situation,
+            i.invest_achievement_percent,
+            i.investment_subject,
+            i.investment_amount,
+            i.investment_image,
+            i.investment_company
+        FROM
+            investment AS i
+        WHERE
+            i.investment_code = #{projectCode}
+    </select>
+
     <select id="investmentProjectDetail" parameterType="String">
         SELECT
             i.investment_code AS investmentCode,
@@ -210,7 +242,8 @@
             ir.investment_request_judge_code AS investmentRequestJudgeCode,
             ir.company_business_type_code AS companyBusinessTypeCode,
             ir.stock_number AS stockNumber,
-            ir.issue_stock_number AS issueStockNumber
+            ir.issue_stock_number AS issueStockNumber,
+            ir.investment_request_content AS investmentRequestContent
         FROM
             investment AS i
             INNER JOIN
@@ -273,6 +306,9 @@
             <when test='orderBy == "deadline"'>
                 ORDER BY investmentDeadlineCnt ASC
             </when>
+            <otherwise>
+                ORDER BY invest_achievement_percent DESC
+            </otherwise>
         </choose>
     </select>
 

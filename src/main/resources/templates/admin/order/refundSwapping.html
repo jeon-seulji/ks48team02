@@ -383,7 +383,7 @@
         </thead>
         <tbody>
           <!-- 조회 결과 없음 -->
-          <tr th:if="${RefundApplicationList == null}">
+          <tr th:if="${RefundApplicationList == null || #arrays.length(RefundApplicationList) == 0}">
             <td colspan="11" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
           </tr>
           <!-- 조회 결과 contents -->

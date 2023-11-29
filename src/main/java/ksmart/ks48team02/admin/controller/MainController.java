@@ -22,6 +22,7 @@ public class MainController {
 		if(getSid == null){
 			session.setAttribute("SID", "id001");
 			session.setAttribute("STYPECODE", "mem_type_01");
+			session.setAttribute("SNAME", "채송아");
 		}
 		if(getStype != null && !getStype.equals("mem_type_01")){
 			session.removeAttribute("SID");
@@ -29,6 +30,7 @@ public class MainController {
 			session.removeAttribute("SNAME");
 			session.setAttribute("SID", "id001");
 			session.setAttribute("STYPECODE", "mem_type_01");
+			session.setAttribute("SNAME", "채송아");
 		}
 
 

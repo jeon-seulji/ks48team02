@@ -62,7 +62,13 @@ public class OrderService {
             double rowCnt = orderMapper.getOrderCnt(paramMap);
 
             // 마지막 페이지 수
-            int lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            int lastPage = 0;
+
+            if(rowCnt == 0){
+                lastPage = 1;
+            } else {
+                lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            }
 
             // 보여줄 페이지 번호 초깃값
             int startPageNum = 1;
@@ -136,7 +142,13 @@ public class OrderService {
             double rowCnt = orderMapper.getRfndCnt(paramMap);
 
             // 마지막 페이지 수
-            int lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            int lastPage = 0;
+
+            if(rowCnt == 0){
+                lastPage = 1;
+            } else {
+                lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            }
 
             // 보여줄 페이지 번호 초깃값
             int startPageNum = 1;
@@ -213,7 +225,14 @@ public class OrderService {
             double rowCnt = orderMapper.getAutoRfndCnt(paramMap);
 
             // 마지막 페이지 수
-            int lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            int lastPage = 0;
+
+            if(rowCnt == 0){
+                lastPage = 1;
+            } else {
+                lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            }
+
 
             // 보여줄 페이지 번호 초깃값
             int startPageNum = 1;
@@ -277,7 +296,13 @@ public class OrderService {
             double rowCnt = orderMapper.getOrderConfCnt(paramMap);
 
             // 마지막 페이지 수
-            int lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            int lastPage = 0;
+
+            if(rowCnt == 0){
+                lastPage = 1;
+            } else {
+                lastPage = (int) Math.ceil(rowCnt / rowPerPage); // 25 / 15;
+            }
 
             // 보여줄 페이지 번호 초깃값
             int startPageNum = 1;
