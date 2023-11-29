@@ -47,6 +47,7 @@ public class InvestmentInfo {
     private String companyBusinessTypeCode;
     private int stockNumber;
     private int issueStockNumber;
+    private String investmentRequestContent;
 
 
     private String categoryName;
