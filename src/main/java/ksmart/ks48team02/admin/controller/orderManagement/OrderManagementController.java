@@ -185,7 +185,7 @@ public class OrderManagementController {
 
         // 특정 결제 정보 및 배송 정보조회
         switch(goodsPartition){
-            case "rwd":
+            case "RWD":
                 // 옵션 정보
                 List<RewardOrderDetail> getRewardOptionByOrderCode = orderService.getRewardOptionByOrderCode(orderCode);
                 log.info("getRewardOptionByOrderCode {}", getRewardOptionByOrderCode);
@@ -213,7 +213,6 @@ public class OrderManagementController {
                 OrderDelivery getDeliveryByCode = deliveryService.getDeliveryByCode(null, orderCode);
                 model.addAttribute("getDeliveryByCode", getDeliveryByCode);
                 break;
-
             case "don":
                 // 결제 정보
                 DonationPayments getDonationPaymentsById = paymentsService.getDonationPaymentsById(orderCode);
@@ -493,6 +492,10 @@ public class OrderManagementController {
         Map<String, Object> resultMap = orderService.getOrderConfLogList(paramMap);
 
         model.addAttribute("confLogList", resultMap.get("confLogList"));
+        model.addAttribute("lastPage",resultMap.get("lastPage"));
+        model.addAttribute("startPageNum",resultMap.get("startPageNum"));
+        model.addAttribute("endPageNum",resultMap.get("endPageNum"));
+        model.addAttribute("currentPage",resultMap.get("currentPage"));
 
         return "admin/order/orderCompletedList";
     }
