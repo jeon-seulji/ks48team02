@@ -171,6 +171,13 @@
             $('.navbar').not('.reward_nav').show();
         }
     });
+
+    // header menu slidedown
+    $('.user-connection-menu li').hover(function(){
+        $(this).find('.header-menu-submenu').stop().slideDown(300);
+    }, function(){
+        $(this).find('.header-menu-submenu').stop().slideUp(300);
+    })
 </script>
 
 </body>
