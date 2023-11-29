@@ -356,7 +356,6 @@
             </if>
             <if test="searchKey != null and searchKey != ''">
                 ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
-                AND
             </if>
         </where>
         <if test="startRowNum > -1">

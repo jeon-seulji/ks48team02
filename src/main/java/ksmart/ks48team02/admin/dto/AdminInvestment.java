@@ -1,6 +1,7 @@
 package ksmart.ks48team02.admin.dto;
 
 import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
+import ksmart.ks48team02.seller.dto.SellersecuritiesIssuanceStock;
 
 public class AdminInvestment {
 
@@ -33,6 +34,16 @@ public class AdminInvestment {
     private AdminInvestmentRequestJudge adminInvestmentRequestJudge;
 
     private SellerInvestmentContent sellerInvestmentContent;
+
+    private SellersecuritiesIssuanceStock sellersecuritiesIssuanceStock;
+
+    public SellersecuritiesIssuanceStock getSellersecuritiesIssuanceStock() {
+        return sellersecuritiesIssuanceStock;
+    }
+
+    public void setSellersecuritiesIssuanceStock(SellersecuritiesIssuanceStock sellersecuritiesIssuanceStock) {
+        this.sellersecuritiesIssuanceStock = sellersecuritiesIssuanceStock;
+    }
 
     public String getInvestmentCode() {
         return investmentCode;
@@ -252,61 +263,37 @@ public class AdminInvestment {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("AdminInvestment [investmentCode=");
-        builder.append(investmentCode);
-        builder.append(", memberId=");
-        builder.append(memberId);
-        builder.append(", storeCode=");
-        builder.append(storeCode);
-        builder.append(", investmentRequestJudgeCode=");
-        builder.append(investmentRequestJudgeCode);
-        builder.append(", totalCategoryCode=");
-        builder.append(totalCategoryCode);
-        builder.append(", memberIdSeller=");
-        builder.append(memberIdSeller);
-        builder.append(", investmentSubject=");
-        builder.append(investmentSubject);
-        builder.append(", investmentContent=");
-        builder.append(investmentContent);
-        builder.append(", investmentImage=");
-        builder.append(investmentImage);
-        builder.append(", investmentLike=");
-        builder.append(investmentLike);
-        builder.append(", investmentAmount=");
-        builder.append(investmentAmount);
-        builder.append(", invInvestmentAchievementMoney=");
-        builder.append(invInvestmentAchievementMoney);
-        builder.append(", investAchievementPercent=");
-        builder.append(investAchievementPercent);
-        builder.append(", investmentCompany=");
-        builder.append(investmentCompany);
-        builder.append(", searchCount=");
-        builder.append(searchCount);
-        builder.append(", investCount=");
-        builder.append(investCount);
-        builder.append(", securitiesClassification=");
-        builder.append(securitiesClassification);
-        builder.append(", investmentDisplayDate=");
-        builder.append(investmentDisplayDate);
-        builder.append(", investmentRegDate=");
-        builder.append(investmentRegDate);
-        builder.append(", investmentDeadline=");
-        builder.append(investmentDeadline);
-        builder.append(", investmentReport=");
-        builder.append(investmentReport);
-        builder.append(", basicFee=");
-        builder.append(basicFee);
-        builder.append(", contractFeeRate=");
-        builder.append(contractFeeRate);
-        builder.append(", contractFile=");
-        builder.append(contractFile);
-        builder.append(", investJudgeSituation=");
-        builder.append(investJudgeSituation);
-        builder.append(", adminInvestmentRequestJudge=");
-        builder.append(adminInvestmentRequestJudge);
-        builder.append("]");
-        return builder.toString();
+        final StringBuffer sb = new StringBuffer("AdminInvestment{");
+        sb.append("investmentCode='").append(investmentCode).append('\'');
+        sb.append(", memberId='").append(memberId).append('\'');
+        sb.append(", storeCode='").append(storeCode).append('\'');
+        sb.append(", investmentRequestJudgeCode='").append(investmentRequestJudgeCode).append('\'');
+        sb.append(", totalCategoryCode='").append(totalCategoryCode).append('\'');
+        sb.append(", memberIdSeller='").append(memberIdSeller).append('\'');
+        sb.append(", investmentSubject='").append(investmentSubject).append('\'');
+        sb.append(", investmentContent='").append(investmentContent).append('\'');
+        sb.append(", investmentImage='").append(investmentImage).append('\'');
+        sb.append(", investmentLike=").append(investmentLike);
+        sb.append(", investmentAmount=").append(investmentAmount);
+        sb.append(", invInvestmentAchievementMoney=").append(invInvestmentAchievementMoney);
+        sb.append(", investAchievementPercent=").append(investAchievementPercent);
+        sb.append(", investmentCompany='").append(investmentCompany).append('\'');
+        sb.append(", searchCount=").append(searchCount);
+        sb.append(", investCount=").append(investCount);
+        sb.append(", securitiesClassification='").append(securitiesClassification).append('\'');
+        sb.append(", investmentDisplayDate='").append(investmentDisplayDate).append('\'');
+        sb.append(", investmentRegDate='").append(investmentRegDate).append('\'');
+        sb.append(", investmentDeadline='").append(investmentDeadline).append('\'');
+        sb.append(", investmentReport='").append(investmentReport).append('\'');
+        sb.append(", basicFee=").append(basicFee);
+        sb.append(", contractFeeRate=").append(contractFeeRate);
+        sb.append(", contractFile='").append(contractFile).append('\'');
+        sb.append(", investJudgeSituation=").append(investJudgeSituation);
+        sb.append(", adminInvestmentRequestJudge=").append(adminInvestmentRequestJudge);
+        sb.append(", sellerInvestmentContent=").append(sellerInvestmentContent);
+        sb.append(", sellersecuritiesIssuanceStock=").append(sellersecuritiesIssuanceStock);
+        sb.append('}');
+        return sb.toString();
     }
 
 }
