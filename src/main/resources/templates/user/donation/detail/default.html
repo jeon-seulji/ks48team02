@@ -341,9 +341,12 @@
     $('#donationBtn').click(function (){
         const SID = `[[${SID}]]`;
         const STYPECODE = '[[${STYPECODE}]]';
+        const donationCondition = '[[${donationInfo.donationCondition}]]';
         if(SID == null || SID == '' || typeof SID == 'undefined' || SID == 'noSession'){
             alert('기부 모금하기 기능을 이용하시려면 로그인을 해야됩니다!');
-        }else{
+        }else if(donationCondition == 4 || donationCondition == 5){
+            alert('모금 기간이 종료 되었습니다!');
+        } else{
             if(STYPECODE == 'mem_type_05'){
                 window.location.href="/user/donation/order?donationCode="+'[[${donationCode}]]';
             }else{

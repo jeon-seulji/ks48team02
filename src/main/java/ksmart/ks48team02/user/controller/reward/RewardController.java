@@ -246,33 +246,37 @@ public class RewardController {
     public String paymentPage(@RequestBody PaymentResult paymentResult) throws IOException, InterruptedException {
 
         //결제 DB작업에 필요한 데이터 잘 받았는지 log4j로 출력
-        log.info("paymentResult: {}", paymentResult);
+        log.info("결제 진행 객체: {}", paymentResult);
 
-        String payResult = "{\"paymentKey\":\""+paymentResult.getPaymentKey()+"\", "
-                            +"\"orderId\":\""+paymentResult.getOrderId()+"\", "
-                            +"\"amount\":\""+paymentResult.getAmount()+"\"}";
+        String paymentKey = paymentResult.getPaymentKey();
+        String orderId = paymentResult.getOrderId();
+        int amount = Integer.parseInt(paymentResult.getAmount());
 
-        //토스 API에 결제 완료 후, 결제에 사용된 데이터 요청.
+        String payResult = "{\"paymentKey\":\""+paymentKey+"\", "
+                            +"\"orderId\":\""+orderId+"\", "
+                            +"\"amount\":\""+amount+"\"}";
+
+        //토스 API에 결제 요청 후 승인하고, 결제에 사용된 데이터 요청.
+        //결제 승인하기 위해 필요한 url 객체 생성.
         HttpRequest request = HttpRequest.newBuilder()
                                         .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
                                         .header("Authorization","Basic dGVzdF9za19EbnlScFFXR3JOV0Q5WHBMemdaZzhLd3YxTTlFOg==")
                                         .header("Content-Type","application/json")
-                                        .header("Idempotency-Key","a6a498c4-6f61-4183-a2ff-80176e69a067")
                                         .method("POST", HttpRequest.BodyPublishers.ofString(payResult))
                                         .build();
+        //생성한 url을 보내고, 결제 승인 후 반환 객체를 response변수에 할당.
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> map = mapper.readValue(response.body(), Map.class);
 
+        log.info("결제 승인 후 반환 객체: {}", map);
 
         //주문코드, 결제코드 생성
         OrderTotal orderAndPaymentCode = rewardService.getOrderAndPaymentCode();
-
         //paymentResult 객체에 주문코드 할당
         String orderCode = orderAndPaymentCode.getOrderCode();
         paymentResult.setOrderCode(orderCode);
-
         //paymentResult 객체에 결제코드 할당
         String paymentCode = orderAndPaymentCode.getRewardPaymentCode();
         paymentResult.setPaymentCode(paymentCode);
@@ -281,13 +285,6 @@ public class RewardController {
         rewardService.rewardProjectPay(paymentResult);
 
         return "/user/reward/order/paymentConfirm";
-    }
-
-    //리워드 결제 확인 페이지
-    @GetMapping("/order/paymentConfirm")
-    public String paymentConfirmPage(Model model) {
-
-        return "user/reward/order/paymentConfirm";
     }
 
     //리워드 환불 정책 페이지

@@ -431,7 +431,7 @@
                 SUBSTRING_INDEX(SUBSTRING_INDEX(r.use_reserve_code,'_',2),'_',-1) = CURDATE()+0
         </selectKey>
         INSERT INTO reward_payment
-            (reward_payment_code, order_code, member_id, reward_refund_code, switching_code, order_price, delivery_price, order_total_price, use_reserve_price, use_reserve_code, discount_rank_price, discount_coupon_price, payment_scheduled_price, payment_method, deposit_name, deposit_account, refund_account, deposit_price, payment_state, payment_deadline_date, payment_completed_date)
+            (reward_payment_code, order_code, member_id, reward_refund_code, switching_code, order_price, delivery_price, order_total_price, use_reserve_price, use_reserve_code, discount_rank_price, discount_coupon_price, payment_scheduled_price, payment_method, deposit_name, deposit_account, refund_account, deposit_price, payment_state, payment_deadline_date, payment_completed_date, tosspay_paymentkey)
         VALUES
             (#{paymentCode}, #{orderCode}, #{orderMemberId}, null, null, #{orderPrice}, #{deliveryPrice}, #{totalPayPrice}, #{usePoint},
         <choose>
@@ -442,7 +442,7 @@
                 #{useReserveCode}
             </otherwise>
         </choose>
-        , #{memberRankDiscount}, #{couponDiscountPrice}, #{totalPayPrice}, #{paymentMethod}, null, null, null, 0, 'Y', null, now())
+        , #{memberRankDiscount}, #{couponDiscountPrice}, #{totalPayPrice}, #{paymentMethod}, null, null, null, 0, 'Y', null, now(), #{paymentKey})
 
     </insert>
 

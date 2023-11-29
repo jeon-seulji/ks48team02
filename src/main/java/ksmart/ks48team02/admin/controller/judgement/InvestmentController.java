@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpSession;
-import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
-import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
-import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
-import ksmart.ks48team02.admin.dto.AdminLawSatistifyReason;
+import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +26,46 @@ public class InvestmentController {
         this.investmentService = investmentService;
     }
 
-    @GetMapping("/judge-main")
-    public String getInvestJudgeMain(Model model){
+    @GetMapping("/search/investment")
+    public String getInvestMain(Model model, HttpSession session
+            ,@RequestParam(name = "searchKey", required = false) String searchKey
+            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
+            ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
+            ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+            ,@RequestParam(name = "searchSelectValue", required = false, defaultValue = "") String searchSelectValue
+            ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage) {
 
-        model.addAttribute("title", "투자 심사 관리");
-        model.addAttribute("contentsTitle","투자 심사 관리");
+        String loginId = (String) session.getAttribute("SID");
 
-        return "admin/judgement/investment/invest_judge_main";
+        Map<String, Object> resultMap = null;
+
+        List<AdminInvestment> investmentList = null;
+
+        if(searchKey != null) {
+            resultMap = investmentService.getInvestmentList(searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, searchSelectValue, currentPage);
+            investmentList = (List<AdminInvestment>) resultMap.get("investmentList");
+        }else {
+            resultMap = investmentService.getInvestmentList(currentPage);
+            investmentList = (List<AdminInvestment>) resultMap.get("investmentList");
+        }
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
+
+        model.addAttribute("title", "관리자 : 투자 프로젝트");
+        model.addAttribute("contentsTitle","투자 프로젝트");
+        model.addAttribute("investmentList",investmentList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("searchSelectValue", searchSelectValue);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
+
+        return "admin/judgement/investment/list/invesment_list";
     }
 
     @GetMapping("/search/judge")
@@ -203,6 +234,20 @@ public class InvestmentController {
 
         return "admin/judgement/investment/list/corporate_value_evaluation_list";
     }
+
+    @GetMapping("/view/investment")
+    public String getInvestementByCode(Model model, String investmentCode, HttpSession session) {
+
+        AdminInvestment investmentInfo = investmentService.getInvestementByCode(investmentCode);
+
+        model.addAttribute("title", "관리자 : 투자펀딩 공고 상세");
+        model.addAttribute("contentsTitle","투자펀딩 공고 상세");
+        model.addAttribute("contentsSubTitle","투자펀딩 공고 상세 내용을 확인합니다");
+        model.addAttribute("investmentInfo", investmentInfo);
+
+        return "admin/judgement/investment/view/investment_view";
+    }
+
     @GetMapping("/view/judge")
     public String getInvestmentJudge(@RequestParam(name = "investmentRequestJudgeCode") String investmentRequestJudgeCode,Model model){
 
@@ -288,16 +333,13 @@ public class InvestmentController {
     }
 
     @GetMapping("/insert/corporate-value")
-    public String addCorporateValueEvaluation(Model model, @RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage){
+    public String addCorporateValueEvaluation(Model model) {
 
-        Map<String, Object> resultMap = investmentService.getInvestmentRequestJudgeList(currentPage);
-
-        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = (List<AdminInvestmentRequestJudge>) resultMap.get("investmentRequestJudgeList");
+        List<AdminInvestmentRequestJudge> investmentRequestJudgeList = investmentService.getInvestmentRequestJudgeListOnly();
 
         model.addAttribute("title", "관리자 : 기업가치 평가 결과 등록");
         model.addAttribute("contentsTitle","기업가치 평가 결과 등록");
         model.addAttribute("investmentRequestJudgeList",investmentRequestJudgeList);
-        model.addAttribute("currentPage", currentPage);
 
         return "admin/judgement/investment/insert/corporate_value_evaluation_insert";
     }
@@ -308,6 +350,27 @@ public class InvestmentController {
         investmentService.addCorporateValueEvaluation(adminCorporateValueEvaluation);
         investmentService.modifyInvestmentRequestCorpValueKey(adminInvestmentRequestJudge);
         return "redirect:/admin/investment/search/corporate-value";
+    }
+
+    @GetMapping("/update/investment")
+    public String modifyInvestment(Model model, String investmentCode, HttpSession session) {
+
+        AdminInvestment investmentInfo = investmentService.getInvestementByCode(investmentCode);
+
+        model.addAttribute("title", "관리자 : 투자펀딩 공고 수정");
+        model.addAttribute("contentsTitle","투자펀딩 공고 수정");
+        model.addAttribute("investmentInfo", investmentInfo);
+
+        return "admin/judgement/investment/update/investment_update";
+    }
+
+    @PostMapping("/update/investment")
+    public String modifyInvestmentJudge(AdminInvestment adminInvestment, SellerInvestmentContent sellerInvestmentContent) {
+
+        investmentService.modifyInvestment(adminInvestment);
+        investmentService.modifyInvestmentContent(sellerInvestmentContent);
+
+        return "redirect:/admin/investment/search/investment";
     }
 
     @GetMapping("/update/judge")
@@ -391,6 +454,32 @@ public class InvestmentController {
 
         investmentService.modifyCorporateValueEvaluation(adminCorporateValueEvaluation);
         return "redirect:/admin/investment/search/corporate-value";
+    }
+
+    @GetMapping("/delete/investment")
+    public String removeInvestment(@RequestParam(value = "investmentCode") String investmentCode
+            ,@RequestParam(value = "investmentContentCode") String investmentContentCode
+            ,Model model) {
+
+        investmentService.removeInvestment(investmentCode, investmentContentCode);
+
+        model.addAttribute("investmentCode", investmentCode);
+        model.addAttribute("investmentContentCode",investmentContentCode);
+
+        return "redirect:/admin/investment/search/investment";
+    }
+
+    @PostMapping("/delete/investment")
+    public String removeInvestment(@RequestParam(value = "investmentCode") String investmentCode
+            ,@RequestParam(value = "investmentContentCode") String investmentContentCode
+            ,RedirectAttributes redirectAttributes) {
+
+        investmentService.removeInvestment(investmentCode, investmentContentCode);
+
+        redirectAttributes.addAttribute("investmentCode", investmentCode);
+        redirectAttributes.addAttribute("investmentContentCode", investmentContentCode);
+
+        return "redirect:/admin/investment/search/investment";
     }
 
     @GetMapping("/delete/judge")

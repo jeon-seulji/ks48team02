@@ -94,7 +94,7 @@ public class PojectRegistrationContoller {
     @GetMapping("/reward/success")
     public String rewardProjectSuccessPage(){
 
-        return "/user/projectRegistration/reward/reward_insert_success";
+        return "user/projectRegistration/reward/reward_insert_success";
     }
 
 
@@ -121,10 +121,11 @@ public class PojectRegistrationContoller {
 
     // 투자 프로젝트 등록
     @PostMapping(value = {"/investment/judge"})
-    public String investmentRegistrationPage(InvestmentJudge investmentJudge, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession httpSession){
+    public String investmentRegistrationPage(InvestmentJudge investmentJudge, InvestmentInfo investmentInfo, InvestmentContent investmentContent, HttpSession session){
 
-        String memberId = (String) httpSession.getAttribute("SID");
+        String memberId = (String) session.getAttribute("SID");
         investmentJudge.setMemberIdSeller(memberId);
+
 
         System.out.println(investmentJudge);
 

@@ -10,6 +10,9 @@ import java.util.List;
 
 @Mapper
 public interface SellerInvestmentMapper {
+
+    // 판매자 투자펀딩 공고 목록 조회(페이징 x)
+    public List<AdminInvestment> getInvestmentListOnly(String memberIdSeller);
     
     // 판매자 투자펀딩 공고 목록 조회
     public List<AdminInvestment> getInvestmentList(String memberIdSeller, int startRowNum, int rowPerPage);
@@ -41,12 +44,24 @@ public interface SellerInvestmentMapper {
     // 판매자 투자후 기업정보 공개(주식) 전체 행의 갯수
     public int getAfterFundRevenueStockCnt();
 
+    // 판매자 검색조건에 따른 투자후 기업정보 공개(주식) 목록 조회
+    public List<SellerAfterFundRevenueStock> getAfterFundRevenueStockListBySearch(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int startRowNum, int rowPerPage);
+
+    // 판매자 특정 기업정보 공개(주식) 조회
+    public SellerAfterFundRevenueStock getAfterFundRevenueStockByCode(String memberId, String afterFundRevenueStockCode);
+
     // 판매자 투자후 기업정보 공개(채권) 목록 조회
     public List<SellerAfterFundRevenueBond> getAfterFundRevenueBondList(String memberId, int startRowNum, int rowPerPage);
 
     // 판매자 투자후 기업정보 공개(채권) 전체 행의 갯수
     public int getAfterFundRevenueBondCnt();
 
+    // 판매자 검색조건에 따른 투자후 기업정보 공개(채권) 목록 조회
+    public List<SellerAfterFundRevenueBond> getAfterFundRevenueBondListBySearch(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int startRowNum, int rowPerPage);
+
+    // 판매자 특정 기업정보 공개(채권) 조회
+    public SellerAfterFundRevenueBond getAfterFundRevenueBondByCode(String memberId, String afterFundRevenueBondCode);
+    
     // 판매자 자본시장법 범위충족기준 목록 조회
     public List<AdminLawSatistifyReason> getLawSatistifyList();
 
@@ -65,6 +80,12 @@ public interface SellerInvestmentMapper {
     // 판매자 투자펀딩 심사요청 수정
     public int modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge);
 
+    // 판매자 투자후 기업정보 공개(주식) 수정
+    public int modifyAfterFundRevenueStock(SellerAfterFundRevenueStock sellerAfterFundRevenueStock);
+
+    // 판매자 투자후 기업정보 공개(채권) 수정
+    public int modifyAfterFundRevenueBond(SellerAfterFundRevenueBond sellerAfterFundRevenueBond);
+
     // 판매자 투자펀딩 공고 삭제
     public int removeInvestment(String investmentCode);
 
@@ -73,4 +94,10 @@ public interface SellerInvestmentMapper {
 
     // 판매자 투자펀딩 심사요청 삭제
     public int removeInvestmentRequestJudge(String investmentRequestJudgeCode);
+
+    // 판매자 투자후 기업정보 공개(주식) 삭제
+    public int removeAfterFundRevenueStock(String afterFundRevenueStockCode);
+
+    // 판매자 투자후 기업정보 공개(채권) 삭제
+    public int removeAfterFundRevenueBond(String afterFundRevenueBondCode);
 }
