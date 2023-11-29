@@ -227,17 +227,18 @@
 
     <select id="getSortedList" parameterType="map" resultMap="InvestmentInfoResultMap">
         SELECT
-        investment_code,
-        invest_achievement_percent,
-        investment_subject,
-        investment_amount,
-        investment_deadline,
-        DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
-        investment_image,
-        investment_company,
-        securities_classification
+            investment_code,
+            invest_achievement_percent,
+            investment_subject,
+            investment_amount,
+            investment_deadline,
+            DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+            investment_image,
+            investment_company,
+            securities_classification,
+            invest_judge_situation
         FROM
-        investment
+            investment
         <where>
             <choose>
                 <when test='status == "ing"'>
@@ -246,9 +247,6 @@
                 <when test='status == "end"'>
                     CURDATE() > investment_deadline
                 </when>
-                <otherwise>
-                    1 = 1
-                </otherwise>
             </choose>
             <choose>
                 <when test='securities == "stock"'>

@@ -32,7 +32,7 @@
                 <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" th:text="|${investmentInfo.investmentDeadlineCnt}일남음|"></span>
             </div>
             <div>
-                <span style="font-size: 20px; color: black; font-weight: bold;" th:text="${investmentInfo.investmentAmount}"></span>
+                <span style="font-size: 20px; color: black; font-weight: bold;" th:text="${#numbers.formatInteger(investmentInfo.investmentAmount,0,'COMMA')}"></span>
                 <span style="color: black">원 달성</span>
                 <span style="margin-left: 5px; background: #daf6fb; color: #235FD9; border-radius: 5px; padding: 2px;" th:text="|${investmentInfo.investAchievementPercent}% 달성|"></span>
             </div>
