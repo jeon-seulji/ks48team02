@@ -117,19 +117,26 @@
             }
         });
 
-        let replyCount = 0;
-        $('.reply').click(function (){
-            if(replyCount == 0){
-                $('#replyArrow').text("△");
-                replyCount = 1;
-                $('.comments-reply').css('display', 'flex');
-            }else{
-                $('#replyArrow').text("▽");
-                replyCount = 0;
-                $('.comments-reply').css('display', 'none');
+        $('.reply').on('click', function (){
+            const $clickedReply = $(this);
+            const $replyArrow = $clickedReply.find('.replyArrow');
+            const $commentsReply = $clickedReply.siblings('.comments-reply');
+            if ($replyArrow.text() == '▽') {
+                $replyArrow.text("△");
+                $commentsReply.css('display', 'inline-block');
+            } else {
+                $replyArrow.text("▽");
+                $commentsReply.css('display', 'none');
             }
         });
 
+    </script>
+
+    <script type="text/javascript">
+        let investmentProjectCode = '[[${investmentInfo.investmentCode}]]';
+        // 썸네일 이미지 경로 지정
+        let thumbNailImageSrc = $('#thumbNailImage').attr('src');
+        $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${investmentInfo.investmentImage}]]');
     </script>
 
 </th:block>

@@ -258,7 +258,7 @@
             member_id = #{memberId};
     </select>
 
-    <!-- 기부 플로버 차감 -->
+    <!-- 기부 플로버 변동 -->
     <update id="deductFlover" parameterType="Map">
         UPDATE
             customer
@@ -304,7 +304,7 @@
             (#{orderCode}, #{memberId}, 'ORDC_002', #{memberName}, #{donationSubject}, #{orderTotalPrice}, '주문 확정-기부 프로젝트 주문 확정', #{donationCode}, NOW(), NULL, NULL);
     </insert>
 
-    <insert id="addDonationPayemnt" parameterType="String">
+    <insert id="addDonationPayment" parameterType="String">
         <selectKey keyProperty="donationOrderCode,orderCode,memberName" resultType="hashmap" order="BEFORE">
             SELECT
                 (CASE
@@ -377,5 +377,51 @@
         WHERE
             donation_code = #{donationCode};
     </update>
+
+    <delete id="removeOrderInfo" parameterType="String">
+        DELETE
+        FROM
+            order_table
+        WHERE
+            order_code = #{orderCode};
+    </delete>
+
+    <select id="getOrderInfo" parameterType="String" resultType="OrderTableList">
+        SELECT
+            order_code AS orderCode,
+            member_id AS memberId,
+            order_category_code AS orderCategoryCode,
+            order_name AS orderName,
+            order_funding_name AS orderFundingName,
+            order_total_price AS orderTotalPrice,
+            order_category_detail AS orderCategoryDetail,
+            goods_code AS goodsCode,
+            order_application_date AS orderApplicationDate,
+            order_confirm_date AS orderConfirmDate,
+            order_cancell_date AS orderCancellDate
+        FROM
+            order_table
+        WHERE
+            order_code = #{orderCode};
+    </select>
+
+    <select id="getCustomerInfo" parameterType="String" resultType="Customer">
+        SELECT
+            customer_code AS customerCode,
+            member_id AS customerMemberId,
+            reward_rank_code AS rewardRankCode,
+            donation_rank_code AS donationRankCode,
+            customer_gender AS customerGender,
+            customer_birth AS customerBirth,
+            customer_addr AS customerAddr,
+            customer_addr_detail AS customerAddrDetail,
+            customer_point AS customerPoint,
+            customer_flover AS customerFlover,
+            customer_coupon AS customerCoupon
+        FROM
+            customer
+        WHERE
+            member_id = #{memberId};
+    </select>
 
 </mapper>
