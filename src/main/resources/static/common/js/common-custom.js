@@ -185,7 +185,7 @@ $('#allSelectBtn').on('click', function(){
 });
 
 // 공고 상세보기 btn controls
-$('.more-btn').on('click', function(){
+$(document).on('click', '.more-btn', function(){
     $('.projectInfoDetail').toggleClass('active');
     $(this).toggleClass('active');
 });

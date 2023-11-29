@@ -1,5 +1,6 @@
 package ksmart.ks48team02.user.controller;
 
+import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.main.UserMainService;
 import org.slf4j.Logger;
@@ -38,9 +39,25 @@ public class MainController {
 
 	@GetMapping(value = {"" , "/"})
 	public String mainPage(Model model,
+						   HttpSession session,
 						   @RequestParam(name="rankCategory",
 								   		 required = false,
 								   		 defaultValue = "achievementPercent") String rankCategory) {
+
+		// 추천 콘텐츠
+		String sid = (String) session.getAttribute("SID");
+		List<RecommendCategory> getRecommendCtList = null;
+
+		if(sid != null){
+			getRecommendCtList = userMainService.getRecommendCtList(sid);
+		}
+		log.info("getRecommendCtList {}", getRecommendCtList);
+
+		List<TotalRecommendProject> getRecommendPjgList = userMainService.getRecommendPjgList(getRecommendCtList);
+
+		log.info("getRecommendPjgList {}", getRecommendPjgList);
+
+		model.addAttribute("getRecommendPjgList", getRecommendPjgList);
 
 		// 랭크 데이터
 		List<OrderRank> rankList = userMainService.getRankList(rankCategory);
@@ -49,7 +66,7 @@ public class MainController {
 		model.addAttribute("rankList", rankList);
 
 		// 스토어 추천
-		List<StoreProject> getStorePrjList = userMainService.getStorePrjList();
+		List<TotalRecommendProject> getStorePrjList = userMainService.getStorePrjList();
 		log.info("getStorePrjList {}", getStorePrjList);
 		model.addAttribute("storeList", getStorePrjList);
 
@@ -68,6 +85,7 @@ public class MainController {
 		List<InvestmentInfo> getInvestPrjList = userMainService.getInvestPrjList();
 		log.info("getInvestPrjList {}", getInvestPrjList);
 		model.addAttribute("investPrjList", getInvestPrjList);
+
 		return "user/index";
 	}
 

@@ -314,7 +314,7 @@
         </thead>
         <tbody>
           <!-- 조회 결과 없음 -->
-          <tr th:if="${list == null}">
+          <tr th:if="${list == null || #arrays.length(list) == 0}">
             <td colspan="9" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
           </tr>
           <!-- 조회 결과 contents -->

@@ -320,8 +320,10 @@
                 </thead>
                 <tbody>
                     <!-- 조회 결과 없음 -->
-                    <tr th:if="${deliveryList == null}">
-                        <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+                    <tr th:if="${deliveryList == null || #arrays.length(deliveryList) == 0}">
+
+                        <td colspan="12" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
+
                     </tr>
                     <!-- 조회 결과 contents -->
                     <tr th:unless="${deliveryList == null}" th:each="l : ${deliveryList}">

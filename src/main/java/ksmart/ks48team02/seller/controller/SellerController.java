@@ -26,7 +26,7 @@ public class SellerController {
             session.setAttribute("SNAME", "최자두");
         }
 
-        if(getStype != null && getStype.equals("mem_type_01")){
+        if(getStype != null && (getStype.equals("mem_type_01") || getStype.equals("mem_type_05"))){
             session.removeAttribute("SID");
             session.removeAttribute("STYPECODE");
             session.removeAttribute("SSTORECODE");

@@ -9,6 +9,7 @@ public class DonationList {
     private String donationCondition;
     private String donationSubject;
     private int donationAchievementMoney;
+    private int donationAchievementPercent;
     private int donationGoalMoney;
     private String donationRegDate;
     private String donationEndDate;
