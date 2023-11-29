@@ -107,6 +107,13 @@
         //상세페이지 사진 크기 맞추기
         $('#storyBody').find('img').css('width','100%');
 
+        //옵션 내용 높이조절.
+        $('.rewardOptionContents').each((idx,item)=>{
+            let height = $(item).prop('scrollHeight');
+            let preHeight = $(item).height();
+                $(item).css('height',`${height}px`);
+        })
+
     </script>
 
 
