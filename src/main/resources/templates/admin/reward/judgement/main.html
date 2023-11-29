@@ -117,8 +117,8 @@
                     <td colspan="11" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                 </tr>
                 <!-- contents -->
-                <th:block th:unless="${#lists.size(projectList) == 0}" th:each="l : ${projectList}">
-                    <tr class="rewardProject">
+                    <tr class="rewardProject" th:unless="${#lists.size(projectList) == 0}" th:each="l : ${projectList}"
+                        th:onclick="|location.href='@{/user/reward/detail(rewardProjectCode=${l.rewardProjectCode})}'|">
                         <td class="rewardProjectCode" th:text="${l.rewardProjectCode}"></td>
                         <td class="sellerId" th:text="${l.regMemberId}"></td>
                         <td th:text="${l.projectSubject}"></td>
@@ -140,7 +140,6 @@
                             <button type="button" class="judgementReject  btn btn-sm btn-danger">심사거절</button>
                         </td>
                     </tr>
-                </th:block>
                 </tbody>
             </table>
         </form>

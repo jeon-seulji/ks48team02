@@ -6,6 +6,8 @@
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <title th:text="${title}"></title>
+    <style>
+    </style>
 
 
 </head>
@@ -48,6 +50,7 @@
                 prevEl: "#rewardProject .swiper-button-prev",
             },
         });
+
     </script>
     <script type="text/javascript" th:inline="javascript">
         // 현재 프로젝트코드로 상세페이지 데이터를 가져오기 위한 코드
@@ -100,6 +103,9 @@
                 location.href=`/user/reward/great?rewardProjectCode=${rewardProjectCode}&greatCheck=${greatCheck}`;
             }
         })
+
+        //상세페이지 사진 크기 맞추기
+        $('#storyBody').find('img').css('width','100%');
 
     </script>
 

@@ -10,7 +10,10 @@
   <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
   <link rel="stylesheet" th:href="@{/user/css/main_style.css}" />
 
-
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+        integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
 </head>
 
@@ -28,8 +31,8 @@
 <!--  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist/summernote.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist/summernote.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 </th:block>
 
@@ -139,25 +142,6 @@
         $(this).parents('.info-contents-area').prev().show();
       });
 
-      //썸네일 이미지 추가 시, 이미지 표시
-      $('#thumbnailImage').change(function () {
-        if ($(this).val() != null) {
-          $('.img-thumbnail').css('display', 'block');
-          setImageFromFile(this, '.img-thumbnail');
-        }
-      });
-
-      function setImageFromFile(input, expression) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            $(expression).attr('src', e.target.result);
-          }
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
-
-
 
 
       //summerNote API 설정.
@@ -187,6 +171,7 @@
       /**
        * 이미지 파일 업로드
        */
+      let imagesName = [];
       function uploadSummernoteImageFile(file, editor) {
         data = new FormData();
         data.append("file", file);
@@ -199,6 +184,7 @@
           success : function(data) {
             //항상 업로드된 파일의 url이 있어야 한다.
             $(editor).summernote('insertImage', data.url);
+            imagesName.push(data.filename);
           }
         });
       }
@@ -219,19 +205,19 @@
         }
 
         $('#confirmBtn').css('display', 'none');
-        $('#confirmMessage').css('display', 'block');
+        $('#confimMessage').css('display', 'block');
         $('#thumbnailImage').css('display', 'none');
-        let formData = new FormData();	//FormData 객체 생성
-        let inputFile = $("input[type='file']"); //input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
-        let files = inputFile[0].files;
+        var formData = new FormData();	//FormData 객체 생성
+        var inputFile = $("input[type='file']"); //input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+        var files = inputFile[0].files;
         //files : 선택한 모든 파일을 나열하는 FileList 객체입니다.
         //multiple 특성을 지정하지 않닸다면 두 개 이상의 파일을 포함하지 않습니다.
-        for (let i = 0; i < files.length; i++) {
+        for (var i = 0; i < files.length; i++) {
           console.log(files[i]);
           formData.append("file", files[i]);//키,값으로 append
         }
 
-        //실제 사진 파일 업로드
+        //실제 업로드 부분
         //upload ajax
         $.ajax({
           url: '/user/projectRegistration/uploadSummernoteImageFile',	//경로
@@ -248,8 +234,27 @@
           error: function(jqXHR, textStatus, errorThrown){	//오류 메시지 판정
             console.log(textStatus);
           }
+
         }); //$.ajax
       });
+
+      //썸네일 이미지 추가 시, 이미지 표시
+      $('#thumbnailImage').change(function () {
+        if ($(this).val() != null) {
+          $('.img-thumbnail').css('display', 'block');
+          setImageFromFile(this, '.img-thumbnail');
+        }
+      });
+
+      function setImageFromFile(input, expression) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $(expression).attr('src', e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
 
       //약관 체크 모두 될 시 모두 동의에 체크.
       $('.essential').not('#agreeNews').click(function(){
@@ -583,24 +588,27 @@
 
 
 
-                  <div class="mb-3">
-                    <label for="thumbnailImage" class="form-label fw-bord text-dark">대표 이미지를 등록</label>
-                    <br>
-                    <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
-                      <img src="" class="img-thumbnail" alt="썸네일이미지" style="height: 200px; width: 350px; display: none;">
-                    </div>
-                    <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
+                <div class="mb-3">
+                  <label for="thumbnailImage" class="form-label fw-bord text-dark">대표 이미지를 등록해주세요</label>
+                  <!--                                <div class=" banner-content" style="background-color: #7D7D7D">썸네일 이미지</div>-->
+                  <br>
+                  <div class="border border-secondary mb-lg-1" style="width: 355px; height: 205px;">
+                    <img src="" class="img-thumbnail" alt="썸네일이미지" style="height: 200px; width: 350px; display: none;">
                   </div>
-                  <label for="investmentImage">대표 이미지 확정을 해주세요</label>
-                  <input id="investmentImage" name="investmentImage" style="display: none">
-                  <div class="mb-3">
-                    <button id="confirmBtn" type="button" style="border-radius: 5px; background-color: #0b44d7; color: whitesmoke; padding: 5px">대표 이미지 확정</button>
-                  </div>
-                  <div id="confirmMessage" style="background: #ddfffc; border-radius: 5px; padding: 10px; font-size: 12px; color: black; display: none">
-                    <p>
-                      <b>대표 이미지가 확정 되었습니다!</b><br>
-                    </p>
-                  </div>
+
+                  <!--                <input type="file" accept="image/png, image/jpeg" multiple>-->
+                  <input class="form-control" id="thumbnailImage" type="file" accept="image/*">
+                </div>
+                <label for="investmentImage">대표 이미지 확정을 해주세요</label>
+                <input id="investmentImage" name="investmentImage" style="display: none">
+                <div class="mb-3">
+                  <button id="confirmBtn" type="button" style="border-radius: 5px; background-color: #0b44d7; color: whitesmoke; padding: 5px">대표 이미지 확정</button>
+                </div>
+                <div id="confimMessage" style="background: #ddfffc; border-radius: 5px; padding: 10px; font-size: 12px; color: black; display: none">
+                  <p>
+                    <b>대표 이미지가 확정 되었습니다!</b><br>
+                  </p>
+                </div>
 
                   <hr class="my-4">
 

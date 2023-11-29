@@ -79,26 +79,26 @@
          class="sett-total-data admin-content-wrapper form-table" th:fragment="settlementInfoHeader">
         <div class="sett-total-item">
             <h5>오늘 들어온 심사 요청</h5>
-            <div class="sett-total-item-data"><a class="today-add-count" th:href="@{#}"
-                                                 th:text="${l.adminInvestmentRequestJudge.todayRequestCnt}">0</a>건
+            <div class="sett-total-item-data"><span class="today-add-count" th:href="@{#}"
+                                                 th:text="${l.adminInvestmentRequestJudge.todayRequestCnt}">0</span>건
             </div>
         </div>
         <div class="sett-total-item">
             <h5>처리중</h5>
-            <div class="sett-total-item-data"><a class="progress-add-count" th:href="@{#}"
-                                                 th:text="${l.adminInvestmentRequestJudge.standbyCnt}">0</a>건
+            <div class="sett-total-item-data"><span class="progress-add-count" th:href="@{#}"
+                                                 th:text="${l.adminInvestmentRequestJudge.standbyCnt}">0</span>건
             </div>
         </div>
         <div class="sett-total-item">
             <h5>오늘 처리 완료</h5>
-            <div class="sett-total-item-data"><a class="progress-completed-count" th:href="@{#}"
-                                                 th:text="${l.adminInvestmentRequestJudge.todayProceedCnt}">0</a>건
+            <div class="sett-total-item-data"><span class="progress-completed-count" th:href="@{#}"
+                                                 th:text="${l.adminInvestmentRequestJudge.todayProceedCnt}">0</span>건
             </div>
         </div>
         <div class="sett-total-item">
             <h5>심사 반려</h5>
-            <div class="sett-total-item-data"><a class="progress-error-count" th:href="@{#}"
-                                                 th:text="${l.adminInvestmentRequestJudge.rejectCnt}">0</a>건
+            <div class="sett-total-item-data"><span class="progress-error-count" th:href="@{#}"
+                                                 th:text="${l.adminInvestmentRequestJudge.rejectCnt}">0</span>건
             </div>
         </div>
     </div>
@@ -116,23 +116,6 @@
                     <li>심사 요청 총 <span class="count-data total-list">0</span>건</li>
                     <li>선택 항목 총 <span class="count-data select-list-count">0</span>건</li>
                 </ul>
-            </div>
-            <div class="list-count-selector">
-                <select name="orderby">
-                    <option value="regist_d">평가일 순</option>
-                    <option value="regist_a">평가일 역순</option>
-                    <option>-----------------</option>
-                    <option value="project_name_d">평가 코드순</option>
-                    <option value="project_name_a">평가 코드 역순</option>
-                    <option>-----------------</option>
-                    <option value="project_name_d">심사요청 제목순</option>
-                    <option value="project_name_a">심사요청 제목역순</option>
-                </select>
-                <select name="count-select">
-                    <option value="15">15개씩 보기</option>
-                    <option value="20">20개씩 보기</option>
-                    <option value="30">30개씩 보기</option>
-                </select>
             </div>
         </div>
 
