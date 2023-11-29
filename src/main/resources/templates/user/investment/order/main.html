@@ -169,7 +169,7 @@
                 if(isValid){
                     paymentWidget.requestPayment({
                         orderId: "ZnMXcbHhAnrQHkkyFvZj8",
-                        orderName: "토스 티셔츠 외 2건",
+                        orderName: "주식회사 라다하임",
                         successUrl: window.location.origin + "/success",
                         failUrl: window.location.origin + "/fail",
                         customerEmail: "customer123@gmail.com",
@@ -203,14 +203,14 @@
         const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
             '#payment-method',
             {
-                value: 10000,
+                value: 5000000,
                 currency: 'KRW',
                 country: 'KR',
             },
             { variantKey: 'widgetA' }
         )
         const paymentMethods = paymentWidget.renderPaymentMethods('#payment-method', {
-            value: 10000,
+            value: 5000000,
         })
 
         /*$('#payment-button').on("click", function () {
@@ -328,7 +328,7 @@
                                         <li>
                                             <dl>
                                                 <dd>김플루님의 크라우드펀딩 투자 한도</dd>
-                                                <dt id="investLimit" th:text="${#numbers.formatInteger(5000000,3,'COMMA') + '원'}" th:data-invest-limit="${5000000}"></dt>
+                                                <dt id="investLimit" th:text="${#numbers.formatInteger(25000000,3,'COMMA') + '원'}" th:data-invest-limit="${25000000}"></dt>
                                             </dl>
                                         </li>
                                     </ul>
@@ -338,7 +338,7 @@
                                         <li>
                                             <dl>
                                                 <dd>1주당 가격</dd>
-                                                <dt id="stockPrice" th:text="${#numbers.formatInteger(5000,3,'COMMA') + '원'}" th:data-stock-price="${5000}"></dt>
+                                                <dt id="stockPrice" th:text="${#numbers.formatInteger(50000,3,'COMMA') + '원'}" th:data-stock-price="${50000}"></dt>
                                             </dl>
                                         </li>
                                     </ul>
@@ -346,7 +346,7 @@
                                 <div class="col-lg-4">
                                     <ul class="tight">
                                         <li>
-                                            <dl th:with="minStock=${5000000/5000/5}, maxStock=${5000000/5000}">
+                                            <dl th:with="minStock=${100}, maxStock=${500}">
                                                 <dd>청약 가능 수량</dd>
                                                 <dt><span id="minStock" th:text="${minStock}"></span>~<span id="maxStock" th:text="${maxStock}"></span>주</dt>
                                             </dl>
