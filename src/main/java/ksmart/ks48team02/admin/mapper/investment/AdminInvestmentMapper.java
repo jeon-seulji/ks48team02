@@ -2,15 +2,24 @@ package ksmart.ks48team02.admin.mapper.investment;
 
 import java.util.List;
 
+import ksmart.ks48team02.admin.dto.*;
+import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
 import org.apache.ibatis.annotations.Mapper;
-
-import ksmart.ks48team02.admin.dto.AdminInvestmentRequestJudge;
-import ksmart.ks48team02.admin.dto.AdminLawSatistifyReason;
-import ksmart.ks48team02.admin.dto.AdminIncongruitySectors;
-import ksmart.ks48team02.admin.dto.AdminCorporateValueEvaluation;
 
 @Mapper
 public interface AdminInvestmentMapper {
+
+    // 투자펀딩 공고 목록 조회
+    public List<AdminInvestment> getInvestmentList(int startRowNum, int rowPerPage);
+
+    // 투자펀딩 공고 전체 행의 갯수
+    public int getInvestment(String memberIdSeller);
+
+    // 검색조건에 따른 투자펀딩 공고 목록 조회
+    public List<AdminInvestment> getInvestmentListBySearch(String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, String searchSelectValue, int startRowNum, int rowPerPage);
+
+    // 특정 투자펀딩 공고 조회
+    public AdminInvestment getInvestementByCode(String investmentCode);
 
     // 투자펀딩 심사요청 목록 조회
     public List<AdminInvestmentRequestJudge> getInvestmentRequestJudgeListOnly();
@@ -75,6 +84,12 @@ public interface AdminInvestmentMapper {
     // 기업가치 평가결과 등록
     public int addCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation);
 
+    // 투자펀딩 공고 수정
+    public int modifyInvestment(AdminInvestment adminInvestment);
+
+    // 투자펀딩 공고 상세 수정
+    public int modifyInvestmentContent(SellerInvestmentContent sellerInvestmentContent);
+
     // 기업가치 평과결과 등록 후 심사요청 외래키 수정
     public int modifyInvestmentRequestCorpValueKey(AdminInvestmentRequestJudge adminInvestmentRequestJudge);
 
@@ -89,6 +104,12 @@ public interface AdminInvestmentMapper {
 
     // 기업가치 평가 결과 수정
     public int modifyCorporateValueEvaluation(AdminCorporateValueEvaluation adminCorporateValueEvaluation);
+
+    // 투자펀딩 공고 삭제
+    public int removeInvestment(String investmentCode);
+
+    // 투자펀딩 공고 상세 삭제
+    public int removeInvestmentContent(String investmentContentCode);
 
     // 투자펀딩 심사요청 삭제
     public int removeInvestmentRequestJudge(String investmentRequestJudgeCode);

@@ -263,7 +263,7 @@ public class InvestmentService {
         return resultMap;
     }
 
-    // // 판매자 특정 기업정보 공개(주식) 조회
+    // 판매자 특정 기업정보 공개(주식) 조회
     public SellerAfterFundRevenueStock getAfterFundRevenueStockByCode(String memberId, String afterFundRevenueStockCode) {
         SellerAfterFundRevenueStock afterFundRevenueStockInfo = sellerInvestmentMapper.getAfterFundRevenueStockByCode(memberId, afterFundRevenueStockCode);
 
@@ -379,6 +379,16 @@ public class InvestmentService {
         sellerInvestmentMapper.modifyInvestmentRequestJudge(adminInvestmentRequestJudge);
     }
 
+    // 판매자 투자후 기업정보 공개(주식) 수정
+    public void modifyAfterFundRevenueStock(SellerAfterFundRevenueStock sellerAfterFundRevenueStock) {
+        sellerInvestmentMapper.modifyAfterFundRevenueStock(sellerAfterFundRevenueStock);
+    }
+
+    // 판매자 투자후 기업정보 공개(주식) 수정
+    public void modifyAfterFundRevenueBond(SellerAfterFundRevenueBond sellerAfterFundRevenueBond) {
+        sellerInvestmentMapper.modifyAfterFundRevenueBond(sellerAfterFundRevenueBond);
+    }
+
     // 판매자 투자펀딩 공고 삭제
     public void removeInvestment(String investmentCode, String investmentContentCode) {
 
@@ -389,6 +399,15 @@ public class InvestmentService {
     // 판매자 투자펀딩 심사요청 삭제
     public void reomveInvestmentJudge(String investmentRequestJudgeCode) {
         sellerInvestmentMapper.removeInvestmentRequestJudge(investmentRequestJudgeCode);
+    }
+
+    // 판매자 투자후 기업정보 공개(주식) 삭제
+    public void removeAfterFundRevenueStock(String afterFundRevenueStockCode) {
+        sellerInvestmentMapper.removeAfterFundRevenueStock(afterFundRevenueStockCode);
+    }
+
+    public void removeAfterFundRevenueBond(String afterFundRevenueBondCode) {
+        sellerInvestmentMapper.removeAfterFundRevenueBond(afterFundRevenueBondCode);
     }
 
     // 페이징 처리

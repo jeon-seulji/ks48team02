@@ -10,6 +10,9 @@ import java.util.List;
 
 @Mapper
 public interface SellerInvestmentMapper {
+
+    // 판매자 투자펀딩 공고 목록 조회(페이징 x)
+    public List<AdminInvestment> getInvestmentListOnly(String memberIdSeller);
     
     // 판매자 투자펀딩 공고 목록 조회
     public List<AdminInvestment> getInvestmentList(String memberIdSeller, int startRowNum, int rowPerPage);
@@ -77,6 +80,12 @@ public interface SellerInvestmentMapper {
     // 판매자 투자펀딩 심사요청 수정
     public int modifyInvestmentRequestJudge(AdminInvestmentRequestJudge adminInvestmentRequestJudge);
 
+    // 판매자 투자후 기업정보 공개(주식) 수정
+    public int modifyAfterFundRevenueStock(SellerAfterFundRevenueStock sellerAfterFundRevenueStock);
+
+    // 판매자 투자후 기업정보 공개(채권) 수정
+    public int modifyAfterFundRevenueBond(SellerAfterFundRevenueBond sellerAfterFundRevenueBond);
+
     // 판매자 투자펀딩 공고 삭제
     public int removeInvestment(String investmentCode);
 
@@ -85,4 +94,10 @@ public interface SellerInvestmentMapper {
 
     // 판매자 투자펀딩 심사요청 삭제
     public int removeInvestmentRequestJudge(String investmentRequestJudgeCode);
+
+    // 판매자 투자후 기업정보 공개(주식) 삭제
+    public int removeAfterFundRevenueStock(String afterFundRevenueStockCode);
+
+    // 판매자 투자후 기업정보 공개(채권) 삭제
+    public int removeAfterFundRevenueBond(String afterFundRevenueBondCode);
 }
