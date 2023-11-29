@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.Donation;
 import ksmart.ks48team02.admin.dto.DonationInfo;
+import ksmart.ks48team02.common.dto.OrderTableList;
 import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.scheduler.UserCommonScheduler;
@@ -212,7 +213,7 @@ public class DonationController {
 
             int floverToMoney = floverCount * 100;
             donationService.addOrderTable(SID, donationCode, Integer.toString(floverToMoney));
-            donationService.addDonationPayemnt(donationCode, Integer.toString(floverCount), Integer.toString(floverToMoney));
+            donationService.addDonationPayment(donationCode, Integer.toString(floverCount), Integer.toString(floverToMoney));
             DonationInfo donationInfo = donationService.getDonationInfo(donationCode);
             float acvMoney = donationInfo.getDonationAchievementMoney() + floverToMoney;
             float goalMoney = donationInfo.getDonationGoalMoney();
@@ -408,6 +409,32 @@ public class DonationController {
     public String paymentCancel(@RequestParam(name = "pg_token")String pgToken){
 
         return "user/donation/payment/cancel";
+    }
+
+    @GetMapping("/floverPayment/cancel")
+    public String floverPaymentCancel(@RequestParam(name = "orderCode")String orderCode){
+        OrderTableList getOrderInfo = donationService.getOrderInfo(orderCode);
+        int cancelPrice = getOrderInfo.getOrderTotalPrice();
+        int MoneyToFlover = cancelPrice / 100;
+        String orderMemberId = getOrderInfo.getMemberId();
+        Customer customerInfo = donationService.getCustomerInfo(orderMemberId);
+        int resultFlover = customerInfo.getCustomerFlover() + MoneyToFlover;
+
+        Map<String, Object> deductData = new HashMap<String,Object>();
+        deductData.put("SID", orderMemberId);
+        deductData.put("resultFlover", resultFlover);
+        donationService.deductFlover(deductData);
+        donationService.removeOrderInfo(orderCode);
+
+        return "redirect:/user/mypage";
+    }
+
+    @GetMapping("/payment/detailInfo")
+    public String paymentDetailInfo(@RequestParam(name = "orderCode")String orderCode, Model model){
+        OrderTableList orderInfo = donationService.getOrderInfo(orderCode);
+        model.addAttribute("orderInfo", orderInfo);
+
+        return "user/donation/payment/detailInfo";
     }
 
 

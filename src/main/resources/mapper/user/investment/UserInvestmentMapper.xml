@@ -198,6 +198,7 @@
             i.investment_reg_date AS investmentRegDate,
             i.investment_deadline AS investmentDeadline,
             i.investment_report AS investmentReport,
+            DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
             ic.investment_content_code AS investmentContentCode,
             ic.project_introduction AS projectIntroduction,
             ic.market_analysis AS marketAnalysis,
@@ -224,18 +225,40 @@
             i.investment_code = #{investmentCode}
     </select>
 
-    <select id="getSortedList" parameterType="String" resultMap="InvestmentInfoResultMap">
-        /* 추천순, 최신순, 인기순, 모집금액순, 마감임박순 정렬 */
+    <select id="getSortedList" parameterType="map" resultMap="InvestmentInfoResultMap">
         SELECT
-            investment_code,
-            invest_achievement_percent,
-            investment_subject,
-            investment_amount,
-            DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
-            investment_image,
-            investment_company
+        investment_code,
+        invest_achievement_percent,
+        investment_subject,
+        investment_amount,
+        investment_deadline,
+        DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+        investment_image,
+        investment_company,
+        securities_classification
         FROM
-            investment
+        investment
+        <where>
+            <choose>
+                <when test='status == "ing"'>
+                    investment_deadline >= CURDATE()
+                </when>
+                <when test='status == "end"'>
+                    CURDATE() > investment_deadline
+                </when>
+                <otherwise>
+                    1 = 1
+                </otherwise>
+            </choose>
+            <choose>
+                <when test='securities == "stock"'>
+                    AND securities_classification = '주식'
+                </when>
+                <when test='securities == "bond"'>
+                    AND securities_classification = '채권'
+                </when>
+            </choose>
+        </where>
         <choose>
             <when test='orderBy == "recommendation"'>
                 ORDER BY invest_achievement_percent DESC
@@ -252,9 +275,6 @@
             <when test='orderBy == "deadline"'>
                 ORDER BY investmentDeadlineCnt ASC
             </when>
-            <otherwise>
-                ORDER BY invest_achievement_percent DESC
-            </otherwise>
         </choose>
     </select>
 
@@ -290,6 +310,70 @@
             l.code_reg_day AS codeRegDay
         FROM
             law_satistify_reason AS l
+    </select>
+
+    <!--공고 내 증권발행 조건(주식)-->
+    <select id="securitiesStock" parameterType="String">
+        /* 공고 내 증권발행 조건(주식) */
+        SELECT
+            s.securities_issuance_stock_code AS securitiesIssuanceStockCode,
+            s.member_id AS memberId,
+            s.investment_code AS investmentCode,
+            s.corp_value AS corpValue,
+            s.invest_min_cost AS investMinCost,
+            s.stock_price AS stockPrice,
+            s.securities_classification AS securitiesClassification,
+            s.face_value AS faceValue,
+            s.stock_number AS stockNumber,
+            s.issue_stock_number AS issueStockNumber,
+            s.issue_allotment_share_ratio AS issueAllotmentShareRatio,
+            s.subscription_allocation_ranking AS subscriptionAllocationRanking,
+            s.stock_type AS stockType,
+            s.subscription_date AS subscriptionDate,
+            s.subscription_deadline AS subscriptionDeadline,
+            s.payment_date AS paymentDate,
+            s.estimated_issue_date AS estimatedIssueDate,
+            s.allocation_confirmation_date AS allocationConfirmationDate,
+            s.receiving_date_of_securities AS receivingDateOfSecurities,
+            s.redemption_start_date AS redemptionStartDate,
+            s.redemption_end_date AS redemptionEndDate,
+            s.repayment_rate AS repaymentRate,
+            s.min_dividend_rate AS minDividendRate,
+            s.conversion_start_date AS conversionStartDate,
+            s.conversion_end_date AS conversionEndDate,
+            s.conversion_condition AS conversionCondition,
+            s.voting_right AS votingRight
+        FROM
+            securities_issuance_stock AS s
+        WHERE
+            s.investment_code = #{investmentCode};
+    </select>
+
+    <!--공고 내 증권발행 조건(채권)-->
+    <select id="securitiesBond" parameterType="String">
+        /* 공고 내 증권발행 조건(채권) */
+        SELECT
+            s.securities_issuance_bond_code AS securitiesIssuanceBondCode,
+            s.member_id AS memberId,
+            s.investment_code AS investmentCode,
+            s.interest_rate AS interestRate,
+            s.invest_min_cost AS investMinCost,
+            s.bond_price AS bondPrice,
+            s.securities_classification AS securitiesClassification,
+            s.maturity AS maturity,
+            s.subscription_allocation_ranking AS subscriptionAllocationRanking,
+            s.bond_type AS bondType,
+            s.subscription_date AS subscriptionDate,
+            s.subscription_deadline AS subscriptionDeadline,
+            s.maturity_date AS maturityDate,
+            s.estimated_issue_date AS estimatedIssueDate,
+            s.allocation_confirmation_date AS allocationConfirmationDate,
+            s.payment_date AS paymentDate,
+            s.account_to_be_issued AS accountToBeIssued
+        FROM
+            securities_issuance_bond AS s
+        WHERE
+            s.investment_code = #{investmentCode};
     </select>
 
 

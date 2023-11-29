@@ -366,9 +366,10 @@
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_002'}">
                                                     <!--기부 프로젝트 주문 완료-->
-                                                    <a href="#" class="payDetailBtn submitBtn_white" >기부 내역</a>
+                                                    <a th:href="@{/user/donation/payment/detailInfo(orderCode=${l.orderCode})}" class="payDetailBtn submitBtn_white" >기부 내역</a>
                                                     <!--기부 취소는 기부 주문 후 7일 이내 가능하도록.-->
-                                                    <a href="#" id="donationCancelBtn" class="payDetailBtn orderCancelBtn submitBtn_black">기부 취소</a>
+                                                    <a th:href="@{/user/donation/floverPayment/cancel(orderCode=${l.orderCode})}" id="paymentCancelBtn" class="payDetailBtn orderCancelBtn submitBtn_black">기부 취소</a>
+                                                    <input class="donationOrderCode" hidden="hidden" th:value="${l.orderCode}">
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_003'}">
                                                     <!--투자 프로젝트 주문 완료, 청약 신청 중-->
@@ -404,8 +405,8 @@
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_007'}">
                                                     <!--기부 주문 확정-->
-                                                    <a href="#" class="submitBtn_white" >기부 현황</a>
-                                                    <a href="#" class="submitBtn_white" >기부 상세</a>
+                                                    <a th:href="@{/user/donation/detail/condition(donationCode=${l.goodsCode})}" class="submitBtn_white" >기부 현황</a>
+                                                    <a th:href="@{/user/donation/detail(donationCode=${l.goodsCode})}" class="submitBtn_white" >기부 상세</a>
                                                 </th:block>
                                                 <th:block th:if="${l.orderCategoryCode =='ORDC_008'}">
                                                     <!--투자 주문 확정, 납입일 도래-->
@@ -959,6 +960,16 @@
             location.href = `/user/mypage/?selectFund=${selectFund}`;
         })
 
+
+      $('#paymentCancelBtn').click(function (){
+          if (confirm('기부를 취소하시겠습니까?')){
+              event.preventDefault();
+              console.log($(this).next().val());
+              window.location.href = "/user/donation/floverPayment/cancel?orderCode="+$(this).next().val();
+          }else{
+              return false;
+          }
+      })
 
 
     </script>

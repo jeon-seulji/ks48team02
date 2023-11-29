@@ -15,10 +15,10 @@ public class InvestmentJudge {
     private String investmentRequestSubject;
     private String investmentRequestContent;
     private String investmentCompany;
-    private int investmentAchievementMoney;
-    private int businessProfits;
-    private int depreciation;
-    private int netDebt;
+    private Long investmentAchievementMoney;
+    private Long businessProfits;
+    private Long depreciation;
+    private Long netDebt;
     private int stockNumber;
     private int issueStockNumber;
     private int cashReserves;
