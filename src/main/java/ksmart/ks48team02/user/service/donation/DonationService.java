@@ -1,6 +1,7 @@
 package ksmart.ks48team02.user.service.donation;
 
 import ksmart.ks48team02.admin.dto.DonationInfo;
+import ksmart.ks48team02.common.dto.OrderTableList;
 import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.controller.donation.KaKaoPayProperties;
 import ksmart.ks48team02.user.dto.*;
@@ -86,8 +87,8 @@ public class DonationService{
         donationUserMapper.addOrderTable(memberId, donationCode, orderTotalPrice);
     }
 
-    public void addDonationPayemnt(String donationCode, String floverAmount, String floverToMoney){
-        donationUserMapper.addDonationPayemnt(donationCode, floverAmount, floverToMoney);
+    public void addDonationPayment(String donationCode, String floverAmount, String floverToMoney){
+        donationUserMapper.addDonationPayment(donationCode, floverAmount, floverToMoney);
     }
 
     public void updateMoney(String donationCode, String acvMoney, String acvPercent){
@@ -104,6 +105,18 @@ public class DonationService{
 
     public void searchCountUpdate(String donationCode, String searchCount){
         donationUserMapper.searchCountUpdate(donationCode , searchCount);
+    }
+
+    public void removeOrderInfo(String orderCode){
+        donationUserMapper.removeOrderInfo(orderCode);
+    }
+
+    public OrderTableList getOrderInfo(String orderCode){
+        return donationUserMapper.getOrderInfo(orderCode);
+    }
+
+    public Customer getCustomerInfo(String memberId){
+        return donationUserMapper.getCustomerInfo(memberId);
     }
 
 }

@@ -15,8 +15,8 @@ public class InvestmentInfo {
     private String investmentSubject;
     private String investmentImage;
     private int investmentLike;
-    private int investmentAmount;
-    private int investmentAchievementMoney;
+    private Long investmentAmount;
+    private Long investmentAchievementMoney;
     private int investAchievementPercent;
     private String investmentCompany;
     private int searchCount;
@@ -33,6 +33,19 @@ public class InvestmentInfo {
     private int investJudgeSituation;
     private int investmentDeadlineCnt;
 
+
+
+    private String investmentContentCode;
+    private String projectIntroduction;
+    private String marketAnalysis;
+    private String majorFinancialInformation;
+    private String risk;
+    private String majorManpower;
+    private String patentAwardDetails;
+    private String etcInvestContent;
+    private String companyBusinessTypeCode;
+    private int stockNumber;
+    private int issueStockNumber;
 
 
     private String categoryName;

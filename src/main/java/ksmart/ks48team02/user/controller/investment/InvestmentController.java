@@ -1,9 +1,7 @@
 package ksmart.ks48team02.user.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
-import ksmart.ks48team02.user.dto.InvestmentContent;
-import ksmart.ks48team02.user.dto.InvestmentInfo;
-import ksmart.ks48team02.user.dto.InvestmentJudge;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,15 +40,20 @@ public class InvestmentController {
 
 
     @GetMapping("/detail/main")
-    public String getDetailMainPage(Model model) {
-        List<InvestmentJudge> investmentJudge = userInvestmentService.getInvestmentJudge();
-        model.addAttribute("investmentJudge", investmentJudge);
+    public String getDetailMainPage(Model model,
+                                    @RequestParam(name = "investmentCode") String investmentCode,
+                                    @RequestParam(name = "securitiesStock", required=false) String securitiesStock,
+                                    @RequestParam(name = "securitiesBond", required=false) String securitiesBond,
+                                    HttpSession session) {
 
-        List<InvestmentInfo> investmentInfo = userInvestmentService.getInvestmentInfo();
+        String loginMemberId = (String) session.getAttribute("SID");
+
+        InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
         model.addAttribute("investmentInfo", investmentInfo);
-
-        List<InvestmentContent> investmentContent = userInvestmentService.getInvestmentContent();
-        model.addAttribute("investmentContent", investmentContent);
+        SecuritiesIssuanceStock securitiesIssuanceStock = userInvestmentService.securitiesStock(investmentCode);
+        model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
+        SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
+        model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
 
         model.addAttribute("title", "투자 상세 페이지");
 
@@ -59,7 +62,20 @@ public class InvestmentController {
     }
 
     @GetMapping("/detail/comment")
-    public String detailCommentPage(Model model) {
+    public String detailCommentPage(Model model,
+                                    @RequestParam(name = "investmentCode") String investmentCode,
+                                    @RequestParam(name = "securitiesStock", required=false) String securitiesStock,
+                                    @RequestParam(name = "securitiesBond", required=false) String securitiesBond,
+                                    HttpSession session) {
+
+        String memberId = (String)session.getAttribute("SID");
+
+        InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
+        model.addAttribute("investmentInfo", investmentInfo);
+        SecuritiesIssuanceStock securitiesIssuanceStock = userInvestmentService.securitiesStock(investmentCode);
+        model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
+        SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
+        model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
 
         model.addAttribute("title", "투자 상세 댓글");
 
@@ -67,7 +83,20 @@ public class InvestmentController {
     }
 
     @GetMapping("/detail/investor")
-    public String detailInvestorPage(Model model) {
+    public String detailInvestorPage(Model model,
+                                     @RequestParam(name = "investmentCode") String investmentCode,
+                                     @RequestParam(name = "securitiesStock", required=false) String securitiesStock,
+                                     @RequestParam(name = "securitiesBond", required=false) String securitiesBond,
+                                     HttpSession session) {
+
+        String memberId = (String)session.getAttribute("SID");
+
+        InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
+        model.addAttribute("investmentInfo", investmentInfo);
+        SecuritiesIssuanceStock securitiesIssuanceStock = userInvestmentService.securitiesStock(investmentCode);
+        model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
+        SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
+        model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
 
         model.addAttribute("title", "투자 상세 투자자 목록");
 
@@ -75,7 +104,20 @@ public class InvestmentController {
     }
 
     @GetMapping("/detail/news")
-    public String detailNewsPage(Model model) {
+    public String detailNewsPage(Model model,
+                                 @RequestParam(name = "investmentCode") String investmentCode,
+                                 @RequestParam(name = "securitiesStock", required=false) String securitiesStock,
+                                 @RequestParam(name = "securitiesBond", required=false) String securitiesBond,
+                                 HttpSession session) {
+
+        String memberId = (String)session.getAttribute("SID");
+
+        InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
+        model.addAttribute("investmentInfo", investmentInfo);
+        SecuritiesIssuanceStock securitiesIssuanceStock = userInvestmentService.securitiesStock(investmentCode);
+        model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
+        SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
+        model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
 
         model.addAttribute("title", "투자 새소식");
 

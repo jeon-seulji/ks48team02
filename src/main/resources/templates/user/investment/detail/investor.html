@@ -98,6 +98,13 @@
 
     </script>
 
+    <script type="text/javascript">
+        let investmentProjectCode = '[[${investmentInfo.investmentCode}]]';
+        // 썸네일 이미지 경로 지정
+        let thumbNailImageSrc = $('#thumbNailImage').attr('src');
+        $('#thumbNailImage').attr('src', '/summernoteImage/' + '[[${investmentInfo.investmentImage}]]');
+    </script>
+
 
 </th:block>
 
