@@ -409,6 +409,22 @@ public class InvestmentController {
         return "seller/investment/update/after_fund_revenue_update";
     }
 
+    @PostMapping("/update/after-fund-revenue-stock")
+    public String modifyAfterFundRevenue(SellerAfterFundRevenueStock sellerAfterFundRevenueStock) {
+
+        investmentService.modifyAfterFundRevenueStock(sellerAfterFundRevenueStock);
+
+        return "redirect:/seller/investment/search/after-fund-revenue";
+    }
+
+    @PostMapping("/update/after-fund-revenue-bond")
+    public String modifyAfterFundRevenue(SellerAfterFundRevenueBond sellerAfterFundRevenueBond) {
+
+        investmentService.modifyAfterFundRevenueBond(sellerAfterFundRevenueBond);
+
+        return "redirect:/seller/investment/search/after-fund-revenue";
+    }
+
     @GetMapping("/update/customer-invest")
     public String modifyCustomerInvest(Model model) {
 
@@ -460,8 +476,8 @@ public class InvestmentController {
 
     @PostMapping("/delete/investment")
     public String removeInvestment(@RequestParam(value = "investmentCode") String investmentCode
-            ,@RequestParam(value = "investmentContentCode") String investmentContentCode
-            ,RedirectAttributes redirectAttributes) {
+                                  ,@RequestParam(value = "investmentContentCode") String investmentContentCode
+                                  ,RedirectAttributes redirectAttributes) {
 
         investmentService.removeInvestment(investmentCode, investmentContentCode);
 
@@ -491,6 +507,42 @@ public class InvestmentController {
         redirectAttributes.addAttribute("investmentRequestJudgeCode", investmentRequestJudgeCode);
 
         return "redirect:/seller/investment/search/judge";
+    }
+
+    @GetMapping("/delete/after-fund-revenue")
+    public String removeAfterFundRevenue(@RequestParam(value = "afterFundRevenueStockCode", required = false) String afterFundRevenueStockCode
+                                        ,@RequestParam(value = "afterFundRevenueBondCode", required = false) String afterFundRevenueBondCode
+                                        ,Model model) {
+
+        if(afterFundRevenueStockCode != null) {
+            investmentService.removeAfterFundRevenueStock(afterFundRevenueStockCode);
+        }
+        else if(afterFundRevenueBondCode != null) {
+            investmentService.removeAfterFundRevenueBond(afterFundRevenueBondCode);
+        }
+
+        model.addAttribute("afterFundRevenueStockCode", afterFundRevenueStockCode);
+        model.addAttribute("afterFundRevenueBondCode", afterFundRevenueBondCode);
+
+        return "redirect:/seller/investment/search/after-fund-revenue";
+    }
+
+    @PostMapping("/delete/after-fund-revenue")
+    public String removeAfterFundRevenue(@RequestParam(value = "afterFundRevenueStockCode", required = false) String afterFundRevenueStockCode
+                                        ,@RequestParam(value = "afterFundRevenueBondCode", required = false) String afterFundRevenueBondCode
+                                        ,RedirectAttributes redirectAttributes) {
+
+        if(afterFundRevenueStockCode != null) {
+            investmentService.removeAfterFundRevenueStock(afterFundRevenueStockCode);
+        }
+        else if(afterFundRevenueBondCode != null) {
+            investmentService.removeAfterFundRevenueBond(afterFundRevenueBondCode);
+        }
+
+        redirectAttributes.addAttribute("afterFundRevenueStockCode", afterFundRevenueStockCode);
+        redirectAttributes.addAttribute("afterFundRevenueBondCode", afterFundRevenueBondCode);
+
+        return "redirect:/seller/investment/search/after-fund-revenue";
     }
 
 }

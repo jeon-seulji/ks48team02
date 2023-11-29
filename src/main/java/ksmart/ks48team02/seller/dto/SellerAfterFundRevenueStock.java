@@ -18,6 +18,7 @@ public class SellerAfterFundRevenueStock {
     private long subscriptionEnterpriseValue;
     private int salesBaseStockPrice;
     private int issuePrice;
+    private int totalStockNumber;
     private int dividendAmount;
     private float dividendRate;
     private int dividendPerStock;
@@ -32,6 +33,14 @@ public class SellerAfterFundRevenueStock {
 
     public void setAfterFundRevenueStockCode(String afterFundRevenueStockCode) {
         this.afterFundRevenueStockCode = afterFundRevenueStockCode;
+    }
+
+    public int getTotalStockNumber() {
+        return totalStockNumber;
+    }
+
+    public void setTotalStockNumber(int totalStockNumber) {
+        this.totalStockNumber = totalStockNumber;
     }
 
     public String getMemberId() {
@@ -229,6 +238,7 @@ public class SellerAfterFundRevenueStock {
         sb.append(", subscriptionEnterpriseValue=").append(subscriptionEnterpriseValue);
         sb.append(", salesBaseStockPrice=").append(salesBaseStockPrice);
         sb.append(", issuePrice=").append(issuePrice);
+        sb.append(", totalStockNumber=").append(totalStockNumber);
         sb.append(", dividendAmount=").append(dividendAmount);
         sb.append(", dividendRate=").append(dividendRate);
         sb.append(", dividendPerStock=").append(dividendPerStock);
@@ -239,4 +249,5 @@ public class SellerAfterFundRevenueStock {
         sb.append('}');
         return sb.toString();
     }
+
 }
