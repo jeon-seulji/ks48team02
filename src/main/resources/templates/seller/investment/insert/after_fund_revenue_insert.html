@@ -26,49 +26,60 @@
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
     <script>
+
+        // 유효성 검사
         function validationCheck(data) {
             let isValid = true;
-            if (typeof data == 'object') {
 
+            if (typeof data === 'object') {
                 $.each(data, function () {
-                    let checkValue = $(this).val();
-                    if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
-                        isValid = false;
-                        let eleId = $(this).attr('id');
-                        let cate = $(`label[for="${eleId}"]`).text();
-                        alert(`${cate} 필수 입력 항목입니다.`);
-                        $(this).focus();
-                        return isValid;
+                    let elementType = $(this).attr('type');
+
+                    if (elementType === 'radio') {
+                        // Check if at least one radio button is checked
+                        if (!$(`input[name="${$(this).attr('name')}"]:checked`).val()) {
+                            isValid = false;
+                            alert(`심사 결과 필수 선택 항목입니다.`);
+                            return false;
+                        }
+                    } else {
+                        let checkValue = $(this).val();
+                        if (checkValue == null || checkValue == '' || typeof checkValue == 'undefined') {
+                            isValid = false;
+                            let eleId = $(this).attr('id');
+                            let cate = $(`label[for="${eleId}"]`).text();
+                            alert(`${cate} 필수 입력 항목입니다.`);
+                            $(this).focus();
+                            return false;
+                        }
                     }
                 });
-
             } else {
                 if (data == null || data == '' || typeof data == 'undefined') {
                     isValid = false;
                 }
             }
-
             return isValid;
         }
 
         $('#settAddBtn').click(function () {
+            let check = true;
 
-            const formEles = $('#modifyAfterFundRevenueStockForm input, #modifyAfterFundRevenueStockForm select');
+            $('select').each(function () {
+                let selectedOption = $(this).val();
+                if (selectedOption === null || selectedOption === '' || typeof selectedOption == 'undefined') {
+                    check = false;
+                    alert(`투자펀딩 공고를 선택해주세요.`);
+                    $(this).focus();
+                    return false;
+                } else {
+                    const formEles = $('#addAfterFundRevenueForm input, #addAfterFundRevenueForm input:radio, #addCorporateValueForm select');
 
-            let isValid = validationCheck(formEles);
+                    let isValid = validationCheck(formEles);
 
-            if (isValid) $('#modifyAfterFundRevenueStockForm').submit();
-
-        });
-
-        $('#settUpdateBtn2').click(function () {
-
-            const formEles = $('#modifyAfterFundRevenueBondForm input, #modifyAfterFundRevenueBondForm select');
-
-            let isValid = validationCheck(formEles);
-
-            if (isValid) $('#modifyAfterFundRevenueBondForm').submit();
-
+                    if (isValid) $('#addAfterFundRevenueForm').submit();
+                }
+            });
         });
 
         // 입력 값이 변경될 때마다 계산 실행
@@ -109,14 +120,11 @@
                 data: {selectedValue: selectedValue},
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
                     $('#memberId').text(data.memberIdSeller);
-                    $('#investmentAmount').text(data.investmentAmount);
-                    $('#subscriptionEnterpriseValue').text(data.sellersecuritiesIssuanceStock.corpValue);
-                    $('#issuePriceResult').text(data.sellersecuritiesIssuanceStock.stockPrice);
-                    $('#dividendRateResult').text(data.sellersecuritiesIssuanceStock.minDividendRate);
-                    $('#businessProfits').val(data.memberIdSeller);
-                    $('#depreciation').val(data.memberId);
+                    $('#investmentAmount').text(Number(data.investmentAmount).toLocaleString('ko-KR') + ' 원');
+                    $('#subscriptionEnterpriseValue').text(Number(data.sellersecuritiesIssuanceStock.corpValue).toLocaleString('ko-KR') + ' 원');
+                    $('#issuePriceResult').text(Number(data.sellersecuritiesIssuanceStock.stockPrice).toLocaleString('ko-KR') + ' 원');
+                    $('#dividendRateResult').text(data.sellersecuritiesIssuanceStock.minDividendRate + ' %');
                 },
                 error: function (error) {
                     console.log("Error:", error);
@@ -183,7 +191,7 @@
                             <td>
                                 펀딩 달성 금액
                             </td>
-                            <td id="investmentAmount" colspan="5"></td>
+                            <td id="investmentAmount" class="revenue-result" colspan="5"></td>
                         </tr>
                         <tr>
                             <td>
@@ -197,7 +205,7 @@
                             <td>
                                 청약당시 기업가치
                             </td>
-                            <td id="subscriptionEnterpriseValue" colspan="5"></td>
+                            <td id="subscriptionEnterpriseValue" class="revenue-result" colspan="5"></td>
                         </tr>
                         <tr>
                             <td>
@@ -212,7 +220,7 @@
                             <td>
                                 발행주가
                             </td>
-                            <td id="issuePriceResult" colspan="5">
+                            <td id="issuePriceResult" class="revenue-result" colspan="5">
                                 <input id="issuePrice" name="issuePrice" type="number" class="after-fund-calc"
                                        hidden="hidden"></td>
                         </tr>
@@ -269,9 +277,8 @@
                             <td style="height: 35px;">매출기준기간(종료)</td>
                         </tr>
                         <tr>
-                            <td id="dividendRateResult" colspan="2" style="background: #fff;"></td>
-                            <td id="dividendPerStockResult"
-                                class="revenue-result"></td>
+                            <td id="dividendRateResult" class="revenue-result" colspan="2" style="background: #fff;"></td>
+                            <td id="dividendPerStockResult" class="revenue-result"></td>
                             <td id="earningsPerShareResult" class="revenue-result"></td>
                             <td>
                                 <input type="date" name="revenuePeriodStart">
