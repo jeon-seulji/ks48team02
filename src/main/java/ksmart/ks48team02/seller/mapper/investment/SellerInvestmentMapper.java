@@ -81,6 +81,9 @@ public interface SellerInvestmentMapper {
     // 판매자 특정 기업가치 평가결과 조회
     public AdminCorporateValueEvaluation getCorporateValueEvaluationByCode(String corporateValueEvaluationCode);
 
+    // 투자후 기업정보 공개(주식) 등록
+    public int addAfterFundRevenueStock(SellerAfterFundRevenueStock sellerAfterFundRevenueStock);
+
     // 판매자 투자펀딩 공고 수정
     public int modifyInvestment(AdminInvestment adminInvestment);
 
