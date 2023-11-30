@@ -61,6 +61,11 @@
 <!--/* layout:decorate : 파일에서 사용자 정의로 선언한 조각에 작성한 html 코드 삽입 */-->
 <th:block layout:fragment="customContents">
 
+    <div th:include="~{seller/investment/search/after_invest_division_search :: searchFragment}"></div>
+    <br>
+
+    <h4 class="admin-content-title">투자 후 분배 목록</h4>
+
     <div class="admin-content-wrapper">
         <table>
             <thead>

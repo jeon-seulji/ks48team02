@@ -193,9 +193,17 @@ public class InvestmentController {
 
         String loginId = (String) session.getAttribute("SID");
 
-        Map<String, Object> resultMap = investmentService.getAfterInvestDivision(loginId, currentPage);
+        Map<String, Object> resultMap = null;
 
-        List<SellerAfterInvestDivision> sellerAfterInvestDivisionList = (List<SellerAfterInvestDivision>) resultMap.get("sellerAfterInvestDivisionList");
+        List<SellerAfterInvestDivision> sellerAfterInvestDivisionList = null;
+
+        if(searchKey != null) {
+            resultMap = investmentService.getAfterInvestDivisionBySearch(loginId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, currentPage);
+            sellerAfterInvestDivisionList = (List<SellerAfterInvestDivision>) resultMap.get("sellerAfterInvestDivisionList");
+        }else {
+            resultMap = investmentService.getAfterInvestDivision(loginId, currentPage);
+            sellerAfterInvestDivisionList = (List<SellerAfterInvestDivision>) resultMap.get("sellerAfterInvestDivisionList");
+        }
 
         int lastPage = (int) resultMap.get("lastPage");
         int startPageNum = (int) resultMap.get("startPageNum");

@@ -69,6 +69,9 @@ public interface SellerInvestmentMapper {
     // 판매자 투자 후 분배 전체 행의 갯수
     public int getAfterInvestDivisionCnt();
 
+    // 판매자 검색조건에 따른 투자후 분배 목록 조회
+    public List<SellerAfterInvestDivision> getAfterInvestDivisionBySearch(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int startRowNum, int rowPerPage);
+
     // 판매자 자본시장법 범위충족기준 목록 조회
     public List<AdminLawSatistifyReason> getLawSatistifyList();
 
