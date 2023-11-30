@@ -43,8 +43,7 @@ $('#rankReload').on('click', function(){
             listElement += "          	</p>";
             listElement += "        </div>";
             listElement += "        </div>";
-            listElement += "      <div class='project-img' style=";
-            listElement += (item.imageUrl == null)? "'background:#eee;'>": `'background:url("${item.imageUrl}") no-repeat center center / cover'`;
+            listElement += `      <div class="project-img" style="background-image: url('/summernoteImage/${item.imageUrl}'),url('/user/images/no-image.svg');"></div>`;
             listElement += "      </div>";
             listElement += "    </a>";
             listElement += "</li>";

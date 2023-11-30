@@ -10,6 +10,7 @@
 		  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 		  <link rel="stylesheet" th:href="@{/user/css/swiper-event-css.css}" />
 		  <link rel="stylesheet" th:href="@{/user/css/main_style.css}" />
+
   	  </head>
   	  
   	  
@@ -78,9 +79,7 @@
 						listElement += "          </p>";
 						listElement += "        </div>";
 						listElement += "        </div>";
-						listElement += "      <div class='project-img' style=";
-						listElement += (item.imageUrl == null)? "'background:#eee;'>": `'background:url("${item.imageUrl}") no-repeat center center / cover'`;
-						listElement += "      </div>";
+						listElement += `      <div class="project-img" style="background-image: url('/summernoteImage/${item.imageUrl}'),url('/user/images/no-image.svg');"></div>`
 						listElement += "    </a>";
 						listElement += "</li>";
 						console.log(listElement);
@@ -239,7 +238,7 @@
 													</div>
 												</div>
 												<div class="project-img"
-													 th:style="|${l.imageUrl} == null ? 'background:#eee;':'background:url('${l.imageUrl}') no-repeat center center / cover'|" ></div>
+													 th:style="'background-image: url(' + |@{/summernoteImage/}${l.imageUrl}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
 											</a>
 
 											<a th:case="기부" th:href="@{/user/donation/detail(donationCode=${l.projectCode})}">
@@ -257,7 +256,7 @@
 													</div>
 												</div>
 												<div class="project-img"
-													 th:style="|${l.imageUrl} == null ? 'background:#eee;':'background:url('${l.imageUrl}') no-repeat center center / cover'|" ></div>
+													 th:style="'background-image: url(' + |@{/summernoteImage/}${l.imageUrl}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
 											</a>
 
 											<a th:case="투자" th:href="@{/user/investment/detail/main(investmentCode=${l.projectCode})}">
@@ -275,7 +274,7 @@
 													</div>
 												</div>
 												<div class="project-img"
-													 th:style="|${l.imageUrl} == null ? 'background:#eee;':'background:url('${l.imageUrl}') no-repeat center center / cover'|" ></div>
+													 th:style="'background-image: url(' + |@{/summernoteImage/}${l.imageUrl}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
 											</a>
 										</th:block>
 <!--										<a th:href="|@{${l.projectType == '리워드'} ? /user/reward/detail(rewardProjectCode=${l.projectCode}) : ${l.projectType == '기부'}}|">-->
