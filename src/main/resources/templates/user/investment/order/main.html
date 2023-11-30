@@ -51,6 +51,25 @@
 <th:block layout:fragment="customJsCode">
 
     <script th:inline="javascript">
+
+        //토스 api CustomerKey를 랜덤 생성하기위한 generateUUID 함수
+        function generateUUID() { // Public Domain/MIT
+            var d = new Date().getTime();//Timestamp
+            var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16;//random number between 0 and 16
+                if(d > 0){//Use timestamp until depleted
+                    r = (d + r)%16 | 0;
+                    d = Math.floor(d/16);
+                } else {//Use microseconds since page-load if supported
+                    r = (d2 + r)%16 | 0;
+                    d2 = Math.floor(d2/16);
+                }
+                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+        }
+
+
         // 토스페이에 담을 투자 상품 정보
         const products = [];
         // 주문자 회원 정보
@@ -167,11 +186,14 @@
                     }
                 });
                 if(isValid){
+                    const paymentResult = {};
+
                     paymentWidget.requestPayment({
-                        orderId: "ZnMXcbHhAnrQHkkyFvZj8",
-                        orderName: "토스 티셔츠 외 2건",
-                        successUrl: window.location.origin + "/success",
-                        failUrl: window.location.origin + "/fail",
+                        amount: 5000000,
+                        orderId: generateUUID(),
+                        orderName: "주식회사 라다하임",
+                        successUrl: window.location.origin + "/user/investment",
+                        failUrl: window.location.origin + "/user/investment",
                         customerEmail: "customer123@gmail.com",
                         customerName: "김토스",
                         customerMobilePhone: "01012341234"
@@ -196,21 +218,21 @@
 
         // 토스 결제
         const clientKey = 'test_ck_P9BRQmyarY7j4lG4Oepv3J07KzLN' // 테스트용 클라이언트 키
-        const customerKey = 'test_ck_P9BRQmyarY7j4lG4Oepv3J07KzLN' // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
+        const customerKey = generateUUID(); // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
 
         // 2. 결제위젯 SDK 초기화
         const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
         const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
             '#payment-method',
             {
-                value: 10000,
+                value: 5000000,
                 currency: 'KRW',
                 country: 'KR',
             },
             { variantKey: 'widgetA' }
         )
         const paymentMethods = paymentWidget.renderPaymentMethods('#payment-method', {
-            value: 10000,
+            value: 5000000,
         })
 
         /*$('#payment-button').on("click", function () {
@@ -328,7 +350,7 @@
                                         <li>
                                             <dl>
                                                 <dd>김플루님의 크라우드펀딩 투자 한도</dd>
-                                                <dt id="investLimit" th:text="${#numbers.formatInteger(5000000,3,'COMMA') + '원'}" th:data-invest-limit="${5000000}"></dt>
+                                                <dt id="investLimit" th:text="${#numbers.formatInteger(25000000,3,'COMMA') + '원'}" th:data-invest-limit="${25000000}"></dt>
                                             </dl>
                                         </li>
                                     </ul>
@@ -338,7 +360,7 @@
                                         <li>
                                             <dl>
                                                 <dd>1주당 가격</dd>
-                                                <dt id="stockPrice" th:text="${#numbers.formatInteger(5000,3,'COMMA') + '원'}" th:data-stock-price="${5000}"></dt>
+                                                <dt id="stockPrice" th:text="${#numbers.formatInteger(50000,3,'COMMA') + '원'}" th:data-stock-price="${50000}"></dt>
                                             </dl>
                                         </li>
                                     </ul>
@@ -346,7 +368,7 @@
                                 <div class="col-lg-4">
                                     <ul class="tight">
                                         <li>
-                                            <dl th:with="minStock=${5000000/5000/5}, maxStock=${5000000/5000}">
+                                            <dl th:with="minStock=${100}, maxStock=${500}">
                                                 <dd>청약 가능 수량</dd>
                                                 <dt><span id="minStock" th:text="${minStock}"></span>~<span id="maxStock" th:text="${maxStock}"></span>주</dt>
                                             </dl>

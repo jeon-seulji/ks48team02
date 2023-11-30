@@ -167,7 +167,7 @@
             store_code)
         <if test="changeCategory =='주문취소'">
             VALUES
-                (#{refundCode},#{orderCode},'리워드',NULL,NULL,#{paymentScheduledPrice},
+                (#{refundCode},#{orderCode},'rwd',NULL,NULL,#{paymentScheduledPrice},
                 #{refundSubejct},#{refundTitle},#{refundComments},
                 NOW(),'승인',NULL,NULL,NULL,2,NOW(),#{storeCode});
         </if>

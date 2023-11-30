@@ -42,4 +42,16 @@ public interface UserInvestmentMapper {
     // 자본시장법 범위충족기준 조회
     public List<UserLawSatistifyReason> getUserLawSatistifyReason();
 
+    // 댓글 등록
+    public void CommentAdd(String memberId, String investmentCode,String memberName,String commentContent);
+
+    // 댓글 리스트
+    public List<InvestmentComment> getCommentList(String investmentCode);
+
+    // 대댓글 등록
+    public void replyAdd(String reply, String investmentCode, String parentCommentCode, String memberId, String memberName);
+
+
+    public CommentMember getMember(String memberId);
+
 }
