@@ -162,9 +162,9 @@
             SELECT
                 (CASE
                     WHEN
-                        COUNT(r.reward_project_code) = 0  THEN CONCAT('RWD_', CURDATE()+0, '_1')
+                        COUNT(r.reward_project_code) = 0  THEN CONCAT('rwd_', CURDATE()+0, '_1')
                     ELSE
-                        CONCAT('RWD_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(r.reward_project_code,'_',-1)AS UNSIGNED )+1))
+                        CONCAT('rwd_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(r.reward_project_code,'_',-1)AS UNSIGNED )+1))
                 END) AS rewardProjectCode,
                 (SELECT
                     s.store_code
