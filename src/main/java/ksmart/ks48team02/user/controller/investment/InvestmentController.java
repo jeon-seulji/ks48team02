@@ -1,12 +1,18 @@
 package ksmart.ks48team02.user.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @Controller("userInvestmentController")
@@ -198,9 +204,6 @@ public class InvestmentController {
         if(memberId == null) {
             return "user/account/login";
         }
-
-
-
         return "user/investment/order/main";
     }
 
