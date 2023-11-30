@@ -203,6 +203,8 @@
     width: 93px !important;
     height: 56px;
     background: #eee;
+    background-position: center center;
+    background-size: cover;
 }
 #project-rank {
     width: calc(30% - 40px);

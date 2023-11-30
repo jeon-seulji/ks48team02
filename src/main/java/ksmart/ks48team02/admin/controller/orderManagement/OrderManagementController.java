@@ -70,9 +70,9 @@ public class OrderManagementController {
     // 주문 대시보드
     @GetMapping(value = {"","/"})
     public String adminOrderDashBoard(Model model){
-        model.addAttribute("title","관리자 : 주문 대시보드");
+        model.addAttribute("title","주문 대시보드");
         model.addAttribute("contentsTitle","주문 대시보드");
-        model.addAttribute("contentsSubTitle","관리자 주문 대시보드");
+        model.addAttribute("contentsSubTitle","주문 대시보드");
         return null;
     }
 
@@ -103,9 +103,9 @@ public class OrderManagementController {
         log.info("sessionStoreCode {}", sstorecode);
 
         // default param setting
-        model.addAttribute("title","관리자 : 주문 목록");
+        model.addAttribute("title","주문 목록");
         model.addAttribute("contentsTitle","주문 목록");
-        model.addAttribute("contentsSubTitle","관리자 주문 전체 목록");
+        model.addAttribute("contentsSubTitle","주문 전체 목록");
         model.addAttribute("actionValue","/list");
 
         String orderby = "orderby";
@@ -229,9 +229,9 @@ public class OrderManagementController {
         }
 
 
-        model.addAttribute("title","관리자 : 주문 상세");
+        model.addAttribute("title","주문 상세");
         model.addAttribute("contentsTitle","주문 상세");
-        model.addAttribute("contentsSubTitle","관리자 주문 상세");
+        model.addAttribute("contentsSubTitle","주문 상세");
 
         return "admin/order/orderDetailInfo";
     }
@@ -239,9 +239,9 @@ public class OrderManagementController {
     // 배송 관리
     @GetMapping( "/delivery")
     public String adminOrderDelivery(Model model, HttpSession session){
-        model.addAttribute("title","관리자 : 배송 관리");
+        model.addAttribute("title","배송 관리");
         model.addAttribute("contentsTitle","배송 관리");
-        model.addAttribute("contentsSubTitle","관리자 배송 관리");
+        model.addAttribute("contentsSubTitle","배송 관리");
         model.addAttribute("paramActive","noActive");
 
         String sid = (String) session.getAttribute("SID");
@@ -314,9 +314,9 @@ public class OrderManagementController {
     @GetMapping( "/delivery/detail")
     public String adminOrderDeliveryInfo(Model model,
                                          @RequestParam(name="orderDeliveryCode") String orderDeliveryCode){
-        model.addAttribute("title","관리자 : 배송 정보");
+        model.addAttribute("title","배송 정보");
         model.addAttribute("contentsTitle","배송 정보");
-        model.addAttribute("contentsSubTitle","관리자 배송 정보");
+        model.addAttribute("contentsSubTitle","배송 정보");
 
 
         // 특정 배송 정보 조회
@@ -340,9 +340,9 @@ public class OrderManagementController {
     // 교환 환불 신청 관리 main
     @GetMapping( "/refundSwapping")
     public String adminOrderRefundSwapping(Model model,HttpSession session){
-        model.addAttribute("title","관리자 : 교환 환불 관리");
+        model.addAttribute("title","교환 환불 관리");
         model.addAttribute("contentsTitle","교환/환불 관리");
-        model.addAttribute("contentsSubTitle","관리자 교환/환불 관리");
+        model.addAttribute("contentsSubTitle","교환/환불 관리");
 
         String sid = (String) session.getAttribute("SID");
         String stypecode = (String) session.getAttribute("STYPECODE");
@@ -409,7 +409,7 @@ public class OrderManagementController {
     @GetMapping("/autorfnd")
     public String admAutoRefdList(Model model, HttpSession session){
 
-        model.addAttribute("title","관리자 : 자동 환불 관리");
+        model.addAttribute("title","자동 환불 관리");
         model.addAttribute("contentsTitle","자동 환불 관리");
         model.addAttribute("contentsSubTitle","프로젝트 실패 자동 환불 관리");
 
@@ -475,9 +475,9 @@ public class OrderManagementController {
     // 주문 확정 목록 조회
     @GetMapping( "/completedList")
     public String adminOrderCompletedList(Model model){
-        model.addAttribute("title","관리자 : 주문 확정 목록");
+        model.addAttribute("title","주문 확정 목록");
         model.addAttribute("contentsTitle","주문 확정 목록");
-        model.addAttribute("contentsSubTitle","관리자 주문 확정 목록");
+        model.addAttribute("contentsSubTitle","주문 확정 목록");
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
