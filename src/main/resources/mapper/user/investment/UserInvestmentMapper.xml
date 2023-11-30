@@ -242,7 +242,8 @@
             ir.investment_request_judge_code AS investmentRequestJudgeCode,
             ir.company_business_type_code AS companyBusinessTypeCode,
             ir.stock_number AS stockNumber,
-            ir.issue_stock_number AS issueStockNumber
+            ir.issue_stock_number AS issueStockNumber,
+            ir.investment_request_content AS investmentRequestContent
         FROM
             investment AS i
             INNER JOIN
@@ -409,6 +410,87 @@
             s.investment_code = #{investmentCode};
     </select>
 
+    <!--댓글 등록-->
+    <insert id="CommentAdd" parameterType="String">
+        <selectKey keyProperty="investCommentCode" resultType="String" order="BEFORE">
+            SELECT
+                (
+                CASE
+                WHEN COUNT(comment_datetime) = 0     THEN CONCAT('com_', CURDATE()+0, '_0001')
+                WHEN COUNT(comment_datetime) > 9999  THEN CONCAT('com_', CURDATE()+0, '_', COUNT(comment_datetime)+1)
+                ELSE CONCAT('com_', CURDATE()+0, '_', LPAD(COUNT(comment_datetime)+1, 4, '0'))
+                END
+                ) AS investCommentCode
+            FROM
+                invest_comment
+            WHERE
+                DATE_FORMAT(comment_datetime, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+        INSERT INTO invest_comment
+            (invest_comment_code, member_id, investment_code, member_name, comment_content, comment_datetime,
+            comment_modify_datetime, comment_delete_datetime, comment_code, comment_class)
+        VALUE
+            (#{investCommentCode}, #{memberId}, #{investmentCode}, #{memberName}, #{commentContent}, NOW(), NULL, NULL, NULL, 'comment');
+    </insert>
 
+    <!--댓글 리스트-->
+    <select id="getCommentList" parameterType="String" resultType="InvestmentComment">
+        SELECT
+            i.invest_comment_code AS investCommentCode,
+            i.member_id AS memberId,
+            i.investment_code AS investmentCode,
+            i.member_name AS memberName,
+            i.comment_content AS commentContent,
+            i.comment_datetime AS commentDatetime,
+            i.comment_modify_datetime AS commentModifyDatetime,
+            i.comment_delete_datetime AS commentDeleteDatetime,
+            i.comment_code AS commentCode,
+            i.comment_class AS commentClass
+        FROM
+            invest_comment AS i
+        WHERE
+            i.investment_code = #{investmentCode};
+    </select>
+
+    <!-- 댓글 등록 -->
+    <insert id="replyAdd" parameterType="String">
+        <selectKey keyProperty="investCommentCode" resultType="String" order="BEFORE">
+            SELECT
+                (
+                CASE
+                WHEN COUNT(comment_datetime) = 0     THEN CONCAT('com_', CURDATE()+0, '_0001')
+                WHEN COUNT(comment_datetime) > 9999  THEN CONCAT('com_', CURDATE()+0, '_', COUNT(comment_datetime)+1)
+                ELSE CONCAT('com_', CURDATE()+0, '_', LPAD(COUNT(comment_datetime)+1, 4, '0'))
+                END
+                ) AS investCommentCode
+            FROM
+                invest_comment
+            WHERE
+                DATE_FORMAT(comment_datetime, '%Y-%m-%d') = CURDATE();
+        </selectKey>
+        INSERT INTO donation_comment
+            (invest_comment_code, member_id, investment_code, member_name, comment_content, comment_datetime, comment_modify_datetime, comment_delete_datetime,
+            comment_code, comment_class)
+        VALUES
+            (#{investCommentCode}, #{memberId}, #{investmentCode}, #{memberName}, #{reply}, NOW(), NULL, NULL, #{parentCommentCode}, 'reply');
+    </insert>
+
+    <!-- 멤버 정보 가져오기 -->
+    <select id="getMember" parameterType="String" resultType="CommentMember">
+        SELECT
+            member_id AS memberId,
+            member_type_code AS memberTypeCode,
+            member_name AS memberName,
+            member_pw AS memberPw,
+            member_reg_date AS memberRegDate,
+            member_email AS memberEmail,
+            contact_info AS contactInfo,
+            unreg_date AS unregDate,
+            unreg_status AS unregStatus
+        FROM
+            member
+        WHERE
+            member_id = #{memberId};
+    </select>
 
 </mapper>

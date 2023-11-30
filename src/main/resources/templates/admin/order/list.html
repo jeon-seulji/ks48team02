@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="@{|${(session.STYPECODE == 'mem_type_02'
+      layout:decorate="~{|${(session.STYPECODE == 'mem_type_02'
                                 || session.STYPECODE == 'mem_type_03'
-                                || session.STYPECODE == 'mem_type_04')? '/seller/layout/default'
-                                :(session.STYPECODE == 'mem_type_01')? '/admin/layout/default':''}|}">
+                                || session.STYPECODE == 'mem_type_04')? 'seller/layout/default'
+                                :(session.STYPECODE == 'mem_type_01')? 'admin/layout/default':''}|}">
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
@@ -72,7 +72,7 @@
                     )
                     .append(
                         `<td class="table-data-center">
-                            <span>${l.goodsPartition === 'rwd' ? '리워드' : (l.goodsPartition === 'don' ? '기부' : '투자')}</span>
+                            <span>${l.goodsPartition === 'RWD'? '리워드' : (l.goodsPartition === 'don' ? '기부' : '투자')}</span>
                         </td>`
                     )
                     .append(

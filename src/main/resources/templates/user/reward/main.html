@@ -10,7 +10,7 @@
     <style>
         .category-button {
             border: none;
-            border-radius: 25px; /* 라운드 처리 반경을 조정합니다. */
+            border-radius: 10px; /* 라운드 처리 반경을 조정합니다. */
             text-align: center;
             text-decoration: none;
             font-size: 16px;
@@ -22,6 +22,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            border: lightgray solid 1px;
         }
         .category-li{
             display: flex;
@@ -33,6 +34,9 @@
         .selected {
             font-weight: bold;
             color: black;
+        }
+        .selected > button {
+            border: black solid 2px;
         }
         ul.d-flex li:hover {
             cursor: pointer;
@@ -160,19 +164,6 @@
             }
         });
 
-        $('.reward-item-span-first').each(function (){
-            let goalMoney = parseInt($(this).next().val());
-            let achievementMoney = parseInt($(this).next().next().text());
-
-            let percent = (achievementMoney / goalMoney) * 100;
-            $(this).text(parseInt(percent) + '% 달성');
-        });
-        // 달성 금액 설정
-        $('.reward-item-span-second').each(function (){
-            $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
-        });
-
-
         let projectArrange = [[${projectArrange}]];
         let projectStatus = [[${projectStatus}]];
         let category =[[${category}]];
@@ -180,12 +171,16 @@
         $('#projectArrange').children().each((idx,item)=>{
             if($(item).data('arrange') == projectArrange) {
                 sortItemClickedStyle(item);
+                return false;
             }
         });
 
         $('.category-li').each((idx,item)=>{
             if($(item).data('category') == category) {
                 cateItemClickedStyle(item);
+                let categoryName = $(item).find('p').text();
+                $('#selectedCategory').text(categoryName);
+                return false;
             }
         });
 
@@ -225,43 +220,43 @@
     <div class="container">
         <ul id="category-wrap" class="d-flex"  style="margin-left: 100px; margin-top: 20px">
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="allCategory">
-                <button class="category-button" style="background-image: url('/user/images/category/all.png');"></button>
+                <button class="category-button" style="background-image: url('/user/images/category/all2.png');"></button>
                 <p>전체</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_002">
-                <button class="category-button"  style="background-image: url('/user/images/category/movie.png');"></button>
+                <button class="category-button"  style="background-image: url('/user/images/category/movie2.png');"></button>
                 <p>영화</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_001">
-                <button class="category-button"  style="background-image: url('/user/images/category/book.png');"></button>
+                <button class="category-button"  style="background-image: url('/user/images/category/book2.png');"></button>
                 <p>도서</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_003">
-                <button class="category-button" style="background-image: url('/user/images/category/paint.png');"></button>
+                <button class="category-button" style="background-image: url('/user/images/category/paint2.png');"></button>
                 <p>그림</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_018">
-                <button class="category-button" style="background-image: url('/user/images/category/cartoon.png');"></button>
+                <button class="category-button" style="background-image: url('/user/images/category/cartoon2.png');"></button>
                 <p>만화○웹툰</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_019">
-                <button class="category-button" style="background-image: url('/user/images/category/game.png');"></button>
+                <button class="category-button" style="background-image: url('/user/images/category/game2.png');"></button>
                 <p>게임</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_022">
-                <button class="category-button" style="background-image: url('/user/images/category/goods.png');"></button>
+                <button class="category-button" style="background-image: url('/user/images/category/goods2.png');"></button>
                 <p>캐릭터○굿즈</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_004">
-                <button class="category-button" style="background-image: url('/user/images/category/festival.png');"></button>
+                <button class="category-button" style="background-image: url('/user/images/category/festival2.png');"></button>
                 <p>공연</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_020">
-                <button class="category-button" style="background-image: url('/user/images/category/eraser.png');"></button>
+                <button class="category-button" style="background-image: url('/user/images/category/pen.png');"></button>
                 <p>문구</p>
             </li>
             <li class="category-li" onclick="cateItemClickedStyle(this)" data-category="category_code_021">
-                <button class="category-button"  style="background-image: url('/user/images/category/camera.png');"></button>
+                <button class="category-button"  style="background-image: url('/user/images/category/camera2.png');"></button>
                 <p>사진</p>
             </li>
         </ul>
@@ -274,7 +269,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex col">
-                    <p style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
+                    <p id="selectedCategory" style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
                     <div id="sort-item-wrap" class="d-flex" style="margin-left: auto">
                         <select id="projectProgress" style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
                             <option value="all" th:selected="${projectStatus == 'all'}">전체</option>
@@ -302,9 +297,9 @@
                                      th:onerror="|this.src='@{/user/images/no-image.svg}'|">
                             </div>
                             <div class="reward-item-second-child">
-                                <span class="reward-item-span-first"></span>
+                                <span class="reward-item-span-first" th:text="|${l.projectAchievementPercent}% 달성|"></span>
                                 <input class="reward-item-goalMoney" th:value="${l.projectGoalMoney}" hidden="hidden"/>
-                                <span class="reward-item-span-second" th:text="${l.projectAchievementMoney}"></span>
+                                <span class="reward-item-span-second" th:text="|${#numbers.formatInteger(l.projectAchievementMoney,0,'COMMA')} 원|"></span>
                                 <span class="reward-item-span-third" th:text="${l.projectEndDate}"></span>
                             </div>
                             <div class="reward-item-third-child">

@@ -52,13 +52,13 @@
         let issueStockNumberInput = $('#issueStockNumber').closest('.my-2');
 
         // 주식형이 선택된 경우
-        if (selectedValue === '1') {
+        if (selectedValue === '주식') {
           // 현재 주식 수와 발행 예정 주식 수 필드 표시
           stockNumberInput.show();
           issueStockNumberInput.show();
           // 현금 보유량 입력 필드 숨기고 유효성 검사 제거, 값 0으로 설정
           cashReservesInput.hide().find('input').prop('required', false).val('0');
-        } else if (selectedValue === '2') {
+        } else if (selectedValue === '채권') {
           // 채권형이 선택된 경우
           // 현금 보유량 입력 필드 표시
           cashReservesInput.show().find('input').val('');
@@ -100,9 +100,9 @@
             let labelId = $(item).attr('id');
 
             // 주식형이 선택되었을 때 현금 보유량 필드는 유효성 검사에서 제외
-            if (labelId === 'cashReserves' && $('#securitiesClassification').val() === '1') {
+            if (labelId === 'cashReserves' && $('#securitiesClassification').val() === '주식') {
               return true;
-            }else if ((labelId === 'stockNumber' || labelId === 'issueStockNumber') && $('#securitiesClassification').val() === '2'){
+            }else if ((labelId === 'stockNumber' || labelId === 'issueStockNumber') && $('#securitiesClassification').val() === '채권'){
               return true;
             }
 
