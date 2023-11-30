@@ -87,7 +87,22 @@ public class UserInvestmentService {
         return userLawSatistifyReason;
     }
 
+    public void CommentAdd(String memberId, String investmentCode, String memberName, String commentContent){
+        userInvestmentMapper.CommentAdd(memberId, investmentCode, memberName, commentContent);
+    }
 
+    public List<InvestmentComment> getCommentList(String investmentCode){
+        return userInvestmentMapper.getCommentList(investmentCode);
+    }
+
+    public void replyAdd(String reply, String investmentCode, String parentCommentCode, String memberId, String memberName){
+        userInvestmentMapper.replyAdd(reply, investmentCode, parentCommentCode, memberId, memberName);
+    }
+
+
+    public CommentMember getMember(String memberId){
+        return userInvestmentMapper.getMember(memberId);
+    }
 
 
 

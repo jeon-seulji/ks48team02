@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="@{|${(session.STYPECODE == 'mem_type_02'
+      layout:decorate="~{|${(session.STYPECODE == 'mem_type_02'
                                 || session.STYPECODE == 'mem_type_03'
-                                || session.STYPECODE == 'mem_type_04')? '/seller/layout/default'
-                                :(session.STYPECODE == 'mem_type_01')? '/admin/layout/default':''}|}">
+                                || session.STYPECODE == 'mem_type_04')? 'seller/layout/default'
+                                :(session.STYPECODE == 'mem_type_01')? 'admin/layout/default':''}|}">
 
 <head>
     <!--  사용자별 css file 추가 부분 -->
@@ -184,8 +184,8 @@
             // ajax 호출
             adminDeliveryAjax(queryString, function(list){
                 // list count
-                $('.total-list').text(list.orderList.length);
-                setOrderData(list.orderList);
+                $('.total-list').text(list.deliveryList.length);
+                setOrderData(list.deliveryList);
 
                 // pager setting
                 const pageNumArr = Array((list.endPageNum - list.startPageNum) + 1).fill().map((item, idx) => list.startPageNum + idx);
@@ -240,8 +240,9 @@
 
             adminDeliveryAjax(queryString, function(list) {
                 // list count
-                $('.total-list').text(list.orderList.length);
-                setOrderData(list.orderList);
+
+                $('.total-list').text(list.deliveryList.length);
+                setOrderData(list.deliveryList);
 
                 // pager setting
                 setPagerData(numberArr, currentPage, list);

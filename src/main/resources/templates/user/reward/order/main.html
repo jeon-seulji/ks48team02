@@ -349,6 +349,13 @@
                 }
             });
 
+            //옵션 내용 높이조절.
+            $('.rewardOptionContents').each((idx,item)=>{
+                let height = $(item).prop('scrollHeight');
+                let preHeight = $(item).height();
+                $(item).css('height',`${height}px`);
+            })
+
             //주소 찾기 클릭시 daum주소 api 호출
             $('.findAddrBtn, #deliverMemberAddr').click(function(){
                 new daum.Postcode({
@@ -589,7 +596,8 @@
                                             <span class="optionName ml-2" th:text="${l.optionName}"></span>
                                             <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
-                                            <span class="optionContents ml-2" th:text="${l.optionContents}"></span>
+                                            <textarea style="width: 90%; height: 20px; overflow: hidden; border: none; resize: none;" readonly="readonly" class="rewardOptionContents ml-2" th:text="${l.optionContents}"></textarea>
+<!--                                            <span class="optionContents ml-2" th:text="${l.optionContents}"></span>-->
                                             <div style="border: 1px solid #f3f4f5; margin: 5px; width: 100%"></div>
 
                                             <span class="ml-2">주문 수량</span>

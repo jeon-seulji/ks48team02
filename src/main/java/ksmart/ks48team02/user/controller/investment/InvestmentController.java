@@ -1,12 +1,18 @@
 package ksmart.ks48team02.user.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.common.dto.PaymentResult;
 import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @Controller("userInvestmentController")
@@ -54,6 +60,12 @@ public class InvestmentController {
         model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
         SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
         model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
+        String SID = (String) session.getAttribute("SID");
+        if(SID == null || SID == "" || SID == "null"){
+            model.addAttribute("SID", "noSession");
+        }else {
+            model.addAttribute("SID", SID);
+        }
 
         model.addAttribute("title", "투자 상세 페이지");
 
@@ -74,15 +86,63 @@ public class InvestmentController {
         model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
         SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
         model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
-        if(memberId == null || memberId == "" || memberId == "null"){
-            model.addAttribute("memberId", "noSession");
+        String SID = (String) session.getAttribute("SID");
+        if(SID == null || SID == "" || SID == "null"){
+            model.addAttribute("SID", "noSession");
         }else {
-            model.addAttribute("memberId", memberId);
+            model.addAttribute("SID", SID);
         }
+
+        List<InvestmentComment> investmentComment = userInvestmentService.getCommentList(investmentCode);
+        model.addAttribute("investmentComment", investmentComment);
+        // 리뷰 개수 계산
+        int viewCount = 0;
+        for (int i = 0; i < investmentComment.size(); i++) {
+            if(investmentComment.get(i).getCommentClass().equals("comment")){
+                viewCount++;
+            }
+        }
+        model.addAttribute("viewCount", viewCount);
 
         model.addAttribute("title", "투자 상세 댓글");
 
         return "user/investment/detail/comment";
+    }
+
+    @PostMapping("/detail/comment")
+    public String commentAdd(HttpSession session, Model model,
+                             @RequestParam(name = "investmentCode") String investmentCode,
+                             @RequestParam(name = "commentContent") String commentContent){
+        String memberId = (String)session.getAttribute("SID");
+        CommentMember commentMember = userInvestmentService.getMember(memberId);
+        model.addAttribute("commentMember", commentMember);
+
+        System.out.println("Received investmentCode: " + investmentCode);
+
+        userInvestmentService.CommentAdd(memberId, investmentCode, commentMember.getMemberName(), commentContent);
+
+        return "redirect:/user/investment/detail/comment?investmentCode=" + investmentCode;
+    }
+
+    @PostMapping("/detail/reply")
+    public String replyAdd(HttpSession session, Model model,
+                           @RequestParam(name = "reply") String reply,
+                           @RequestParam(name = "investmentCode") String investmentCode,
+                           @RequestParam(name = "parentCommentCode") String parentCommentCode){
+        String memberId = (String)session.getAttribute("SID");
+        CommentMember commentMember = userInvestmentService.getMember(memberId);
+        model.addAttribute("commentMember", commentMember);
+
+        String SID = (String) session.getAttribute("SID");
+        if(SID == null || SID == "" || SID == "null"){
+            model.addAttribute("SID", "noSession");
+        }else {
+            model.addAttribute("SID", SID);
+        }
+
+        userInvestmentService.replyAdd(reply, investmentCode, parentCommentCode, memberId, commentMember.getMemberName());
+
+        return "redirect:/user/investment/detail/comment?investmentCode=" + investmentCode;
     }
 
     @GetMapping("/detail/investor")
@@ -90,7 +150,6 @@ public class InvestmentController {
                                      @RequestParam(name = "investmentCode") String investmentCode,
                                      HttpSession session) {
 
-        String memberId = (String)session.getAttribute("SID");
 
         InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
         model.addAttribute("investmentInfo", investmentInfo);
@@ -98,6 +157,13 @@ public class InvestmentController {
         model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
         SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
         model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
+
+        String SID = (String) session.getAttribute("SID");
+        if(SID == null || SID == "" || SID == "null"){
+            model.addAttribute("SID", "noSession");
+        }else {
+            model.addAttribute("SID", SID);
+        }
 
         model.addAttribute("title", "투자 위험 고지");
 
@@ -109,7 +175,6 @@ public class InvestmentController {
                                  @RequestParam(name = "investmentCode") String investmentCode,
                                  HttpSession session) {
 
-        String memberId = (String)session.getAttribute("SID");
 
         InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
         model.addAttribute("investmentInfo", investmentInfo);
@@ -117,6 +182,12 @@ public class InvestmentController {
         model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
         SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
         model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
+        String SID = (String) session.getAttribute("SID");
+        if(SID == null || SID == "" || SID == "null"){
+            model.addAttribute("SID", "noSession");
+        }else {
+            model.addAttribute("SID", SID);
+        }
 
         model.addAttribute("title", "투자 새소식");
 
@@ -133,9 +204,6 @@ public class InvestmentController {
         if(memberId == null) {
             return "user/account/login";
         }
-
-
-
         return "user/investment/order/main";
     }
 

@@ -911,7 +911,7 @@
             ot.order_name
         FROM
             order_confirmation_log AS ocl
-            LEFT OUTER JOIN
+            INNER JOIN
             order_table AS ot
             ON ocl.order_code = ot.order_code
 
@@ -927,7 +927,7 @@
             COUNT(1)
         FROM
             order_confirmation_log AS ocl
-            LEFT OUTER JOIN
+            INNER JOIN
             order_table AS ot
             ON ocl.order_code = ot.order_code
         <include refid="orderCompWhere"/>

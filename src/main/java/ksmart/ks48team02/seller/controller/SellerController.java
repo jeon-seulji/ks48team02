@@ -13,8 +13,6 @@ public class SellerController {
     public String sellerMainPage(Model model,
                                  HttpSession session){
 
-
-
         // 세션 기본값 설정
         String getSid = (String) session.getAttribute("SID");
         String getStype = (String) session.getAttribute("STYPECODE");
