@@ -164,19 +164,6 @@
             }
         });
 
-        $('.reward-item-span-first').each(function (){
-            let goalMoney = parseInt($(this).next().val());
-            let achievementMoney = parseInt($(this).next().next().text());
-
-            let percent = (achievementMoney / goalMoney) * 100;
-            $(this).text(parseInt(percent) + '% 달성');
-        });
-        // 달성 금액 설정
-        $('.reward-item-span-second').each(function (){
-            $(this).text($(this).text().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
-        });
-
-
         let projectArrange = [[${projectArrange}]];
         let projectStatus = [[${projectStatus}]];
         let category =[[${category}]];
@@ -184,12 +171,16 @@
         $('#projectArrange').children().each((idx,item)=>{
             if($(item).data('arrange') == projectArrange) {
                 sortItemClickedStyle(item);
+                return false;
             }
         });
 
         $('.category-li').each((idx,item)=>{
             if($(item).data('category') == category) {
                 cateItemClickedStyle(item);
+                let categoryName = $(item).find('p').text();
+                $('#selectedCategory').text(categoryName);
+                return false;
             }
         });
 
@@ -278,7 +269,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex col">
-                    <p style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
+                    <p id="selectedCategory" style="font-weight: bold; font-size: 20px; margin-bottom: 20px; color: black; margin-left: 15px">전체</p>
                     <div id="sort-item-wrap" class="d-flex" style="margin-left: auto">
                         <select id="projectProgress" style="margin-right: 10px; border: 0px solid #ccc; background: none; margin-bottom: 20px">
                             <option value="all" th:selected="${projectStatus == 'all'}">전체</option>
@@ -306,9 +297,9 @@
                                      th:onerror="|this.src='@{/user/images/no-image.svg}'|">
                             </div>
                             <div class="reward-item-second-child">
-                                <span class="reward-item-span-first"></span>
+                                <span class="reward-item-span-first" th:text="|${l.projectAchievementPercent}% 달성|"></span>
                                 <input class="reward-item-goalMoney" th:value="${l.projectGoalMoney}" hidden="hidden"/>
-                                <span class="reward-item-span-second" th:text="${l.projectAchievementMoney}"></span>
+                                <span class="reward-item-span-second" th:text="|${#numbers.formatInteger(l.projectAchievementMoney,0,'COMMA')} 원|"></span>
                                 <span class="reward-item-span-third" th:text="${l.projectEndDate}"></span>
                             </div>
                             <div class="reward-item-third-child">
