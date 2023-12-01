@@ -2,6 +2,8 @@ package ksmart.ks48team02.seller.mapper.investment;
 
 import ksmart.ks48team02.admin.dto.*;
 import ksmart.ks48team02.seller.dto.*;
+import ksmart.ks48team02.user.dto.InvestmentInfo;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -113,4 +115,9 @@ public interface SellerInvestmentMapper {
 
     // 판매자 투자후 기업정보 공개(채권) 삭제
     public int removeAfterFundRevenueBond(String afterFundRevenueBondCode);
+
+    public List<InvestmentInfo> getInvestmentInfo(String memberId);
+
+    // 새소식
+    public List<NewsList> getNews();
 }

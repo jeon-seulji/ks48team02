@@ -1,7 +1,9 @@
 package ksmart.ks48team02.user.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
+import ksmart.ks48team02.admin.dto.DonationInfo;
 import ksmart.ks48team02.common.dto.PaymentResult;
+import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.service.investment.UserInvestmentService;
 import org.springframework.stereotype.Controller;
@@ -182,6 +184,10 @@ public class InvestmentController {
         model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
         SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
         model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
+
+        List<NewsList> newsList = userInvestmentService.getNewsList(investmentCode);
+        model.addAttribute("newsList", newsList);
+
         String SID = (String) session.getAttribute("SID");
         if(SID == null || SID == "" || SID == "null"){
             model.addAttribute("SID", "noSession");
@@ -192,6 +198,33 @@ public class InvestmentController {
         model.addAttribute("title", "투자 새소식");
 
         return "user/investment/detail/news/main";
+    }
+
+    @GetMapping("/detail/news/newsDetail")
+    public String newsDetailPage(@RequestParam(name = "newCode") String newsCode,
+                                 @RequestParam(name = "investmentCode") String investmentCode,
+                                 Model model, HttpSession session){
+        InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
+        model.addAttribute("investmentInfo", investmentInfo);
+        SecuritiesIssuanceStock securitiesIssuanceStock = userInvestmentService.securitiesStock(investmentCode);
+        model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
+        SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
+        model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
+
+        NewsList newsList = userInvestmentService.getDetailNews(newsCode);
+        model.addAttribute("newsList", newsList);
+
+        String STYPECODE = (String)session.getAttribute("STYPECODE");
+        model.addAttribute("STYPECODE", STYPECODE);
+        String SID = (String) session.getAttribute("SID");
+        if(SID == null || SID == "" || SID == "null"){
+            model.addAttribute("SID", "noSession");
+        }else {
+            model.addAttribute("SID", SID);
+        }
+
+
+        return "user/investment/detail/news/news_detail";
     }
 
     @GetMapping("/order")

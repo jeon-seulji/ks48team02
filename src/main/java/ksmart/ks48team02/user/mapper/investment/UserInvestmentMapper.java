@@ -1,5 +1,6 @@
 package ksmart.ks48team02.user.mapper.investment;
 
+import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -41,6 +42,11 @@ public interface UserInvestmentMapper {
 
     // 자본시장법 범위충족기준 조회
     public List<UserLawSatistifyReason> getUserLawSatistifyReason();
+
+    // 새소식
+    List<NewsList> getNewsList(String investmentCode);
+
+    public NewsList getDetailNews(String newsCode);
 
     // 댓글 등록
     public void CommentAdd(String memberId, String investmentCode,String memberName,String commentContent);
