@@ -410,6 +410,23 @@
             s.investment_code = #{investmentCode};
     </select>
 
+    <!-- 뉴스 전체 리스트 가져오기 -->
+    <select id="getNewsList" parameterType="String" resultType="NewsList">
+        SELECT
+            news_code AS newsCode,
+            project_code AS projectCode,
+            news_subject AS newsSubject,
+            news_content AS newsContent,
+            news_datetime AS newsDatetime,
+            news_modify_datetime AS newsModifyDatetime,
+            news_delete_datetime AS newsDeleteDatetime,
+            news_display AS newsDisplay
+        FROM
+            news
+        WHERE
+            project_code = #{investmentCode};
+    </select>
+
     <!--댓글 등록-->
     <insert id="CommentAdd" parameterType="String">
         <selectKey keyProperty="investCommentCode" resultType="String" order="BEFORE">

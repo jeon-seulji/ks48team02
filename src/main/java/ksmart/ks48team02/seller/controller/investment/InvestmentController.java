@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.*;
 import ksmart.ks48team02.seller.dto.*;
 import ksmart.ks48team02.seller.service.investment.InvestmentService;
+import ksmart.ks48team02.user.dto.InvestmentInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -479,13 +480,20 @@ public class InvestmentController {
     }
 
     @GetMapping("/news")
-    public String getInvestNews(Model model) {
+    public String newsManagementPage(Model model,
+                                     HttpSession session) {
 
         model.addAttribute("title", "판매자 : 투자 새소식");
         model.addAttribute("contentsTitle", "투자 새소식");
+        String memberId = (String)session.getAttribute("SID");
+        List<InvestmentInfo> investmentInfo = investmentService.getInvestmentInfo(memberId);
+        model.addAttribute("investmentInfo", investmentInfo);
+        List<NewsList> newsList = investmentService.getNews();
+        model.addAttribute("newsList", newsList);
 
         return "seller/investment/news/main";
     }
+
 
     @GetMapping("/comment")
     public String getInvestComment(Model model) {

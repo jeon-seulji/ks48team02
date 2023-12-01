@@ -3,6 +3,8 @@ package ksmart.ks48team02.seller.service.investment;
 import ksmart.ks48team02.admin.dto.*;
 import ksmart.ks48team02.seller.dto.*;
 import ksmart.ks48team02.seller.mapper.investment.SellerInvestmentMapper;
+import ksmart.ks48team02.user.dto.AllDonationInfo;
+import ksmart.ks48team02.user.dto.InvestmentInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -520,4 +522,16 @@ public class InvestmentService {
 
         return pagingInfo;
     }
+
+    public List<InvestmentInfo> getInvestmentInfo(String memberId){
+        List<InvestmentInfo> investmentInfo = sellerInvestmentMapper.getInvestmentInfo(memberId);
+        return investmentInfo;
+    }
+
+    // 새소식
+    public List<NewsList> getNews(){
+        return sellerInvestmentMapper.getNews();
+    };
+
+
 }
