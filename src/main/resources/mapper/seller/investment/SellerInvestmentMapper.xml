@@ -1149,4 +1149,52 @@
         after_fund_revenue_bond_code = #{afterFundRevenueBondCode};
     </delete>
 
+    <select id="getInvestmentInfo" parameterType="String">
+        SELECT
+        i.investment_code AS investmentCode,
+        i.member_id AS memberId,
+        i.store_code AS storeCode,
+        i.investment_request_judge_code AS investmentRequestJudgeCode,
+        i.total_category_code AS totalCategoryCode,
+        i.member_id_seller AS memberIdSeller,
+        i.investment_image AS investmentImage,
+        i.investment_like AS investmentLike,
+        i.investment_achievement_money AS investmentAchievementMoney,
+        i.search_count AS searchCount,
+        i.invest_count AS investCount,
+        i.securities_classification AS securitiesClassification,
+        i.investment_display_date AS investmentDisplayDate,
+        i.investment_reg_date AS investmentRegDate,
+        i.investment_report AS investmentReport,
+        i.basic_fee AS basicFee,
+        i.contract_fee_rate AS contractFeeRate,
+        i.contract_file AS contractFile,
+        i.invest_judge_situation AS investJudgeSituation,
+        i.invest_achievement_percent AS investAchievementPercent,
+        i.investment_subject AS investmentSubject,
+        i.investment_amount AS investmentAmount,
+        DATEDIFF(investment_deadline, CURDATE()) AS investmentDeadlineCnt,
+        i.investment_company AS investmentCompany
+        FROM
+        investment AS i
+    </select>
+
+
+
+    <select id="getNews" resultType="NewsList">
+        SELECT
+            n.news_code AS newsCode,
+            n.project_code AS projectCode,
+            n.news_subject AS newsSubject,
+            n.news_content AS newsContent,
+            n.news_datetime AS newsDatetime,
+            n.news_modify_datetime AS newsModifyDatetime,
+            n.news_delete_datetime AS newsDeleteDatetime,
+            n.news_display AS newsDisplay
+        FROM
+            news AS n;
+    </select>
+
+
+
 </mapper>

@@ -1,5 +1,6 @@
 package ksmart.ks48team02.user.service.investment;
 
+import ksmart.ks48team02.seller.dto.NewsList;
 import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.mapper.investment.UserInvestmentMapper;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,14 @@ public class UserInvestmentService {
     public List<UserLawSatistifyReason> getUserLawSatistifyReason(){
         List<UserLawSatistifyReason> userLawSatistifyReason = userInvestmentMapper.getUserLawSatistifyReason();
         return userLawSatistifyReason;
+    }
+
+    public List<NewsList> getNewsList(String investmentCode){
+        return userInvestmentMapper.getNewsList(investmentCode);
+    }
+
+    public NewsList getDetailNews(String newsCode){
+        return userInvestmentMapper.getDetailNews(newsCode);
     }
 
     public void CommentAdd(String memberId, String investmentCode, String memberName, String commentContent){
