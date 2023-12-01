@@ -83,12 +83,14 @@
 
     <!-- 공고 resultset -->
     <sql id="resultset">
+        /* 진행중인 공고 */
         WITH resultset AS (
             SELECT
                 r.reward_project_code AS projectCode,
                 r.total_cagegory_code AS categoryCode,
                 r.project_subject AS subject,
                 r.store_code AS storeCode,
+                r.project_thumbnail_image AS imageUrl,
                 '리워드' AS projectType,
                 r.project_achievement_percent AS achievementPercent,
                 r.reward_like AS likeCount
@@ -102,6 +104,7 @@
                 d.total_category_code AS categoryCode,
                 d.donation_subject AS subject,
                 d.store_code AS storeCode,
+                d.donation_image AS imageUrl,
                 '기부' AS projectType,
                 d.donation_achievement_percent AS achievementPercent,
                 d.donation_like AS likeCount
@@ -115,6 +118,7 @@
                 i.total_category_code AS categoryCode,
                 i.investment_subject AS subject,
                 i.store_code AS storeCode,
+                i.investment_image AS imageUrl,
                 '투자' AS projectType,
                 i.invest_achievement_percent AS achievementPercent,
                 i.investment_like AS likeCount
@@ -231,6 +235,7 @@
     </select>
     <!-- recommend category list -->
     <select id="getRecommendCtList" parameterType="String" resultMap="recomendCtMap">
+
         WITH resultset AS (
             SELECT
                 r.reward_project_code AS projectCode,
@@ -371,6 +376,7 @@
             rs.projectCode AS projectCode,
             rs.subject AS subject,
             rs.projectType AS projectType,
+            rs.imageUrl,
             ifnull(tc.category_name, '') AS categoryName,
             s.store_name AS storeName,
             rs.achievementPercent AS achievementPercent,

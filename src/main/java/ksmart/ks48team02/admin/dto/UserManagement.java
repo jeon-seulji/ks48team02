@@ -13,4 +13,17 @@ public class UserManagement {
 
     // member dto
     private Member member;
+
+    /* 리워드 등급 */
+    private String rewardRankCode;
+    private String rewardRankName;
+    private Float discountRate;
+    private int rewardRankUpgradeAmount;
+    private Float pointSavingRate;
+
+    /* 기부 등급 */
+    private String donationRankCode;
+    private String donationRankName;
+    private int donationRankUpgradeAmount;
+    private Float floverSavingRate;
 }

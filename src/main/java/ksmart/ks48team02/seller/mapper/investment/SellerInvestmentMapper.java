@@ -3,6 +3,7 @@ package ksmart.ks48team02.seller.mapper.investment;
 import ksmart.ks48team02.admin.dto.*;
 import ksmart.ks48team02.seller.dto.*;
 import ksmart.ks48team02.user.dto.InvestmentInfo;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -63,7 +64,16 @@ public interface SellerInvestmentMapper {
 
     // 판매자 특정 기업정보 공개(채권) 조회
     public SellerAfterFundRevenueBond getAfterFundRevenueBondByCode(String memberId, String afterFundRevenueBondCode);
-    
+
+    // 판매자 투자 후 분배 목록 조회
+    public List<SellerAfterInvestDivision> getAfterInvestDivision(String memberId, int startRowNum, int rowPerPage);
+
+    // 판매자 투자 후 분배 전체 행의 갯수
+    public int getAfterInvestDivisionCnt();
+
+    // 판매자 검색조건에 따른 투자후 분배 목록 조회
+    public List<SellerAfterInvestDivision> getAfterInvestDivisionBySearch(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int startRowNum, int rowPerPage);
+
     // 판매자 자본시장법 범위충족기준 목록 조회
     public List<AdminLawSatistifyReason> getLawSatistifyList();
 
@@ -72,6 +82,9 @@ public interface SellerInvestmentMapper {
 
     // 판매자 특정 기업가치 평가결과 조회
     public AdminCorporateValueEvaluation getCorporateValueEvaluationByCode(String corporateValueEvaluationCode);
+
+    // 투자후 기업정보 공개(주식) 등록
+    public int addAfterFundRevenueStock(SellerAfterFundRevenueStock sellerAfterFundRevenueStock);
 
     // 판매자 투자펀딩 공고 수정
     public int modifyInvestment(AdminInvestment adminInvestment);

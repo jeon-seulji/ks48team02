@@ -303,7 +303,7 @@ public class InvestmentService {
         return resultMap;
     }
 
-    // 판매자 투자후 기업정보 공개(채권) 목록 조회
+    // 판매자 검색조건에 따른 투자후 기업정보 공개(채권) 목록 조회
     public  Map<String, Object> getAfterFundRevenueBondList(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int currentPage) {
 
         switch (searchKey) {
@@ -361,6 +361,72 @@ public class InvestmentService {
         List<AdminLawSatistifyReason> lawSatistifyReasonList = sellerInvestmentMapper.getLawSatistifyList();
 
         return lawSatistifyReasonList;
+    }
+
+    // 판매자 투자후 분배 목록 조회
+    public Map<String, Object> getAfterInvestDivision(String memberId, int currentPage) {
+
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = sellerInvestmentMapper.getAfterInvestDivisionCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<SellerAfterInvestDivision> sellerAfterInvestDivisionList = sellerInvestmentMapper.getAfterInvestDivision(memberId, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("sellerAfterInvestDivisionList", sellerAfterInvestDivisionList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
+    }
+
+    // 판매자 검색조건에 따른 투자후 분배 목록 조회
+    public Map<String, Object> getAfterInvestDivisionBySearch(String memberId, String searchKey, String searchValue, String amDateSettStartDate, String amDateSettEndDate, int currentPage) {
+
+        switch (searchKey) {
+            case "afterInvestDivisionCode":
+                searchKey = "a.after_invest_division_code";
+                break;
+            case "memberId":
+                searchKey = "a.member_id";
+                break;
+            case "investmentCode":
+                searchKey = "a.investment_code";
+                break;
+        }
+
+        // 보여줄 행의 갯수
+        int rowPerpage = 15;
+
+        // 전체 행의 갯수
+        double rowCnt = sellerInvestmentMapper.getAfterInvestDivisionCnt();
+
+        Map<String, Integer> pagingInfo = calculatePagingInfo(currentPage, rowCnt, rowPerpage);
+
+        int startRowNum = pagingInfo.get("startRowNum");
+        int lastPage = pagingInfo.get("lastPage");
+        int startPageNum = pagingInfo.get("startPageNum");
+        int endPageNum = pagingInfo.get("endPageNum");
+
+        List<SellerAfterInvestDivision> sellerAfterInvestDivisionList = sellerInvestmentMapper.getAfterInvestDivisionBySearch(memberId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, startRowNum, rowPerpage);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("sellerAfterInvestDivisionList", sellerAfterInvestDivisionList);
+        resultMap.put("lastPage", lastPage);
+        resultMap.put("startPageNum", startPageNum);
+        resultMap.put("endPageNum", endPageNum);
+
+        return resultMap;
     }
 
     // 판매자 부적합 업종 목록 조회
