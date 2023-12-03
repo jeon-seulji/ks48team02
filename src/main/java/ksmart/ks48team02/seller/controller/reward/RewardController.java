@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.TotalCategory;
 import ksmart.ks48team02.admin.service.TotalCategoryService;
+import ksmart.ks48team02.seller.dto.PreMember;
 import ksmart.ks48team02.seller.service.reward.SellerRewardService;
 import ksmart.ks48team02.user.dto.RewardProject;
 import ksmart.ks48team02.user.service.reward.RewardService;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -112,9 +114,57 @@ public class RewardController {
 
     // 판매자 사전체험단 관리 페이지
     @GetMapping("/products/preExperienceRecruit")
-    public String preExperienceRecruitPage(Model model) {
+    public String preExperienceRecruitPage(Model model,
+                                           HttpSession httpSession) {
+
+        String storeCode = (String) httpSession.getAttribute("SSTORECODE");
+        List<PreMember> preMemberList = sellerRewardService.preMemberList(storeCode);
+        model.addAttribute("preMemberList",preMemberList);
 
         return "seller/reward/products/pre_experience_recruit";
+    }
+
+    //사전체험단 추가 시, 가입된 회원인지 검사
+    @PostMapping("/products/preMemberIdCheck")
+    @ResponseBody
+    public int preMemberIdCheck(@RequestParam String memberId){
+
+        int memberCeck = sellerRewardService.preMemberIdCheck(memberId);
+
+        return memberCeck;
+    }
+
+    //사전체험단 추가 시, 이미 추가된 회원인지 검사
+    @PostMapping("/products/preMemberRegCheck")
+    @ResponseBody
+    public int preMemberRegCheck(@RequestParam String memberId){
+
+        int preMemberRegCheck = sellerRewardService.preMemberRegCheck(memberId);
+
+        return preMemberRegCheck;
+    }
+
+    //사전체험단 추가
+    @GetMapping("/products/regPreMember")
+    public String regPreMember(@RequestParam (name="memberId", required = true) String memberId,
+                            @RequestParam (name="startDate", required = true) String startDate,
+                            @RequestParam (name="endDate", required = true) String endDate,
+                               HttpSession httpSession){
+
+        String storeCode = (String) httpSession.getAttribute("SSTORECODE");
+        sellerRewardService.regPreMember(storeCode, memberId, startDate, endDate);
+
+        return "redirect:/seller/reward/products/preExperienceRecruit";
+    }
+
+    //사전체험단 삭제
+    @GetMapping("/products/delPreMember")
+    public String delPreMember(@RequestParam (name="memberId", required = true) String memberId){
+
+
+        sellerRewardService.delPreMember(memberId);
+
+        return "redirect:/seller/reward/products/preExperienceRecruit";
     }
 
     // 판매자 상품 검색태그 수정 패이지
@@ -142,5 +192,7 @@ public class RewardController {
 
         return"seller/reward/products/comment";
     }
+
+
 
 }

@@ -1,6 +1,7 @@
 package ksmart.ks48team02.seller.service.reward;
 
 
+import ksmart.ks48team02.seller.dto.PreMember;
 import ksmart.ks48team02.seller.mapper.reward.SellerRewardMapper;
 import ksmart.ks48team02.user.dto.RewardProject;
 import lombok.AllArgsConstructor;
@@ -73,5 +74,28 @@ public class SellerRewardService {
         System.out.println(newsListPerProject);
 
         return newsListPerProject;
+    }
+
+    //사전체험단 추가시 가입된 회원인지 검사
+    public int preMemberIdCheck(String memberId) {
+        return sellerRewardMapper.preMemberIdCheck(memberId);
+    }
+
+    //사전체험단 이미 등록된 회원인지 검사
+    public int preMemberRegCheck(String memberId){ return sellerRewardMapper.preMemberRegCheck(memberId); }
+
+    //사전체험단 등록
+    public void regPreMember(String storeCode, String memberId, String startDate, String endDate) {
+     sellerRewardMapper.regPreMember(storeCode, memberId, startDate, endDate);
+    }
+
+    //사전체험단 삭제
+    public void delPreMember(String memberId){
+        sellerRewardMapper.delPreMember(memberId);
+    }
+
+    //사전체험단 조회
+    public List<PreMember> preMemberList (String storeCode){
+        return sellerRewardMapper.preMemberList(storeCode);
     }
 }
