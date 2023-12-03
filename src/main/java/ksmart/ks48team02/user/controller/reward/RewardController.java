@@ -4,7 +4,6 @@ package ksmart.ks48team02.user.controller.reward;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.Coupon;
-import ksmart.ks48team02.admin.dto.DonationInfo;
 import ksmart.ks48team02.admin.service.coupon.AdminCouponService;
 import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
@@ -115,12 +114,8 @@ public class RewardController {
                              @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
                              @RequestParam(name = "commentContent") String commentContent){
 
-
         String memberId = (String)session.getAttribute("SID");
         String memberName = (String) session.getAttribute("SNAME");
-
-
-
         rewardService.addRewardComment(memberId, rewardProjectCode, memberName, commentContent);
 
         return "redirect:/user/reward/detail/comment?rewardProjectCode=" + rewardProjectCode;
@@ -156,14 +151,9 @@ public class RewardController {
                            @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
                            @RequestParam(name = "parentCommentCode") String parentCommentCode){
 
-
         String memberId = (String)session.getAttribute("SID");
         String memberName = (String) session.getAttribute("SNAME");
-
-
-
         rewardService.addReplyComment(reply, rewardProjectCode, parentCommentCode, memberId, memberName);
-
 
         return "redirect:/user/reward/detail/comment?rewardProjectCode=" + rewardProjectCode;
     }
@@ -328,6 +318,94 @@ public class RewardController {
         return "redirect:/user/reward/detail";
     }
 
+    //사전체험 리뷰 목록
+    @GetMapping("/detail/preReview")
+    public String preReview (HttpSession session, Model model,
+                             @RequestParam(name = "rewardProjectCode") String rewardProjectCode){
+        //리워드 상세페이지 정보 조회
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //리워드 사전체험리뷰 목록 조회
+        List<PreReview> preReviewList =rewardService.preReviewList(rewardProjectCode);
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+        //사전체험단 여부 조회
+        String loginMemberId = (String) session.getAttribute("SID");
+        String storeCode = rewardProject.getStoreCode();
+        int isPreMember = rewardService.isPreMember(loginMemberId, storeCode);
+
+        model.addAttribute("recommendProjectList",recommendProjectList);
+        model.addAttribute("rewardProject",rewardProject);
+        model.addAttribute("preReviewList",preReviewList);
+        model.addAttribute("isPreMember",isPreMember);
+
+        return "user/reward/detail/preReview/main";
+    }
+
+    //사전체험 리뷰 상세
+    @GetMapping("/detail/reviewDetail")
+    public String preReviewDetail (HttpSession session, Model model,
+                                   @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                                   @RequestParam(name = "reviewCode") String reviewCode){
+        //리워드 상세페이지 정보 조회
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //사전체험 리뷰 상세내용 조회
+        PreReview preReviewInfo =rewardService.preReview(reviewCode);
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+        //사전체험단 여부 조회
+        String loginMemberId = (String) session.getAttribute("SID");
+        String storeCode = rewardProject.getStoreCode();
+        int isPreMember = rewardService.isPreMember(loginMemberId, storeCode);
+
+        model.addAttribute("recommendProjectList",recommendProjectList);
+        model.addAttribute("rewardProject",rewardProject);
+        model.addAttribute("preReviewInfo",preReviewInfo);
+        model.addAttribute("isPreMember",isPreMember);
+
+        return "user/reward/detail/preReview/reviewDetail";
+    }
+
+    //사전체험 리뷰 등록
+    @GetMapping("/detail/addReview")
+    public String addReviewPage (Model model,
+                                 @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+        //리워드 상세페이지 정보 조회
+        RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
+        //리워드 프로젝트 추천 리스트 조회
+        List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+
+        model.addAttribute("recommendProjectList",recommendProjectList);
+        model.addAttribute("rewardProject",rewardProject);
+
+        return "user/reward/detail/preReview/addReview";
+    }
+
+    // 리뷰 등록 진행
+    @PostMapping("/detail/addReview")
+    public String addReview (PreReview preReview, HttpSession httpSession,
+                             RedirectAttributes reAttr){
+
+        String preMemberId = (String) httpSession.getAttribute("SID");
+        preReview.setMemberId(preMemberId);
+
+        rewardService.preReivewInsert(preReview);
+        reAttr.addAttribute("rewardProjectCode", preReview.getRewardProjectCode());
+
+        return "redirect:/user/reward/detail/preReview";
+    }
+
+    //리뷰 삭제
+    @GetMapping("/detail/delReview")
+    public String delReview (Model model,
+                             @RequestParam(name = "reviewCode") String reviewCode,
+                             @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                             RedirectAttributes reAttr) {
+
+        rewardService.delReview(reviewCode);
+        reAttr.addAttribute("rewardProjectCode",rewardProjectCode);
+
+        return "redirect:/user/reward/detail/preReview";
+    }
 
 
 

@@ -177,4 +177,80 @@
         WHERE
             reward_project_code = #{rewardProjectCode};
     </update>
+
+    <!--사전체험단 회원 등록 시 가입된 회원인지 검사-->
+    <select id="preMemberIdCheck" parameterType="String">
+        SELECT
+            COUNT(1)
+        FROM
+            customer AS c
+        WHERE
+            c.member_id = #{memberId};
+    </select>
+
+    <!--사전체험단 등록-->
+    <insert id="regPreMember" parameterType="String">
+        <selectKey keyProperty="preExperienceCode" resultType="String" order="BEFORE">
+            SELECT
+                (CASE
+                    WHEN
+                        COUNT(s.sotre_pre_experience_code) = 0  THEN CONCAT('PRE_', CURDATE()+0, '_1')
+                    ELSE
+                        CONCAT('PRE_', CURDATE()+0 ,'_' ,MAX(CAST(substring_index(s.sotre_pre_experience_code,'_',-1)AS UNSIGNED )+1))
+                END) AS preExperienceCode
+            FROM
+                store_pre_experience as s
+            WHERE
+                SUBSTRING_INDEX(SUBSTRING_INDEX(s.sotre_pre_experience_code,'_',2),'_',-1) = CURDATE()+0
+        </selectKey>
+        INSERT INTO store_pre_experience
+            (sotre_pre_experience_code, store_code, member_id, pre_reg_date, pre_unreg_date)
+        VALUES
+            (#{preExperienceCode},#{storeCode},#{memberId},#{startDate},#{endDate});
+    </insert>
+
+    <!--사전체험단 등록된 회원인지 검사-->
+    <select id="preMemberRegCheck" parameterType="String">
+        SELECT
+            COUNT(1)
+        FROM
+            store_pre_experience AS s
+        WHERE
+            s.member_id = #{memberId};
+    </select>
+
+    <!--사전체험단 취소-->
+    <delete id="delPreMember" parameterType="String">
+        DELETE
+            store_pre_experience
+        FROM
+            store_pre_experience
+        WHERE
+            member_id = #{memberId}
+    </delete>
+
+    <!--사전체험단 조회-->
+    <select id="preMemberList" parameterType="String" resultType="PreMember">
+        SELECT
+            s.member_id AS memberId,
+            s.pre_reg_date AS startDate,
+            s.pre_unreg_date AS endDate,
+            m.member_name AS memberName,
+            m.contact_info AS mobile,
+            c.customer_addr AS addr,
+            c.customer_addr_detail AS addrDetail
+        FROM
+            store_pre_experience AS s
+        INNER JOIN
+            member AS m
+        ON
+            s.member_id=m.member_id
+        INNER JOIN
+            customer AS c
+        ON
+            c.member_id = s.member_id
+        WHERE
+            s.store_code = #{storeCode};
+    </select>
+
 </mapper>
