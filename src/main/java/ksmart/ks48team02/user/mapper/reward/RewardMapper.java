@@ -4,10 +4,7 @@ package ksmart.ks48team02.user.mapper.reward;
 import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
-import ksmart.ks48team02.user.dto.Member;
-import ksmart.ks48team02.user.dto.RewardComment;
-import ksmart.ks48team02.user.dto.RewardOption;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
@@ -103,5 +100,20 @@ public interface RewardMapper {
 
     //프로젝트 추천 리스트 조회
     public List<RewardProject> projectRecommendList();
+
+    //사전체험 후기 목록
+    public List<PreReview> preReviewList(String rewardProjectCode);
+
+    //사전 체험 상세정보
+    public PreReview preReview(String reviewCode);
+
+    //사전 체험 리뷰 등록
+    public int preReivewInsert (PreReview preReview);
+
+    //사전체험단 여부 조회
+    public int isPreMember(String loginMemberId, String storeCode);
+
+    //리뷰 삭제
+    public int delReview(String reviewCode);
 
 }
