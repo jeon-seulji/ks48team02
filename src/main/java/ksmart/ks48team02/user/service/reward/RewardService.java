@@ -4,10 +4,7 @@ package ksmart.ks48team02.user.service.reward;
 import ksmart.ks48team02.common.dto.DeliveryMessage;
 import ksmart.ks48team02.common.dto.OrderTotal;
 import ksmart.ks48team02.common.dto.PaymentResult;
-import ksmart.ks48team02.user.dto.Member;
-import ksmart.ks48team02.user.dto.RewardComment;
-import ksmart.ks48team02.user.dto.RewardOption;
-import ksmart.ks48team02.user.dto.RewardProject;
+import ksmart.ks48team02.user.dto.*;
 import ksmart.ks48team02.user.mapper.reward.RewardMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -189,4 +186,22 @@ public class RewardService {
     public List<RewardProject> projectRecommendList() {
         return rewardMapper.projectRecommendList();
     }
+
+    //사전체험 후기 목록
+    public List<PreReview> preReviewList(String rewardProjectCode){return rewardMapper.preReviewList(rewardProjectCode);}
+
+    //사전 체험 상세정보
+    public PreReview preReview(String reviewCode){return rewardMapper.preReview(reviewCode);}
+
+    //사전 체험 리뷰 등록
+    public void preReivewInsert (PreReview preReview){
+        rewardMapper.preReivewInsert(preReview);
+    }
+
+    //사전체험단 여부 조회
+    public int isPreMember(String loginMemberId, String storeCode){return rewardMapper.isPreMember(loginMemberId, storeCode);}
+
+    //리뷰 삭제
+    public void delReview(String reviewCode){rewardMapper.delReview(reviewCode);}
+
 }
