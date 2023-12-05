@@ -228,15 +228,19 @@ public class InvestmentController {
     }
 
     @GetMapping("/order")
-    public String orderPage(Model model, HttpSession httpSession) {
+    public String orderPage(Model model, HttpSession session) {
 
         model.addAttribute("title", "투자 주문 페이지");
 
-        String memberId = (String) httpSession.getAttribute("SID");
+        String memberId = (String) session.getAttribute("SID");
 
         if(memberId == null) {
             return "user/account/login";
         }
+        // 프로젝트 상세 정보 가져오기
+
+
+
         return "user/investment/order/main";
     }
 
