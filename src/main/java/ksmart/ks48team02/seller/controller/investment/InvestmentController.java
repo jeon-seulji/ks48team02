@@ -2,11 +2,9 @@ package ksmart.ks48team02.seller.controller.investment;
 
 import jakarta.servlet.http.HttpSession;
 import ksmart.ks48team02.admin.dto.*;
-import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueBond;
-import ksmart.ks48team02.seller.dto.SellerAfterFundRevenueStock;
-import ksmart.ks48team02.seller.dto.SellerInvestmentContent;
-import ksmart.ks48team02.seller.dto.SellersecuritiesIssuanceStock;
+import ksmart.ks48team02.seller.dto.*;
 import ksmart.ks48team02.seller.service.investment.InvestmentService;
+import ksmart.ks48team02.user.dto.InvestmentInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -186,10 +184,45 @@ public class InvestmentController {
     }
 
     @GetMapping("/search/after-invest-division")
-    public String getAfterInvestDivisionList(Model model) {
+    public String getAfterInvestDivisionList(Model model
+                                            ,@RequestParam(name = "searchKey", required = false) String searchKey
+                                            ,@RequestParam(name = "searchValue", required = false, defaultValue = "") String searchValue
+                                            ,@RequestParam(name = "amDateSettStartDate", required = false) String amDateSettStartDate
+                                            ,@RequestParam(name = "amDateSettEndDate", required = false) String amDateSettEndDate
+                                            ,@RequestParam(name = "currentPage", required = false, defaultValue = "1") int currentPage
+                                            ,HttpSession session) {
+
+        String loginId = (String) session.getAttribute("SID");
+
+        Map<String, Object> resultMap = null;
+
+        List<SellerAfterInvestDivision> sellerAfterInvestDivisionList = null;
+
+        if(searchKey != null) {
+            resultMap = investmentService.getAfterInvestDivisionBySearch(loginId, searchKey, searchValue, amDateSettStartDate, amDateSettEndDate, currentPage);
+            sellerAfterInvestDivisionList = (List<SellerAfterInvestDivision>) resultMap.get("sellerAfterInvestDivisionList");
+        }else {
+            resultMap = investmentService.getAfterInvestDivision(loginId, currentPage);
+            sellerAfterInvestDivisionList = (List<SellerAfterInvestDivision>) resultMap.get("sellerAfterInvestDivisionList");
+        }
+
+        int lastPage = (int) resultMap.get("lastPage");
+        int startPageNum = (int) resultMap.get("startPageNum");
+        int endPageNum = (int) resultMap.get("endPageNum");
+
+        System.out.println(sellerAfterInvestDivisionList);
 
         model.addAttribute("title", "판매자 : 투자 후 분배");
         model.addAttribute("contentsTitle", "투자 후 분배");
+        model.addAttribute("sellerAfterInvestDivisionList", sellerAfterInvestDivisionList);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("amDateSettStartDate", amDateSettStartDate);
+        model.addAttribute("amDateSettEndDate", amDateSettEndDate);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("endPageNum", endPageNum);
 
         return "seller/investment/list/after_invest_division_list";
     }
@@ -447,13 +480,20 @@ public class InvestmentController {
     }
 
     @GetMapping("/news")
-    public String getInvestNews(Model model) {
+    public String newsManagementPage(Model model,
+                                     HttpSession session) {
 
         model.addAttribute("title", "판매자 : 투자 새소식");
         model.addAttribute("contentsTitle", "투자 새소식");
+        String memberId = (String)session.getAttribute("SID");
+        List<InvestmentInfo> investmentInfo = investmentService.getInvestmentInfo(memberId);
+        model.addAttribute("investmentInfo", investmentInfo);
+        List<NewsList> newsList = investmentService.getNews();
+        model.addAttribute("newsList", newsList);
 
         return "seller/investment/news/main";
     }
+
 
     @GetMapping("/comment")
     public String getInvestComment(Model model) {

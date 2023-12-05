@@ -173,10 +173,10 @@
         <div class="board-page-area">
             <div class="list-controller-inner">
                 <ul>
-                    <li><a th:href="@{/seller/investment/search/after-fund-revenue(searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate})}">[맨처음으로]</a></li>
+                    <li><a th:href="@{/seller/investment/search/after-fund-revenue(searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate})}"><<</a></li>
                     <li><a th:if="${currentPage > 1}"
-                           th:href="@{/seller/investment/search/after-fund-revenue(currentPage=${currentPage - 1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate})}">[이전]</a>
-                        <span th:unless="${currentPage > 1}">[이전]</span>
+                           th:href="@{/seller/investment/search/after-fund-revenue(currentPage=${currentPage - 1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate})}">&lt;</a>
+                        <span th:unless="${currentPage > 1}">&lt;</span>
                     </li>
                     <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
                         <a th:if="${num != currentPage}"
@@ -184,16 +184,16 @@
                         <span th:unless="${num != currentPage}" th:text="|[${num}]|"></span>
                     </th:block>
                     <li><a th:if="${currentPage < lastPage}"
-                           th:href="@{/seller/investment/search/after-fund-revenue(currentPage=${currentPage +1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate})}">[다음]</a>
-                        <span th:unless="${currentPage < lastPage}">[다음]</span>
+                           th:href="@{/seller/investment/search/after-fund-revenue(currentPage=${currentPage +1}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate})}">></a>
+                        <span th:unless="${currentPage < lastPage}">></span>
                     </li>
-                    <li><a th:href="@{/seller/investment/search/after-fund-revenue(currentPage=${lastPage}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate})}">[맨마지막]</a></li>
+                    <li><a th:href="@{/seller/investment/search/after-fund-revenue(currentPage=${lastPage}, searchKey=${searchKey}, searchValue=${searchValue}, amDateSettStartDate=${amDateSettStartDate}, amDateSettEndDate=${amDateSettEndDate})}">>></a></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="btn-area">
+    <!--<div class="btn-area">
         <ul>
             <li>
                 <button type="button" class="submitBtn"
@@ -202,7 +202,7 @@
                 </button>
             </li>
         </ul>
-    </div>
+    </div>-->
 
 </th:block>
 </html>

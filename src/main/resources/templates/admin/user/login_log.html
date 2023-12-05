@@ -76,7 +76,7 @@
                 </div>
             </div>
             <!-- contents area -->
-            <table class="login-log">
+            <table class="login-log settlement-log">
                 <thead>
                 <tr>
                     <th style="width:5%;">
@@ -91,19 +91,43 @@
                 </thead>
                 <tbody>
                 <!-- 조회 결과 없음 -->
-                <tr th:if="${loginLogs == null}">
+                <tr th:if="${loginLogAll == null}">
                     <td colspan="10" style="text-align: center; padding: 30px 0;">검색 결과가 없습니다.</td>
                 </tr>
                 <!-- 조회 결과 contents -->
-                <tr th:unless="${loginLogs == null}" th:each="l : ${loginLogs}">
+                <tr th:unless="${loginLogAll == null}" th:each="l : ${loginLogAll}">
                     <td class="table-data-center">
                         <input type="checkbox" name="selectList">
                     </td>
-                    <td class="table-data-center"></td>
+                    <td class="table-data-center" th:text="${l.loginLogCode}" ></td>
+                    <td class="table-data-center" th:text="${l.memberId}"></td>
+                    <td class="table-data-center" th:text="${l.member.memberTypeDetail}"></td>
+                    <td class="table-data-center" th:text="${l.loginTime}"></td>
+                    <td class="table-data-center" th:text="${l.clientNetAddress}"></td>
                 </tr>
                 </tbody>
             </table>
 
+            <div class="board-page-area">
+                <div class="list-controller-inner">
+                    <ul>
+                        <li class="link-active"><a th:href="@{#}">1</a></li>
+                        <li><a th:href="@{#}">2</a></li>
+                        <li><a th:href="@{#}">3</a></li>
+                        <li><a th:href="@{#}">4</a></li>
+                        <li><a th:href="@{#}">5</a></li>
+                        <li><a th:href="@{#}">6</a></li>
+                    </ul>
+                    <div class="list-btn-area">
+                        <button class="prev-transfer">
+                            <span>prev</span>
+                        </button>
+                        <button class="next-transfer">
+                            <span>next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
