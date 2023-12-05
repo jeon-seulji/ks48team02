@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{seller/layout/default}">
-
 <head>
     <!--  사용자별 css file 추가 부분 -->
     <title th:text="${title}"></title>
@@ -16,7 +15,6 @@
         }
     </style>
 </head>
-
 
 <!-- 사용자 페이지별 javascript file -->
 <th:block layout:fragment="customJsFile">
@@ -62,7 +60,6 @@
                         <p th:case="'기부'" style="color: var(--maincolor);">[[${list.donationCode}]]</p>
                         <p th:case="'투자'" style="color: var(--maincolor);">[[${list.investmentCode}]]</p>
                     </th:block>
-
                 </div>
                 <div class="info-more-btn">
                     <a class="more-btn" style="padding: 7px 10px 9px 19px;">
@@ -291,5 +288,4 @@
     </div>
 
 </th:block>
-</body>
 </html>

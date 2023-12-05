@@ -277,24 +277,6 @@
 													 th:style="'background-image: url(' + |@{/summernoteImage/}${l.imageUrl}| + '),url(' + |@{/user/images/no-image.svg}| + ');'"></div>
 											</a>
 										</th:block>
-<!--										<a th:href="|@{${l.projectType == '리워드'} ? /user/reward/detail(rewardProjectCode=${l.projectCode}) : ${l.projectType == '기부'}}|">-->
-<!--/*										<a th:href="|@{${l.projectType == '리워드'}? /user/reward/detail(rewardProjectCode=${l.projectCode}) : ${l.projectType == '기부'} ? /user/donation/detail(donationCode=${l.projectCode}) : /user/investment/detail/main(investmentCode=${l.projectCode})}|"> */-->
-<!--										<em th:text="${l.rankCount}">순위</em>-->
-<!--											<div>-->
-<!--												<h5 th:text="${l.subject}">프로젝트 명</h5>-->
-<!--												<div class="product-detail-info">-->
-<!--													<p class="funding-percent"><span th:text="${l.achievementPercent}"></span>%</p>-->
-<!--													<p class="category" >-->
-<!--														<span th:if="${l.categoryName == ''}">카테고리없음</span>-->
-<!--														<span th:unless="${l.categoryName == ''}" th:text="${l.categoryName}">카테고리</span>-->
-<!--														·-->
-<!--														<span th:text="${l.projectType}">분류</span>-->
-<!--													</p>-->
-<!--												</div>-->
-<!--											</div>-->
-<!--											<div class="project-img"-->
-<!--												 th:style="|${l.imageUrl} == null ? 'background:#eee;':'background:url('${l.imageUrl}') no-repeat center center / cover'|" ></div>-->
-<!--										</a>-->
 									</li>
 								</ul>
 							</div>
