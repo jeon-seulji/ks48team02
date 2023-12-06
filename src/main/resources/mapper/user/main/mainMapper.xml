@@ -372,7 +372,7 @@
     <select id="getRankList" parameterType="String" resultMap="orderRankMap">
        <include refid="resultset"/>
         SELECT
-            RANK() OVER(ORDER BY ${rankCategory} DESC) AS rankCount,
+            row_number() OVER(ORDER BY ${rankCategory} DESC) AS rankCount,
             rs.projectCode AS projectCode,
             rs.subject AS subject,
             rs.projectType AS projectType,
