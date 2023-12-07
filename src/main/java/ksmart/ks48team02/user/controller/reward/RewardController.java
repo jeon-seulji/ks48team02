@@ -98,7 +98,10 @@ public class RewardController {
         List<RewardComment> rewardCommentList = rewardService.getCommentList(rewardProjectCode);
         //리워드 프로젝트 추천 리스트 조회
         List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+        // 회원이 프로젝트 찜 했는지 조회
+        int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,memberId);
 
+        model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("memberId", memberId);
@@ -162,7 +165,10 @@ public class RewardController {
 
     //리워드 상세 페이지 새소식
     @GetMapping("/detail/news")
-    public String newsPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+    public String newsPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode, HttpSession session) {
+
+        //로그인 한 아이디 조회
+        String loginMemberId = (String) session.getAttribute("SID");
 
         //프로젝트 상세정보 조회
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
@@ -170,7 +176,10 @@ public class RewardController {
         List<NewsList> newsList = donationService.getNewsList(rewardProjectCode);
         //리워드 프로젝트 추천 리스트 조회
         List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+        // 회원이 프로젝트 찜 했는지 조회
+        int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,loginMemberId);
 
+        model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("newsList",newsList);
@@ -182,7 +191,11 @@ public class RewardController {
     @GetMapping("/detail/news/detail")
     public String newsDetailPage(Model model,
                                  @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
-                                 @RequestParam(name = "newCode") String newsCode){
+                                 @RequestParam(name = "newCode") String newsCode,
+                                 HttpSession session){
+
+        //로그인 한 아이디 조회
+        String loginMemberId = (String) session.getAttribute("SID");
 
         //프로젝트 상제정보 조회
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
@@ -190,7 +203,10 @@ public class RewardController {
         NewsList newsList = donationService.getDetailNews(newsCode);
         //리워드 프로젝트 추천 리스트 조회
         List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+        // 회원이 프로젝트 찜 했는지 조회
+        int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,loginMemberId);
 
+        model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("newsList", newsList);
@@ -287,13 +303,18 @@ public class RewardController {
 
     //리워드 환불 정책 페이지
     @GetMapping("/detail/refundPolicy")
-    public String refundPolicyPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode){
-
+    public String refundPolicyPage(Model model, @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                                   HttpSession session){
+        //로그인 한 아이디 조회
+        String loginMemberId = (String) session.getAttribute("SID");
         //프로젝트 상세정보 조회
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
         //리워드 프로젝트 추천 리스트 조회
         List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+        // 회원이 프로젝트 찜 했는지 조회
+        int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,loginMemberId);
 
+        model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         log.info("프로젝트 상세페이지 정보 : {}",rewardProject);
@@ -309,6 +330,12 @@ public class RewardController {
                          RedirectAttributes reattr){
         reattr.addAttribute("rewardProjectCode",rewardProjectCode);
         String loginMemberId = (String) httpSession.getAttribute("SID");
+
+        //로그인 하지 않았다면 로그인 화면으로 이동.
+        if(loginMemberId == null) {
+            return "user/account/login";
+        }
+
         if(greatCheck > 0) {
             rewardService.greatCancel(rewardProjectCode, loginMemberId);
         } else {
@@ -332,7 +359,10 @@ public class RewardController {
         String loginMemberId = (String) session.getAttribute("SID");
         String storeCode = rewardProject.getStoreCode();
         int isPreMember = rewardService.isPreMember(loginMemberId, storeCode);
+        // 회원이 프로젝트 찜 했는지 조회
+        int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,loginMemberId);
 
+        model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("preReviewList",preReviewList);
@@ -356,7 +386,10 @@ public class RewardController {
         String loginMemberId = (String) session.getAttribute("SID");
         String storeCode = rewardProject.getStoreCode();
         int isPreMember = rewardService.isPreMember(loginMemberId, storeCode);
+        // 회원이 프로젝트 찜 했는지 조회
+        int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,loginMemberId);
 
+        model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
         model.addAttribute("preReviewInfo",preReviewInfo);
@@ -368,12 +401,18 @@ public class RewardController {
     //사전체험 리뷰 등록
     @GetMapping("/detail/addReview")
     public String addReviewPage (Model model,
-                                 @RequestParam(name = "rewardProjectCode") String rewardProjectCode) {
+                                 @RequestParam(name = "rewardProjectCode") String rewardProjectCode,
+                                 HttpSession session) {
+        //로그인 아이디 조회
+        String loginMemberId = (String) session.getAttribute("SID");
         //리워드 상세페이지 정보 조회
         RewardProject rewardProject = rewardService.rewardProjectDetail(rewardProjectCode);
         //리워드 프로젝트 추천 리스트 조회
         List<RewardProject> recommendProjectList = rewardService.projectRecommendList();
+        // 회원이 프로젝트 찜 했는지 조회
+        int greatCheck = rewardService.projectGreatCheck(rewardProjectCode,loginMemberId);
 
+        model.addAttribute("greatCheck", greatCheck);
         model.addAttribute("recommendProjectList",recommendProjectList);
         model.addAttribute("rewardProject",rewardProject);
 
