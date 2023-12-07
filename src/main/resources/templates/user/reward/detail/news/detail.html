@@ -17,7 +17,9 @@
 
 <!-- 사용자별 스크립트 작성 -->
 <th:block layout:fragment="customJsCode">
-    <script>
+    <script th:inline="javascript">
+        let rewardProjectCode = [[${rewardProject.rewardProjectCode}]];
+
         var swiper = new Swiper(".mySwiper", {
             spaceBetween: 30,    // 슬라이드 사이 여백
             slidesPerView : 'auto', // 한 슬라이드에 보여줄 갯수
@@ -45,6 +47,26 @@
                 nextEl: "#rewardProject .swiper-button-next",
                 prevEl: "#rewardProject .swiper-button-prev",
             },
+        });
+
+        //찜하기 여부에 따라 찜하기 아이콘 변화
+        let greatCheck = [[${greatCheck}]];
+        if(greatCheck > 0) {
+            $('#likeBtn').find('svg').attr('fill','currentColor');
+        } else {
+            $('#likeBtn').find('svg').attr('fill','lightGrey');
+        }
+
+        //찜하기 누를때마다 찜하기 진행, 취소.
+        $('#likeBtn').click(function(){
+            let fill = $(this).find('svg').attr('fill');
+            if(fill === 'currentColor') {
+                //찜하기 취소
+                window.location.href = `/user/reward/great?rewardProjectCode=${rewardProjectCode}&greatCheck=${greatCheck}`;
+            } else {
+                //찜하기 진행
+                location.href=`/user/reward/great?rewardProjectCode=${rewardProjectCode}&greatCheck=${greatCheck}`;
+            }
         });
     </script>
 
