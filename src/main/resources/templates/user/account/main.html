@@ -178,6 +178,12 @@
             border: 1px solid var(--maincolor);
             color: #fff;
         }
+
+        .form-control::placeholder{
+            font-size: small;
+            color: lightgrey;
+        }
+
     </style>
 </head>
 
@@ -207,7 +213,7 @@
                 <div class="mb-3" id="id-check">
                     <label for="memberId" class="form-label">ID</label>
                     <div style="display: flex; gap:10px;">
-                        <input type="text" name="memberId" class="form-control" id="memberId" placeholder="아이디 입력">
+                        <input type="text" name="memberId" class="form-control" id="memberId" placeholder="아이디 입력 (4자리 이상 20자리 미만)">
                         <button id="id-check-btn" type="button" class="submitBtn_white" style="width:105px;"; >중복확인</button>
                         <button id="readonly-btn" type="button" class="submitBtn_black" style="background-color: lightgrey; color: white; border: 1px solid lightgray; width:105px; display: none">변경하기</button>
                     </div>
@@ -217,7 +223,7 @@
                 <div class="mb-3">
                     <label for="memberPw" class="form-label">비밀번호</label>
                     <input type="password" name="memberPw" class="form-control pw-check"  aria-describedby="emailHelp" id="memberPw" placeholder="8자 이상의 비밀번호 입력 (영문, 숫자, 특수문자 혼합)">
-                    <div class="form-text" style="color:red; font-size:13px;"></div>
+                    <div id="pw-mix-alert" class="form-text" style="color:red; font-size:13px;"></div>
                 </div>
                 <div class="mb-3">
                     <label for="checkPw" class="form-label">비밀번호 확인</label>
@@ -720,40 +726,48 @@ Fax: 02)0000-0000
 
         /* 중복확인 버튼 클릭 이벤트리스너 등록 */
         $idCheckBtn.addEventListener('click',function (){
-
+            // 소문자와 숫자만 허용
+            const alphanumericRegex = /^[a-z0-9]+$/;
+            // 소문자 영어는 무조건 포함!!
+            const lowercaseRegex = /[a-z]/;
             // 유효성 검사
             if($memberId.value.trim() === '' || typeof $memberId === 'undefined'){
                 $idAlert.textContent = '올바른 ID를 입력해 주세요';
+            }else if(!alphanumericRegex.test($memberId.value) || !lowercaseRegex.test($memberId.value) || $memberId.value.length<4 ||  $memberId.value.length>20){
+
+                    // 0. 영문, 숫자만 포함 가능 (한글 X)
+                    $idAlert.textContent = '4~20 자리의 영문과 숫자로 입력해 주세요';
+
 
             }else{
-                // 아이디 중복 확인
-                $.ajax({
-                    url : '/user/account/idCheck',
-                    method : 'POST',
-                    data : {'memberId': $memberId.value},
-                    dataType : 'json'
-                })
-
-                    .done(function (response){
-                        if(response) { // true : 이미 아이디 존재
-                            $idAlert.textContent = '이미 사용 중인 아이디입니다'
-                        }else{
-                            $idAlert.textContent = '';
-                            alert('사용 가능한 아이디입니다');
-                            /* readonly로 변경하고 스타일 바꾸기 */
-                            $idCheckBtn.style.display = 'none';
-                            $disabledBtn.style.display = 'block';
-
-                            $memberId.setAttribute('readonly','readonly');
-                            console.log($memberId.value);
-                        }
+                    // 아이디 중복 확인
+                    $.ajax({
+                        url : '/user/account/idCheck',
+                        method : 'POST',
+                        data : {'memberId': $memberId.value},
+                        dataType : 'json'
                     })
 
-                    .fail(function(jqXHR, textStatus){
-                        alert('통신 중 오류가 발생하였습니다');
-                        console.log(`Request failed: ${textStatus}`);
-                    })
-            }
+                        .done(function (response){
+                            if(response) { // true : 이미 아이디 존재
+                                $idAlert.textContent = '이미 사용 중인 아이디입니다'
+                            }else{
+                                $idAlert.textContent = '';
+                                alert('사용 가능한 아이디입니다');
+                                /* readonly로 변경하고 스타일 바꾸기 */
+                                $idCheckBtn.style.display = 'none';
+                                $disabledBtn.style.display = 'block';
+
+                                $memberId.setAttribute('readonly','readonly');
+                                console.log($memberId.value);
+                            }
+                        })
+
+                        .fail(function(jqXHR, textStatus){
+                            alert('통신 중 오류가 발생하였습니다');
+                            console.log(`Request failed: ${textStatus}`);
+                        })
+                }
         });
 
         /* 변경하기 버튼 클릭 이벤트리스너 등록 */
@@ -830,11 +844,34 @@ Fax: 02)0000-0000
 
         })
 
-        /* 비밀번호 & 비밀번호확인 일치 체크 */
+        /* 비밀번호 : 8자리 이상 영문 숫자 특수문자 포함되는지 체크 */
         const $pwEles = document.querySelectorAll('.pw-check');
         const $memberPw = document.getElementById('memberPw');
         const $checkPw = document.getElementById('checkPw');
-        const $pwAlert = document.getElementById('pw-alert');
+        const $pwAlert = document.getElementById('pw-alert'); // 비밀번호 서로 일치하는지 확인
+        const $pwMixAlert = document.getElementById('pw-mix-alert'); // 비밀번호 혼합 확인
+
+        $memberPw.addEventListener('focusout',function(){
+            const password = $memberPw.value;
+            // 1. 8자리인지 이상인지 확인
+            if(password.length<8){
+                $pwMixAlert.textContent = '비밀번호를 8자리 이상 입력해 주세요';
+            }else{
+                // 2. 소문자, 특수문자, 숫자가 각각 하나 이상 포함되는지 확인
+                const specialCharRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+                const digitRegex = /\d/;
+
+                if(!(lowercaseRegex.test(password) && specialCharRegex.test(password) && digitRegex.test(password))){
+                    $pwMixAlert.textContent = '비밀번호가 영문, 특수문자, 숫자를 모두 포함하여야 합니다'
+                }else{
+                    $pwMixAlert.textContent = '';
+                }
+            }
+
+        })
+
+
+        /* 비밀번호 & 비밀번호확인 일치 체크 */
         $pwEles.forEach((ele)=>{
 
             ele.addEventListener('focusout',()=>{
@@ -850,8 +887,6 @@ Fax: 02)0000-0000
                 }
             })
         })
-
-
     </script>
 
 </th:block>
