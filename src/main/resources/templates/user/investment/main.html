@@ -256,7 +256,7 @@
                                 <span class="investment-item-span-third" th:text="|${#numbers.formatInteger(l.investmentDeadlineCnt,0,'COMMA')}일 남음|"></span>
                             </div>
                             <div class="investment-item-third-child project-title">
-                                <a th:text="${l.investmentSubject}" th:href="@{/user/investment/detail/main}"></a>
+                                <a th:text="${l.investmentSubject}" ></a>
                             </div>
                             <div class="investment-item-fourth-child" th:text="${l.investmentCompany}"></div>
                         </div>

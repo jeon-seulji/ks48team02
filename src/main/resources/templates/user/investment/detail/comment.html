@@ -101,7 +101,8 @@
         const $commentBoxClose = document.getElementById('commentBoxClose');
 
         $writeButton.addEventListener('click', function (){
-            const  sessionId = '[[${SID}]]';
+            const  sessionId = '[[${memberId}]]';
+            console.log(sessionId);
             if (sessionId == '' || sessionId == null || typeof sessionId == 'undefined'){
                 alert('글쓰기 기능은 로그인을 해야합니다!');
                 return false;
@@ -207,9 +208,15 @@
                     <div style="display: inline-block;">
                         <img src="https://picpac.kr/common/img/default_profile.png" style="width: 50px; height: 50px; border-radius: 30px;">
                     </div>
-                    <div style="display: inline-block; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
-                        <p th:text="${l.memberName}"></p>
+                    <div style="display: inline; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
+                        <span  th:text="${l.memberId}"></span>
+                        <span class="float-right">
+                            <a th:if="${memberId == l.memberId}" onclick='return confirm("댓글을 삭제하시겠습니까?");' class="delCommentBtn btn btn-sm btn-danger btn rounded-pill justify-content-end" th:href="@{/user/investment/detail/commentDelete(investmentCode=${investmentInfo.investmentCode},investCommentCode=${l.investCommentCode})}">삭제</a>
+                        </span>
                     </div>
+                    <!--<div style="display: inline-block; width: auto; height: 100%; color: black; font-weight: bold; margin-left: 5px; top: 10%">
+                        <p th:text="${l.memberName}"></p>
+                    </div>-->
                 </div>
                 <div class="col-lg-12" style="height: 10px"></div>
                 <div style="background: #f9fafb; border-radius: 5px; padding: 10px">
