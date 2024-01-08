@@ -10,10 +10,10 @@ public class SecuritiesIssuanceBond {
     private String memberId;
     private String investmentCode;
     private String interestRate;
-    private String investMinCost;
-    private String bondPrice;
+    private int investMinCost;
+    private int bondPrice;
     private String securitiesClassification;
-    private String maturity;
+    private int maturity;
     private String subscriptionAllocationRanking;
     private String bondType;
     private LocalDateTime subscriptionDate;
@@ -22,5 +22,5 @@ public class SecuritiesIssuanceBond {
     private LocalDateTime estimatedIssueDate;
     private LocalDateTime allocationConfirmationDate;
     private LocalDateTime paymentDate;
-    private String accountToBeIssued;
+    private int accountToBeIssued;
 }

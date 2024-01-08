@@ -51,6 +51,9 @@ public interface UserInvestmentMapper {
     // 댓글 등록
     public void CommentAdd(String memberId, String investmentCode,String memberName,String commentContent);
 
+    // 댓글 삭제
+    public int commentDelete (String investCommentCode);
+
     // 댓글 리스트
     public List<InvestmentComment> getCommentList(String investmentCode);
 

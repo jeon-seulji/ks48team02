@@ -137,7 +137,7 @@
 
                 // 청약 가능 수량 검사
                 let stockEls = parseInt($('#stockNumber').val());
-                if(stockEls < parseInt($('#minStock').text()) || stockEls > parseInt($('#maxStock').text())){
+                if(stockEls < parseInt($('.minStock').text()) || stockEls > parseInt($('.maxStock').text())){
                     alert('청약 가능 수량이 아닙니다.');
                     return;
                 }
@@ -186,17 +186,24 @@
                     }
                 });
                 if(isValid){
+
+
                     const paymentResult = {};
+                    let stockPrice = $('.stockPrice').data('stockPrice');
+                    let stockAmount = $('#stockNumber').val();
+                    let amount = stockPrice * stockAmount;
+                    let companyName = [[${investmentInfo.investmentCompany}]];
+                        paymentMethodsWidget.updateAmount(amount);
 
                     paymentWidget.requestPayment({
-                        amount: 5000000,
+                        amount: amount,
                         orderId: generateUUID(),
-                        orderName: "주식회사 라다하임",
+                        orderName: companyName,
                         successUrl: window.location.origin + "/user/investment",
                         failUrl: window.location.origin + "/user/investment",
-                        customerEmail: "customer123@gmail.com",
+                        /*customerEmail: "customer123@gmail.com",
                         customerName: "김토스",
-                        customerMobilePhone: "01012341234"
+                        customerMobilePhone: "01012341234"*/
                     })
                 }
 
@@ -204,11 +211,11 @@
 
             // 주문 금액 계산해서 넣기
             $('#stockNumber').on('input', function(){
-                let stockPrice = $('#stockPrice').data('stockPrice');
+                let stockPrice = $('.stockPrice').data('stockPrice');
                 let stockAmount = $(this).val();
                 let result = (stockPrice*stockAmount).toLocaleString('ko-kr') + '원';
                 $('.total-price').text(result);
-                $('.stockNumber').text($('#stockNumber').val() + '주');
+                $('.stockNumber').text($('#stockNumber').val() + '주(구좌)');
             });
 
 
@@ -284,10 +291,10 @@
                     <div class="col-lg-8">
 
                         <form id="investOrderInfoForm">
-                            <h5 style="font-weight: bold;">증권 계좌 입력</h5>
-                            <div style="color: black; font-size: 18px;">주식이 입고될 증권계좌를 입력해 주세요</div>
+                            <h5 style="font-weight: bold;" th:if="${investmentInfo.securitiesClassification} == '주식'">증권 계좌 입력</h5>
+                            <div style="color: black; font-size: 18px;" th:if="${investmentInfo.securitiesClassification} == '주식'">주식이 입고될 증권계좌를 입력해 주세요</div>
                             <br>
-                            <div class="cal-12">
+                            <div class="cal-12" th:if="${investmentInfo.securitiesClassification} == '주식'">
                                 <label for="memIvsSecurCode" class="mt20 mb4" style="color: black">증권사 선택</label>
                                 <select id="memIvsSecurCode" class="custom-select">
                                     <option value="" disabled="disabled" selected="selected">증권사를 선택해 주세요</option>
@@ -317,11 +324,11 @@
                                 <label for="stockAccountNumber" class="mt20 mb4" style="color: black">증권 계좌 번호 입력</label><br>
                                 <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="d_form large" id="stockAccountNumber" name="stockAccountNumber" placeholder="'-'없이 숫자만 입력해주세요." value required>
                             </div><br>
-                            <div class="mt30">
+                            <div class="mt30" th:if="${investmentInfo.securitiesClassification} == '주식'">
                                 투자자 본인 명의의 증권 계좌로 교부됩니다. 직접 주식거래가 가능한 증권 계좌번호를 입력해 주세요.&nbsp;
                             </div><br>
 
-                            <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div><br><br>
+                            <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%" th:if="${investmentInfo.securitiesClassification} == '주식'"></div><br><br>
 
                             <h5 style="font-weight: bold;">배송지</h5>
                             <div style="color: black; font-size: 18px;">주소를 입력해 주세요.</div>
@@ -349,8 +356,9 @@
                                     <ul class="tight">
                                         <li>
                                             <dl>
-                                                <dd>김플루님의 크라우드펀딩 투자 한도</dd>
-                                                <dt id="investLimit" th:text="${#numbers.formatInteger(25000000,3,'COMMA') + '원'}" th:data-invest-limit="${25000000}"></dt>
+                                                <dd>김플루님의 크라우드펀딩 투자 최소 금액</dd>
+                                                <dt class="investLimit" th:if="${investmentInfo.securitiesClassification} == '주식'" th:text="|${#numbers.formatInteger(securitiesIssuanceStock.investMinCost,3,'COMMA')}원|" th:data-invest-limit="${securitiesIssuanceStock.investMinCost}"></dt>
+                                                <dt class="investLimit" th:if="${investmentInfo.securitiesClassification} == '채권'" th:text="|${#numbers.formatInteger(securitiesIssuanceBond.investMinCost,3,'COMMA')}원|" th:data-invest-limit="${securitiesIssuanceBond.investMinCost}"></dt>
                                             </dl>
                                         </li>
                                     </ul>
@@ -358,9 +366,13 @@
                                 <div class="col-lg-3">
                                     <ul class="tight">
                                         <li>
-                                            <dl>
+                                            <dl class="stockPrice" th:if="${investmentInfo.securitiesClassification} == '주식'">
                                                 <dd>1주당 가격</dd>
-                                                <dt id="stockPrice" th:text="${#numbers.formatInteger(50000,3,'COMMA') + '원'}" th:data-stock-price="${50000}"></dt>
+                                                <dt class="stockPrice" th:text="|${#numbers.formatInteger(securitiesIssuanceStock.stockPrice,3,'COMMA')}원| " th:data-stock-price="${securitiesIssuanceStock.stockPrice}"></dt>
+                                            </dl>
+                                            <dl th:if="${investmentInfo.securitiesClassification} == '채권'">
+                                                <dd>1구좌당 가격</dd>
+                                                <dt class="stockPrice" th:text="|${#numbers.formatInteger(securitiesIssuanceBond.bondPrice,3,'COMMA')}원|" th:data-stock-price="${securitiesIssuanceBond.bondPrice}"></dt>
                                             </dl>
                                         </li>
                                     </ul>
@@ -368,9 +380,13 @@
                                 <div class="col-lg-4">
                                     <ul class="tight">
                                         <li>
-                                            <dl th:with="minStock=${100}, maxStock=${500}">
+                                            <dl th:if="${investmentInfo.securitiesClassification} == '주식'" th:with="minStock=${securitiesIssuanceStock.investMinCost / securitiesIssuanceStock.stockPrice}, maxStock=${50000000/securitiesIssuanceStock.stockPrice}">
                                                 <dd>청약 가능 수량</dd>
-                                                <dt><span id="minStock" th:text="${minStock}"></span>~<span id="maxStock" th:text="${maxStock}"></span>주</dt>
+                                                <dt><span class="minStock" th:text="${minStock}"></span>~<span class="maxStock" th:text="${maxStock}"></span>주</dt>
+                                            </dl>
+                                            <dl th:if="${investmentInfo.securitiesClassification} == '채권'" th:with="minStock=${securitiesIssuanceBond.investMinCost / securitiesIssuanceBond.bondPrice}, maxStock=${50000000/securitiesIssuanceBond.bondPrice}">
+                                                <dd>청약 가능 수량</dd>
+                                                <dt><span class="minStock" th:text="${minStock}"></span>~<span class="maxStock" th:text="${maxStock}"></span>구좌</dt>
                                             </dl>
                                         </li>
                                     </ul>
@@ -380,11 +396,12 @@
                                 투자 한도 내에서 투자가 가능합니다.
                             </div><br><br>
 
-                            <div style="color: black; font-size: 18px;">청약하실 주식 수를 입력해 주세요.</div><br>
+                            <div style="color: black; font-size: 18px;" th:if="${investmentInfo.securitiesClassification} == '주식'">청약하실 주식 수를 입력해 주세요.</div><br>
+                            <div style="color: black; font-size: 18px;" th:if="${investmentInfo.securitiesClassification} == '채권'">청약하실 채권 수를 입력해 주세요.</div><br>
                             <div class="payments-form col-5">
-                                <label for="stockNumber" class="mt20 mb4" style="color: black">청약 주식 수</label>
+                                <label for="stockNumber" class="mt20 mb4" style="color: black"></label>
                                 <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="d_form col-12" id="stockNumber" placeholder="청약 주식 수 입력" value required>
-                                <label class="form-text text-muted text-right col-12" style="font-size: 18px;"><span style="color: #0b44d7">주문금액</span> <span class="total-price">0<i></i>원</span></label>
+                                <label class="form-text text-muted text-right col-12" style="font-size: 18px;"><span style="color: #0b44d7">주문금액</span> <span class="total-price">0</span></label>
                             </div>
                             <br>
                             <div style="border: 0.3px solid #f3f4f5; margin: 10px 0px; width: 100%"></div>
@@ -420,7 +437,7 @@
                             <h5 style="font-weight: bold;">결제 진행</h5>
                             <br>
                             <div style="color: black; font-size: 18px;">결제하실 금액만큼 결제를 진행해 주세요.</div><br><br>
-                            <label class="form-text text-muted col-12" style="font-size: 16px; color: black"><span>청약 신청 수량</span> <span class="stockNumber">0주</span></label>
+                            <label class="form-text text-muted col-12" style="font-size: 16px; color: black"><span>청약 신청 수량</span> <span class="stockNumber">0주(구좌)</span></label>
                             <label class="form-text text-muted col-12" style="font-size: 18px;"><span style="color: #0b44d7">결제하실 금액</span> <span style="font-weight: bold" class="total-price">0<i></i>원</span></label>
                             <br><br>
 

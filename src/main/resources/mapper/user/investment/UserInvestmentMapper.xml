@@ -427,6 +427,23 @@
             project_code = #{investmentCode};
     </select>
 
+    <!-- 뉴스 상세 정보 가져오기-->
+    <select id="getDetailNews" parameterType="String" resultType="NewsList">
+        SELECT
+            news_code AS newsCode,
+            project_code AS projectCode,
+            news_subject AS newsSubject,
+            news_content AS newsContent,
+            news_datetime AS newsDatetime,
+            news_modify_datetime AS newsModifyDatetime,
+            news_delete_datetime AS newsDeleteDatetime,
+            news_display AS newsDisplay
+        FROM
+            news
+        WHERE
+            news_code = #{newsCode};
+    </select>
+
     <!--댓글 등록-->
     <insert id="CommentAdd" parameterType="String">
         <selectKey keyProperty="investCommentCode" resultType="String" order="BEFORE">
@@ -449,6 +466,15 @@
         VALUE
             (#{investCommentCode}, #{memberId}, #{investmentCode}, #{memberName}, #{commentContent}, NOW(), NULL, NULL, NULL, 'comment');
     </insert>
+
+    <!--댓글 삭제-->
+    <delete id="commentDelete" parameterType="String">
+        DELETE
+        FROM
+            invest_comment
+        WHERE
+            invest_comment_code = #{investCommentCode}
+    </delete>
 
     <!--댓글 리스트-->
     <select id="getCommentList" parameterType="String" resultType="InvestmentComment">
