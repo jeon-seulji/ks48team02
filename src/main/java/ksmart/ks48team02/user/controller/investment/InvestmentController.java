@@ -88,12 +88,7 @@ public class InvestmentController {
         model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
         SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
         model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
-        String SID = (String) session.getAttribute("SID");
-        if(SID == null || SID == "" || SID == "null"){
-            model.addAttribute("SID", "noSession");
-        }else {
-            model.addAttribute("SID", SID);
-        }
+        model.addAttribute("memberId", memberId);
 
         List<InvestmentComment> investmentComment = userInvestmentService.getCommentList(investmentCode);
         model.addAttribute("investmentComment", investmentComment);
@@ -119,9 +114,31 @@ public class InvestmentController {
         CommentMember commentMember = userInvestmentService.getMember(memberId);
         model.addAttribute("commentMember", commentMember);
 
-        System.out.println("Received investmentCode: " + investmentCode);
 
         userInvestmentService.CommentAdd(memberId, investmentCode, commentMember.getMemberName(), commentContent);
+
+        return "redirect:/user/investment/detail/comment?investmentCode=" + investmentCode;
+    }
+
+    //댓글 삭제
+    @GetMapping("/detail/commentDelete")
+    public String commentDelete(Model model,
+                                HttpSession session,
+                                @RequestParam(name = "investmentCode") String investmentCode,
+                                @RequestParam(name = "investCommentCode") String investCommentCode){
+
+        //접속 회원 아이디
+        String memberId = (String)session.getAttribute("SID");
+        //프로젝트 정보 조회
+        InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
+        //댓글 리스트 조회
+        List<InvestmentComment> investmentCommentList = userInvestmentService.getCommentList(investmentCode);
+
+        model.addAttribute("investmentCode",investmentCode);
+        model.addAttribute("memberId", memberId);
+        model.addAttribute("investmentCommentList", investmentCommentList);
+
+        userInvestmentService.commentDelete(investCommentCode);
 
         return "redirect:/user/investment/detail/comment?investmentCode=" + investmentCode;
     }
@@ -228,8 +245,15 @@ public class InvestmentController {
     }
 
     @GetMapping("/order")
-    public String orderPage(Model model, HttpSession session) {
+    public String orderPage(Model model, HttpSession session,
+                            @RequestParam(name = "investmentCode") String investmentCode) {
 
+        InvestmentInfo investmentInfo = userInvestmentService.investmentProjectDetail(investmentCode);
+        model.addAttribute("investmentInfo", investmentInfo);
+        SecuritiesIssuanceStock securitiesIssuanceStock = userInvestmentService.securitiesStock(investmentCode);
+        model.addAttribute("securitiesIssuanceStock", securitiesIssuanceStock);
+        SecuritiesIssuanceBond securitiesIssuanceBond = userInvestmentService.securitiesBond(investmentCode);
+        model.addAttribute("securitiesIssuanceBond", securitiesIssuanceBond);
         model.addAttribute("title", "투자 주문 페이지");
 
         String memberId = (String) session.getAttribute("SID");
@@ -237,7 +261,6 @@ public class InvestmentController {
         if(memberId == null) {
             return "user/account/login";
         }
-        // 프로젝트 상세 정보 가져오기
 
 
 

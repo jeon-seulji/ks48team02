@@ -100,6 +100,11 @@ public class UserInvestmentService {
         userInvestmentMapper.CommentAdd(memberId, investmentCode, memberName, commentContent);
     }
 
+    //댓글 삭제
+    public void commentDelete (String investCommentCode) {
+        userInvestmentMapper.commentDelete(investCommentCode);
+    }
+
     public List<InvestmentComment> getCommentList(String investmentCode){
         return userInvestmentMapper.getCommentList(investmentCode);
     }
